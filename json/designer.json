@@ -1,0 +1,245 @@
+{
+layout:"border",
+border:true,
+window:{
+  height:400,
+  layout:"fit",
+  width:600,
+  border:false,
+  version:/*BEGIN*/1.1/*END*/,
+  title:"Gui Designer",
+  required_css:"css/Ext.ux.Designer.css",
+  required_js:"js/codepress/Ext.ux.CodePress.js,js/Ext.ux.Designer.js"
+},
+items:[{
+    region:"center",
+    layout:"fit",
+    border:false,
+    items:[{
+        xtype:"tabpanel",
+        tabPosition:"top",
+        activeTab:0,
+        border:true,
+        listeners:/*BEGIN*/{beforeremove: function(tabpanel, tab){
+  if (tabpanel.closeAllowed || !tab.items.items[0].modified) {
+    tabpanel.closeAllowed = false;
+    return true;
+  }
+  Ext.Msg.show({
+   title:'Save Changes?',
+   msg: 'You are closing a tab that has unsaved changes. Ignore changes?',
+   buttons: Ext.Msg.YESNO,
+   fn: function(btn, text) {
+    if (btn == 'yes') {
+  tabpanel.closeAllowed = true;        tabpanel.remove(tab);
+    }
+   }, animEl: tabpanel.id,
+   icon: Ext.MessageBox.QUESTION
+  });
+  return false;
+},
+beforerender:function(){
+ this.ownerCt.ownerCt.tabPanelId =this.id;
+}
+}/*END*/,
+        enableTabScroll:true,
+        resizeTabs:true,
+        minTabWidth:100,
+        items:[{
+            xtype:"panel",
+            title:"Help",
+            iconCls:"icon-help",
+            items:[{
+                xtype:"label",
+                html:"<H1>Welcome to ExtJs Gui Designer</H1></br>You are looking at the version of the designer with support for open,reload or save files. It has been created with the Gui Designer and saved as json, therefor it can be customized by you through the usage of the designer.<br>It uses a PHP5 script (index.php) to load,save of list files.As a result of the PHP usage you cannot run this demo without a webserver.We have setup that only files ending on <b>.json</b> are shown from the json directory or higer.When creating or renaming a file then extension .json will be added.<br><br><li>Open a file by double clicking on a json file or selection open file form context menu, if file is allreay opened only tab will be shown.</li><li>Close a file by closing the tab, you will be prompted to save when design changed.</li><li>Rename file by clicking on name and change it.</li><li>Delete file by selecting it form context menu.</li><br><br>Hope you enyou this solution."
+              }]
+          }]
+      }]
+  },{
+    region:"west",
+    title:"JSON Files",
+    width:200,
+    split:true,
+    collapsible:true,
+    layout:"fit",
+    border:true,
+    items:[{
+        xtype:"treepanel",
+        animate:true,
+        autoScroll:true,
+        containerScroll:true,
+        root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'json',id:'json/',draggable : false,leaf:false})/*END*/,
+        loader:/*BEGIN*/new Ext.tree.TreeLoader({
+   dataUrl:'index.php',
+   baseParams: {
+    filter : '(.*).json$'
+   }
+})/*END*/,
+        bbar:/*BEGIN*/ [{
+        text    : 'Expand All',
+        tooltip : 'Expand all elements',
+        handler : function() { Ext.getCmp('treepanel').expandAll(); }
+      },{
+        text    : 'Collapse All',
+        tooltip : 'Collapse all elements',
+        handler : function() { Ext.getCmp('treepanel').collapseAll(); }
+  }]/*END*/,
+        id:"treepanel",
+        listeners:/*BEGIN*/{ dblclick : function(el,e){
+           this.openNode(el);
+},
+contextmenu : function(node, e){
+    var self = this;
+    if(!this.menuItem){ // create context menu on first right click
+      this.menuItem =  new Ext.menu.Menu({items:[{
+          text    : 'Delete file',
+          iconCls : 'icon-deleteEl',
+          scope   : this,
+          handler : function(item) {
+           var node = this.contextNode;
+           Ext.Ajax.request({
+                   url: self.actionUrl,
+                   method : 'POST',
+                   params : {'delete':node.id},
+                   callback: function(options, success, response){
+                     if (success) {
+                      node.parentNode.removeChild(node);
+                     }            }
+           });
+         }
+       },{
+          text    : 'Open file',
+          iconCls : 'icon-editEl',
+          scope   : this,
+          handler : function(item) {
+             this.openNode(this.contextNode);
+                      }
+       }
+      ]});
+       this.menuFolder =  new Ext.menu.Menu({items:[{
+          text    : 'Add new JSON File',
+          iconCls : 'icon-addEl',
+          scope   : this,
+          handler : function(item) {
+           var node = this.contextNode;
+           Ext.Ajax.request({
+                   url: self.actionUrl,
+                   method : 'POST',
+                   params : {'new':node.id},
+                   callback: function(options, success, response){
+                     if (success) {
+                       var nnode = node.appendChild(new Ext.tree.TreeNode(Ext.decode(response.responseText)[0]));
+                       nnode.select();
+                     }                   }
+           });
+          }
+      }]});    }
+    this.contextNode = node;
+    if(node.isLeaf()){
+       this.menuItem.showAt(e.getXY());
+    } else {
+      this.menuFolder.showAt(e.getXY());
+    }
+},
+ render : function() {
+   if (this.editor) return;
+   var self = this;
+   this.editor = new Ext.tree.TreeEditor(this, {
+      allowBlank:false,
+      cancelOnEsc:true,
+      completeOnEnter:true,
+      ignoreNoChange:true,
+      blankText:'A name is required',
+      selectOnFocus:true
+   });
+   // do not enter edit mode on selected node click 
+   this.editor.on('beforestartedit',function(editor,el,text){
+     return editor.editNode.leaf;
+   });
+   this.editor.on('beforecomplete',function(editor,text,oldtext) {
+     var node = editor.editNode;
+     if (!node.allwaysAccept) {
+       var p = node.id.lastIndexOf(oldtext);
+       var fromName = node.id;
+       var toName = node.id.substr(0,p) + text + node.id.substr(p+oldtext.length);
+       Ext.Ajax.request({
+         url: self.actionUrl,
+         method : 'POST',
+         params : {rename:fromName,to:toName},
+         callback: function(options, success, response){
+           if (success) {
+             node.id = toName;
+           } else {
+             node.allwaysAccept = true;
+             node.setText(oldtext);
+           }
+         }
+        });
+      }
+      delete node.allwaysAccept;
+   });
+ }
+}/*END*/,
+        border:false,
+        actionUrl:/*BEGIN*/"index.php"/*END*/,
+        openNode:/*BEGIN*/function(node){
+  if (node.isLeaf()) {
+     var id = node.id, title = node.text;
+     var tabpanel = Ext.getCmp(this.ownerCt.ownerCt.tabPanelId);
+      for (var i=0,len=tabpanel.items.items.length;i<len;i++) {
+         if (tabpanel.items.items[i].fileid===id)
+          return tabpanel.setActiveTab(tabpanel.items.items[i]);
+      }
+      tabpanel.add({
+        layout : 'fit',
+        title: title,
+        fileid : id,
+        border: false,
+        iconCls: 'icon-editEl',
+        items: new Ext.ux.Designer({
+          border:false,
+          url    : this.actionUrl,
+          disableCaching:true,
+          customProperties : true,
+          enableCopy: false,
+          filename: id,
+          enableSave: true,
+          enableReload: true
+       }),
+      closable:true
+    }).show();
+  }
+}/*END*/,
+        keys:/*BEGIN*///Add Keys here because the need scope 
+[{ 
+    // Enter = open 
+    key:Ext.EventObject.ENTER
+    ,fn:function(key, e) { 
+      var sm = this.getSelectionModel(); 
+      var node = sm.getSelectedNode(); 
+      if(node && node.isLeaf()) { 
+         this.openNode(node); 
+      } 
+    }},{ 
+      // F2 = edit 
+      key:113, fn:function(key, e) {
+        var sm = this.getSelectionModel(); 
+        var node = sm.getSelectedNode(); 
+        if(node && node.isLeaf()) { 
+          this.editor.triggerEdit(node); 
+      } 
+    }},{ 
+      // Ctrl + E = reload 
+      key:69, ctrl:true, stopEvent:true
+      ,fn:function(key, e) { 
+        var sm = this.getSelectionModel(); 
+        var node = sm.getSelectedNode(); 
+        if(node) { 
+          node = node.isLeaf() ? node.parentNode : node; 
+          sm.select(node); 
+          node.reload(); 
+        } 
+    }}]/*END*/
+      }]
+  }]
+}
