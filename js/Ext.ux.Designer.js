@@ -894,7 +894,10 @@ Ext.ux.Designer = Ext.extend(Ext.ux.JsonPanel, {
       var name = tf.getValue() || (self.customProperties ? newPropertyField.getRawValue() : '');
       var ds = this.editPanel.store;
       if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
-        ds.add(new Ext.grid.PropertyRecord({name:name}, name));
+        var defaultVal = "";
+      //  if (this.attrType(name) == 'object') { defaultVal = "{}"; }
+      //  if (this.attrType(name) == 'number') { defaultVal = 0; }
+        ds.add(new Ext.grid.PropertyRecord({name:name, value:""}, name));
         this.editPanel.startEditing(ds.getCount()-1, 1);
         tf.setValue('');
       }
@@ -1031,6 +1034,7 @@ Ext.ux.Designer = Ext.extend(Ext.ux.JsonPanel, {
               },
             getTreeNode : function(data, targetNode) {
                 if (!data.compData) { return null; }
+
                 var c = data.compData.config;
                 if (typeof c == 'function') {
                   c.call(this,function(config) {

@@ -1,0 +1,45 @@
+.typeBoolTrue {
+  color:green;
+}
+.typeBoolFalse {
+  color:red;
+}
+.typeObject {
+  color: blue;
+  font-style: italic;
+}
+
+.selectedElementParent *, .selectedElementParent {
+  background:#ccf;
+}
+.selectedElement *, .selectedElement {
+  background:#ffc;
+}
+
+.text-scripteditor {float:left;font:normal 12px arial}                    
+.icon-scripteditor {background-image: url(../icons/layout_edit.png) !important;
+                    background-repeat: no-repeat;float:left;width:20px;height:20px;}
+.icon-layoutEdit { background-image:url(../icons/layout_edit.png) !important; }
+.icon-reset { background-image:url(../icons/asterisk_orange.png) !important; }
+.icon-time { background-image:url(../icons/time.png) !important; }
+.icon-show { background-image:url(../icons/television.png) !important; }
+.icon-delete { background-image:url(../icons/delete.png) !important; }
+.icon-add { background-image:url(../icons/add.png) !important; }
+.icon-help { background-image:url(../icons/help.png) !important; }
+.icon-designcopy {background-image:url(../icons/cog_go.png) !important; }
+.icon-save {background-image:url(../icons/save.gif) !important; }
+.icon-reload {background-image:url(../icons/database_refresh.png) !important; }
+.icon-left {background-image:url(../icons/arrow_left.png) !important; }
+.icon-right {background-image:url(../icons/arrow_right.png) !important; }
+
+
+
+.icon-el { background-image:url(../icons/folder_explore.png) !important; }
+.icon-deleteEl { background-image:url(../icons/application_delete.png) !important; }
+.icon-addEl { background-image:url(../icons/application_add.png) !important; }
+.icon-dupEl { background-image:url(../icons/application_double.png) !important; }
+.icon-editEl { background-image:url(../icons/application_edit.png) !important; }
+
+.icon-undo { background-image:url(../icons/arrow_undo.png) !important; }
+.icon-update { background-image:url(../icons/arrow_refresh.png) !important; }
+.icon-resize { background-image:url(../icons/arrow_inout.png) !important; }

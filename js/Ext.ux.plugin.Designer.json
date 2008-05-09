@@ -1,0 +1,102 @@
+{
+  layout: 'border',
+  border: false,
+  items : [{
+    layout:"accordion",
+    region:"north",
+    border:false,
+    height:180,
+    split:true,
+    layoutConfig:/*BEGIN*/{
+      activeOnTop:false,
+      animate:false,
+      autoWidth:true,
+      collapseFirst:true,
+      fill:true,
+      hideCollapseTool:false,
+      titleCollapse:true
+    }/*END*/,
+    tbar:/*BEGIN*/[{
+          tooltip : 'Save the design file ',
+          iconCls:'icon-save',
+        },{
+          iconCls:'icon-reload',
+          tooltip : 'Reload the design file '
+        },{
+          tooltip : 'Remove all elements from design',
+          iconCls:'icon-reset'
+        },'-',{
+          tooltip : 'Copy JSON to clipboard',
+          iconCls:'icon-designcopy'
+        },{
+          tooltip : 'Edit the generated JSON using a text area',
+          iconCls:'icon-editEl'
+        },{
+          iconCls : 'icon-show',
+          tooltip : 'Show design in window'
+        },'-',{
+          iconCls : 'icon-update',
+          tooltip : 'Apply changes'
+        },'-',{
+          iconCls : 'icon-undo',
+          tooltip : "Undo last change"
+        },'->',{
+          iconCls : 'icon-help',
+          handler : function() {
+            Ext.Msg.alert('Information',
+              "<i>Author  :</i><b> Sierk Hoeksma</b><br/>" +
+              '<i>Version :</i> ' + this.version);}
+          }
+      ]/*END*/,
+    items:[{
+        title:"Components",
+        xtype:"treepanel",
+        animate:true,
+        autoScroll:true,
+        containerScroll:true,
+        enableDrag:true,
+        ddGroup: 'designerddgroup',
+        rootVisible : false,
+        root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
+        loader:/*BEGIN*/new Ext.ux.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.plugin.Designer.Components.json'})/*END*/
+      },{
+        title:"Code Tree",
+        xtype:"treepanel",
+        animate:true,
+        autoScroll:true,
+        containerScroll:true,
+        root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'json',id:'json/',draggable : false,leaf:false})/*END*/,
+        loader:/*BEGIN*/new Ext.tree.TreeLoader({dataUrl:'index.php',baseParams: {filter : '(.*).json$'}})/*END*/    
+      }]
+    },{
+          xtype : 'propertygrid',
+          region: 'center',
+          source           : {},
+          bbar             : ['Add ',   
+            new Ext.form.ComboBox({
+              mode           : 'local',
+              valueField     : 'value',
+              displayField   : 'name',
+              customProperties: true,
+              store          : new Ext.data.SimpleStore({
+                  sortInfo : {field:'name',order:'ASC'},
+                  fields   : ['value','name'],
+                  data     : [['test','test']/* TODO FILL FROM JSON instead local */]
+                }),
+              listeners    : {
+                'specialkey' : function(tf,e) {
+                      var name = tf.getValue() || (this.customProperties ? tf.getRawValue() : '');
+      //TODO: Wrong store is selected Combobox instead of grid                
+                      var ds = this.store, defaultVal = "";
+                      if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
+                          tf.setValue('');
+                          ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
+                 //       this.editPanel.startEditing(ds.getCount()-1, 1);
+                      }
+                }
+              }
+           })
+         ]
+    }
+  ]
+}  

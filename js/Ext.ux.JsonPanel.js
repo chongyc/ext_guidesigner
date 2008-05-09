@@ -215,7 +215,12 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel, {
             this.required_js(items.window.required_js);
           }
           //Now load object again but apply internal code
-          try { items = Ext.decode(response.responseText); } catch (e) {alert('Failed to load JsonPanel:' + e)}
+          try {
+             var jsonPanel = this; //Create reference object for json
+             items = eval("(" + response.responseText + ')'); 
+          } catch (e) {
+            alert('Failed to load JsonPanel:' + e)
+          }
           delete items.window;
           //Clear out orignal content
           while (this.items.first()) {this.remove(this.items.first(), true);}
@@ -353,7 +358,6 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel, {
          o.items = items;
        }
        for (i in o) {
-         if (i === "_node") { continue; }
            v = o[i];
            if (i === "id" && /^form-gen-/.test(o[i])) { continue; }
            if (i === "id" && /^ext-comp-/.test(o[i])) { continue; }

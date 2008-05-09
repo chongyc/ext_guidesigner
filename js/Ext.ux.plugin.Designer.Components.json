@@ -1,0 +1,12 @@
+[{
+ text : 'Basic',
+ cls  : 'folder',
+ childeren : [{
+   text : 'TextField',
+   cls  : 'file',
+   compData: true
+ },{
+   text : 'Panel',
+   cls  : 'file'
+ }]
+}]

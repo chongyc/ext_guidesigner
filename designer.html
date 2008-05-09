@@ -1,0 +1,89 @@
+<!--
+  * Author: Sierk Hoeksma. WebBlocks.eu
+  * Copyright 2007-2008, WebBlocks.  All rights reserved.
+  *
+  * This extension adds Gui Designer  Support to ExtJs
+  ************************************************************************************
+  *   This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY;
+  *   without even the implied warranty of MERCHANTABILITY or
+  *   FITNESS FOR A PARTICULAR PURPOSE.
+  ************************************************************************************
+
+  License: This source is licensed under the terms of the Open Source LGPL 3.0 license.
+  Commercial use is permitted to the extent that the code/component(s) do NOT become
+  part of another Open Source or Commercially licensed development library or toolkit
+  without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
+
+  * Donations are welcomed: http://donate.webblocks.eu
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="ExtJs Gui Designer" content="A Gui Desginer for ExtJs">
+<meta name="keywords" content="Gui, Designer, FormBuilder, GuiDesigner, ExtJs, Json, Gui Designer">
+<link rel="shortcut icon" href="icons/favicon.ico" >
+<title>ExtJs Gui Designer</title>
+<!-- The ExtJs base 2.02  -->
+    <link rel="stylesheet" type="text/css" href="css/ext-all.css" />
+ 	<script type="text/javascript" src="js/ext-base.js"></script>
+    <script type="text/javascript" src="js/ext-all.js"></script>
+
+<!-- Add Code press as script editor, remove line below to used textarea as script editor  -->
+    <script id="js/codepress/Ext.ux.CodePress.js" type="text/javascript" src="js/codepress/Ext.ux.CodePress.js"></script>
+
+<!-- The Gui Designer  -->
+    <link id="css/Ext.ux.plugin.Designer.css" rel="stylesheet" type="text/css" href="css/Ext.ux.plugin.Designer.css" />
+    <script id="js/Ext.ux.JsonPanel.js" type="text/javascript" src="js/Ext.ux.JsonPanel.js"></script>
+    <script id="js/Ext.ux.plugin.Designer.js" type="text/javascript" src="js/Ext.ux.plugin.Designer.js"></script>
+
+<!-- Look for a change log at changes.txt -->
+</head>
+<body>
+<script>
+Ext.SSL_SECURE_URL="images/default/s.gif";
+Ext.BLANK_IMAGE_URL="images/default/s.gif";
+ /*
+  You can now use the designer as panel, JSON can contain javascript and information
+  of base info is stored in special tag Window. enabling auto create window/frame see show code
+ */
+ var designer = new Ext.Viewport({
+	layout : 'border',
+	items: [{ region : 'west',
+	          layout : 'fit',
+	          border : false,
+	          id     : 'toolbox',
+	          xtype  : 'panel',
+	          title  : 'toolbox',
+	          width  : 215
+	        },
+	        { region : 'center',
+	          xtype  : 'panel',
+	          id     : 'root',
+	          plugins : [
+	            new Ext.ux.plugin.Designer({
+	              toolboxTarget : 'toolbox',
+	              disableCaching : true
+	            })
+	          ],
+	          items  : [
+	            { xtype : 'textfield',
+	              id    : 'text'
+	            }
+	          ]
+	        },
+	        {region : 'east',
+	         layout : 'fit',
+	         width  : 150,
+	         items : [{
+	           id : 'debug',
+	           xtype : 'textarea'
+	         }]
+	        }
+	       ]
+ });
+ function debug(s){
+  Ext.getCmp('debug').setValue(s);
+ }
+</script>
+</body>
+</html>

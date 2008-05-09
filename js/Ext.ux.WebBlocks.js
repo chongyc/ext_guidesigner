@@ -115,3 +115,56 @@ Ext.extend(Ext.ux.AutoUpper, Ext.util.Observable, {
     }
   }    
 });
+
+
+/**
+ * Used by designer when selecting a value from a ComponentDoc defined value property in the grid
+ * @type component
+ */  
+Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
+    // @private Data is loaded localy
+    mode           : 'local',
+    // @private We trigger on all
+    triggerAction  : 'all',
+    // @private We allow type ahead
+    typeAhead      : true,
+    // @private The value field bound to field called value    
+    valueField     : 'value',
+    // @private The display name is called name
+    displayField   : 'name',
+    // @private Forceselection is by default enabled
+    forceSelection : true,
+    // @private The Combobox is by default editable
+    editable       : true,
+    // @private No charachters are required
+    minChars       : 0,
+    /**
+     * Are customProperties (values) allowed to be entered (defaults false)
+     * @type {Boolean}
+     @cfg */
+    customProperties : false,
+    /**
+     * @private Override the init of ComboBox so that local data store is used
+     */
+    initComponent  : function(){
+        Ext.form.ComboBox.superclass.initComponent.call(this);
+        if(!this.store && this.data){
+            this.store = new Ext.data.SimpleStore({
+                fields: ['value','name','cls'],
+                data : this.data
+            });
+        }
+        this.tpl = '<tpl for="."><div class="x-combo-list-item {cls}">{' + this.displayField + '}</div></tpl>';
+    },
+    
+    /**
+     * @private Override the getValue so that when customProperties is set
+     * the rawValues is returned
+     */
+    getValue : function (){
+      return Ext.form.ComboBox.superclass.getValue.call(this) || 
+        (this.customProperties ? this.getRawValue() : '');
+    }
+
+});
+Ext.reg('simplecombo', Ext.ux.form.SimpleCombo);
