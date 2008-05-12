@@ -2,6 +2,7 @@
  -  Make toolbox global if required, so only one exits by screen
  -  Align toolbox, smaller text, smaller icons
  -  Fit the add combo box over screen  
+ -  Build new decode,encode removing attribute trick and _node
  */  
 
  /*
@@ -45,7 +46,7 @@ Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
             new Ext.tree.AsyncTreeNode(attr) : 
             new Ext.tree.TreeNode(attr) );
     } else {
-      var node = new Ext.tree.TreeNode(attr);
+      var node = new Ext.tree.TreeNode(Ext.applyIf(attr,{draggable:false}));
       for(var i = 0, len = childeren.length; i < len; i++){
        var n = this.createNode(childeren[i]);
        if(n) node.appendChild(n);
@@ -59,6 +60,19 @@ Ext.namespace('Ext.ux.plugin');
 
 //Is not registered but required by designer
 Ext.reg('propertygrid', Ext.grid.PropertyGrid);
+
+/*
+Ext.ux.plugin.DesignerWizard = function(json){
+  var cache = {};
+  return function(callback) {
+     if (!cache[json]) {  
+      cache[json] = new Ext.ux.JsonPanel({autoLoad:json,updateOwner:true});
+     }
+     cache[json].callback = callback;
+     (new Ext.Window(cache[json])).show();
+  }
+}
+*/
 
 /** Create a desginer */
 Ext.ux.plugin.Designer = function(config){
@@ -115,28 +129,26 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
        * @event beforehide
        * @param {Object} toolbox The toolbox window
        */
-      'beforehide' : true,
+      'beforehide' : true
     });
     
     
-    //Init the component when it is rendered
-    this.field.on('render', function() {
+    //Init the components drag & drop and toolbox when it is rendered
+    this.field.on('render', function() {    
+      this.drag = new Ext.dd.DragZone(this.field.el, {
+        ddGroup:'designerddgroup',
+        getDragData     : this.getDragData.createDelegate(this)
+      });
       this.drop = new Ext.dd.DropZone(this.field.el, {
         ddGroup:'designerddgroup',
         notifyOver : this.notifyOver.createDelegate(this),
         notifyDrop : this.notifyDrop.createDelegate(this)
       });
-      this.drag = new Ext.dd.DragZone(this.field.el, {
-        ddGroup:'designerddgroup',
-        containerScroll : true,
-        getDragData     : this.getDragData.createDelegate(this)
-      });
       this.field.el.on('click', function(e,el) {
-              e.preventDefault();
-              this.selectElement(el,true);
+         var cmp = this.selectElement(el,true);
+         if (el.focus) el.focus();
       }, this);
       this.toolbox(this.autoShow);
-
     }, this);
   },
   
@@ -144,10 +156,20 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * Append the config to the element
    * @param {Element} el The element to which the config would be added
    * @param {Object} config The config object to be added
+   * @return {Component} The component added
    */
-  appendConfig : function (el,config){
-    if (this.canAppend(el,config)) {
+  appendConfig : function (el,config,highlight){
+    if (typeof config == 'function') {
+      config.call(this,function(config) {
+        this.appendConfig(el,config,true);
+      }.createDelegate(this));
+    } else if (this.canAppend(el,config)) {
+     var cmp = this.getDesignElement(el);
+     config = this.tools.clone(config);
+     alert(this.tools.encode(config));
+     if (highlight) this.highlightElement(cmp);
     }
+    return null;
   },
   
   /**
@@ -177,15 +199,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @return {Boolean} True when element highlighted
    */
   highlightElement : function (el) {
-    //Remove old highlight
+    //Remove old highlight and drag support
     this.field.el.removeClass('selectedElement');
-//    this.field.el.removeClass('selectedElementParent');
     this.field.el.select('.selectedElement').removeClass('selectedElement');
     this.field.el.select('.designerddgroup').removeClass('designerddgroup');
-//    this.field.el.select('.selectedElementParent').removeClass('selectedElementParent');
     if (el) {
-//      var elParent = el.findParent ? el.findParent('.x-form-element', 5, true) : null;
-//      if (elParent) { elParent.addClass("selectedElementParent"); }
       el.addClass("selectedElement");
       if (el.id != this.field.id) el.addClass("designerddgroup");
       return true;
@@ -233,7 +251,47 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
   getDragData : function(e) {
      var cmp = this.selectElement(e.getTarget());
      var el = e.getTarget('.designerddgroup');
-     if (el) { return {ddel:el}; }
+     if (el && cmp) { 
+       return {
+         ddel:el,
+         config : cmp.initialConfig,
+         clone:(e.shiftKey)
+       }; 
+     }
+  },
+  
+  /**
+   * Check if the given component is a container which can contain other xtypes
+   * @param {Component} cmp The component to validate if it is in the list
+   * @return {Boolean} True indicates the xtype is a container capable of contain other elements
+   */
+  isContainer : function (cmp) {
+    var xtype = cmp ? cmp.xtype : null;
+    return  (xtype && ['jsonpanel','panel','viewport','form','window','tabpanel','toolbar','fieldset'].indexOf(xtype) !== -1);
+  },
+  
+  /**
+   * @private Fix a problem in firefox with drop getTarget by finding a component 
+   * using xy coordinates. 
+   * @param {Event} event The event for which a node should be searched
+   * @return {Node} The node that is located by xy coordinates or null when none.
+   */
+  getTarget : function (event) {
+    if (!event) return;
+    if (!Ext.isGecko) event.getTarget();
+    var n,findNode = function(c,p) {
+      if (c && c.getPosition && c.getSize) {
+       var pos = c.getPosition();
+       var size = c.getSize();
+       if (event.xy[0] >= pos[0] && event.xy[0]<=pos[0] + size.width &&
+           event.xy[1] >= pos[1] && event.xy[1]<=pos[1] + size.height) {
+         n = c
+         if (c.findBy) c.findBy(findNode);
+       }
+      }
+    };
+    findNode(this.field);
+    return n;
   },
   
   /**
@@ -244,10 +302,17 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @return {Boolean} return true to accept or false to reject 
    */
   notifyOver : function (src,e,data) {
-    if (data.node.attributes.compData) {
-      var el = this.getDesignElement(e.getTarget());
-      if (this.canAppend(el)) {
-        return this.selectElement(el);
+    if (data.config) {
+      var cmp = this.getDesignElement(this.getTarget(e));
+      if (this.canAppend(cmp)) {
+        this.selectElement(cmp);
+        //"x-tree-drop-ok-above" "x-tree-drop-ok-between" "x-tree-drop-ok-below"        
+        var el=cmp.getEl();
+        data.drop = this.isContainer(cmp) ? "append" : 
+           (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "before" : "after");
+        //TODO: Find Child to add, incase of append
+        return (data.drop=='before' ?  "x-tree-drop-ok-above" :
+               (data.drop=='after'  ? "x-tree-drop-ok-below"  : "x-tree-drop-ok-append"));
       }
     }
     return false;
@@ -261,17 +326,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @return {Boolean} return true to accept or false to reject 
    */
   notifyDrop : function (src,e,data) {
-    var el=e.getTarget();
-    if (data.compData && !data.processed) {
-/*      var config = data.compData.config;
-      if (typeof config == 'function') {
-        config.call(this,function(config) {
-          this.highlightElement(this.appendConfig(el,config));
-        });
-      } else {
-        this.highlightElement(this.appendConfig(el,config));
-      }
-*/      //Remove the data so no double event is fired
+    var el=this.getTarget(e);
+    if (data.config && !data.processed) {
+      this.appendConfig(el,data.config,true);
       data.processed = true;
     }
     return true;  
@@ -295,13 +352,13 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
         }
         this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
       }
-      var tools = new Ext.ux.JsonPanel({ autoLoad:this.toolboxJson,
+      this.tools = new Ext.ux.JsonPanel({ autoLoad:this.toolboxJson,
                                        disableCaching :this.disableCaching,
                                        scope   : this });
       this.toolboxTarget = Ext.getCmp(this.toolboxTarget);
       if (this.toolboxTarget){
         this._toolbox = this.toolboxTarget;
-        this._toolbox.add(tools);
+        this._toolbox.add(this.tools);
       } else {
        this._toolbox = new Ext.Window({
          closeAction: 'hide', 
@@ -310,7 +367,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
          border: false,
          width : 215,
          height: 350,
-         items : tools
+         items : this.tools
        });
       }
     }

@@ -4,9 +4,119 @@
  childeren : [{
    text : 'TextField',
    cls  : 'file',
-   compData: true
+   config: true
  },{
    text : 'Panel',
-   cls  : 'file'
+   cls  : 'file',
+   config : function(callback) {
+      var w = new Ext.Window({
+       width:586,
+       height:339,
+       title:"New Tab Panel",
+       items:[{
+           xtype:"form",
+           frame:true,
+           items:[{
+               layout:"table",
+               layoutConfig:{
+                 columns:2
+               },
+               defaults:{
+                 style:"margin:1px;",
+                 border:true
+               },
+               xtype:"fieldset",
+               title:"Tabs",
+               autoHeight:true,
+               items:[{
+                   title:"Title"
+                 },{
+                   title:"activeTab"
+                 },{
+                   xtype:"textfield",
+                   name:"title_1",
+                   width:200
+                 },{
+                   xtype:"radio",
+                   fieldLabel:"Label",
+                   boxLabel:"This tab is the default active one",
+                   name:"active",
+                   inputValue:0
+                 },{
+                   xtype:"textfield",
+                   name:"title_2",
+                   width:200
+                 },{
+                   xtype:"radio",
+                   fieldLabel:"Label",
+                   boxLabel:"This tab is the default active one",
+                   name:"active",
+                   inputValue:1
+                 },{
+                   xtype:"textfield",
+                   name:"title_3",
+                   width:200
+                 },{
+                   xtype:"radio",
+                   fieldLabel:"Label",
+                   boxLabel:"This tab is the default active one",
+                   name:"active",
+                   inputValue:2
+                 },{
+                   xtype:"textfield",
+                   name:"title_4",
+                   width:200
+                 },{
+                   xtype:"radio",
+                   fieldLabel:"Label",
+                   boxLabel:"This tab is the default active one",
+                   name:"active",
+                   inputValue:3
+                 },{
+                   xtype:"textfield",
+                   name:"title_5",
+                   width:200
+                 },{
+                   xtype:"radio",
+                   fieldLabel:"Label",
+                   boxLabel:"This tab is the default active one",
+                   name:"active",
+                   inputValue:4
+                 },{
+                   xtype:"textfield",
+                   name:"title_6",
+                   width:200
+                 },{
+                   xtype:"radio",
+                   fieldLabel:"Label",
+                   boxLabel:"This tab is the default active one",
+                   name:"active",
+                   inputValue:5
+                 }]
+             }]
+         }],
+         buttons:[{
+           text:'Ok',
+           handler:function() {
+             var values = w.items.first().form.getValues();
+             w.close();
+             var config = {xtype:'tabpanel',items:[]};
+             var activeTab = 0;
+             Ext.each([1,2,3,4,5,6], function(i) {
+               if (values['title_'+i]) {
+                 config.items.push({xtype:'panel',title:values['title_'+i],layout:'fit'});
+                 if (values.active == i) { activeTab = i; }
+               }
+             });
+             config.activeTab = activeTab;
+             callback.call(this,config);
+           }
+         },{
+           text:'Cancel',
+           handler:function() {w.close();}
+         }]
+     });
+     w.show();
+   }
  }]
 }]

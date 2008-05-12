@@ -1,4 +1,6 @@
-{
+{ json: {
+   required_js : 'js/Ext.ux.plugin.Designer.js'
+  },
   layout: 'border',
   border: false,
   items : [{
@@ -18,7 +20,7 @@
     }/*END*/,
     tbar:/*BEGIN*/[{
           tooltip : 'Save the design file ',
-          iconCls:'icon-save',
+          iconCls:'icon-save'
         },{
           iconCls:'icon-reload',
           tooltip : 'Reload the design file '
@@ -45,9 +47,9 @@
           handler : function() {
             Ext.Msg.alert('Information',
               "<i>Author  :</i><b> Sierk Hoeksma</b><br/>" +
-              '<i>Version :</i> ' + this.version);}
-          }
-      ]/*END*/,
+              '<i>Version :</i> ' + scope.version);}
+        }
+    ]/*END*/,
     items:[{
         title:"Components",
         xtype:"treepanel",
@@ -58,7 +60,18 @@
         ddGroup: 'designerddgroup',
         rootVisible : false,
         root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
-        loader:/*BEGIN*/new Ext.ux.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.plugin.Designer.Components.json'})/*END*/
+        loader:/*BEGIN*/new Ext.ux.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.plugin.Designer.Components.json'})/*END*/,
+        dragConfig:/*BEGIN*/{ 
+          getDragData : function(e){
+            var data = Ext.dd.Registry.getHandleFromEvent(e);
+            if (data) {
+             data.config=data.node.attributes.config;
+             data.processed=false;
+            }
+            return data;
+          },
+          ddGroup: 'designerddgroup'
+        }/*END*/
       },{
         title:"Code Tree",
         xtype:"treepanel",
@@ -66,7 +79,7 @@
         autoScroll:true,
         containerScroll:true,
         root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'json',id:'json/',draggable : false,leaf:false})/*END*/,
-        loader:/*BEGIN*/new Ext.tree.TreeLoader({dataUrl:'index.php',baseParams: {filter : '(.*).json$'}})/*END*/    
+        loader:/*BEGIN*/new Ext.tree.TreeLoader({dataUrl:'index.php',baseParams: {filter : '(.*).json$'}})/*END*/
       }]
     },{
           xtype : 'propertygrid',
@@ -82,7 +95,7 @@
                   sortInfo : {field:'name',order:'ASC'},
                   fields   : ['value','name'],
                   data     : [['test','test']/* TODO FILL FROM JSON instead local */]
-                }),
+              }),
               listeners    : {
                 'specialkey' : function(tf,e) {
                       var name = tf.getValue() || (this.customProperties ? tf.getRawValue() : '');
