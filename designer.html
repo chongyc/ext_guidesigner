@@ -51,37 +51,29 @@ Ext.BLANK_IMAGE_URL="images/default/s.gif";
 	items: [{ region : 'west',
 	          layout : 'fit',
 	          border : false,
-	          id     : 'toolbox',
+	          id     : 'toolbox2',
 	          xtype  : 'panel',
 	          title  : 'toolbox',
 	          width  : 215
-	        },
-	        { region : 'center',
-	          xtype  : 'panel',
-	          id     : 'root',
-	          plugins : [
-	            new Ext.ux.plugin.Designer({
-	              toolboxTarget : 'toolbox',
-	              disableCaching : true
-	            })
-	          ],
-	          items  : [
-	            { xtype : 'textfield',
-	              value : 'Test',
-	              id    : 'text',
-	              handler: function(){
-	                 alert('test')
-	              },
-	              obj   : {'A':'TEST','B':function(){
-	                 alert('b')
-	              }},
-	              arr   : ['A','B']
-	            },
-	            { xtype : 'textfield',
-				  value : 'Test2',
-				  id    : 'text2'
-	            }
-	          ]
+	        },{
+              region:'center',
+              layout:'fit',
+              border:false,
+              bodyBorder:false,
+              style:'padding:3px 3px;background:black',
+              items:{
+                border:false,
+                bodyBorder:false,
+                bodyStyle:'background:black;border:dashed green 1px;',
+                layout:'fit',
+				 plugins : [
+					new Ext.ux.plugin.Designer({
+					  toolboxTarget : 'toolbox',
+					  disableCaching : true,
+					  customProperties : true
+					})
+				  ]
+	         }
 	        },
 	        {region : 'east',
 	         layout : 'fit',
@@ -94,7 +86,7 @@ Ext.BLANK_IMAGE_URL="images/default/s.gif";
 	       ]
  });
  function debug(s){
-  Ext.getCmp('debug').setValue(s);
+  Ext.getCmp('debug').setValue((s + '\n' +Ext.getCmp('debug').getValue()).substring(0,500));
  }
 </script>
 </body>

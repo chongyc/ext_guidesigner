@@ -2,11 +2,13 @@
  text : 'Basic',
  cls  : 'folder',
  childeren : [{
-   text : 'TextField',
-   cls  : 'file',
-   config: true
+   text : 'TextField', cls  : 'file',
+   config: {  xtype : 'textfield', value : 'Change me'}
  },{
-   text : 'Panel',
+   text : 'Panel', cls  : 'file',
+   config: {  xtype : 'panel', title : 'Panel' }
+ },{
+   text : 'Tabpanel',
    cls  : 'file',
    config : function(callback) {
       var w = new Ext.Window({
@@ -104,7 +106,7 @@
              var activeTab = 0;
              Ext.each([1,2,3,4,5,6], function(i) {
                if (values['title_'+i]) {
-                 config.items.push({xtype:'panel',title:values['title_'+i],layout:'fit'});
+                 config.items.push({xtype:'panel',title:values['title_'+i]});
                  if (values.active == i) { activeTab = i; }
                }
              });

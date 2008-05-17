@@ -102,24 +102,30 @@ Ext.ux.ScriptLoader = function(url,cachingOff) {
  */
 Ext.ux.JSON = new (function(){
   return {
-   /** 
+    /** 
     * The string used to indent   
     * @type {String} 
     @cfg */
     indentString : '  ',
 
-   /** 
+    /**
+     * Array with items which should be blocked during init
+     * @type {Array}
+     @cfg */
+    blockedJsonInit : ['required_js','required_css','items'],
+
+    /** 
     * Should caching be disabled when JSON are loaded (defaults false).   
     * @type {Boolean} 
     @cfg */
     disableCaching:false, 
 
-   /**
+    /**
     * @private Tag added to json code so whe can see begining of code  
     */
     scriptStart  : '/*BEGIN*/',
 
-   /**
+    /**
     * @private Tag added to json code so whe can see ending of code
     */
     scriptEnd    : '/*END*/',
@@ -127,6 +133,42 @@ Ext.ux.JSON = new (function(){
      * @private Indicator if object hasOwnProperty
      */
     useHasOwn : ({}.hasOwnProperty ? true : false),
+    
+    //@private The internal tag used to create unique, when null no id is generated
+    jsonId : null, 
+    //@private Last id used to create json
+    lastJsonId : 0,
+
+    
+    //@private The maximum number of json histories to keep
+    jsonHistoryMax : 1,
+    //@private The history for json
+    jsonHistory : [],
+    
+    /**
+     * Add a json to the json history
+     * @param {String} json the json to add
+     */
+    addJsonHistory : function(json) {
+      if (json) {
+        this.jsonHistory.push(json);
+        while (this.jsonHistory.length > this.jsonHistoryMax)
+          this.jsonHistory.remove(this.jsonHistory[0]);
+      }
+    },
+    
+    /**
+     * Get the last item from the json history
+     * @param {Boolean} keep Should history be untouched
+     * @return {String} The json
+     */
+    getJsonHistory : function(keep) {
+      if (this.jsonHistory.length > 0) {
+        if (keep) return this.jsonHistory[this.jsonHistory.length-1];
+        return this.jsonHistory.pop();
+      }
+      return null;
+    },
 
     /**
      * Load one or more javascripts. Is trigger by root element window.required_js in json file. 
@@ -134,7 +176,7 @@ Ext.ux.JSON = new (function(){
      * disableCaching (defaults true) the url of the javascript to load is made unique with parameter _dc.
      * @param {String} list A comma seperated list of javascripts to load
      */
-    required_js : function(list) {   
+    setRequired_js : function(list) {   
      if (!list) return;
      var files = list.split(',');
      for (var f=0;f<files.length;f++) {
@@ -148,13 +190,111 @@ Ext.ux.JSON = new (function(){
      * Load one or more stylesheets. Is triggered by root element window.required_css in json file
      * @param {String} list A comma seperated list of stylesheets to load
      */
-    required_css : function(list) {
+    setRequired_css : function(list) {
       if (!list) return;
       var files = list.split(',');
       for (var f=0;f<files.length;f++) {    
         if(document.getElementById(files[f])) {continue;}
         Ext.util.CSS.swapStyleSheet(files[f], files[f]);
      }
+    },
+
+    /**
+    * Added items to blockedJsonInit during jsonInit
+    * @param {Object} args A object indexed by xtype containing array of blocked keys
+    */
+    setBlockedJsonInit : function(args){
+      if (this.getXType && args) {
+        var val = args[this.getXType()];
+        if (typeof val == 'object') {
+          for (var i=0;i<val.length;i++) this.blockedJsonInit.push(val[i]);
+        } else this.blockedJsonInit.push(val);
+      }
+    },
+
+    /**
+    * Function called with config object of json file
+    * @param {Object} config The config object that can be applied
+    * @return {Boolean} indicator if all changes where set
+    */
+    jsonInit : function (config,element,all) {
+     var allSet = true, el = element || this;
+     if (config) {
+      for (var i in config) {       
+        if (all || this.blockedJsonInit.indexOf(i) == -1) {
+          var k = 'set' + i.substring(0,1).toUpperCase() + i.substring(1);
+          try {
+            if (el[k] && typeof el[k] == 'function') {
+              el[k].call(el,config[i]);
+            } else if (el[i] && typeof el[i] == 'function') {
+              el[i].call(el,config[i]);
+            } else { 
+              allSet &= typeof(el[i])!='undefined' && el[i] == config[i]
+              el[i] = config[i];
+            }
+          } catch (e) {
+            allSet = false;
+          }
+        }
+      }
+     }
+     return allSet;
+    },
+
+   /**
+    * Apply the Json to given element
+    * @param {Object/String} json The json to apply
+    * @param {Element} element The element to apply the json to
+    * @return {Object} The elements applied
+    */
+    applyJson : function (json,element) {
+     var el = element || this;
+     var items = this.jsonId ? this.editableJson(json) : json || {};
+     if (typeof(items) !== 'object') items = this.decode(json);
+     if (items) {
+       delete items.json;
+       if (el instanceof Ext.Container) {
+         //Clear out orignal content of container
+         if (el.items) {
+           while (el.items.first()) {el.remove(el.items.first(), true);}
+           for (var i=0;i<el.items.items.length;i++) {el.remove(el.items.items[i],true)};
+         }
+         if(items instanceof Array) {
+           el.add.apply(el,items);
+         } else {
+          var l = 0;
+          for (var i in items) if (i!=this.jsonId)  l++;
+          if (l!=0) el.add(items);
+         }
+       } else {
+         //This is not a container so try to update element using jsonInit construction
+         this.jsonInit(items,el);
+       }
+     }
+     if (el.rendered && el.layout && el.layout.layout) el.doLayout();
+     return items;
+    },
+
+   /**
+    * Convert a Json to a editableJson by adding an edtiableId when set
+    * @param {Object/String} json The json to add an id to
+    * @param {Object} id The id object used to give id
+    * @return {Object} The decoded object with id
+    */
+    editableJson : function(json) {
+     var items = json || {};
+     if (typeof(items) !== 'object') items = this.decode(json);
+     if (this.jsonId) {
+       if (!items[this.jsonId]) {
+         items[this.jsonId]=Ext.id();
+       }
+       if (items.items) { 
+         for (var i=0;i<items.items.length;i++) {
+           items.items[i]=this.editableJson(items.items[i]);
+         }
+       }
+     }
+     return items;
     },
 
     /**
@@ -198,7 +338,7 @@ Ext.ux.JSON = new (function(){
       * @param {Boolean} notags Should code be wrapped between scriptStart and scriptEnd
       * @return {String} The array encode as string
       */
-     encodeArray  : function(o, indent,notags){
+     encodeArray  : function(o,indent){
        indent = indent || 0;
        var a = ["["], b, i, l = o.length, v;
        for (i = 0; i < l; i += 1) {
@@ -238,7 +378,7 @@ Ext.ux.JSON = new (function(){
       * @param {Int} indent The indent to uses (defaults 0)
       * @return {String} The object encode as string
       */  
-    encode : function(o, indent){
+    encode : function(o,indent){       
        indent = indent || 0;
        if(typeof o == "undefined" || o === null){
            return "null";
@@ -248,15 +388,40 @@ Ext.ux.JSON = new (function(){
            return this.encodeDate(o);
        }else if(typeof o == "number"){
            return isFinite(o) ? String(o) : "null";
-       }else if(typeof o == "string" && !isNaN(o) ){
+       }else if(typeof o == "string" && !isNaN(o) && o!='' ){
            return o; 
        } else if(typeof o == "string"){
            return this.encodeString(o);
        }else if(typeof o == "boolean"){
            return String(o);
+
        }else {
+        if (o.constructor) {
+          var c = ""+o.constructor;
+          c=c.substring(c.indexOf('function ')+9);
+          c=c.substring(0,c.indexOf('(')).replace(' '); 
+          if (!c) {
+           b = ""+o.constructor;
+           var b=b.substring(0,b.indexOf('.superclass'));
+           for (var i=b.length-1;i>0;i--) {
+             if ([';',' ','\n','\t'].indexOf(b.substring(i,i+1))!=-1) {
+               c=b.substring(i+1);
+               i=-1;
+             }
+           }
+           if (c && o.initialConfig) {
+             return this.indentStr(indent) + this.scriptStart 
+               + 'new '+ c + '(' +
+                this.encode(o.initialConfig,indent+1)
+               + ') ' + this.scriptEnd;
+           }
+          } 
+          if (['Array','Object','Date'].indexOf(c)== -1) 
+            return '/* Class ' + c + ' has no initialConfig */';
+         }
          var a = ["{\n"], b, i, v;
          for (i in o) {
+           if (i == this.jsonId) continue; //internal id skip it during decode
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
              v = o[i];
              switch (typeof v) {
@@ -266,12 +431,14 @@ Ext.ux.JSON = new (function(){
                  b = true;
                  break;
                case "undefined":
-               case "unknown":
-                   break;
+               case "unknown":               
+                   break;            
+               case "object" :
+
                default:
                    if(b) a.push(',\n');
                    a.push(this.indentStr(indent), i, " : ",
-                           v === null ? "null" : this.encode(v, indent + 1));
+                         v === null ? "null" : this.encode(v,indent + 1));
                    b = true;
              }
            }
@@ -282,34 +449,46 @@ Ext.ux.JSON = new (function(){
      },
 
      /**
+      * Decode json evaluating Json tag (required_js,required_css) returning all elements as string
+      * @param {String} value The string to decode
+      * @return {Object} The decoded object with string only
+      */     
+     decodeAsString : function(json) {
+       if (!json) return;
+       /* Encode all functions between begin and end as string enabling load of packages */
+       var value = json
+       var v = '', s = value.indexOf(this.scriptStart);
+       while (s!=-1) {
+         e = value.indexOf(this.scriptEnd,s);
+         v += value.substring(0,s);
+         v += this.encodeString(value.substring(s+this.scriptStart.length,e));
+         value = value.substring(e+this.scriptEnd.length);
+         s=value.indexOf(this.scriptStart);
+       }
+       v += value;   
+       var scope = this.scope || this; //Create reference object for json    
+       var items = eval("(" + v + ")");
+       if(items && items.json) { 
+          this.setRequired_css(items.json.required_css);                    
+          this.setRequired_js(items.json.required_js);
+       }
+       return items;
+     },
+
+     /**
       * Decode json evaluating Json tag (required_js,required_css) 
       * @param {String} value The string to decode
       * @return {Object} The decoded object
       */
      decode : function(json) {
-      if (!json) return;
-      /* Encode all functions between begin and end as string enabling load of packages */
-      var value = json
-      var v = '', s = value.indexOf(this.scriptStart);
-      while (s!=-1) {
-        e = value.indexOf(this.scriptEnd,s);
-        v += value.substring(0,s);
-        v += this.encodeString(value.substring(s+this.scriptStart.length,e));
-        value = value.substring(e+this.scriptEnd.length);
-        s=value.indexOf(this.scriptStart);
-      }
-      v += value;   
-
-      var scope = this.scope || this; //Create reference object for json    
-      var items = eval("(" + v + ")");
-      if(items && items.json) { 
-        this.required_css(items.json.required_css);                    
-        this.required_js(items.json.required_js);
-      }
-      //Now we can do decode by using eval setting scope
-      items = eval("(" + json + ")"); 
-      return items;
-    },
+       this.addJsonHistory(json);
+       var items = this.decodeAsString(json);
+       //Now we can do decode by using eval setting scope
+       var scope = this.scope || this; //Create reference object for json    
+       items = eval("(" + json + ")"); 
+       if(items) this.jsonInit(items.json); 
+       return items;
+     },
 
     /**
      * Function used to clone a object
@@ -351,6 +530,13 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
  
  //@private Whe only read a JSON file once
  single:true,  //only needed once
+
+  /**
+   * Array with items which should be blocked during init
+   * @type {Array}
+   @cfg */
+  blockedJsonInit : ['required_js','required_css','alignTo','anchorTo','items'],
+    
  
  /**
   * @private Init the JSON Panel making sure caching is set depending on disableCaching 
@@ -382,14 +568,7 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
     'failedjsonload' : false
    });
  },
- 
- /**
-  * Function called with config object of json file
-  * @param {Object} config The config object that can be applied
-  */
- jsonInit : function (config) {
-   Ext.apply(this,config);
- },
+
 
  /**
   * @private We override the render function of the panel, so that the updater.renderer is changed to accept JSON
@@ -407,21 +586,8 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
         //Load the code to check if we should javascripts
         this.fireEvent('beforejsonload', response);
         try { 
-          var items = this.decode(response.responseText); 
-          if (items) {
-            this.jsonInit(items.json);
-            delete items.json;
-            //Clear out orignal content
-            while (this.items.first()) {this.remove(this.items.first(), true);}
-            for (var i=0;i<this.items.items.length;i++) {this.remove(this.items.items[i],true)};
-            if(items instanceof Array) {
-              this.add.apply(this,items);
-            } else {
-             this.add(items);
-            }
-          }
+          this.applyJson(response.responseText); 
           this.fireEvent('afterjsonload');
-          this.doLayout();
           if(callback) {callback();}
         } catch (e) {
           if (!this.fireEvent('afterjsonload',response,e))
@@ -437,8 +603,11 @@ Ext.reg('jsonpanel', Ext.ux.JsonPanel);
 
 
 /* FOR NOW WE COPY CODE TO ALSO HAVE A WINDOW, WE NEED TO FIND A SOLUTION */
-
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
+ //@private Window is hidden by moving X out of screen
+ x     : -1000,
+ //@private Window is hidden by moving Y out of screen
+ y     : -1000,
  
  //@private Layout is by default fit
  layout: 'fit',
@@ -480,14 +649,23 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
    });
  },
  
- /**
-  * Function called with config object of json file
-  * @param {Object} config The config object that can be applied
-  */
- jsonInit : function (config) {
-   Ext.apply(this,config);
+ setX : function(x) {
+   this.setPosition(x,this.y);
  },
-
+ 
+ setY : function(y) {
+    this.setPosition(this.x,y);
+ },
+ 
+ setAlignTo : function(arg) {
+   this.alignTo(arg[0],arg[1],arg[2]);
+ },
+ 
+ setAnchorTo : function(ar) {
+   this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
+ },
+ 
+  
  /**
   * @private We override the render function of the panel, so that the updater.renderer is changed to accept JSON
   * @param {Component} ct The component to render
@@ -504,21 +682,8 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
         //Load the code to check if we should javascripts
         this.fireEvent('beforejsonload', response);
         try { 
-          var items = this.decode(response.responseText); 
-          if (items) {
-            this.jsonInit(items.json);
-            delete items.json;
-            //Clear out orignal content
-            while (this.items.first()) {this.remove(this.items.first(), true);}
-            for (var i=0;i<this.items.items.length;i++) {this.remove(this.items.items[i],true)};
-            if(items instanceof Array) {
-              this.add.apply(this,items);
-            } else {
-             this.add(items);
-            }
-          }
+          this.applyJson(response.responseText); 
           this.fireEvent('afterjsonload');
-          this.doLayout();
           if(callback) {callback();}
         } catch (e) {
           if (!this.fireEvent('afterjsonload',response,e))

@@ -1,8 +1,9 @@
 /* TODO: 
  -  Make toolbox global if required, so only one exits by screen
  -  Align toolbox, smaller text, smaller icons
- -  Fit the add combo box over screen  
- -  Build new decode,encode removing attribute trick and _node
+ -  Create special property grid which support editing of code objects
+ -  Element context menu width delete,resize ?
+ -  Double Click event on tree should trigger append
  */  
 
  /*
@@ -74,13 +75,15 @@ Ext.ux.plugin.DesignerWizard = function(json){
 }
 */
 
+
 /** Create a desginer */
 Ext.ux.plugin.Designer = function(config){
   Ext.apply(this, config);
   Ext.ux.plugin.Designer.superclass.constructor.call(this);
+  this.initialConfig = config;
 };
 
-Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {  
+Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({  
   
   /**
    * When true the toolbox is show on init
@@ -105,6 +108,59 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @type {String} 
    @cfg */
   toolboxJson   : false,
+
+  /**
+   * Enable or disable the usage of customProperties (defaults false). 
+   * When disabled only properties which are defined within Ext.ux.Designer.ComponentsDoc.json are available.
+   * @type {Boolean}
+   @cfg */    
+  customProperties  : false, 
+  
+  
+ //Menu buttons
+  /**
+   * Enable or disable the Copy menu button (defaults true).
+   * @type {Boolean}
+   @cfg */
+  enableCopy : true,
+  /**
+   * Enable or disable the Show menu button (defaults true).
+   * @type {Boolean}
+   @cfg */
+  enableShow : true,
+  /**
+   * Enable or disable the Edit Json menu button (defaults true).
+   * @type {Boolean}
+   @cfg */    
+  enableEdit : true,
+  /**
+   * Enable or disable the Help/Version information menu button (defaults true).
+   * @type {Boolean}
+   @cfg */    
+  enableVersion : true,
+  /**
+   * Enable or disable the Save file menu button (defaults false).
+   * @type {Boolean}
+   @cfg */    
+  enableSave : false,
+  /**
+   * Enable or disable the Reload file menu button (defaults false).
+   * @type {Boolean}
+   @cfg */    
+  enableReload: false,
+
+  /**
+   * When fullUpdate is set to true the all items changes are applied by creating new object
+   * otherwise it will first try to apply changes by using the setMethod
+   * @type {Boolean}
+   @cfg */
+  fullUpdate : false,
+  
+  //@private Whe tag each json object with a id
+  jsonId :  '__JSON__',
+  
+  //@private is the root field editable
+  rootEditable : false,
  
   //@private The version of the designer
   version : '0.1.0',
@@ -131,8 +187,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
        */
       'beforehide' : true
     });
-    
-    
+        
     //Init the components drag & drop and toolbox when it is rendered
     this.field.on('render', function() {    
       this.drag = new Ext.dd.DragZone(this.field.el, {
@@ -149,6 +204,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
          if (el.focus) el.focus();
       }, this);
       this.toolbox(this.autoShow);
+      this.createConfig();
     }, this);
   },
   
@@ -158,16 +214,50 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @param {Object} config The config object to be added
    * @return {Component} The component added
    */
-  appendConfig : function (el,config,highlight){
+  appendConfig : function (el,config,select,dropLocation){
+    //Custom function for adding stuff to a container
+    var add =  function(src,comp,at,before){
+      if(!src.items) src.initItems();
+      var c = src.lookupComponent(src.applyDefaults(comp));
+      var pos = src.items.length;
+      for (var i=0;i<src.items.length;i++) {
+        if (src.items.items[i]==at) {
+          pos = (before) ? i : i+1;
+          i=src.items.length;
+        }
+      }
+      if(src.fireEvent('beforeadd', src, c, pos) !== false && src.onBeforeAdd(c) !== false){
+        if (!src.codeConfig) src.codeConfig = this.getConfig(src);
+        if (!src.codeConfig.items) src.codeConfig.items =  [];
+        if (pos>src.codeConfig.items) 
+          src.codeConfig.items.push(comp)
+        else   
+          src.codeConfig.items.splice(pos, 0, comp);
+        src.items.insert(pos,c);
+        c.ownerCt = src;
+        src.fireEvent('add', src, c, pos);
+      }
+      return c;
+    }.createDelegate(this);
+  
     if (typeof config == 'function') {
       config.call(this,function(config) {
         this.appendConfig(el,config,true);
       }.createDelegate(this));
     } else if (this.canAppend(el,config)) {
-     var cmp = this.getDesignElement(el);
-     config = this.tools.clone(config);
-     alert(this.tools.encode(config));
-     if (highlight) this.highlightElement(cmp);
+     //Get the config of the items
+     var ncmp,cmp = this.getDesignElement(el,true);
+     var items = this.editableJson(this.clone(config));
+     //Find the container that should be changed
+     cmp = this.getContainer(cmp); 
+     if (dropLocation == 'after') {
+       ncmp=add(cmp,items,this.activeElement,false);      
+     } else if (dropLocation == 'before') { 
+       ncmp=add(cmp,items,this.activeElement,true);
+     } else  ncmp=add(cmp,items);
+     this.modified = true;     
+     if (cmp.rendered && cmp.layout && cmp.layout.layout) cmp.doLayout();     
+     if (select && ncmp) this.selectElement(ncmp);
     }
     return null;
   },
@@ -178,7 +268,98 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @param {Object} config The config object to be added
    */
   canAppend : function (el,config) {
+    //TODO: Check if we do not add at root container twice
     return true;
+  },
+  
+  /**
+   * Create the codeConfig object and apply it to the field
+   */
+  createConfig : function() {
+    if (this.field.getJsonHistory) 
+      this.field.codeConfig = this.encode(this.field.getJsonHistory());
+    this.field.codeConfig = this.field.codeConfig || this.editableJson(this.field.initialConfig) || {};      
+    if (!this.rootEditable) {
+      this.field.codeConfig = this.field.codeConfig.items ? {'items': this.field.codeConfig.items } : {};
+      this.field.codeConfig[this.jsonId]=Ext.id();
+    }
+    this.applyJson(this.field.codeConfig.items,this.field);
+  },
+  
+  /** 
+   * Get the config of the specified element
+   * @param {Element} el The element for which to get the config object
+   * @return {Object} The config object 
+   */
+  getConfig : function (el) {
+    el = el || this.field;
+    if (!el.codeConfig && el[this.jsonId]) {
+      var findIn = function(items) {
+        if (!items) return null;
+        if (items[this.jsonId]==el[this.jsonId]) return items;
+        if (items.items) {
+          for (var i=0;i<items.items.length;i++) {
+            var r = findIn(items.items[i]);
+            if (r) return r;
+          }
+        }
+        return null;
+      }.createDelegate(this);
+      el.codeConfig = findIn(this.codeConfig)
+    } 
+    return el.codeConfig || el.initialConfig;
+  },
+  
+  /**
+   * Set the config to the design element
+   * @param {String/Object} json The json to be applied
+   * @return {Boolean} true when succesfull applied
+   */
+  setConfig : function (json) {
+    var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
+    this.field.codeConfig = this.editableJson(items);
+    this.jsonInit(items,this.field); //Apply to main
+    this.applyJson(items.items,this.field); //Recreate childs
+    this.modified = true;
+    this.selectElement(this.activeElement);
+    return true;
+  },
+  
+  /**
+   * Refresh the content of the designer
+   */
+  refresh : function() {
+    this.setConfig(this.getConfig());
+  },
+
+  //Find parent which is of type container  
+  getContainer : function(el) {
+    var p = el;
+    while (p && p!=this.field && !this.isContainer(p)) p = p.ownerCt;
+    return p;
+  },
+  
+  /**
+   * Update an element with the changed config
+   * @param {Element} element The elmenent to update
+   * @param {Object} config The config 
+   * @return {Boolean} Indicator that update was applied
+   */
+  updateElement : function (element,config) {
+    var el = element || this.activeElement;
+    if (el && (el.modified || config)) {
+      try {
+        if (this.fullUpdate || !(config && this.jsonInit(config,el,true))) {
+          Ext.apply(this.getConfig(el),config);
+          var p = this.getContainer(el);
+          this.applyJson(this.getConfig(p),p);
+        }
+      } catch (e) { alert(e); }
+      el.modified = false;
+      this.modified = true;
+      return true;
+    }
+    return (element && element.modified ? false : true);
   },
   
   /**
@@ -188,8 +369,22 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @return {Component} The selected component
    */
   selectElement : function (el,fieldOnNull) {
+    this.updateElement();
     var cmp = this.getDesignElement(el,fieldOnNull);
     this.highlightElement(cmp);
+    if (cmp) {
+      this.activeElement = cmp;
+      if (this.propertyGrid) {
+        this.propertyGrid.enable();
+        this.propertyGrid.setSource(this.getConfig(this.activeElement));
+      }
+    } else {
+      if (this.propertyGrid) {
+        this.activeConfig = null;
+        this.propertyGrid.disable();
+        this.propertyGrid.setSource({});
+      }
+    }
     return cmp;
   },
 
@@ -266,8 +461,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
    * @return {Boolean} True indicates the xtype is a container capable of contain other elements
    */
   isContainer : function (cmp) {
-    var xtype = cmp ? cmp.xtype : null;
-    return  (xtype && ['jsonpanel','panel','viewport','form','window','tabpanel','toolbar','fieldset'].indexOf(xtype) !== -1);
+    return cmp instanceof Ext.Container;
+    /*var xtype = cmp ? cmp.xtype : null;
+    return  (xtype && ['jsonpanel','panel','viewport','form','window','tabpanel','toolbar','fieldset'].indexOf(xtype) !== -1);*/
   },
   
   /**
@@ -328,10 +524,24 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
   notifyDrop : function (src,e,data) {
     var el=this.getTarget(e);
     if (data.config && !data.processed) {
-      this.appendConfig(el,data.config,true);
+      this.appendConfig(el,data.config,true,data.drop);
       data.processed = true;
     }
     return true;  
+  },
+  
+  /**
+   * @private Function called to initalize the property editor which can be used to edit properties
+   * @param {PropertyGrid} propertyGrid The property grid which is used to edit
+   */
+  setPropertyGrid : function(propertyGrid) {
+    this.propertyGrid = propertyGrid;
+    propertyGrid.store.on('update', function(s,r,t) {
+      if (t == Ext.data.Record.EDIT) {
+        var change = {}; change[r.id] = r.data.value;
+        this.updateElement(this.activeElement,change);
+      }
+    }, this, {buffer:100});
   },
   
   /**
@@ -352,23 +562,22 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
         }
         this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
       }
-      this.tools = new Ext.ux.JsonPanel({ autoLoad:this.toolboxJson,
-                                       disableCaching :this.disableCaching,
-                                       scope   : this });
+      var tools = 
       this.toolboxTarget = Ext.getCmp(this.toolboxTarget);
       if (this.toolboxTarget){
         this._toolbox = this.toolboxTarget;
-        this._toolbox.add(this.tools);
+        this._toolbox.add(new Ext.ux.JsonPanel({
+            autoLoad:this.toolboxJson,
+            disableCaching :this.disableCaching,
+            scope   : this })
+        );
       } else {
-       this._toolbox = new Ext.Window({
-         closeAction: 'hide', 
-         title : 'Designer Toolbox',
-         layout: 'fit',
-         border: false,
-         width : 215,
-         height: 350,
-         items : this.tools
-       });
+        this._toolbox = new Ext.ux.JsonWindow({
+            autoLoad:this.toolboxJson,
+            disableCaching :this.disableCaching,
+            scope   : this,
+            closable: false
+        });
       }
     }
     //Now show or hide the toolbox
@@ -379,4 +588,4 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, {
     }
   }
 
-});
+},Ext.ux.JSON));

@@ -1,5 +1,12 @@
 { json: {
-   required_js : 'js/Ext.ux.plugin.Designer.js'
+   blockedJsonInit: {'jsonpanel' : ['width','height','title'],
+                     'jsonwindow': [] 
+                    },
+   required_js : 'js/Ext.ux.plugin.Designer.js',
+   title : 'Designer Toolbox',
+   width : 235,
+   height: 350,
+   alignTo: [scope.field.id,'br',[-235,-350]]
   },
   layout: 'border',
   border: false,
@@ -20,30 +27,116 @@
     }/*END*/,
     tbar:/*BEGIN*/[{
           tooltip : 'Save the design file ',
-          iconCls:'icon-save'
+          iconCls:'icon-save',
+          hidden: !scope.enableSave
         },{
           iconCls:'icon-reload',
-          tooltip : 'Reload the design file '
+          tooltip : 'Reload the design file ',
+          hidden: !scope.enableReload
         },{
-          tooltip : 'Remove all elements from design',
-          iconCls:'icon-reset'
+          tooltip : 'Clear designarea',
+          iconCls:'icon-reset',
+          handler: function(){
+            scope.setConfig();
+          }
         },'-',{
           tooltip : 'Copy JSON to clipboard',
-          iconCls:'icon-designcopy'
+          iconCls :'icon-designcopy',
+          hidden  : !scope.enableCopy,
+          handler : function(){
+            var text = scope.getConfig();  
+            if (window.clipboardData) { // Internet Explorer
+               window.clipboardData.setData("Text", ""+ text); // stupid IE... won't work without the ""+ ?!?!?
+            } else if (window.netscape) { // Mozilla
+                try {
+                  netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');       
+                  var gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].getService(Components.interfaces.nsIClipboardHelper);            
+                  gClipboardHelper.copyString(text);
+                } catch(e) {
+                  return Ext.Msg.alert('Information',e +'\n\nPlease type: "about:config" in your address bar.\nThen filter by "signed".\nChange the value of "signed.applets.codebase_principal_support" to true.\nYou should then be able to use this feature.');
+                }
+            } else { 
+              return Ext.Msg.alert('Information',"Your browser does not support this feature");
+            }
+          }          
         },{
           tooltip : 'Edit the generated JSON using a text area',
-          iconCls:'icon-editEl'
+          iconCls:'icon-editEl',
+          hidden : !scope.enableEdit,
+          handler :  function (){
+              if (!scope.jsonWindow) {
+                var tf = new Ext.form.TextArea();
+                var jsonWindow = new Ext.Window({
+                    title       : "Edit JSON",
+                    width       : 500,
+                    height      : 300,
+                    autoScroll  : true,
+                    layout      : 'fit',
+                    maximizable : true,
+                    items       : tf,
+                    modal       : true,
+                    closeAction : 'hide'
+                  });
+                jsonWindow.tf = tf;          
+                jsonWindow.addButton({
+                    text    : "Close",
+                    scope   : jsonWindow,
+                    handler : function() { this.hide(); }
+                  });
+                jsonWindow.addButton({
+                    text    : "Apply",
+                    scope   : jsonWindow,
+                    handler : function() {
+                      jsonWindow.el.mask("Please wait...");
+                      if (!scope.setConfig(tf.getValue()))  {
+                          jsonWindow.el.unmask();
+                          return;
+                      }
+                      jsonWindow.el.unmask();
+                      jsonWindow.hide();
+                    }
+                  });
+               scope.jsonWindow = jsonWindow;   
+              }
+              scope.jsonWindow.tf.setValue(scope.encode(scope.getConfig()));
+              scope.jsonWindow.show();
+           }
         },{
           iconCls : 'icon-show',
-          tooltip : 'Show design in window'
+          tooltip : 'Show design in window',
+          hidden  : !scope.enableShow,
+          handler : function(){
+            //Disable the designer so tabindex is disabled
+            scope.field.disable();
+            var w = new Ext.Window(Ext.apply({
+                  title  : 'Show Config', 
+                  border  : false,
+                  width:600,
+                  height: 400,
+                  layout: 'fit',
+                  iconCls: 'icon-show',
+                  modal       : true,
+                  maximizable : true,
+                  closeAction : 'close',
+                  listeners   : { 'beforeclose' : function(){
+                                    scope.field.enable();
+                                }} 
+                  },scope.getConfig()));
+              w.show();
+          }
         },'-',{
           iconCls : 'icon-update',
-          tooltip : 'Apply changes'
+          tooltip : 'Redraw',
+          handler : function(){
+            scope.refresh();
+          }
         },'-',{
           iconCls : 'icon-undo',
-          tooltip : "Undo last change"
+          tooltip : "Undo last change",
+          hidden  : true
         },'->',{
           iconCls : 'icon-help',
+          hidden  : !scope.enableVersion,
           handler : function() {
             Ext.Msg.alert('Information',
               "<i>Author  :</i><b> Sierk Hoeksma</b><br/>" +
@@ -71,6 +164,11 @@
             return data;
           },
           ddGroup: 'designerddgroup'
+        }/*END*/,
+        listeners : /*BEGIN*/ {
+         'dblclick' : function(node,e){
+           scope.appendConfig(scope.activeElement,node.attributes.config);
+         }
         }/*END*/
       },{
         title:"Code Tree",
@@ -84,13 +182,19 @@
     },{
           xtype : 'propertygrid',
           region: 'center',
+          disabled: true,
           source           : {},
+          listeners         : {
+            'render'       : function() {
+             //Register it with designer
+             scope.setPropertyGrid(this);
+            }
+          },
           bbar             : ['Add ',   
             new Ext.form.ComboBox({
               mode           : 'local',
               valueField     : 'value',
               displayField   : 'name',
-              customProperties: true,
               store          : new Ext.data.SimpleStore({
                   sortInfo : {field:'name',order:'ASC'},
                   fields   : ['value','name'],
@@ -98,13 +202,12 @@
               }),
               listeners    : {
                 'specialkey' : function(tf,e) {
-                      var name = tf.getValue() || (this.customProperties ? tf.getRawValue() : '');
-      //TODO: Wrong store is selected Combobox instead of grid                
-                      var ds = this.store, defaultVal = "";
+                      var name = tf.getValue() || (scope.customProperties ? tf.getRawValue() : '');
+                      var ds = scope.propertyGrid.store, defaultVal = "";
                       if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
                           tf.setValue('');
                           ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
-                 //       this.editPanel.startEditing(ds.getCount()-1, 1);
+                          scope.propertyGrid.startEditing(ds.getCount()-1, 1);
                       }
                 }
               }
