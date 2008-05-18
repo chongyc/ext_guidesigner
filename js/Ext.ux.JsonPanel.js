@@ -141,7 +141,7 @@ Ext.ux.JSON = new (function(){
 
     
     //@private The maximum number of json histories to keep
-    jsonHistoryMax : 1,
+    jsonHistoryMax : 0,
     //@private The history for json
     jsonHistory : [],
     

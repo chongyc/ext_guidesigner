@@ -88,9 +88,15 @@
                     scope   : jsonWindow,
                     handler : function() {
                       jsonWindow.el.mask("Please wait...");
-                      if (!scope.setConfig(tf.getValue()))  {
-                          jsonWindow.el.unmask();
-                          return;
+                      try {
+                        if (!scope.setConfig(tf.getValue()))  {
+                           jsonWindow.el.unmask();
+                           return;
+                        }
+                      } catch (e) {
+                         Ext.Msg.alert('Failure','Failed to apply code ' + e); 
+                         jsonWindow.el.unmask();
+                         return;
                       }
                       jsonWindow.el.unmask();
                       jsonWindow.hide();
@@ -113,7 +119,6 @@
                   border  : false,
                   width:600,
                   height: 400,
-                  layout: 'fit',
                   iconCls: 'icon-show',
                   modal       : true,
                   maximizable : true,
@@ -167,7 +172,7 @@
         }/*END*/,
         listeners : /*BEGIN*/ {
          'dblclick' : function(node,e){
-           scope.appendConfig(scope.activeElement,node.attributes.config);
+           scope.appendConfig(scope.activeElement||scope.field,node.attributes.config,true);
          }
         }/*END*/
       },{

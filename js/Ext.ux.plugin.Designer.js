@@ -3,7 +3,8 @@
  -  Align toolbox, smaller text, smaller icons
  -  Create special property grid which support editing of code objects
  -  Element context menu width delete,resize ?
- -  Double Click event on tree should trigger append
+ -  When moving item change icon to move instead of append
+ -  When moving item it cannot moved in it self
  */  
 
  /*
@@ -200,7 +201,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         notifyDrop : this.notifyDrop.createDelegate(this)
       });
       this.field.el.on('click', function(e,el) {
-         var cmp = this.selectElement(el,true);
+         var cmp = this.selectElement(el);
          if (el.focus) el.focus();
       }, this);
       this.toolbox(this.autoShow);
@@ -215,6 +216,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Component} The component added
    */
   appendConfig : function (el,config,select,dropLocation){
+    if (!el) return false;
     //Custom function for adding stuff to a container
     var add =  function(src,comp,at,before){
       if(!src.items) src.initItems();
@@ -259,7 +261,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
      if (cmp.rendered && cmp.layout && cmp.layout.layout) cmp.doLayout();     
      if (select && ncmp) this.selectElement(ncmp);
     }
-    return null;
+    return false;
   },
   
   /**
@@ -276,14 +278,18 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * Create the codeConfig object and apply it to the field
    */
   createConfig : function() {
-    if (this.field.getJsonHistory) 
-      this.field.codeConfig = this.encode(this.field.getJsonHistory());
-    this.field.codeConfig = this.field.codeConfig || this.editableJson(this.field.initialConfig) || {};      
-    if (!this.rootEditable) {
-      this.field.codeConfig = this.field.codeConfig.items ? {'items': this.field.codeConfig.items } : {};
-      this.field.codeConfig[this.jsonId]=Ext.id();
+    if (this.field.items && this.field.items.first()) {
+       var items = [];
+       while (this.field.items.first()) {
+          items.push(this.field.items.first());
+          this.field.items.remove(this.field.items.first(), true);
+       }       
+       //Re create a panel with items from config editable root
+       var config = { 'border' : false, 'layout' : this.field.getLayout(),'items' : this.editableJson(items)};
+       config[this.jsonId]=Ext.id();
+       var el = this.field.add(config);
+       el.codeConfig = config;
     }
-    this.applyJson(this.field.codeConfig.items,this.field);
   },
   
   /** 
@@ -292,7 +298,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Object} The config object 
    */
   getConfig : function (el) {
-    el = el || this.field;
+    el = el || this.field.items.first();
     if (!el.codeConfig && el[this.jsonId]) {
       var findIn = function(items) {
         if (!items) return null;
@@ -318,10 +324,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   setConfig : function (json) {
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
     this.field.codeConfig = this.editableJson(items);
-    this.jsonInit(items,this.field); //Apply to main
-    this.applyJson(items.items,this.field); //Recreate childs
+    this.applyJson(items,this.field); //Recreate childs
     this.modified = true;
-    this.selectElement(this.activeElement);
+    this.selectElement();
     return true;
   },
   
@@ -368,9 +373,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @param {Boolean} fieldOnNull Use the designer field when element not found
    * @return {Component} The selected component
    */
-  selectElement : function (el,fieldOnNull) {
+  selectElement : function (el) {
     this.updateElement();
-    var cmp = this.getDesignElement(el,fieldOnNull);
+    var cmp = this.getDesignElement(el);
     this.highlightElement(cmp);
     if (cmp) {
       this.activeElement = cmp;
@@ -407,35 +412,31 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   },
     
   /**
-   * Check component is child of the designer
-   * @param {Component} cmp The component to check if this is within field
-   * @return {Component} The component when is is within the field otherwise null
-   */
-  isChildOfDesigner : function (cmp) {
-    var c = cmp,loops = 100;
-    var id = this.field.getId();
-    while (loops && c) {
-      if (c.id == id) return cmp;
-      c = c.ownerCt;
-      loops--;
-    }
-    return null;
-  },
-
-  /**
    * Find a designElement, this is a ExtJs component which is embedded within this.field
    * @param {Element} el The element to search the designelement for
    * @return {Component} The ExtJs component found, null when not valid
    */
-  getDesignElement : function(el,fieldOnNull) {
+  getDesignElement : function(el,allowField) {
     var cmp,loops = 10;
     while (loops && el) {
       cmp = Ext.getCmp(el.id);
-      if (cmp) return this.isChildOfDesigner(cmp);
+      if (cmp) {
+        //Check if this component is element of designer
+        if (!allowField && cmp == this.field) return null;
+        loops = 50;
+        var c = cmp;
+        var id = this.field.getId();
+        while (loops && c) {
+          if (c.id == id) return cmp;
+          c = c.ownerCt;
+          loops--;
+        }
+        return null;
+      }
       el = el.parentNode;
       loops--;
     }
-    return (fieldOnNull ? this.field  : null);
+    return null;
   },
   
   /**
@@ -499,7 +500,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   notifyOver : function (src,e,data) {
     if (data.config) {
-      var cmp = this.getDesignElement(this.getTarget(e));
+      var cmp = this.getDesignElement(this.getTarget(e),true);
       if (this.canAppend(cmp)) {
         this.selectElement(cmp);
         //"x-tree-drop-ok-above" "x-tree-drop-ok-between" "x-tree-drop-ok-below"        
