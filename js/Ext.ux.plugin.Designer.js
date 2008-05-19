@@ -215,7 +215,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @param {Object} config The config object to be added
    * @return {Component} The component added
    */
-  appendConfig : function (el,config,select,dropLocation){
+  appendConfig : function (el,config,select,dropLocation,source){
     if (!el) return false;
     //Custom function for adding stuff to a container
     var add =  function(src,comp,at,before){
@@ -248,17 +248,27 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       }.createDelegate(this));
     } else if (this.canAppend(el,config)) {
      //Get the config of the items
-     var ncmp,cmp = this.getDesignElement(el,true);
+     var ncmp,ccmp,cmp= this.getDesignElement(el,true);
      var items = this.editableJson(this.clone(config));
      //Find the container that should be changed
-     cmp = this.getContainer(cmp); 
-     if (dropLocation == 'after') {
-       ncmp=add(cmp,items,this.activeElement,false);      
-     } else if (dropLocation == 'before') { 
-       ncmp=add(cmp,items,this.activeElement,true);
-     } else  ncmp=add(cmp,items);
+     ccmp = this.getContainer(cmp); 
+     if (dropLocation == 'appendafter') {
+       ncmp=add(ccmp,items,this.activeElement,false);      
+     } else if (dropLocation == 'appendbefore') { 
+       ncmp=add(ccmp,items,this.activeElement,true);
+     } else if (dropLocation == 'moveafter') {
+       source.ownerCt.remove(source);
+       ncmp=add(ccmp,items,this.activeElement,false);      
+     } else if (dropLocation == 'movebefore') { 
+       source.ownerCt.remove(source);
+       ncmp=add(ccmp,items,this.activeElement,true);
+     } else if (dropLocation == 'move') {
+       source.ownerCt.remove(source);
+       ncmp=add(ccmp,items);
+     } else // Append default behavior
+        ncmp=add(ccmp,items);
      this.modified = true;     
-     if (cmp.rendered && cmp.layout && cmp.layout.layout) cmp.doLayout();     
+     if (ccmp.rendered && ccmp.layout && ccmp.layout.layout) ccmp.doLayout();     
      if (select && ncmp) this.selectElement(ncmp);
     }
     return false;
@@ -410,33 +420,38 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     }
     return false;
   },
+
+  /**
+   * Check if a element is contained within a other element
+   * @param {Element} cmp The component to search
+   * @param {Element} container The component to search within
+   * @return {Component} The ExtJs component found, false when not valid
+   */  
+  isElementOf : function(cmp,container) {
+    container = container || this.field;
+    var loops = 50,c = cmp,id = container.getId();
+    while (loops && c) {
+      if (c.id == id) return cmp;
+      c = c.ownerCt;
+      loops--;
+    }
+    return false;
+  },
     
   /**
    * Find a designElement, this is a ExtJs component which is embedded within this.field
    * @param {Element} el The element to search the designelement for
-   * @return {Component} The ExtJs component found, null when not valid
+   * @return {Component} The ExtJs component found, false when not valid
    */
   getDesignElement : function(el,allowField) {
     var cmp,loops = 10;
     while (loops && el) {
       cmp = Ext.getCmp(el.id);
-      if (cmp) {
-        //Check if this component is element of designer
-        if (!allowField && cmp == this.field) return null;
-        loops = 50;
-        var c = cmp;
-        var id = this.field.getId();
-        while (loops && c) {
-          if (c.id == id) return cmp;
-          c = c.ownerCt;
-          loops--;
-        }
-        return null;
-      }
+      if (cmp) return this.isElementOf(cmp,this.field) ? cmp : (allowField ? this.field : false);
       el = el.parentNode;
       loops--;
     }
-    return null;
+    return allowField ? this.field : false;
   },
   
   /**
@@ -451,7 +466,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        return {
          ddel:el,
          config : cmp.initialConfig,
-         clone:(e.shiftKey)
+         clone:(e.shiftKey),
+         internal : true,
+         source   : cmp
        }; 
      }
   },
@@ -505,13 +522,22 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         this.selectElement(cmp);
         //"x-tree-drop-ok-above" "x-tree-drop-ok-between" "x-tree-drop-ok-below"        
         var el=cmp.getEl();
-        data.drop = this.isContainer(cmp) ? "append" : 
-           (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "before" : "after");
-        //TODO: Find Child to add, incase of append
-        return (data.drop=='before' ?  "x-tree-drop-ok-above" :
-               (data.drop=='after'  ? "x-tree-drop-ok-below"  : "x-tree-drop-ok-append"));
+        if (data.internal && !data.clone) {
+          //Only allow move if not within same container
+          if (this.isElementOf(cmp,data.source,true)) return false;
+          data.drop = this.isContainer(cmp) ? "move" : 
+           (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "movebefore" : "moveafter");
+          return (data.drop=='movebefore' ?  "icon-element-move-before" :
+            (data.drop=='moveafter'  ? "icon-element-move-after"  : "icon-element-move"));
+        } else {
+          data.drop = this.isContainer(cmp) ? "append" : 
+           (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "appendbefore" : "appendafter");
+          return (data.drop=='appendbefore' ?  "icon-element-add-before" :
+            (data.drop=='appendafter'  ? "icon-element-add-after"  : "icon-element-add"));
+        }
       }
     }
+    data.drop = null;
     return false;
   },
   
@@ -524,8 +550,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   notifyDrop : function (src,e,data) {
     var el=this.getTarget(e);
-    if (data.config && !data.processed) {
-      this.appendConfig(el,data.config,true,data.drop);
+    if (data.config && !data.processed && data.drop) {
+      this.appendConfig(el,data.config,true,data.drop,data.source);
       data.processed = true;
     }
     return true;  

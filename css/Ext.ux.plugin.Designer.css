@@ -43,3 +43,11 @@
 .icon-undo { background-image:url(../icons/arrow_undo.png) !important; }
 .icon-update { background-image:url(../icons/arrow_refresh.png) !important; }
 .icon-resize { background-image:url(../icons/arrow_inout.png) !important; }
+
+
+.icon-element-add .x-dd-drop-icon{background-image:url(../icons/element_new.png); }
+.icon-element-add-before .x-dd-drop-icon{background-image:url(../icons/element_new_before.png); }
+.icon-element-add-after .x-dd-drop-icon{background-image:url(../icons/element_new_after.png); }
+.icon-element-move .x-dd-drop-icon{background-image:url(../icons/element_copy.png);  }
+.icon-element-move-before .x-dd-drop-icon{background-image:url(../icons/element_previous.png);  }
+.icon-element-move-after .x-dd-drop-icon{background-image:url(../icons/element_next.png);  }
