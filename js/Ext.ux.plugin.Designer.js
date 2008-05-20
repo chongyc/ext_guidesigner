@@ -390,6 +390,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     if (cmp) {
       this.activeElement = cmp;
       if (this.propertyGrid) {
+        this.propertyFilter();
         this.propertyGrid.enable();
         this.propertyGrid.setSource(this.getConfig(this.activeElement));
       }
@@ -447,7 +448,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     var cmp,loops = 10;
     while (loops && el) {
       cmp = Ext.getCmp(el.id);
-      if (cmp) return this.isElementOf(cmp,this.field) ? cmp : (allowField ? this.field : false);
+      if (cmp) {
+        if (!allowField && cmp == this.field) return false;
+        return this.isElementOf(cmp,this.field) ? cmp : (allowField ? this.field : false);
+      }
       el = el.parentNode;
       loops--;
     }
@@ -587,7 +591,24 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
             path = s.replace(/Ext.ux.plugin.Designer\.js(\?.*)?$/,'');
           }
         }
+        this.toolboxPath = path;
         this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
+        this.properties = new Ext.data.JsonStore({
+            url: this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json',
+            sortInfo : {field:'value',order:'ASC'},
+            root: 'properties',
+            fields: ['value', 'default','instance']
+        });
+        this.properties.load();
+        //Add Filter function based on instance
+        var filterByFn = function(rec,id) {
+          var i = rec.get('instance');
+          if (i) return eval('this.activeElement instanceof ' +i);
+          return true;
+        }.createDelegate(this);
+        this.propertyFilter = function (){
+          this.properties.filterBy(filterByFn,this);
+        };
       }
       var tools = 
       this.toolboxTarget = Ext.getCmp(this.toolboxTarget);

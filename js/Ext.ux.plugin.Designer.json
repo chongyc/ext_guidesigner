@@ -177,12 +177,7 @@
         }/*END*/
       },{
         title:"Code Tree",
-        xtype:"treepanel",
-        animate:true,
-        autoScroll:true,
-        containerScroll:true,
-        root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'json',id:'json/',draggable : false,leaf:false})/*END*/,
-        loader:/*BEGIN*/new Ext.tree.TreeLoader({dataUrl:'index.php',baseParams: {filter : '(.*).json$'}})/*END*/
+        html :"TODO: Show code as tree of items"
       }]
     },{
           xtype : 'propertygrid',
@@ -199,21 +194,21 @@
             new Ext.form.ComboBox({
               mode           : 'local',
               valueField     : 'value',
-              displayField   : 'name',
-              store          : new Ext.data.SimpleStore({
-                  sortInfo : {field:'name',order:'ASC'},
-                  fields   : ['value','name'],
-                  data     : [['test','test']/* TODO FILL FROM JSON instead local */]
-              }),
+              displayField   : 'value',
+              store          : scope.properties,
               listeners    : {
                 'specialkey' : function(tf,e) {
                       var name = tf.getValue() || (scope.customProperties ? tf.getRawValue() : '');
                       var ds = scope.propertyGrid.store, defaultVal = "";
                       if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
-                          tf.setValue('');
-                          ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
-                          scope.propertyGrid.startEditing(ds.getCount()-1, 1);
-                      }
+                         var i = this.store.find('value',name);
+                         if (i!=-1) {
+                            defaultVal = this.store.getAt(i).get('default') || defaultVal;
+                         }
+                         tf.setValue('');
+                         ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
+                         scope.propertyGrid.startEditing(ds.getCount()-1, 1);
+                      } 
                 }
               }
            })

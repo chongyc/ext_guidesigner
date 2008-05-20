@@ -1,0 +1,4 @@
+{properties: [
+{value: 'test', default: 'Test Code'},
+{value: 'layout', default: 'fit' , instance : 'Ext.Container'}
+]}
