@@ -1,3 +1,21 @@
+/*
+  * Author: Sierk Hoeksma. WebBlocks.eu
+  * Copyright 2007-2008, WebBlocks.  All rights reserved.
+  *
+  * This json is part of the extension Gui Designer
+  ************************************************************************************
+  *   This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY;
+  *   without even the implied warranty of MERCHANTABILITY or
+  *   FITNESS FOR A PARTICULAR PURPOSE.
+  ************************************************************************************
+
+  License: This source is licensed under the terms of the Open Source LGPL 3.0 license.
+  Commercial use is permitted to the extent that the code/component(s) do NOT become
+  part of another Open Source or Commercially licensed development library or toolkit
+  without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
+
+  * Donations are welcomed: http://donate.webblocks.eu
+  */ 
 { json: {
    blockedJsonInit: {'jsonpanel' : ['width','height','title'],
                      'jsonwindow': [] 
@@ -180,31 +198,57 @@
         html :"TODO: Show code as tree of items"
       }]
     },{
-          xtype : 'propertygrid',
+          xtype : 'uxpropertygrid',
           region: 'center',
           disabled: true,
+          propertyTypes : scope.properties,
+         // customEditors    : scope.getEditors()
           source           : {},
           listeners         : {
             'render'       : function() {
-             //Register it with designer
-             scope.setPropertyGrid(this);
+               //Register it with designer
+               scope.setPropertyGrid(this);
+               var id = Ext.id();
+               var contextMenu = new Ext.menu.Menu({items:[{
+                 id      : id,
+                 iconCls : 'icon-delete',
+                 scope   : this,
+                 handler : function(item,e) {
+                     var ds = this.store;
+                     delete this.getSource()[item.record.id];
+                     ds.remove(item.record);
+                     delete item.record;
+                     scope.activeElement.modified = true;
+                     scope.updateElement();
+                     scope.selectElement(scope.findByJsonId(scope.activeElement[scope.jsonId]));
+                   }.createDelegate(this)
+               }]});
+               // property grid contextMenu
+               this.on('rowcontextmenu', function(g, idx, e) {
+                   e.stopEvent();
+                   var r = this.store.getAt(idx);
+                   if (!r) { return false; }
+                   var i = contextMenu.items.get(id);
+                   i.setText('Delete property "' + r.id + '"');
+                   i.record = r;
+                   contextMenu.showAt(e.getXY());
+                 }, this);
+
             }
           },
           bbar             : ['Add ',   
             new Ext.form.ComboBox({
               mode           : 'local',
-              valueField     : 'value',
-              displayField   : 'value',
+              valueField     : 'name',
+              displayField   : 'name',
               store          : scope.properties,
               listeners    : {
                 'specialkey' : function(tf,e) {
                       var name = tf.getValue() || (scope.customProperties ? tf.getRawValue() : '');
                       var ds = scope.propertyGrid.store, defaultVal = "";
                       if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
-                         var i = this.store.find('value',name);
-                         if (i!=-1) {
-                            defaultVal = this.store.getAt(i).get('default') || defaultVal;
-                         }
+                         var i = this.store.find('name',name);
+                         if (i!=-1) defaultVal = this.store.getAt(i).get('default') || defaultVal;
                          tf.setValue('');
                          ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
                          scope.propertyGrid.startEditing(ds.getCount()-1, 1);

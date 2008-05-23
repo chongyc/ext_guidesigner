@@ -26,6 +26,23 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
+Ext.override(Ext.form.Label, {   
+    onRender : function(ct, position){
+        if(!this.el){
+            this.el = document.createElement('label');
+            this.el.innerHTML = this.text ? Ext.util.Format.htmlEncode(this.text) : (this.html || '');
+            if(this.forId){
+                this.el.setAttribute('htmlFor', this.forId);
+            }
+            //Swap the ids, so it becomes selectable in designer
+            this.el.id = this.id;
+            this.id = this.id + '-';
+        }
+        Ext.form.Label.superclass.onRender.call(this, ct, position);
+    }
+});
+
+
 Ext.namespace('Ext.ux.tree');
 Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
  /**
@@ -59,9 +76,6 @@ Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
 });
 
 Ext.namespace('Ext.ux.plugin');
-
-//Is not registered but required by designer
-Ext.reg('propertygrid', Ext.grid.PropertyGrid);
 
 /*
 Ext.ux.plugin.DesignerWizard = function(json){
@@ -160,11 +174,13 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
   
+  licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */\n",
+  
   //@private is the root field editable
   rootEditable : false,
  
   //@private The version of the designer
-  version : '0.1.0',
+  version : '2.0.0-beta1',
 
   /**
    * Init the plugin ad assoiate it to a field
@@ -209,6 +225,16 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     }, this);
   },
   
+  removeElement : function(source) {
+    var own = this.getContainer(source.ownerCt);
+    for (var i=0;i<own.items.length;i++) {
+      if (own.items.items[i]==source) {
+        if (own.codeConfig) own.codeConfig.items.splice(i,1);
+        own.remove(source,true);
+      }
+    }    
+  },
+  
   /**
    * Append the config to the element
    * @param {Element} el The element to which the config would be added
@@ -217,6 +243,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   appendConfig : function (el,config,select,dropLocation,source){
     if (!el) return false;
+
     //Custom function for adding stuff to a container
     var add =  function(src,comp,at,before){
       if(!src.items) src.initItems();
@@ -231,7 +258,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       if(src.fireEvent('beforeadd', src, c, pos) !== false && src.onBeforeAdd(c) !== false){
         if (!src.codeConfig) src.codeConfig = this.getConfig(src);
         if (!src.codeConfig.items) src.codeConfig.items =  [];
-        if (pos>src.codeConfig.items) 
+        if (pos>src.codeConfig.items.length) 
           src.codeConfig.items.push(comp)
         else   
           src.codeConfig.items.splice(pos, 0, comp);
@@ -241,7 +268,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       }
       return c;
     }.createDelegate(this);
-  
+    
+
     if (typeof config == 'function') {
       config.call(this,function(config) {
         this.appendConfig(el,config,true);
@@ -257,13 +285,13 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
      } else if (dropLocation == 'appendbefore') { 
        ncmp=add(ccmp,items,this.activeElement,true);
      } else if (dropLocation == 'moveafter') {
-       source.ownerCt.remove(source);
+       this.removeElement(source);
        ncmp=add(ccmp,items,this.activeElement,false);      
      } else if (dropLocation == 'movebefore') { 
-       source.ownerCt.remove(source);
+       this.removeElement(source);
        ncmp=add(ccmp,items,this.activeElement,true);
      } else if (dropLocation == 'move') {
-       source.ownerCt.remove(source);
+       this.removeElement(source);
        ncmp=add(ccmp,items);
      } else // Append default behavior
         ncmp=add(ccmp,items);
@@ -309,6 +337,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   getConfig : function (el) {
     el = el || this.field.items.first();
+    if (!el) return {};
     if (!el.codeConfig && el[this.jsonId]) {
       var findIn = function(items) {
         if (!items) return null;
@@ -332,11 +361,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Boolean} true when succesfull applied
    */
   setConfig : function (json) {
+    var id = this.activeElement ? this.activeElement[this.jsonId] : null;
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
     this.field.codeConfig = this.editableJson(items);
     this.applyJson(items,this.field); //Recreate childs
     this.modified = true;
-    this.selectElement();
+    this.selectElement(this.findByJsonId(id));
     return true;
   },
   
@@ -364,12 +394,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     var el = element || this.activeElement;
     if (el && (el.modified || config)) {
       try {
-        if (this.fullUpdate || !(config && this.jsonInit(config,el,true))) {
+        if (this.fullUpdate || this.isContainer(el) || !(config && this.jsonInit(config,el,true))) {
           Ext.apply(this.getConfig(el),config);
-          var p = this.getContainer(el);
-          this.applyJson(this.getConfig(p),p);
+          var p = this.isContainer(el) ? this.getContainer(el.ownerCt): this.getContainer(el);
+          this.applyJson(this.getConfig(p).items,p);
         }
-      } catch (e) { alert(e); }
+      } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element' + e); }
       el.modified = false;
       this.modified = true;
       return true;
@@ -456,6 +486,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       loops--;
     }
     return allowField ? this.field : false;
+  },
+  
+  findByJsonId : function(id) {
+     return this.field.findBy(function (c,p) {return (c[this.jsonId]==id ? true : false);},this)[0];
   },
   
   /**
@@ -569,8 +603,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     this.propertyGrid = propertyGrid;
     propertyGrid.store.on('update', function(s,r,t) {
       if (t == Ext.data.Record.EDIT) {
-        var change = {}; change[r.id] = r.data.value;
+        var change = {}; change[r.id] = r.data.changeValue || r.data.value;
         this.updateElement(this.activeElement,change);
+        this.selectElement(this.findByJsonId(this.activeElement[this.jsonId]));
       }
     }, this, {buffer:100});
   },
@@ -595,9 +630,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
         this.properties = new Ext.data.JsonStore({
             url: this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json',
-            sortInfo : {field:'value',order:'ASC'},
+            sortInfo : {field:'name',order:'ASC'},
             root: 'properties',
-            fields: ['value', 'default','instance']
+            fields: ['name', 'type','default','desc','instance','editable','values']
         });
         this.properties.load();
         //Add Filter function based on instance

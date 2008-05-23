@@ -129,6 +129,13 @@ Ext.ux.JSON = new (function(){
     * @private Tag added to json code so whe can see ending of code
     */
     scriptEnd    : '/*END*/',
+    
+    /**
+     * The lisenceText that should be added to each JSON File Created
+     * @type {String}
+     @cfg */
+    licenseText  : '',
+    
     /**
      * @private Indicator if object hasOwnProperty
      */
@@ -288,6 +295,15 @@ Ext.ux.JSON = new (function(){
        if (!items[this.jsonId]) {
          items[this.jsonId]=Ext.id();
        }
+       for (var k in items) {
+         if (!items[this.jsonId + k ]) {
+           if (typeof(items[k]) == 'function') {
+             items[this.jsonId + k]=String(items[k]);
+           } else if (typeof(items[k]) == 'object' && k!='items') {
+            items[this.jsonId + k] = Ext.ux.JSON.encode(items[k]);
+           } 
+         }
+       }
        if (items.items) { 
          for (var i=0;i<items.items.length;i++) {
            items.items[i]=this.editableJson(items.items[i]);
@@ -338,7 +354,7 @@ Ext.ux.JSON = new (function(){
       * @param {Boolean} notags Should code be wrapped between scriptStart and scriptEnd
       * @return {String} The array encode as string
       */
-     encodeArray  : function(o,indent){
+     encodeArray  : function(o,indent,keepJsonId){
        indent = indent || 0;
        var a = ["["], b, i, l = o.length, v;
        for (i = 0; i < l; i += 1) {
@@ -349,7 +365,7 @@ Ext.ux.JSON = new (function(){
                break;
            default:
                if (b) a.push(',');
-               a.push(v === null ? "null" : this.encode(v, indent + 1));
+               a.push(v === null ? "null" : this.encode(v, indent + 1,keepJsonId));
                b = true;
          }
        }
@@ -378,23 +394,24 @@ Ext.ux.JSON = new (function(){
       * @param {Int} indent The indent to uses (defaults 0)
       * @return {String} The object encode as string
       */  
-    encode : function(o,indent){       
+    encode : function(o,indent,keepJsonId){       
        indent = indent || 0;
        if(typeof o == "undefined" || o === null){
            return "null";
        }else if(o instanceof Array){
-           return this.encodeArray(o, indent);
+           return this.encodeArray(o, indent,keepJsonId);
        }else if(o instanceof Date){
            return this.encodeDate(o);
        }else if(typeof o == "number"){
            return isFinite(o) ? String(o) : "null";
        }else if(typeof o == "string" && !isNaN(o) && o!='' ){
            return o; 
+       } else if(typeof o == "string" && ['true','false'].indexOf(o)!=-1){
+          return o;
+       } else if(typeof o == "boolean") {
+           return String(o);
        } else if(typeof o == "string"){
            return this.encodeString(o);
-       }else if(typeof o == "boolean"){
-           return String(o);
-
        }else {
         if (o.constructor) {
           var c = ""+o.constructor;
@@ -412,34 +429,44 @@ Ext.ux.JSON = new (function(){
            if (c && o.initialConfig) {
              return this.indentStr(indent) + this.scriptStart 
                + 'new '+ c + '(' +
-                this.encode(o.initialConfig,indent+1)
+                this.encode(o.initialConfig,indent+1,keepJsonId)
                + ') ' + this.scriptEnd;
            }
           } 
-          if (['Array','Object','Date'].indexOf(c)== -1) 
-            return '/* Class ' + c + ' has no initialConfig */';
+          if (['Array','Object','Date'].indexOf(c)== -1) { 
+            return 'null /* Class ' + c + ' has no initialConfig */';
+          }
          }
-         var a = ["{\n"], b, i, v;
+         var a = [], b, i, v;
+         if (indent==0 && this.licenseText) a.push(this.licenseText);
+         a.push("{\n");
          for (i in o) {
-           if (i == this.jsonId) continue; //internal id skip it during decode
+           if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) continue; //internal id skip it during decode
+//           if (!keepJsonId && i.indexOf(this.jsonId)==0) continue; //internal id skip it during decode
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
-             v = o[i];
-             switch (typeof v) {
-               case "function":
+             if (this.jsonId && o[this.jsonId + i]) {
                  if(b) a.push(',\n'); 
-                 a.push(this.indentStr(indent), i, " : ", this.scriptStart,""+v,this.scriptEnd);
+                 a.push(this.indentStr(indent), i, " : ", this.scriptStart,o[this.jsonId + i],this.scriptEnd);
                  b = true;
-                 break;
-               case "undefined":
-               case "unknown":               
-                   break;            
-               case "object" :
-
-               default:
-                   if(b) a.push(',\n');
-                   a.push(this.indentStr(indent), i, " : ",
-                         v === null ? "null" : this.encode(v,indent + 1));
+             } else {
+               v = o[i];      
+               switch (typeof v) {
+                 case "function":
+                   if(b) a.push(',\n'); 
+                   a.push(this.indentStr(indent), i, " : ", this.scriptStart,""+v,this.scriptEnd);
                    b = true;
+                   break;
+                 case "undefined":
+                 case "unknown":               
+                     break;            
+                 case "string" :
+                    if (!v) break; //Skip empty string
+                 default:
+                     if(b) a.push(',\n');
+                     a.push(this.indentStr(indent), i, " : ",
+                           v === null ? "null" : this.encode(v,indent + 1,keepJsonId));
+                     b = true;
+               }
              }
            }
          }
@@ -458,34 +485,64 @@ Ext.ux.JSON = new (function(){
        /* Encode all functions between begin and end as string enabling load of packages */
        var value = json
        var v = '', s = value.indexOf(this.scriptStart);
+       var jsonStr;
        while (s!=-1) {
+         jsonStr = '';
          e = value.indexOf(this.scriptEnd,s);
          v += value.substring(0,s);
-         v += this.encodeString(value.substring(s+this.scriptStart.length,e));
+         if (this.jsonId) {
+           debug('');
+           var i = v.lastIndexOf(':')-1;
+           while (i>0 && [" ","\t","\n","\r"].indexOf(v.substring(i,i+1))>=0) {i--;}
+           var w = '';
+           while (i>0 && [" ","\t","\n","\r","{","["].indexOf(v.substring(i,i+1))==-1) {
+              w = v.substring(i,i+1) + w;
+              i--;
+           }
+           jsonStr += ',' + this.jsonId + w + ' : ' + this.encodeString(value.substring(s+this.scriptStart.length,e));
+        }            
+         v += this.encodeString(value.substring(s+this.scriptStart.length,e)) + jsonStr;               
          value = value.substring(e+this.scriptEnd.length);
          s=value.indexOf(this.scriptStart);
        }
        v += value;   
-       var scope = this.scope || this; //Create reference object for json    
+       var scope = this.scope || this; //Create reference object for json 
        var items = eval("(" + v + ")");
        if(items && items.json) { 
           this.setRequired_css(items.json.required_css);                    
           this.setRequired_js(items.json.required_js);
        }
+       //When jsonId is set convert changed fields to jsonId+key=StringValue
        return items;
      },
-
+     
      /**
       * Decode json evaluating Json tag (required_js,required_css) 
       * @param {String} value The string to decode
       * @return {Object} The decoded object
       */
      decode : function(json) {
+       var applyJsonId=function(o,j) {
+         if (!this.jsonId) return o;
+         for (var i in o) {
+           if(!this.useHasOwn || o.hasOwnProperty(i)) {
+            if (i=='items') {
+              for (var k=0,len=o.items.length;k<len;k++){
+                 o.items[k] = applyJsonId(o.items[k],j.items[k]);
+              }
+            }
+            else if (j[this.jsonId+i]) {
+             o[this.jsonId+i] = j[this.jsonId+i];
+            }
+          }
+         }
+         return o;
+       }.createDelegate(this);
        this.addJsonHistory(json);
        var items = this.decodeAsString(json);
        //Now we can do decode by using eval setting scope
-       var scope = this.scope || this; //Create reference object for json    
-       items = eval("(" + json + ")"); 
+       var scope = this.scope || this; //Create reference object for json 
+       items = applyJsonId(eval("(" + json + ")"),items); 
        if(items) this.jsonInit(items.json); 
        return items;
      },
