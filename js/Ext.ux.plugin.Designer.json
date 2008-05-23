@@ -38,7 +38,7 @@
       activeOnTop:false,
       animate:false,
       autoWidth:true,
-      collapseFirst:true,
+      collapseFirst:false,
       fill:true,
       hideCollapseTool:false,
       titleCollapse:true

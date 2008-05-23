@@ -169,7 +169,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * otherwise it will first try to apply changes by using the setMethod
    * @type {Boolean}
    @cfg */
-  fullUpdate : false,
+  fullUpdate : true,
   
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
@@ -225,14 +225,18 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     }, this);
   },
   
-  removeElement : function(source) {
+  removeElement : function(source,noRedraw) {
+    if (!source) return false;
     var own = this.getContainer(source.ownerCt);
     for (var i=0;i<own.items.length;i++) {
       if (own.items.items[i]==source) {
-        if (own.codeConfig) own.codeConfig.items.splice(i,1);
-        own.remove(source,true);
+        if (!own.codeConfig) own.codeConfig = this.getConfig(own);
+        own.codeConfig.items.splice(i,1);
+        if (!noRedraw) this.updateElement(own,null);
+        return true;
       }
     }    
+    return false;
   },
   
   /**
@@ -247,7 +251,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     //Custom function for adding stuff to a container
     var add =  function(src,comp,at,before){
       if(!src.items) src.initItems();
-      var c = src.lookupComponent(src.applyDefaults(comp));
       var pos = src.items.length;
       for (var i=0;i<src.items.length;i++) {
         if (src.items.items[i]==at) {
@@ -255,49 +258,42 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
           i=src.items.length;
         }
       }
-      if(src.fireEvent('beforeadd', src, c, pos) !== false && src.onBeforeAdd(c) !== false){
-        if (!src.codeConfig) src.codeConfig = this.getConfig(src);
-        if (!src.codeConfig.items) src.codeConfig.items =  [];
-        if (pos>src.codeConfig.items.length) 
-          src.codeConfig.items.push(comp)
-        else   
-          src.codeConfig.items.splice(pos, 0, comp);
-        src.items.insert(pos,c);
-        c.ownerCt = src;
-        src.fireEvent('add', src, c, pos);
-      }
-      return c;
+      if (!src.codeConfig) src.codeConfig = this.getConfig(src);
+      if (!src.codeConfig.items || !(src.codeConfig.items instanceof Array)) src.codeConfig.items =  [];
+      if (pos>src.codeConfig.items.length) 
+        src.codeConfig.items.push(comp)
+      else 
+        src.codeConfig.items.splice(pos, 0, comp);      
     }.createDelegate(this);
     
 
     if (typeof config == 'function') {
       config.call(this,function(config) {
         this.appendConfig(el,config,true);
-      }.createDelegate(this));
+      }.createDelegate(this),this);
     } else if (this.canAppend(el,config)) {
      //Get the config of the items
-     var ncmp,ccmp,cmp= this.getDesignElement(el,true);
+     var ccmp,cmp= this.getDesignElement(el,true);
      var items = this.editableJson(this.clone(config));
      //Find the container that should be changed
      ccmp = this.getContainer(cmp); 
      if (dropLocation == 'appendafter') {
-       ncmp=add(ccmp,items,this.activeElement,false);      
+       add(ccmp,items,this.activeElement,false);      
      } else if (dropLocation == 'appendbefore') { 
-       ncmp=add(ccmp,items,this.activeElement,true);
+       add(ccmp,items,this.activeElement,true);
      } else if (dropLocation == 'moveafter') {
-       this.removeElement(source);
-       ncmp=add(ccmp,items,this.activeElement,false);      
+       this.removeElement(source,true);
+       add(ccmp,items,this.activeElement,false);      
      } else if (dropLocation == 'movebefore') { 
-       this.removeElement(source);
-       ncmp=add(ccmp,items,this.activeElement,true);
+       this.removeElement(source,true);
+       add(ccmp,items,this.activeElement,true);
      } else if (dropLocation == 'move') {
-       this.removeElement(source);
-       ncmp=add(ccmp,items);
+       this.removeElement(source,true);
+       add(ccmp,items);
      } else // Append default behavior
-        ncmp=add(ccmp,items);
-     this.modified = true;     
-     if (ccmp.rendered && ccmp.layout && ccmp.layout.layout) ccmp.doLayout();     
-     if (select && ncmp) this.selectElement(ncmp);
+       add(ccmp,items);
+     this.modified = true;
+     this.updateElement(ccmp,null,items[this.jsonId]);
     }
     return false;
   },
@@ -339,12 +335,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     el = el || this.field.items.first();
     if (!el) return {};
     if (!el.codeConfig && el[this.jsonId]) {
-      var findIn = function(items) {
-        if (!items) return null;
-        if (items[this.jsonId]==el[this.jsonId]) return items;
-        if (items.items) {
-          for (var i=0;i<items.items.length;i++) {
-            var r = findIn(items.items[i]);
+      var findIn = function(o) {
+        if (!o) return null;
+        if (o[this.jsonId]==el[this.jsonId]) return o;
+        if (o.items) {
+          for (var i=0;i<o.items.length;i++) {
+            var r = findIn(o.items[i]);
             if (r) return r;
           }
         }
@@ -390,21 +386,23 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @param {Object} config The config 
    * @return {Boolean} Indicator that update was applied
    */
-  updateElement : function (element,config) {
+  updateElement : function (element,config,selectId) {
     var el = element || this.activeElement;
-    if (el && (el.modified || config)) {
+    if (el) {
       try {
         if (this.fullUpdate || this.isContainer(el) || !(config && this.jsonInit(config,el,true))) {
+          var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
           Ext.apply(this.getConfig(el),config);
-          var p = this.isContainer(el) ? this.getContainer(el.ownerCt): this.getContainer(el);
+          var p = this.isContainer(el) ? this.getContainer(el): this.getContainer(el.ownerCt);
+          if (p instanceof Ext.form.FieldSet) p = this.getContainer(p.ownerCt);
           this.applyJson(this.getConfig(p).items,p);
+          this.selectElement(id);
         }
       } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element' + e); }
-      el.modified = false;
       this.modified = true;
       return true;
     }
-    return (element && element.modified ? false : true);
+    return  false;
   },
   
   /**
@@ -414,7 +412,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Component} The selected component
    */
   selectElement : function (el) {
-    this.updateElement();
+    if (typeof(el)=='string') el = this.findByJsonId(el);
     var cmp = this.getDesignElement(el);
     this.highlightElement(cmp);
     if (cmp) {
@@ -605,7 +603,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       if (t == Ext.data.Record.EDIT) {
         var change = {}; change[r.id] = r.data.changeValue || r.data.value;
         this.updateElement(this.activeElement,change);
-        this.selectElement(this.findByJsonId(this.activeElement[this.jsonId]));
       }
     }, this, {buffer:100});
   },

@@ -296,13 +296,16 @@ Ext.ux.JSON = new (function(){
          items[this.jsonId]=Ext.id();
        }
        for (var k in items) {
-         if (!items[this.jsonId + k ]) {
+         if (k.indexOf(this.jsonId)==0 && k!=this.jsonId) {
+           var orgK = k.substring(this.jsonId.length);
+           if (typeof(items[orgK])=='undefined') items[orgK]=null; //Code is there but not key, create it
+         } else if (!items[this.jsonId + k ]) {
            if (typeof(items[k]) == 'function') {
              items[this.jsonId + k]=String(items[k]);
            } else if (typeof(items[k]) == 'object' && k!='items') {
             items[this.jsonId + k] = Ext.ux.JSON.encode(items[k]);
            } 
-         }
+         } 
        }
        if (items.items) { 
          for (var i=0;i<items.items.length;i++) {
@@ -394,7 +397,7 @@ Ext.ux.JSON = new (function(){
       * @param {Int} indent The indent to uses (defaults 0)
       * @return {String} The object encode as string
       */  
-    encode : function(o,indent,keepJsonId){       
+    encode : function(o,indent,keepJsonId,noLicense){       
        indent = indent || 0;
        if(typeof o == "undefined" || o === null){
            return "null";
@@ -438,10 +441,18 @@ Ext.ux.JSON = new (function(){
           }
          }
          var a = [], b, i, v;
-         if (indent==0 && this.licenseText) a.push(this.licenseText);
+         if (indent==0 && this.licenseText && !noLicense) a.push(this.licenseText);
          a.push("{\n");
          for (i in o) {
-           if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) continue; //internal id skip it during decode
+           if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) {
+             var orgK = i.substring(this.jsonId.length);
+             if (typeof(o[orgK])=='undefined') {
+                if(b) a.push(',\n'); 
+                a.push(this.indentStr(indent), orgK, " : ", this.scriptStart,o[i],this.scriptEnd);
+                b = true;
+             }
+             continue; //internal id skip it during decode
+           }
 //           if (!keepJsonId && i.indexOf(this.jsonId)==0) continue; //internal id skip it during decode
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
              if (this.jsonId && o[this.jsonId + i]) {
