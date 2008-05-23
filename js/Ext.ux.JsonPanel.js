@@ -446,7 +446,7 @@ Ext.ux.JSON = new (function(){
          for (i in o) {
            if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) {
              var orgK = i.substring(this.jsonId.length);
-             if (typeof(o[orgK])=='undefined') {
+             if (orgK && typeof(o[orgK])=='undefined') {
                 if(b) a.push(',\n'); 
                 a.push(this.indentStr(indent), orgK, " : ", this.scriptStart,o[i],this.scriptEnd);
                 b = true;
@@ -502,7 +502,6 @@ Ext.ux.JSON = new (function(){
          e = value.indexOf(this.scriptEnd,s);
          v += value.substring(0,s);
          if (this.jsonId) {
-           debug('');
            var i = v.lastIndexOf(':')-1;
            while (i>0 && [" ","\t","\n","\r"].indexOf(v.substring(i,i+1))>=0) {i--;}
            var w = '';
