@@ -386,6 +386,7 @@
                           xtype:"numberfield",
                           fieldLabel:"Columns x Rows",
                           width:48,
+                          value : 5,
                           allowNegative:false,
                           allowDecimals:false,
                           name:"cols"
@@ -398,6 +399,7 @@
                       items:[{
                           xtype:"numberfield",
                           fieldLabel:"x",
+                          value : 5,
                           width:48,
                           allowNegative:false,
                           allowDecimals:false,
@@ -406,12 +408,14 @@
                     }]
                 },{
                   xtype:"textfield",
+                  value : 0,
                   fieldLabel:"Cells padding (px)",
                   width:48,
                   name:"cellpadding"
                 },{
                   xtype:"textfield",
                   fieldLabel:"Cells margin (px)",
+                  value : 0,
                   width:48,
                   name:"cellmargin"
                 },{

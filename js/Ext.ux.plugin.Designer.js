@@ -180,8 +180,21 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   rootEditable : false,
  
   //@private The version of the designer
-  version : '2.0.0-beta1',
+  version : '2.0.1-beta',
+  
+  //@private The id for button undo
+  undoBtnId  : Ext.id(),
 
+  //@private The id for button undo
+  redoBtnId  : Ext.id(),
+  
+  //@private The maximum number of undo histories to keep
+  undoHistoryMax : 20,
+  //@private The history for undo
+  undoHistory : [],  
+  //@private The marker for active undo
+  undoHistoryMark : 0,
+   
   /**
    * Init the plugin ad assoiate it to a field
    * @param {Component} field The component to connect this plugin to
@@ -222,21 +235,78 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       }, this);
       this.toolbox(this.autoShow);
       this.createConfig();
+      this.initContextMenu()
     }, this);
   },
   
-  removeElement : function(source,noRedraw) {
+  initContextMenu : function () {
+    var contextMenu = new Ext.menu.Menu({items:[{
+          text    : 'Delete this element',
+          iconCls : 'icon-deleteEl',
+          scope   : this,
+          handler : function(item) {
+              this.removeElement(contextMenu.element);
+            }
+        }]});
+      this.field.el.on('contextmenu', function(e) {
+          e.preventDefault();
+          var el = this.getDesignElement(this.getTarget(e));
+          if (el) {
+            contextMenu.element = el;
+            contextMenu.showAt(e.getXY());
+          }
+      }, this);
+  },
+  
+  removeElement : function(source,internal) {
     if (!source) return false;
     var own = this.getContainer(source.ownerCt);
+    if (internal) this.markUndo();
     for (var i=0;i<own.items.length;i++) {
       if (own.items.items[i]==source) {
         if (!own.codeConfig) own.codeConfig = this.getConfig(own);
         own.codeConfig.items.splice(i,1);
-        if (!noRedraw) this.updateElement(own,null);
+        if (!internal) this.updateElement(own,null);
         return true;
       }
     }    
     return false;
+  },
+  
+  menuUpdate : function(){
+    var menu = Ext.getCmp(this.undoBtnId);
+    if (menu) if (this.undoHistoryMark>0) menu.enable(); else menu.disable();
+    menu = Ext.getCmp(this.redoBtnId);
+    if (menu) if (this.undoHistory.length>this.undoHistoryMark+1) menu.enable(); else menu.disable();
+  },
+  
+  markUndo : function() {
+    while (this.undoHistory.length>this.undoHistoryMark) this.undoHistory.pop();
+    this.undoHistory.push(this.encode(this.getConfig(),0,true));
+    while (this.undoHistory.length > this.undoHistoryMax) this.undoHistory.shift();
+    this.undoHistoryMark = this.undoHistory.length;
+    this.menuUpdate();
+  },
+  
+  undo : function(){
+    if (this.undoHistoryMark>0) {
+      if (this.undoHistoryMark==this.undoHistory.length) {
+        //Make sure whe have point to recover incase of redo
+        this.undoHistory.push(this.encode(this.getConfig(),0,true));
+        this.undoHistoryMark = this.undoHistory.length-1;
+      }
+      this.undoHistoryMark--;
+      this.setConfig(this.undoHistory[this.undoHistoryMark]);
+      this.menuUpdate();
+    }
+  },
+  
+  redo : function(){
+    if (this.undoHistory.length>this.undoHistoryMark+1) {
+      this.undoHistoryMark++;
+      this.setConfig(this.undoHistory[this.undoHistoryMark]);
+      this.menuUpdate();
+    }
   },
   
   /**
@@ -247,7 +317,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   appendConfig : function (el,config,select,dropLocation,source){
     if (!el) return false;
-
+    this.markUndo();
+    
     //Custom function for adding stuff to a container
     var add =  function(src,comp,at,before){
       if(!src.items) src.initItems();
@@ -392,7 +463,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       try {
         if (this.fullUpdate || this.isContainer(el) || !(config && this.jsonInit(config,el,true))) {
           var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
-          Ext.apply(this.getConfig(el),config);
+          if (config) {Ext.apply(this.getConfig(el),config);}
           var p = this.isContainer(el) ? this.getContainer(el): this.getContainer(el.ownerCt);
           if (p instanceof Ext.form.FieldSet) p = this.getContainer(p.ownerCt);
           this.applyJson(this.getConfig(p).items,p);
@@ -496,7 +567,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Object} the drag data
    */
   getDragData : function(e) {
-     var cmp = this.selectElement(e.getTarget());
+     var cmp = this.selectElement(this.getTarget(e));
      var el = e.getTarget('.designerddgroup');
      if (el && cmp) { 
        return {
@@ -602,6 +673,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     propertyGrid.store.on('update', function(s,r,t) {
       if (t == Ext.data.Record.EDIT) {
         var change = {}; change[r.id] = r.data.changeValue || r.data.value;
+        this.markUndo();
         this.updateElement(this.activeElement,change);
       }
     }, this, {buffer:100});

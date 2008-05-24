@@ -148,15 +148,21 @@
               w.show();
           }
         },'-',{
-          iconCls : 'icon-update',
-          tooltip : 'Redraw',
-          handler : function(){
-            scope.refresh();
-          }
-        },'-',{
           iconCls : 'icon-undo',
           tooltip : "Undo last change",
-          hidden  : true
+          id      : scope.undoBtnId,
+          handler : function(){scope.undo();},
+          disabled: true
+        },{
+          iconCls : 'icon-redo',
+          tooltip : "Redo last change",
+          id      : scope.redoBtnId,
+          handler : function(){scope.redo();},
+          disabled: true
+        },{
+          iconCls : 'icon-update',
+          tooltip : 'Redraw',
+          handler : function(){scope.refresh();}
         },'->',{
           iconCls : 'icon-help',
           hidden  : !scope.enableVersion,

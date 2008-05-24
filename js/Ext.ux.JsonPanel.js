@@ -262,16 +262,13 @@ Ext.ux.JSON = new (function(){
        delete items.json;
        if (el instanceof Ext.Container) {
          //Clear out orignal content of container
-         if (el.items) {
-           while (el.items.first()) {el.remove(el.items.first(), true);}
-           for (var i=0;i<el.items.items.length;i++) {el.remove(el.items.items[i],true)};
-         }
+         while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
          if(items instanceof Array) {
            el.add.apply(el,items);
          } else {
-          var l = 0;
-          for (var i in items) if (i!=this.jsonId)  l++;
-          if (l!=0) el.add(items);
+           var l = 0;
+           for (var i in items) {if (i!=this.jsonId)  l++;}
+           if (l!=0) el.add(items);
          }
        } else {
          //This is not a container so try to update element using jsonInit construction
@@ -291,14 +288,20 @@ Ext.ux.JSON = new (function(){
     editableJson : function(json) {
      var items = json || {};
      if (typeof(items) !== 'object') items = this.decode(json);
+     if (items instanceof Array) {
+       for (var i=0;i<items.length;i++) {
+        items[i]=this.editableJson(items[i]);
+       }
+       return items;
+     }
      if (this.jsonId) {
        if (!items[this.jsonId]) {
          items[this.jsonId]=Ext.id();
        }
-       for (var k in items) {
+       for (var k in items) {      
          if (k.indexOf(this.jsonId)==0 && k!=this.jsonId) {
            var orgK = k.substring(this.jsonId.length);
-           if (typeof(items[orgK])=='undefined') items[orgK]=null; //Code is there but not key, create it
+           if (orgK && typeof(items[orgK])=='undefined') items[orgK]=null; //Code is there but not key, create it
          } else if (!items[this.jsonId + k ]) {
            if (typeof(items[k]) == 'function') {
              items[this.jsonId + k]=String(items[k]);
@@ -307,11 +310,7 @@ Ext.ux.JSON = new (function(){
            } 
          } 
        }
-       if (items.items) { 
-         for (var i=0;i<items.items.length;i++) {
-           items.items[i]=this.editableJson(items.items[i]);
-         }
-       }
+       if (items.items) items.items=this.editableJson(items.items);
      }
      return items;
     },
@@ -453,7 +452,6 @@ Ext.ux.JSON = new (function(){
              }
              continue; //internal id skip it during decode
            }
-//           if (!keepJsonId && i.indexOf(this.jsonId)==0) continue; //internal id skip it during decode
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
              if (this.jsonId && o[this.jsonId + i]) {
                  if(b) a.push(',\n'); 

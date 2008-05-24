@@ -1,91 +1,20 @@
  TODO
+  - Save state in cookie based on name of designerfield
+  - Support loading and saving of file
+  - Add Code tree to access hidden fields
+  - Redraw of screen elements should not allways be full (as now in work arround)
+  - Redraw of complex containers (accordion) not working
+  - Add a visual resize option to item
   - Add Grid Wirzard
-  - Translation (tree based) editor for Json files
-  - Translation loader for Json files
-  - Autosave of files
-  - xtype Image button instead of default button
-  - Some properties changes should force update of container (layout)
-  - Drag Drop first item tree in FireFox does not allways work, wrong el.getTarget()
-  - Strange char are sometimes shown when using CodePress in IE6
-  - test scope of tbar if it is set by default to this
   - Add loading page when initailizing index.html en index.php
 
 
  Change History:
+ Version 2.0.1-beta2: 
+  * Added delete element as context menu
+  * Added Undo and Redo functions
+  * Fixed problems in editableJson code
+  
+ 
  Version 2.0.0-beta1: 
   * Complety rebuild as toolbox
-
- Version 1.9:
-  * Because of lisence we stick to version 2.02 in distribution
-  * Changed caching to disableCaching to be complaint with ExtJs
-  * disableCaching now also works for file loaded by JsonPanel
-  * Added events (beforejsonload,afterjsonload,failedjsonload) to jsonpanel
-  * Changed container search for layout to update
-  * Fixed editors for bodyStyle and style therefor special encoding is not needed anymore
-  * Fixed table,accordion wizard now saving properties when created
-  
- Version 1.8:
-  * Documentation has been added
-  * Containers(panel/form/window..) are selected when added by dblclick
-  * Some properties did not open the script editor
-  * Added autoHeight property to accordion wizard
-  * Now load method on JsonPanel works correctly
-  * Fixed problem that javascript files where not loaded during loadconfig
-  * Xtype field is now editable, enables overwrite to other xtypes
-  * Changes made in JSON editor are now also applied to cookie state and undo is created
-  * Fixed problem when using designer in designer that drop was causing multiple items
-  * When using show JSON the designer is disabled, minimizing conflicts with tabindexs
-  * Fixed grid ScriptEditor not opening on second designer (index.php)
-  * Added the capability to overwrite a grid editor (see example)
- Version 1.7:
-  * Bug fix of CodePress causing JSON to fail.
-  * Because of documentation start renamed packages to Ext.ux.form
- Version 1.6:
-  * Fixed problems with stylesheets not loading, when also loading javascript
-  * Codepress can now realy be removed without errors
-  * Layout of panel restored to auto
- Version 1.5:
-  * Designer is added as design element and properties documents
-  * Component definitions are moved to a json file
-  * Renamed property ComponentsRef to ComponentsDoc
-  * Default layout of tabpanel is now fit
-  * Fixed problem with show, not allways applying settings
-  * Added static designer component to reduce memory consumption
-  * Designer element is disabled when using as element in designer (recursive problem)
-  * Fixed problem of loading javascript files through JSON panel.
-  * Fixed codepress problems for IE and Firefox
-  * No need for LocalXHR anymore (removed). Code is now part of scriptloader in Ext.ux.JsonPanel.js
-  * Fixed problem when a designer was loaded for first time with cookies giving error
-  * Fixed Empty designer double click on component not added
-  * Fixed drag drop first element on panel for firefox. Tree still exists
-  * Fixed drag drop issue of TreePanel in combination with designerpanel
-  * Default layout of panel changed to fit.
-  * Fix loading of required (js,css) when changed
-  * Keys are now by default connected to object creating them
-
- Version 1.4:
-  * Added Copy button to export JSON to Clipboard
-  * Menubar items can now be disabled by switching enable[flag] to false: [Save,Reload,Time,Version,Edit,Javascript,Copy,Show]
-  * Added url and filename property to enable (re)loading and saving of file
-  * Fixed bug in table create wizard.
-  * Added Label support by upgrading to extjs2.02 and overriding id
-  * Cardlayout activeItem 0 as default
-  * On 'Clear All' also remove window setting
-  * Show has maximized enabled
-  * Added support for custom eastPanel
-  * Fixed problem calling showFrom 2 times
-  * By setting customProperties to true you can add undocumented properties to items
-  * TabIndex of designerwindow are increased with a value to prefend double tabindexes
-  * Added support for regular expression fields, like maskRe
-  * Added required_css and required_js for loading required stylesheets/javascript files
-  * ScriptEditor results are directly saved to grid
-  * Fixed no redraw when switching tab-panel
-
- Version 1.3:
-  * Fixed problem with support for tbar and bbar when using code
-  * Added Grid and Tree under advanced tab
-Version 1.2:
-  * Fixed resizing of scripteditor and added stylesheet support
-  * Fixed tabpanel by changing active tab on click
-  * CodePress can be disabled by setting CodePress to false
-  * Added CheckBox to enable/disable javascript functions in from
