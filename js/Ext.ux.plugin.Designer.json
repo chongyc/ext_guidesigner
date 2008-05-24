@@ -201,7 +201,24 @@
         }/*END*/
       },{
         title:"Code Tree",
-        html :"TODO: Show code as tree of items"
+        xtype:"treepanel",
+        animate:true,
+        autoScroll:true,
+        containerScroll:true,
+        rootVisible : false,
+        root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
+        loader:/*BEGIN*/new Ext.ux.tree.CodeLoader(scope)/*END*/,
+        listeners : /*BEGIN*/ {
+          'render': function(){
+             scope.on('add',function(){this.root.reload();},this);
+             scope.on('remove',function(){this.root.reload();},this);
+             scope.on('newconfig',function(){this.root.reload();},this);
+          },
+          'click' : function(node,e){
+             e.preventDefault(); 
+             scope.selectElement(node.attributes.jsonId);
+           }
+        }/*END*/
       }]
     },{
           xtype : 'uxpropertygrid',

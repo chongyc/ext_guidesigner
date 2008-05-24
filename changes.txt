@@ -13,6 +13,7 @@
  Version 2.0.1-beta2: 
   * Added delete element as context menu
   * Added Undo and Redo functions
+  * Added CodeTree
   * Fixed problems in editableJson code
   
  

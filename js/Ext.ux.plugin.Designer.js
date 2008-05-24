@@ -215,7 +215,15 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        * @event beforehide
        * @param {Object} toolbox The toolbox window
        */
-      'beforehide' : true
+      'beforehide' : true,
+      
+      'add' : true,
+      
+      'remove' : true,
+      
+      'change' : true,
+      
+      'newconfig': true,
     });
         
     //Init the components drag & drop and toolbox when it is rendered
@@ -266,7 +274,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       if (own.items.items[i]==source) {
         if (!own.codeConfig) own.codeConfig = this.getConfig(own);
         own.codeConfig.items.splice(i,1);
-        if (!internal) this.updateElement(own,null);
+        if (!internal) {
+          this.updateElement(own,null);
+          this.fireEvent('remove');
+        }
         return true;
       }
     }    
@@ -365,6 +376,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        add(ccmp,items);
      this.modified = true;
      this.updateElement(ccmp,null,items[this.jsonId]);
+     this.fireEvent('add');
     }
     return false;
   },
@@ -434,6 +446,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     this.applyJson(items,this.field); //Recreate childs
     this.modified = true;
     this.selectElement(this.findByJsonId(id));
+    this.fireEvent('newConfig');
     return true;
   },
   
@@ -470,6 +483,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
           this.selectElement(id);
         }
       } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element' + e); }
+      this.fireEvent('change',el);
       this.modified = true;
       return true;
     }

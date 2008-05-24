@@ -1,5 +1,58 @@
 Ext.namespace('Ext.ux.grid');
 Ext.namespace('Ext.ux.form');
+Ext.namespace('Ext.ux.tree');
+
+Ext.ux.tree.CodeLoader = function(designer,config) {
+   Ext.apply(this, config);
+   this.designer = designer;
+   Ext.tree.TreeLoader.superclass.constructor.call(this);
+};
+
+Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
+ jsonId : '__JSON__',
+ 
+ load : function(node, callback){ 
+     while(node.firstChild) node.removeChild(node.firstChild);
+     if(this.doLoad(node,this.designer.getConfig())){
+       if(typeof callback == "function") callback();
+     }
+  },
+  
+  elementToText : function(c) {
+      var txt = [];
+      c = c || {};
+      if (c.xtype)      { txt.push(c.xtype); }
+      if (c.fieldLabel) { txt.push('[' + c.fieldLabel + ']'); }
+      if (c.boxLabel)   { txt.push('[' + c.boxLabel + ']'); }
+      if (c.layout)     { txt.push('<i>' + c.layout + '</i>'); }
+      if (c.title)      { txt.push('<b>' + c.title + '</b>'); }
+      if (c.text)       { txt.push('<b>' + c.text + '</b>'); }
+      if (c.region)     { txt.push('<i>(' + c.region + ')</i>'); }
+      return (txt.length == 0 ? "Element" : txt.join(" "));
+  },
+  
+  doLoad : function(node,data){
+    if(data){
+      node.beginUpdate();
+      var cs = {
+           text: this.elementToText(data),
+           cls: data.items ? 'folder' : 'file' , 
+           leaf : data.items ? false : true,
+           jsonId : data[this.jsonId]
+      };
+      var cn = node.appendChild(new Ext.tree.TreeNode(cs));
+      if (data.items) {
+        for(var i = 0, len = data.items.length; i < len; i++){
+          this.doLoad(cn,data.items[i]);
+        }
+      }
+      node.endUpdate();
+      return true;
+    }
+    return false;
+  }
+});
+
 /**
  * Used by designer when selecting a value from a ComponentDoc defined value property in the grid
  * @type component
