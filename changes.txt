@@ -7,7 +7,13 @@
   - Add a visual resize option to item
   - Add Grid Wirzard
   - Add loading page when initailizing index.html en index.php
-
+ -  Make toolbox global if required, so only one exits by screen
+ -  Align toolbox, smaller text, smaller icons
+ -  Create special property grid which support editing of code objects
+ -  Element context menu width delete,resize ?
+ -  When moving item change icon to move instead of append
+ -  When moving item it cannot moved in it self
+ =  Label is not selected after alter
 
  Change History:
  Version 2.0.1-beta2: 

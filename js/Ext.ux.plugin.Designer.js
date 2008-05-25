@@ -1,12 +1,3 @@
-/* TODO: 
- -  Make toolbox global if required, so only one exits by screen
- -  Align toolbox, smaller text, smaller icons
- -  Create special property grid which support editing of code objects
- -  Element context menu width delete,resize ?
- -  When moving item change icon to move instead of append
- -  When moving item it cannot moved in it self
- */  
-
  /*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
@@ -169,7 +160,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * otherwise it will first try to apply changes by using the setMethod
    * @type {Boolean}
    @cfg */
-  fullUpdate : true,
+  fullUpdate : false,
   
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
@@ -201,7 +192,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   init: function(field) {
     Ext.QuickTips.init();
-    this.field = field;
+    this.container = field;
     
     this.addEvents({
       /**
@@ -224,20 +215,22 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       'change' : true,
       
       'newconfig': true,
+      
+      'select'   : true
     });
         
     //Init the components drag & drop and toolbox when it is rendered
-    this.field.on('render', function() {    
-      this.drag = new Ext.dd.DragZone(this.field.el, {
+    this.container.on('render', function() {    
+      this.drag = new Ext.dd.DragZone(this.container.el, {
         ddGroup:'designerddgroup',
         getDragData     : this.getDragData.createDelegate(this)
       });
-      this.drop = new Ext.dd.DropZone(this.field.el, {
+      this.drop = new Ext.dd.DropZone(this.container.el, {
         ddGroup:'designerddgroup',
         notifyOver : this.notifyOver.createDelegate(this),
         notifyDrop : this.notifyDrop.createDelegate(this)
       });
-      this.field.el.on('click', function(e,el) {
+      this.container.el.on('click', function(e,el) {
          var cmp = this.selectElement(el);
          if (el.focus) el.focus();
       }, this);
@@ -256,7 +249,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
               this.removeElement(contextMenu.element);
             }
         }]});
-      this.field.el.on('contextmenu', function(e) {
+      this.container.el.on('contextmenu', function(e) {
           e.preventDefault();
           var el = this.getDesignElement(this.getTarget(e));
           if (el) {
@@ -275,8 +268,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         if (!own.codeConfig) own.codeConfig = this.getConfig(own);
         own.codeConfig.items.splice(i,1);
         if (!internal) {
-          this.updateElement(own,null);
           this.fireEvent('remove');
+          this.updateElement(own,null);
+        } else {
+          this.redrawContainer = true;
         }
         return true;
       }
@@ -341,7 +336,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         }
       }
       if (!src.codeConfig) src.codeConfig = this.getConfig(src);
-      if (!src.codeConfig.items || !(src.codeConfig.items instanceof Array)) src.codeConfig.items =  [];
+      if (!src.codeConfig.items || !(src.codeConfig.items instanceof Array)) 
+          src.codeConfig.items =  [];
+      delete src.codeConfig.html; //items and html go not together in IE
       if (pos>src.codeConfig.items.length) 
         src.codeConfig.items.push(comp)
       else 
@@ -375,8 +372,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
      } else // Append default behavior
        add(ccmp,items);
      this.modified = true;
-     this.updateElement(ccmp,null,items[this.jsonId]);
      this.fireEvent('add');
+     this.updateElement(ccmp,null,items[this.jsonId]);     
     }
     return false;
   },
@@ -395,16 +392,16 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * Create the codeConfig object and apply it to the field
    */
   createConfig : function() {
-    if (this.field.items && this.field.items.first()) {
+    if (this.container.items && this.container.items.first()) {
        var items = [];
-       while (this.field.items.first()) {
-          items.push(this.field.items.first());
-          this.field.items.remove(this.field.items.first(), true);
+       while (this.container.items.first()) {
+          items.push(this.container.items.first());
+          this.container.items.remove(this.container.items.first(), true);
        }       
        //Re create a panel with items from config editable root
-       var config = { 'border' : false, 'layout' : this.field.getLayout(),'items' : this.editableJson(items)};
+       var config = { 'border' : false, 'layout' : this.container.getLayout(),'items' : this.editableJson(items)};
        config[this.jsonId]=Ext.id();
-       var el = this.field.add(config);
+       var el = this.container.add(config);
        el.codeConfig = config;
     }
   },
@@ -415,7 +412,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Object} The config object 
    */
   getConfig : function (el) {
-    el = el || this.field.items.first();
+    el = el || this.container.items.first();
     if (!el) return {};
     if (!el.codeConfig && el[this.jsonId]) {
       var findIn = function(o) {
@@ -442,11 +439,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   setConfig : function (json) {
     var id = this.activeElement ? this.activeElement[this.jsonId] : null;
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
-    this.field.codeConfig = this.editableJson(items);
-    this.applyJson(items,this.field); //Recreate childs
+    this.container.codeConfig = this.editableJson(items);
+    this.applyJson(items,this.container); //Recreate childs
+    this.redrawContainer=false;
     this.modified = true;
+    this.fireEvent('newconfig');
     this.selectElement(this.findByJsonId(id));
-    this.fireEvent('newConfig');
     return true;
   },
   
@@ -460,7 +458,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   //Find parent which is of type container  
   getContainer : function(el) {
     var p = el;
-    while (p && p!=this.field && !this.isContainer(p)) p = p.ownerCt;
+    while (p && p!=this.container && !this.isContainer(p)) p = p.ownerCt;
     return p;
   },
   
@@ -477,9 +475,22 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         if (this.fullUpdate || this.isContainer(el) || !(config && this.jsonInit(config,el,true))) {
           var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
           if (config) {Ext.apply(this.getConfig(el),config);}
-          var p = this.isContainer(el) ? this.getContainer(el): this.getContainer(el.ownerCt);
-          if (p instanceof Ext.form.FieldSet) p = this.getContainer(p.ownerCt);
+          var p = this.container; //Redraw whole canvas          
+          if (!this.redrawContainer && el!=p) {
+             //Check if whe can find parent which can be redraw
+             var c = '';
+             p = this.getContainer(el);
+             //Search if whe find a layout capeble contianer
+             while (p!=this.container && !c) {
+               if (!p.codeConfig) p.codeConfig = this.getConfig(p);
+               c = p.codeConfig.layout;
+               if (!c || ['auto','fit'].indexOf(c)!=-1) p = this.getContainer(p.ownerCt);
+             }
+             //When no layout found whe can use the parent otherwise parent of container
+             p = c ? this.getContainer(p.ownerCt) : this.getContainer(el.ownerCt);
+          }
           this.applyJson(this.getConfig(p).items,p);
+          this.redrawContainer=false;
           this.selectElement(id);
         }
       } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element' + e); }
@@ -500,8 +511,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     if (typeof(el)=='string') el = this.findByJsonId(el);
     var cmp = this.getDesignElement(el);
     this.highlightElement(cmp);
+    this.activeElement = cmp;
     if (cmp) {
-      this.activeElement = cmp;
       if (this.propertyGrid) {
         this.propertyFilter();
         this.propertyGrid.enable();
@@ -509,11 +520,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       }
     } else {
       if (this.propertyGrid) {
-        this.activeConfig = null;
         this.propertyGrid.disable();
         this.propertyGrid.setSource({});
       }
     }
+    this.fireEvent('select',cmp);
     return cmp;
   },
 
@@ -524,12 +535,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   highlightElement : function (el) {
     //Remove old highlight and drag support
-    this.field.el.removeClass('selectedElement');
-    this.field.el.select('.selectedElement').removeClass('selectedElement');
-    this.field.el.select('.designerddgroup').removeClass('designerddgroup');
+    this.container.el.removeClass('selectedElement');
+    this.container.el.select('.selectedElement').removeClass('selectedElement');
+    this.container.el.select('.designerddgroup').removeClass('designerddgroup');
     if (el) {
       el.addClass("selectedElement");
-      if (el.id != this.field.id) el.addClass("designerddgroup");
+      if (el.id != this.container.id) el.addClass("designerddgroup");
       return true;
     }
     return false;
@@ -542,7 +553,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Component} The ExtJs component found, false when not valid
    */  
   isElementOf : function(cmp,container) {
-    container = container || this.field;
+    container = container || this.container;
     var loops = 50,c = cmp,id = container.getId();
     while (loops && c) {
       if (c.id == id) return cmp;
@@ -553,7 +564,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   },
     
   /**
-   * Find a designElement, this is a ExtJs component which is embedded within this.field
+   * Find a designElement, this is a ExtJs component which is embedded within this.container
    * @param {Element} el The element to search the designelement for
    * @return {Component} The ExtJs component found, false when not valid
    */
@@ -562,17 +573,17 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     while (loops && el) {
       cmp = Ext.getCmp(el.id);
       if (cmp) {
-        if (!allowField && cmp == this.field) return false;
-        return this.isElementOf(cmp,this.field) ? cmp : (allowField ? this.field : false);
+        if (!allowField && cmp == this.container) return false;
+        return this.isElementOf(cmp,this.container) ? cmp : (allowField ? this.container : false);
       }
       el = el.parentNode;
       loops--;
     }
-    return allowField ? this.field : false;
+    return allowField ? this.container : false;
   },
   
   findByJsonId : function(id) {
-     return this.field.findBy(function (c,p) {return (c[this.jsonId]==id ? true : false);},this)[0];
+     return this.container.findBy(function (c,p) {return (c[this.jsonId]==id ? true : false);},this)[0];
   },
   
   /**
@@ -614,18 +625,23 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   getTarget : function (event) {
     if (!event) return;
     if (!Ext.isGecko) event.getTarget();
-    var n,findNode = function(c,p) {
+    var n,findNode = function(c) {
       if (c && c.getPosition && c.getSize) {
        var pos = c.getPosition();
        var size = c.getSize();
        if (event.xy[0] >= pos[0] && event.xy[0]<=pos[0] + size.width &&
            event.xy[1] >= pos[1] && event.xy[1]<=pos[1] + size.height) {
          n = c
-         if (c.findBy) c.findBy(findNode);
+         if(c.items){
+            var cs = c.items.items;
+            for(var i = 0, len = cs.length; i < len  && !findNode(cs[i]); i++) {}
+         }
+         return true;
        }
       }
+      return false;
     };
-    findNode(this.field);
+    findNode(this.container);
     return n;
   },
   

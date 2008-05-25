@@ -254,7 +254,7 @@ Ext.ux.JSON = new (function(){
     * @param {Element} element The element to apply the json to
     * @return {Object} The elements applied
     */
-    applyJson : function (json,element) {
+    applyJson : function (json,element,container) {
      var el = element || this;
      var items = this.jsonId ? this.editableJson(json) : json || {};
      if (typeof(items) !== 'object') items = this.decode(json);
@@ -275,7 +275,8 @@ Ext.ux.JSON = new (function(){
          this.jsonInit(items,el);
        }
      }
-     if (el.rendered && el.layout && el.layout.layout) el.doLayout();
+     el = container || el;
+     if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      return items;
     },
 

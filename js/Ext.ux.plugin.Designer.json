@@ -24,7 +24,7 @@
    title : 'Designer Toolbox',
    width : 235,
    height: 350,
-   alignTo: [scope.field.id,'br',[-235,-350]]
+   alignTo: [scope.container.id,'br',[-235,-350]]
   },
   layout: 'border',
   border: false,
@@ -131,7 +131,7 @@
           hidden  : !scope.enableShow,
           handler : function(){
             //Disable the designer so tabindex is disabled
-            scope.field.disable();
+            scope.container.disable();
             var w = new Ext.Window(Ext.apply({
                   title  : 'Show Config', 
                   border  : false,
@@ -142,7 +142,7 @@
                   maximizable : true,
                   closeAction : 'close',
                   listeners   : { 'beforeclose' : function(){
-                                    scope.field.enable();
+                                    scope.container.enable();
                                 }} 
                   },scope.getConfig()));
               w.show();
@@ -196,7 +196,7 @@
         }/*END*/,
         listeners : /*BEGIN*/ {
          'dblclick' : function(node,e){
-           scope.appendConfig(scope.activeElement||scope.field,node.attributes.config,true);
+           scope.appendConfig(scope.activeElement||scope.container,node.attributes.config,true);
          }
         }/*END*/
       },{
