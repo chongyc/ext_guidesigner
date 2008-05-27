@@ -193,6 +193,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   init: function(field) {
     Ext.QuickTips.init();
     this.container = field;
+    this.jsonScope this.scope || this.container;
     
     this.addEvents({
       /**
@@ -700,6 +701,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   setPropertyGrid : function(propertyGrid) {
     this.propertyGrid = propertyGrid;
+    this.propertyGrid.jsonScope = this.jsonScope;
     propertyGrid.store.on('update', function(s,r,t) {
       if (t == Ext.data.Record.EDIT) {
         var change = {}; change[r.id] = r.data.changeValue || r.data.value;

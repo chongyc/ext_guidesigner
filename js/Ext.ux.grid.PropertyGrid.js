@@ -281,6 +281,8 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
       if (typeof(this.source[this.jsonId + prop])!='undefined' || ['object','function'].indexOf(type)!=-1) {
          this.source[this.jsonId + prop] = value;
          try {
+          //Set the jsonScope to be used during eval
+           if (this.grid) var scope = this.grid.jsonScope;
            var o = eval("( { data :" + value + "})");
            this.source[prop] = o.data;
          } catch (e) {Ext.Msg.alert('Exception','Could not set ' + prop + ' to ' + value + '/n' + e);}
@@ -350,7 +352,7 @@ Ext.extend(Ext.ux.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
         }else if(typeof val == 'boolean'){
             return this.editors['boolean'];
         }else{
-            return this.defaultEditor || this.editors['string'];
+            return this.defaultEditor || this.editors['mixed'];
         }
     },
     

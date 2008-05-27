@@ -62,7 +62,7 @@
           iconCls :'icon-designcopy',
           hidden  : !scope.enableCopy,
           handler : function(){
-            var text = scope.getConfig();  
+            var text = scope.encode(scope.getConfig());  
             if (window.clipboardData) { // Internet Explorer
                window.clipboardData.setData("Text", ""+ text); // stupid IE... won't work without the ""+ ?!?!?
             } else if (window.netscape) { // Mozilla

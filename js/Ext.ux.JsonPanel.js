@@ -235,7 +235,11 @@ Ext.ux.JSON = new (function(){
               el[k].call(el,config[i]);
             } else if (el[i] && typeof el[i] == 'function') {
               el[i].call(el,config[i]);
-            } else { 
+            } else if (i=='required_js') { 
+              this.setRequired_js(config[i]);
+            } else if (i=='required_css') {
+              this.setRequired_css(config[i]);
+            } else {
               allSet &= typeof(el[i])!='undefined' && el[i] == config[i]
               el[i] = config[i];
             }
@@ -259,17 +263,20 @@ Ext.ux.JSON = new (function(){
      var items = this.jsonId ? this.editableJson(json) : json || {};
      if (typeof(items) !== 'object') items = this.decode(json);
      if (items) {
+       //Apply global json vars to element
+       this.jsonInit(items.json,this.jsonScope || this.scope || this);
        delete items.json;
        if (el instanceof Ext.Container) {
          //Clear out orignal content of container
          while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
          if(items instanceof Array) {
            el.add.apply(el,items);
-         } else {
+         } else { // Only add items when it is not empty
            var l = 0;
            for (var i in items) {if (i!=this.jsonId)  l++;}
            if (l!=0) el.add(items);
          }
+         
        } else {
          //This is not a container so try to update element using jsonInit construction
          this.jsonInit(items,el);
@@ -515,7 +522,7 @@ Ext.ux.JSON = new (function(){
          s=value.indexOf(this.scriptStart);
        }
        v += value;   
-       var scope = this.scope || this; //Create reference object for json 
+       var scope = this.jsonScope || this.scope || this; //Create reference object for json 
        var items = eval("(" + v + ")");
        if(items && items.json) { 
           this.setRequired_css(items.json.required_css);                    
@@ -550,9 +557,9 @@ Ext.ux.JSON = new (function(){
        this.addJsonHistory(json);
        var items = this.decodeAsString(json);
        //Now we can do decode by using eval setting scope
-       var scope = this.scope || this; //Create reference object for json 
+       var scope = this.jsonScope || this.scope || this; //Create reference object for json 
        items = applyJsonId(eval("(" + json + ")"),items); 
-       if(items) this.jsonInit(items.json); 
+       if(items) this.jsonInit(items.json,scope); 
        return items;
      },
 

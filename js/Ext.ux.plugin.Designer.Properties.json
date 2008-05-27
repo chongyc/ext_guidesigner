@@ -215,7 +215,9 @@ properties : [{
     desc : "<b>Boolean</b> True to automatically monitor window resize events to handle anything that is sensitive to the current size of the viewport. This value is typically managed by the chosen {@link #layout} and should not need to be set manually."
   },{
     name : "layout",
-    desc : "<b>String</b> The layout type to be used in this container. If not specified, a default {@link Ext.layout.ContainerLayout} will be created and used. Valid values are: accordion, anchor, border, card, column, fit, form and table. Specific config values for the chosen layout type can be specified using {@link #layoutConfig}."
+    desc : "<b>String</b> The layout type to be used in this container. If not specified, a default {@link Ext.layout.ContainerLayout} will be created and used. Valid values are: accordion, anchor, border, card, column, fit, form and table. Specific config values for the chosen layout type can be specified using {@link #layoutConfig}.",
+    default: "auto",
+    values : function(){var d=[];for (var i in Ext.Container.LAYOUTS) {d.push(i); } return d}()
   },{
     name : "layoutConfig",
     type : "object",
@@ -643,9 +645,6 @@ properties : [{
     name : "maxText",
     desc : "<b>String</b> The error text to display when the date in the cell is after maxValue (defaults to 'The date in this field must be before {maxValue}')."
   },{
-    name : "invalidText",
-    desc : "<b>String</b> The error text to display when the date in the field is invalid (defaults to '{value} is not a valid date - it must be in the format {format}')."
-  },{
     name : "triggerClass",
     desc : "<b>String</b> An additional CSS class used to style the trigger button. The trigger will always get the class 'x-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x-form-date-trigger' which displays a calendar icon)."
   },{
@@ -655,9 +654,6 @@ properties : [{
   },{
     name : "invalidClass",
     desc : "<b>String</b> The CSS class to use when marking a field invalid (defaults to \"x-form-invalid\")"
-  },{
-    name : "invalidText",
-    desc : "<b>String</b> The error text to use when marking a field invalid and no message is provided (defaults to \"The value in this field is invalid\")"
   },{
     name : "focusClass",
     desc : "<b>String</b> The CSS class to use when the field receives focus (defaults to \"x-form-focus\")"
@@ -727,9 +723,6 @@ properties : [{
   },{
     name : "baseCls",
     desc : "<b>String</b> The base CSS class applied to the fieldset (defaults to 'x-fieldset')."
-  },{
-    name : "layout",
-    desc : "<b>String</b> The {@link Ext.Container#layout} to use inside the fieldset (defaults to 'form')."
   },{
     name : "labelWidth",
     type : "number",
