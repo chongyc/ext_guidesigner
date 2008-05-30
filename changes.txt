@@ -9,19 +9,19 @@
   - Add loading page when initailizing index.html en index.php
  -  Make toolbox global if required, so only one exits by screen
  -  Align toolbox, smaller text, smaller icons
- -  Create special property grid which support editing of code objects
  -  Element context menu width delete,resize ?
- -  When moving item change icon to move instead of append
- -  When moving item it cannot moved in it self
- =  Label is not selected after alter
- -  Scope var must also be set for Designer
+ -  Label is not selected after alter
  -  BBar is converted to string instead of object
+ -  SetConfig calls jsonInit 1 time to mutch 
+ -  Change accordion to tab panel
 
  Change History:
- Version 2.0.1-beta2: 
+ Version 2.0.2-beta2: 
   * Added delete element as context menu
   * Added Undo and Redo functions
   * Added CodeTree
+  * Added "scope.<VAR>" in json object, so you can create local objects 
+  * Fixed Problem required_js in json was not loaded
   * Fixed copy to clipboard did not work
   * Fixed redraw problems for containers
   * Fixed problems in editableJson code

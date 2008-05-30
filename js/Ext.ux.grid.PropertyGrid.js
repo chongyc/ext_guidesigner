@@ -352,7 +352,7 @@ Ext.extend(Ext.ux.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
         }else if(typeof val == 'boolean'){
             return this.editors['boolean'];
         }else{
-            return this.defaultEditor || this.editors['mixed'];
+            return this.defaultEditor || this.editors[prop ? 'string' : 'mixed'];
         }
     },
     

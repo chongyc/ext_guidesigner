@@ -224,27 +224,36 @@ Ext.ux.JSON = new (function(){
     * @param {Object} config The config object that can be applied
     * @return {Boolean} indicator if all changes where set
     */
-    jsonInit : function (config,element,all) {
+    jsonInit : function (config,element,all,scopeOnly) {
      var allSet = true, el = element || this;
      if (config) {
       for (var i in config) {       
+        var j = i;
         if (all || this.blockedJsonInit.indexOf(i) == -1) {
-          var k = 'set' + i.substring(0,1).toUpperCase() + i.substring(1);
-          try {
-            if (el[k] && typeof el[k] == 'function') {
-              el[k].call(el,config[i]);
-            } else if (el[i] && typeof el[i] == 'function') {
-              el[i].call(el,config[i]);
-            } else if (i=='required_js') { 
-              this.setRequired_js(config[i]);
-            } else if (i=='required_css') {
-              this.setRequired_css(config[i]);
-            } else {
-              allSet &= typeof(el[i])!='undefined' && el[i] == config[i]
-              el[i] = config[i];
+          if (i=='required_js') { 
+            this.setRequired_js(config[i]);
+          } else if (i=='required_css') {
+             this.setRequired_css(config[i]);
+          } else {
+            var applyTo = el;
+            //When scope of var set if
+            if (i.indexOf('scope.')==0) {
+               j = i.substring(6);
+               applyTo = this.getJsonScope();
+               alert('Created ' + j);
+            } else if (scopeOnly) continue;
+            var k = 'set' + j.substring(0,1).toUpperCase() + j.substring(1);
+            try {
+              if (applyTo[k] && typeof applyTo[k] == 'function') {
+                applyTo[k].call(el,config[i]);
+              } else if (applyTo[j] && typeof applyTo[j] == 'function') {
+                applyTo[j].call(el,config[i]);
+              } else {
+                applyTo[j] = config[i];
+              }
+            } catch (e) {
+              allSet = false;
             }
-          } catch (e) {
-            allSet = false;
           }
         }
       }
@@ -258,31 +267,32 @@ Ext.ux.JSON = new (function(){
     * @param {Element} element The element to apply the json to
     * @return {Object} The elements applied
     */
-    applyJson : function (json,element,container) {
+    applyJson : function (json,element) {
      var el = element || this;
      var items = this.jsonId ? this.editableJson(json) : json || {};
      if (typeof(items) !== 'object') items = this.decode(json);
      if (items) {
        //Apply global json vars to element
-       this.jsonInit(items.json,this.jsonScope || this.scope || this);
-       delete items.json;
        if (el instanceof Ext.Container) {
          //Clear out orignal content of container
          while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
          if(items instanceof Array) {
+           for (var i=0;i<items.length;i++) this.jsonInit(items[i].json);
            el.add.apply(el,items);
          } else { // Only add items when it is not empty
            var l = 0;
            for (var i in items) {if (i!=this.jsonId)  l++;}
-           if (l!=0) el.add(items);
-         }
-         
+           if (l!=0) { 
+              this.jsonInit(items.json);
+              el.add(items);
+           }              
+         }         
        } else {
          //This is not a container so try to update element using jsonInit construction
+         this.jsonInit(items.json,el);
          this.jsonInit(items,el);
        }
      }
-     el = container || el;
      if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      return items;
     },
@@ -331,14 +341,14 @@ Ext.ux.JSON = new (function(){
     encodeString : function(s){
        var m = {"\b": '\\b',"\t": '\\t',"\n": '\\n',"\f": '\\f',"\r": '\\r','"' : '\\"',"\\": '\\\\'};
        if (/["\\\x00-\x1f]/.test(s)) { //"
-           return '"' + s.replace(/([\x00-\x1f\\"])/g, function(a, b) { //"
+           return '"'  + s.replace(/([\x00-\x1f\\"])/g, function(a, b) { //"
                var c = m[b];
                if(c){ return c; }
                c = b.charCodeAt();
                return "\\u00" +
                    Math.floor(c / 16).toString(16) +
                    (c % 16).toString(16);
-           }) + '"';
+           })  + '"';
        }
        return '"' + s + '"';
      },
@@ -522,14 +532,23 @@ Ext.ux.JSON = new (function(){
          s=value.indexOf(this.scriptStart);
        }
        v += value;   
-       var scope = this.jsonScope || this.scope || this; //Create reference object for json 
+       var scope = this.getJsonScope(); 
        var items = eval("(" + v + ")");
        if(items && items.json) { 
-          this.setRequired_css(items.json.required_css);                    
-          this.setRequired_js(items.json.required_js);
+          items.json = eval("(" + items.json + ")");
+          this.jsonInit(items.json,null,null,true);
        }
+       
        //When jsonId is set convert changed fields to jsonId+key=StringValue
        return items;
+     },
+     
+     /**
+      * Function returning the scope to beused for the json
+      * @return {Object} 
+      */
+     getJsonScope : function(){
+       return  this.jsonScope || this.scope || this;  
      },
      
      /**
@@ -557,9 +576,9 @@ Ext.ux.JSON = new (function(){
        this.addJsonHistory(json);
        var items = this.decodeAsString(json);
        //Now we can do decode by using eval setting scope
-       var scope = this.jsonScope || this.scope || this; //Create reference object for json 
+       var scope = this.getJsonScope();
        items = applyJsonId(eval("(" + json + ")"),items); 
-       if(items) this.jsonInit(items.json,scope); 
+       if(items) this.jsonInit(items.json); 
        return items;
      },
 

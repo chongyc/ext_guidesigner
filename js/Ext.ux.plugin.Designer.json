@@ -16,7 +16,7 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */ 
-{ json: {
+{ json: /*BEGIN*/{
    blockedJsonInit: {'jsonpanel' : ['width','height','title'],
                      'jsonwindow': [] 
                     },
@@ -25,7 +25,7 @@
    width : 235,
    height: 350,
    alignTo: [scope.container.id,'br',[-235,-350]]
-  },
+  }/*END*/,
   layout: 'border',
   border: false,
   items : [{
@@ -225,12 +225,12 @@
           region: 'center',
           disabled: true,
           propertyTypes : scope.properties,
-         // customEditors    : scope.getEditors()
           source           : {},
           listeners         : {
             'render'       : function() {
                //Register it with designer
                scope.setPropertyGrid(this);
+               //Create context menu
                var id = Ext.id();
                var contextMenu = new Ext.menu.Menu({items:[{
                  id      : id,
@@ -241,12 +241,10 @@
                      delete this.getSource()[item.record.id];
                      ds.remove(item.record);
                      delete item.record;
-                     scope.activeElement.modified = true;
                      scope.updateElement();
-                     scope.selectElement(scope.findByJsonId(scope.activeElement[scope.jsonId]));
                    }.createDelegate(this)
                }]});
-               // property grid contextMenu
+               //Connect property grid contextMenu
                this.on('rowcontextmenu', function(g, idx, e) {
                    e.stopEvent();
                    var r = this.store.getAt(idx);

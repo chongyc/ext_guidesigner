@@ -27,6 +27,9 @@ properties : [{
     desc : "<b>String</b> The region of a borderlayout",
     values : ["center","west","north","south","east"]
   },{
+    name : "title",
+    desc : "<b>String</b> The title of a panel"
+  },{
     name : "hideMode",
     desc : "<b>String</b> Style used for hide mode",
     values : ["visibility","display","offsets"]

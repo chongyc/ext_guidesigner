@@ -154,13 +154,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @type {Boolean}
    @cfg */    
   enableReload: false,
-
-  /**
-   * When fullUpdate is set to true the all items changes are applied by creating new object
-   * otherwise it will first try to apply changes by using the setMethod
-   * @type {Boolean}
-   @cfg */
-  fullUpdate : false,
   
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
@@ -171,7 +164,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   rootEditable : false,
  
   //@private The version of the designer
-  version : '2.0.1-beta',
+  version : '2.0.2-beta2',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -193,7 +186,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   init: function(field) {
     Ext.QuickTips.init();
     this.container = field;
-    this.jsonScope this.scope || this.container;
+    this.jsonScope = this.scope || this.container;
     
     this.addEvents({
       /**
@@ -397,7 +390,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        var items = [];
        while (this.container.items.first()) {
           items.push(this.container.items.first());
-          this.container.items.remove(this.container.items.first(), true);
+          this.container.items.remove(this.container.items.first());
        }       
        //Re create a panel with items from config editable root
        var config = { 'border' : false, 'layout' : this.container.getLayout(),'items' : this.editableJson(items)};
@@ -440,7 +433,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   setConfig : function (json) {
     var id = this.activeElement ? this.activeElement[this.jsonId] : null;
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
-    this.container.codeConfig = this.editableJson(items);
+    if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
+    this.container.codeConfig.items=[this.editableJson(items)];
     this.applyJson(items,this.container); //Recreate childs
     this.redrawContainer=false;
     this.modified = true;
@@ -473,27 +467,29 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     var el = element || this.activeElement;
     if (el) {
       try {
-        if (this.fullUpdate || this.isContainer(el) || !(config && this.jsonInit(config,el,true))) {
-          var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
-          if (config) {Ext.apply(this.getConfig(el),config);}
-          var p = this.container; //Redraw whole canvas          
-          if (!this.redrawContainer && el!=p) {
-             //Check if whe can find parent which can be redraw
-             var c = '';
-             p = this.getContainer(el);
-             //Search if whe find a layout capeble contianer
-             while (p!=this.container && !c) {
-               if (!p.codeConfig) p.codeConfig = this.getConfig(p);
-               c = p.codeConfig.layout;
-               if (!c || ['auto','fit'].indexOf(c)!=-1) p = this.getContainer(p.ownerCt);
-             }
-             //When no layout found whe can use the parent otherwise parent of container
-             p = c ? this.getContainer(p.ownerCt) : this.getContainer(el.ownerCt);
-          }
-          this.applyJson(this.getConfig(p).items,p);
-          this.redrawContainer=false;
-          this.selectElement(id);
+        var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
+        if (config) {Ext.apply(this.getConfig(el),config);}
+        var p = this.container; //Redraw whole canvas          
+        if (!this.redrawContainer && el!=p) {
+           //Check if whe can find parent which can be redraw
+           var c = '';
+           p = this.getContainer(el);
+           //Search if whe find a layout capeble contianer
+           while (p!=this.container && !c) {
+             if (!p.codeConfig) p.codeConfig = this.getConfig(p);
+             c = p.codeConfig.layout;
+             if (!c || (p instanceof Ext.form.Form) || (p instanceof Ext.form.FieldSet))
+               c = 'form';
+             if (!c || (p==el && c)) // || ['auto','fit'].indexOf(c)!=-1) 
+                p = this.getContainer(p.ownerCt);
+           }
+           //When no layout found whe can use the parent otherwise parent of container
+           //p = c ? this.getContainer(p == this.container ? p : p.ownerCt) : this.getContainer(el.ownerCt);
+           p = c ? p : this.getContainer(el.ownerCt);
         }
+        this.applyJson(this.getConfig(p).items,p);
+        this.redrawContainer=false;
+        this.selectElement(id);
       } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element' + e); }
       this.fireEvent('change',el);
       this.modified = true;
@@ -701,10 +697,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    */
   setPropertyGrid : function(propertyGrid) {
     this.propertyGrid = propertyGrid;
-    this.propertyGrid.jsonScope = this.jsonScope;
+    this.propertyGrid.jsonScope = this.getJsonScope();
     propertyGrid.store.on('update', function(s,r,t) {
       if (t == Ext.data.Record.EDIT) {
-        var change = {}; change[r.id] = r.data.changeValue || r.data.value;
+        var change = {};
+        change[r.id] = r.data.changeValue || r.data.value;
         this.markUndo();
         this.updateElement(this.activeElement,change);
       }
