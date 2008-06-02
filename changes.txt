@@ -1,21 +1,20 @@
  TODO
   - Save state in cookie based on name of designerfield
   - Support loading and saving of file
-  - Add Code tree to access hidden fields
-  - Redraw of screen elements should not allways be full (as now in work arround)
-  - Redraw of complex containers (accordion) not working
   - Add a visual resize option to item
   - Add Grid Wirzard
   - Add loading page when initailizing index.html en index.php
  -  Make toolbox global if required, so only one exits by screen
- -  Align toolbox, smaller text, smaller icons
- -  Element context menu width delete,resize ?
  -  Label is not selected after alter
  -  BBar is converted to string instead of object
  -  SetConfig calls jsonInit 1 time to mutch 
- -  Change accordion to tab panel
+ -  Add loading indicator in jsonpanel
 
  Change History:
+ Version 2.0.3-beta3:
+  * Fixed Empty designer will not show field anymore in code tree
+  * Changed the accordion to tabpanel
+ 
  Version 2.0.2-beta2: 
   * Added delete element as context menu
   * Added Undo and Redo functions

@@ -260,6 +260,14 @@ Ext.ux.JSON = new (function(){
      }
      return allSet;
     },
+    
+    /**
+     * Check if a object is empty
+     */
+    isEmptyObject : function(obj) {
+     for (var i in obj) {if (i!=this.jsonId)  return false;}
+     return true;
+    },
 
    /**
     * Apply the Json to given element
@@ -282,7 +290,7 @@ Ext.ux.JSON = new (function(){
          } else { // Only add items when it is not empty
            var l = 0;
            for (var i in items) {if (i!=this.jsonId)  l++;}
-           if (l!=0) { 
+           if (!this.isEmptyObject(items)) { 
               this.jsonInit(items.json);
               el.add(items);
            }              

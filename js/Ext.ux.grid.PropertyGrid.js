@@ -34,16 +34,18 @@ Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
   doLoad : function(node,data){
     if(data){
       node.beginUpdate();
-      var cs = {
-           text: this.elementToText(data),
-           cls: data.items ? 'folder' : 'file' , 
-           leaf : data.items ? false : true,
-           jsonId : data[this.jsonId]
-      };
-      var cn = node.appendChild(new Ext.tree.TreeNode(cs));
-      if (data.items) {
-        for(var i = 0, len = data.items.length; i < len; i++){
-          this.doLoad(cn,data.items[i]);
+      if (!this.designer.isEmptyObject(data)) {
+        var cs = {
+             text: this.elementToText(data),
+             cls: data.items ? 'folder' : 'file' , 
+             leaf : data.items ? false : true,
+             jsonId : data[this.jsonId]
+        };
+        var cn = node.appendChild(new Ext.tree.TreeNode(cs));
+        if (data.items) {
+          for(var i = 0, len = data.items.length; i < len; i++){
+            this.doLoad(cn,data.items[i]);
+          }
         }
       }
       node.endUpdate();

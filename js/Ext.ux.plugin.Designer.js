@@ -159,12 +159,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   jsonId :  '__JSON__',
   
   licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */\n",
-  
-  //@private is the root field editable
-  rootEditable : false,
- 
+   
   //@private The version of the designer
-  version : '2.0.2-beta2',
+  version : '2.0.3-beta3',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -232,6 +229,13 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       this.createConfig();
       this.initContextMenu()
     }, this);
+  },
+  
+  /**
+   * Return the file control object
+   */
+  fileControl : function(){
+    return null;
   },
   
   initContextMenu : function () {

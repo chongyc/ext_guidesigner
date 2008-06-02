@@ -29,7 +29,9 @@
   layout: 'border',
   border: false,
   items : [{
-    layout:"accordion",
+//    layout:"accordion",
+    xtype : 'tabpanel',
+    activeTab : 0,
     region:"north",
     border:false,
     height:180,
@@ -219,6 +221,22 @@
              scope.selectElement(node.attributes.jsonId);
            }
         }/*END*/
+      },{
+        title:"Files",
+        xtype:"treepanel",
+        disabled : scope.fileControl() == null,
+        animate:true,
+        autoScroll:true,
+        containerScroll:true,
+        rootVisible : false,
+        root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
+        loader:/*BEGIN*/scope.fileControl()/*END*/,
+        listeners : /*BEGIN*/ {
+          'dblclick' : function(node,e){
+             e.preventDefault(); 
+             scope.setConfig(this.loader.getFile(node));
+           }
+      }/*END*/
       }]
     },{
           xtype : 'uxpropertygrid',
