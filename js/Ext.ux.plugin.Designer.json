@@ -233,8 +233,8 @@
         loader:/*BEGIN*/scope.fileControl()/*END*/,
         listeners : /*BEGIN*/ {
           'dblclick' : function(node,e){
-             e.preventDefault(); 
-             scope.setConfig(this.loader.getFile(node));
+             e.preventDefault();             
+             this.loader.getFile(node.attributes,scope.setConfig);
            }
       }/*END*/
       }]
@@ -287,7 +287,7 @@
                       var ds = scope.propertyGrid.store, defaultVal = "";
                       if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
                          var i = this.store.find('name',name);
-                         if (i!=-1) defaultVal = this.store.getAt(i).get('default') || defaultVal;
+                         if (i!=-1) defaultVal = this.store.getAt(i).get('defaults') || defaultVal;
                          tf.setValue('');
                          ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
                          scope.propertyGrid.startEditing(ds.getCount()-1, 1);

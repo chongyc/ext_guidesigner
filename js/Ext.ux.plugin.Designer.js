@@ -82,6 +82,50 @@ Ext.ux.plugin.DesignerWizard = function(json){
 */
 
 
+Ext.ux.plugin.CookieFiles = function(config) {
+  Ext.apply(this,config);
+  Ext.ux.plugin.Designer.superclass.constructor.call(this);
+  this.init();
+}
+
+Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
+  files : {},
+  
+  init : function(){
+  },
+
+  deleteFile : function(fileInfo){
+  },
+  
+  renameFile : function(fileInfo){
+  },
+  
+  saveFile : function(fileInfo,content){
+  },
+  
+  newFile  : function(fileInfo){
+  },
+  
+  openFile : function(fileInfo,callback) {
+    callback.call(this,result);
+  },
+  
+  getFiles : function(){
+    return files;
+  },
+  
+  deleteFolder : function(folderInfo) {
+  },
+  
+  renameFolder : function(folderInfo) {
+  },
+  
+  newFolder    : function(folderInfo){
+  }
+    
+});
+
+
 /** Create a desginer */
 Ext.ux.plugin.Designer = function(config){
   Ext.apply(this, config);
@@ -734,7 +778,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
             url: this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json',
             sortInfo : {field:'name',order:'ASC'},
             root: 'properties',
-            fields: ['name', 'type','default','desc','instance','editable','values']
+            fields: ['name', 'type','defaults','desc','instance','editable','values']
         });
         this.properties.load();
         //Add Filter function based on instance

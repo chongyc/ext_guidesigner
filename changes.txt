@@ -14,6 +14,8 @@
  Version 2.0.3-beta3:
   * Fixed Empty designer will not show field anymore in code tree
   * Changed the accordion to tabpanel
+  * Fixed problem that not all code parts where not shown
+  * Fixed problem that in IE the code words where not loaded
  
  Version 2.0.2-beta2: 
   * Added delete element as context menu

@@ -39,8 +39,9 @@ properties : [{
     values : ["qtip","title","under","side"]
   },{
     name : "shadow",
-    desc : "<b>String</b> Shadow to be used",
-    values : ["sides","frame","drop"]
+    desc : "<b>String/Boolean</b> Shadow to be used",
+    values : ["sides","frame","drop",'true'],
+    editable: true
   },{
     name : "tabPosition",
     desc : "<b>String</b> Postion of tab in tabpanel",
@@ -81,9 +82,6 @@ properties : [{
     name : "deferHeight",
     type : "boolean",
     desc : "<b>Boolean</b> True to defer height calculations to an external component, false to allow this component to set its own height (defaults to false)."
-  },{
-    name : "text",
-    desc : "<b>String</b> The button text"
   },{
     name : "icon",
     desc : "<b>String</b> The path to an image to display in the button (the image will be set as the background-image CSS property of the button by default, so if you want a mixed icon/text button, set cls:\"x-btn-text-icon\")"
@@ -217,11 +215,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to automatically monitor window resize events to handle anything that is sensitive to the current size of the viewport. This value is typically managed by the chosen {@link #layout} and should not need to be set manually."
   },{
-    name : "layout",
-    desc : "<b>String</b> The layout type to be used in this container. If not specified, a default {@link Ext.layout.ContainerLayout} will be created and used. Valid values are: accordion, anchor, border, card, column, fit, form and table. Specific config values for the chosen layout type can be specified using {@link #layoutConfig}.",
-    default: "auto",
-    values : function(){var d=[];for (var i in Ext.Container.LAYOUTS) {d.push(i); } return d}()
-  },{
     name : "layoutConfig",
     type : "object",
     desc : "<b>Object</b> This is a config object containing properties specific to the chosen layout (to be used in conjunction with the {@link #layout} config value). For complete details regarding the valid config options for each layout type, see the layout class corresponding to the type specified: {@link Ext.layout.Accordion}, {@link Ext.layout.AnchorLayout}, {@link Ext.layout.BorderLayout}, {@link Ext.layout.CardLayout}, {@link Ext.layout.ColumnLayout}, {@link Ext.layout.FitLayout}, {@link Ext.layout.FormLayout} and {@link Ext.layout.TableLayout}."
@@ -269,7 +262,7 @@ properties : [{
   },{
     name : "store",
     type : "mixed",
-    desc : "<b>Ext.data.Store</b> The {@link Ext.data.Store} to bind this DataView to."
+    desc : "<b>Ext.data.Store</b> The {@link Ext.data.Store} to bind this."
   },{
     name : "itemSelector",
     desc : "<b>String</b> A CSS selector in any format supported by {@link Ext.DomQuery} that will be used to filter the data loaded from the store (defaults to '')."
@@ -388,9 +381,6 @@ properties : [{
     name : "alignment",
     desc : "<b>String</b> The position to align to (see {@link Ext.Element#alignTo} for more details, defaults to \"c-c?\")."
   },{
-    name : "shadow",
-    desc : "<b>Boolean/String</b> \"sides\" for sides/bottom only, \"frame\" for 4-way shadow, and \"drop\" for bottom-right shadow (defaults to \"frame\")"
-  },{
     name : "constrain",
     type : "boolean",
     desc : "<b>Boolean</b> True to constrain the editor to the viewport"
@@ -438,9 +428,6 @@ properties : [{
     name : "clientValidation",
     type : "boolean",
     desc : "<b>boolean</b> Applies to submit only. Pass true to call form.isValid() prior to posting to validate the form on the client (defaults to false)"
-  },{
-    name : "text",
-    desc : "<b>String</b> A text that will be shown in label using htmlencode."
   },{
     name : "html",
     type : "html",
@@ -508,10 +495,6 @@ properties : [{
     type : "mixed",
     desc : "<b>Boolean/Object</b> A DomHelper element spec, or true for a default element spec (defaults to: {tag: \"input\", type: \"text\", size: \"24\", autocomplete: \"off\"})"
   },{
-    name : "store",
-    type : "mixed",
-    desc : "<b>Ext.data.Store</b> The data store to which this combo is bound (defaults to undefined)"
-  },{
     name : "title",
     desc : "<b>String</b> If supplied, a header element is created containing this text and added into the top of the dropdown list (defaults to undefined, with no header element)"
   },{
@@ -536,9 +519,6 @@ properties : [{
   },{
     name : "triggerClass",
     desc : "<b>String</b> An additional CSS class used to style the trigger button. The trigger will always get the class 'x-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x-form-arrow-trigger' which displays a downward arrow icon)."
-  },{
-    name : "shadow",
-    desc : "<b>Boolean/String</b> True or \"sides\" for the default effect, \"frame\" for 4-way shadow, and \"drop\" for bottom-right"
   },{
     name : "listAlign",
     desc : "<b>String</b> A valid anchor position value. See {@link Ext.Element#alignTo} for details on supported anchor positions (defaults to 'tl-bl')"
@@ -1007,12 +987,8 @@ properties : [{
     type : "array",
     desc : "<b>Array</b> An array of columns to auto create a ColumnModel"
   },{
-    name : "store",
-    type : "store",
-    desc : "<b>Store</b> The Ext.data.Store the grid should use as it's data source"
-  },{
     name : "cm",
-    type : "store",
+    type : "mixed",
     desc : "<b>Store</b> An Ext.grid.ColumnModel for this grid"
   },{
     name : "sm",
@@ -1142,10 +1118,6 @@ properties : [{
     name : "shim",
     type : "boolean",
     desc : "<b>Boolean</b> False to disable the iframe shim in browsers which need one (defaults to true)"
-  },{
-    name : "shadow",
-    type : "string/boolean",
-    desc : "<b>String/Boolean</b> True to create a shadow element with default class \"x-layer-shadow\", or you can pass a string with a CSS class name. False turns off the shadow."
   },{
     name : "dh",
     type : "object",
@@ -1349,10 +1321,6 @@ properties : [{
     type : "number",
     desc : "<b>Number</b> The minimum width of the menu in pixels (defaults to 120)"
   },{
-    name : "shadow",
-    type : "boolean/string",
-    desc : "<b>Boolean/String</b> True or \"sides\" for the default effect, \"frame\" for 4-way shadow, and \"drop\" for bottom-right shadow (defaults to \"sides\")"
-  },{
     name : "subMenuAlign",
     desc : "<b>String</b> The {@link Ext.Element#alignTo} anchor position value to use for submenus of this menu (defaults to \"tl-tr?\")"
   },{
@@ -1369,9 +1337,6 @@ properties : [{
     name : "hideOnClick",
     type : "boolean",
     desc : "<b>Boolean</b> True to hide the containing menu after this item is clicked (defaults to false)"
-  },{
-    name : "text",
-    desc : "<b>String</b> The text to display for this item (defaults to '')"
   },{
     name : "hideOnClick",
     type : "boolean",
@@ -1463,10 +1428,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to float the panel (absolute position it with automatic shimming and shadow), false to display it inline where it is rendered (defaults to false). Note that by default, setting floating to true will cause the panel to display at negative offsets so that it is hidden -- because the panel is absolute positioned, the position must be set explicitly after render (e.g., myPanel.setPosition(100,100);). Also, when floating a panel you should always assign a fixed width, otherwise it will be auto width and will expand to fill to the right edge of the viewport."
   },{
-    name : "shadow",
-    type : "boolean/string",
-    desc : "<b>Boolean/String</b> True (or a valid Ext.Shadow {@link Ext.Shadow#mode} value) to display a shadow behind the panel, false to display no shadow (defaults to 'sides'). Note that this option opnly applies when floating = true."
-  },{
     name : "shim",
     type : "boolean",
     desc : "<b>Boolean</b> False to disable the iframe shim in browsers which need one (defaults to true). Note that this option opnly applies when floating = true."
@@ -1522,9 +1483,6 @@ properties : [{
     type : "float",
     desc : "<b>Float</b> A floating point value between 0 and 1 (e.g., .5, defaults to 0)"
   },{
-    name : "text",
-    desc : "<b>String</b> The progress bar text (defaults to '')"
-  },{
     name : "textEl",
     type : "mixed",
     desc : "<b>Mixed</b> The element to render the progress text to (defaults to the progress bar's internal text element)"
@@ -1571,9 +1529,6 @@ properties : [{
     name : "maxWidth",
     type : "number",
     desc : "<b>Number</b> The maximum width of the tip in pixels (defaults to 300)"
-  },{
-    name : "shadow",
-    desc : "<b>Boolean/String</b> True or \"sides\" for the default effect, \"frame\" for 4-way shadow, and \"drop\" for bottom-right shadow (defaults to \"sides\")"
   },{
     name : "defaultAlign",
     desc : "<b>String</b> The default {@link Ext.Element#alignTo) anchor position value for this tip relative to its element of origin (defaults to \"tl-bl?\")"
@@ -1644,9 +1599,6 @@ properties : [{
     name : "clearOnLoad",
     type : "boolean",
     desc : "<b>Boolean</b> (optional) Default to true. Remove previously existing child nodes before loading."
-  },{
-    name : "text",
-    desc : "<b>String</b> The text for this node"
   },{
     name : "expanded",
     type : "boolean",
@@ -1930,10 +1882,6 @@ properties : [{
     type : "object",
     desc : "<b>Object</b> Any subclass of AbstractSelectionModel that will provide the selection model for the grid (defaults to Ext.grid.RowSe..."
   },{
-    name : "store",
-    type : "mixed",
-    desc : "<b>Ext.data.Store</b> The Ext.data.Store the grid should use as its data source (required)."
-  },{
     name : "stripeRows",
     type : "boolean",
     desc : "<b>Boolean</b> True to stripe the rows. Default is false"
@@ -2040,5 +1988,10 @@ properties : [{
     name : "json",
     type : "object",
     desc : "<b>Object</b> A special object used top apply settings to owner of JsonPanel or JsonWindow"
+  },{
+    name : "layout",
+    desc : "<b>String</b> The layout type to be used in this container. If not specified, a default {@link Ext.layout.ContainerLayout} will be created and used. Valid values are: accordion, anchor, border, card, column, fit, form and table. Specific config values for the chosen layout type can be specified using {@link #layoutConfig}.",
+    defaults: "auto",
+    values :  function(){var d=[];for (i in Ext.Container.LAYOUTS) {d.push(i);} return d;}()
   }]
 }
