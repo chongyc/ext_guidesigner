@@ -13,7 +13,11 @@
  Change History:
  Version 2.0.4:
   + Loading indicator
-  + Documentation added under Question Mark
+  + Documentation window added under Question Mark
+  + Added loadConfig method for loading from URL
+  + Added autoLoad option in config to load json from URL
+  + Added Cookie files
+  - Remove debug message Created, for special scope objects
   * Config is now shown in window
   * Fixed layout problem
   

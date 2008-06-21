@@ -252,7 +252,6 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
             if (i.indexOf('scope.')==0) {
                j = i.substring(6);
                applyTo = this.getJsonScope();
-               alert('Created ' + j);
             } else if (scopeOnly) continue;
             var k = 'set' + j.substring(0,1).toUpperCase() + j.substring(1);
             try {

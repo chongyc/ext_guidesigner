@@ -94,45 +94,54 @@ Ext.ux.plugin.CookieFiles = function(config) {
   Ext.apply(this,config);
   Ext.ux.plugin.CookieFiles.superclass.constructor.call(this);
   this.init();
-  this.newFile({id :'dummy/test.json'},'{xtype : "form",title : "Form",items : [{xtype : "fieldset",title : "Legend",autoHeight : true}]}');
 }
 
 Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
   files : null,
+  last  : null,
   
   init : function(){
     this.cookies = new Ext.state.CookieProvider();     
     this.files = this.cookies.get('Designer.files') || {};
   },
   
+  reset : function(){
+    this.cookies.clear('Designer.files');
+  },
+  
   saveChanges : function(id,action,content) {
     this.cookies.set('Designer.files',this.files);
     if (content) this.cookies.set('Designer/' + id,escape(content));
-    if (action=='delete') this.cookies.clear('Designer.'+id);
+    if (action=='delete') {
+      this.cookies.clear('Designer.'+id);
+      this.last = null;
+    } else {
+      this.last = id;
+    }
   },
   
   deleteFile : function(fileInfo){
-    delete this.files[fileInfo.id];
-    this.saveChanges(fileInfo.id,'delete');
+    delete this.files[fileInfo];
+    this.saveChanges(fileInfo,'delete');
   },
   
   renameFile : function(fileInfo){
-    this.files[fileInfo.id] = fileInfo;
-    this.saveChanges(fileInfo.id,'rename');
+    this.files[fileInfo] = fileInfo;
+    this.saveChanges(fileInfo,'rename');
   },
   
   saveFile : function(fileInfo,content){
-    this.files[fileInfo.id] = fileInfo;
-    this.saveChanges(fileInfo.id,'save',content);
+    this.files[fileInfo] = fileInfo;
+    this.saveChanges(fileInfo,'save',content);
   },
   
   newFile  : function(fileInfo,content){
-    this.files[fileInfo.id] = fileInfo;
-    this.saveChanges(fileInfo.id,'new',content);
+    this.files[fileInfo] = fileInfo;
+    this.saveChanges(fileInfo,'new',content);
   },
   
   openFile : function(fileInfo,callback) {
-    var result = unescape(this.cookies.get('Designer/' + fileInfo.id));
+    var result = unescape(this.cookies.get('Designer/' + fileInfo));
     if(typeof callback == "function") callback(result);
   },
   
@@ -144,9 +153,9 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
   loadNodes : function(node,append){
     if (!append) while(node.firstChild) node.removeChild(node.firstChild);
     node.beginUpdate();
-    for (i in this.files){
-        var file = this.files[i];
-        var path = file.id.split('/');
+    for (f in this.files){
+        var file = this.files[f];
+        var path = f.split('/');
         var name = '';
         var cnode = node;
         var n;
@@ -238,16 +247,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @type {Boolean}
    @cfg */    
   enableVersion : true,
+  
   /**
-   * Enable or disable the Save file menu button (defaults false).
-   * @type {Boolean}
-   @cfg */    
-  enableSave : false,
-  /**
-   * Enable or disable the Reload file menu button (defaults false).
-   * @type {Boolean}
-   @cfg */    
-  enableReload: false,
+   * An url specifing the json to load
+   * @type {Url}
+   @cfg */
+  autoLoad :  false,
   
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
@@ -270,7 +275,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   //@private The marker for active undo
   undoHistoryMark : 0,
   
-  fileControl : new Ext.ux.plugin.CookieFiles(),
+  /**
+   * A file control config item
+   */
+  fileControl : null,
    
   /**
    * Init the plugin ad assoiate it to a field
@@ -303,7 +311,15 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       
       'newconfig': true,
       
-      'select'   : true
+      'select'   : true,
+
+      /**
+       * Fires after loadConfig fails
+       * @event loadfailed
+       * @param {Url} url The url tried to load
+       * @param {Object} response Response object
+       */      
+      'loadfailed' : false
     });
         
     //Init the components drag & drop and toolbox when it is rendered
@@ -323,7 +339,13 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       }, this);
       this.toolbox(this.autoShow);
       this.createConfig();
-      this.initContextMenu()
+      this.initContextMenu();
+      // Check if whe have to load a external file
+      if (this.autoLoad) {
+       if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
+       if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
+       this.loadConfig(this.autoLoad.url);
+      } 
     }, this);
   },
     
@@ -491,6 +513,40 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        var el = this.container.add(config);
        el.codeConfig = config;
     }
+  },
+  
+  /**
+   * Load a config from URL
+   * @param {Element} el The url to load
+   */
+  loadConfig : function (url) {
+    if (this.loadMask && this.container.ownerCt) 
+      this.container.ownerCt.el.mask(this.loadMsg, this.msgCls);
+     Ext.Ajax.request({
+      url: url,
+      method : 'GET',
+      callback: function(options, success, response){
+        if (success) {
+         this.setConfig(response.responseText);
+         this.modified = false;
+        } else {
+         if (!this.fireEvent('loadfailed',url,response))
+            Ext.Msg.alert('Failure','Failed to load url :' + url);
+        }
+        if (this.loadMask && this.container.ownerCt) 
+           this.container.ownerCt.el.unmask();
+      },
+      scope: this
+     });
+  },
+ 
+  /** 
+    * Get the config as string of the specified element
+    * @param {Element} el The element for which to get the config object
+    * @return {String} The config string 
+    */
+  getCode : function(el) {
+   return this.encode(this.getConfig(el));
   },
   
   /** 
