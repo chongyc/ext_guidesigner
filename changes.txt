@@ -11,6 +11,12 @@
  -  Add loading indicator in jsonpanel
 
  Change History:
+ Version 2.0.4:
+  + Loading indicator
+  + Documentation added under Question Mark
+  * Config is now shown in window
+  * Fixed layout problem
+  
  Version 2.0.3-beta3:
   * Fixed Empty designer will not show field anymore in code tree
   * Changed the accordion to tabpanel
@@ -27,6 +33,5 @@
   * Fixed redraw problems for containers
   * Fixed problems in editableJson code
   
- 
  Version 2.0.0-beta1: 
   * Complety rebuild as toolbox

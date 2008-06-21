@@ -33,6 +33,14 @@ Ext.override(Ext.form.Label, {
     }
 });
 
+Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+    onRender : function(ct, position){
+        var url = this.url;
+        url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
+        this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: url});
+    }
+});
+Ext.reg('iframe', Ext.ux.IFrameComponent);
 
 Ext.namespace('Ext.ux.tree');
 Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
@@ -84,45 +92,87 @@ Ext.ux.plugin.DesignerWizard = function(json){
 
 Ext.ux.plugin.CookieFiles = function(config) {
   Ext.apply(this,config);
-  Ext.ux.plugin.Designer.superclass.constructor.call(this);
+  Ext.ux.plugin.CookieFiles.superclass.constructor.call(this);
   this.init();
+  this.newFile({id :'dummy/test.json'},'{xtype : "form",title : "Form",items : [{xtype : "fieldset",title : "Legend",autoHeight : true}]}');
 }
 
 Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
-  files : {},
+  files : null,
   
   init : function(){
+    this.cookies = new Ext.state.CookieProvider();     
+    this.files = this.cookies.get('Designer.files') || {};
   },
-
+  
+  saveChanges : function(id,action,content) {
+    this.cookies.set('Designer.files',this.files);
+    if (content) this.cookies.set('Designer/' + id,escape(content));
+    if (action=='delete') this.cookies.clear('Designer.'+id);
+  },
+  
   deleteFile : function(fileInfo){
+    delete this.files[fileInfo.id];
+    this.saveChanges(fileInfo.id,'delete');
   },
   
   renameFile : function(fileInfo){
+    this.files[fileInfo.id] = fileInfo;
+    this.saveChanges(fileInfo.id,'rename');
   },
   
   saveFile : function(fileInfo,content){
+    this.files[fileInfo.id] = fileInfo;
+    this.saveChanges(fileInfo.id,'save',content);
   },
   
-  newFile  : function(fileInfo){
+  newFile  : function(fileInfo,content){
+    this.files[fileInfo.id] = fileInfo;
+    this.saveChanges(fileInfo.id,'new',content);
   },
   
   openFile : function(fileInfo,callback) {
-    callback.call(this,result);
+    var result = unescape(this.cookies.get('Designer/' + fileInfo.id));
+    if(typeof callback == "function") callback(result);
   },
   
-  getFiles : function(){
-    return files;
+  load : function(node, callback){ 
+   this.loadNodes(node,false);
+   if(typeof callback == "function") callback();   
   },
   
-  deleteFolder : function(folderInfo) {
-  },
-  
-  renameFolder : function(folderInfo) {
-  },
-  
-  newFolder    : function(folderInfo){
+  loadNodes : function(node,append){
+    if (!append) while(node.firstChild) node.removeChild(node.firstChild);
+    node.beginUpdate();
+    for (i in this.files){
+        var file = this.files[i];
+        var path = file.id.split('/');
+        var name = '';
+        var cnode = node;
+        var n;
+        for (var i=0;i<path.length;i++) {
+           name += path[i];
+           n=null;
+           for (var j=0,c=cnode.childNodes;j<c.length && !n;j++) {
+             if (c[j].attributes.text==path[i]) n = c[j];
+           }
+           if (!n) {
+             var leaf = (i==path.length-1);
+             n = new Ext.tree.TreeNode({
+                     text: path[i],
+                     cls:  leaf ? 'file' : 'folder' , 
+                     leaf : leaf,
+                     id  : name
+             }); 
+             cnode.appendChild(n);
+           }
+           cnode = n;
+           name += '/' 
+        }
+    }
+    node.endUpdate();
   }
-    
+      
 });
 
 
@@ -205,7 +255,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */\n",
    
   //@private The version of the designer
-  version : '2.0.3-beta3',
+  version : '2.0.4',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -219,6 +269,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   undoHistory : [],  
   //@private The marker for active undo
   undoHistoryMark : 0,
+  
+  fileControl : new Ext.ux.plugin.CookieFiles(),
    
   /**
    * Init the plugin ad assoiate it to a field
@@ -274,14 +326,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       this.initContextMenu()
     }, this);
   },
-  
-  /**
-   * Return the file control object
-   */
-  fileControl : function(){
-    return null;
-  },
-  
+    
   initContextMenu : function () {
     var contextMenu = new Ext.menu.Menu({items:[{
           text    : 'Delete this element',
@@ -526,19 +571,15 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
            while (p!=this.container && !c) {
              if (!p.codeConfig) p.codeConfig = this.getConfig(p);
              c = p.codeConfig.layout;
-             if (!c || (p instanceof Ext.form.Form) || (p instanceof Ext.form.FieldSet))
-               c = 'form';
-             if (!c || (p==el && c)) // || ['auto','fit'].indexOf(c)!=-1) 
+             if (!c || (p==el && c)) 
                 p = this.getContainer(p.ownerCt);
            }
-           //When no layout found whe can use the parent otherwise parent of container
-           //p = c ? this.getContainer(p == this.container ? p : p.ownerCt) : this.getContainer(el.ownerCt);
            p = c ? p : this.getContainer(el.ownerCt);
         }
         this.applyJson(this.getConfig(p).items,p);
         this.redrawContainer=false;
         this.selectElement(id);
-      } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element' + e); }
+      } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element ' + e); }
       this.fireEvent('change',el);
       this.modified = true;
       return true;

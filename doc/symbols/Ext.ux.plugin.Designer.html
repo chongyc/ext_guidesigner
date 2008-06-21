@@ -1,0 +1,1296 @@
+
+<div class="body-wrap">
+    <div class="top-tools">
+        <a class="inner-link" href="#Ext.ux.plugin.Designer-props"><img src="resources/s.gif" class="item-icon icon-prop">Properties</a>
+        <a class="inner-link" href="#Ext.ux.plugin.Designer-methods"><img src="resources/s.gif" class="item-icon icon-method">Methods</a>
+        <a class="inner-link" href="#Ext.ux.plugin.Designer-events"><img src="resources/s.gif" class="item-icon icon-event">Events</a>
+        <a class="inner-link" href="#Ext.ux.plugin.Designer-configs"><img src="resources/s.gif" class="item-icon icon-config">Config Options</a>
+        <a class="bookmark" href="NEED_TO_CREATE_DIRECT_LINK_HREF"><img src="resources/s.gif" class="item-icon icon-fav">Direct Link</a>
+    </div>
+    
+    <div class="inheritance res-block"><pre class="res-block-inner">
+<a ext:cls="Ext.util.Observable" ext_member="" href="Ext.util.Observable">Ext.util.Observable</a>
+<img src="resources/elbow-end.gif"/>Ext.ux.plugin.Designer
+</pre></div>
+    <h1>Class Ext.ux.plugin.Designer</h1>     
+    <table cellspacing="0">
+        <tr><td class="label">Package:</td><td class="hd-info">Ext.ux.plugin</td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.plugin.Designer" ext:member="" href="src/GuiBuilder_js_Ext.ux.plugin.Designer.js.html">Ext.ux.plugin.Designer.js</a></td></tr>
+        <tr><td class="label">Class:</td><td class="hd-info">Designer</td></tr>
+<!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.plugin.Designer" ext:member="" href="Ext.util.Observable">Ext.util.Observable</a></td></tr>        
+    </table>
+    
+    <div class="description">
+         
+    </div>
+    
+    <div class="hr"></div>
+    <a id="Ext.ux.plugin.Designer-configs"></a>
+    <h2>Config Options</h2>
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Config Options</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>autoShow</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">When true the toolbox is show on init</div>
+                    <div class="long">
+                        When true the toolbox is show on init
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#autoShow" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>disableCaching</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Should caching be disabled when JSON are loaded (defaults false).</div>
+                    <div class="long">
+                        Should caching be disabled when JSON are loaded (defaults false).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#disableCaching" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>toolboxTarget</b> : String/Element
+                <div class="mdesc">
+                    <div class="short">When toolboxTarget is set, this will be used to render toolbox to not window</div>
+                    <div class="long">
+                        When toolboxTarget is set, this will be used to render toolbox to not window
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#toolboxTarget" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>toolboxJson</b> : String
+                <div class="mdesc">
+                    <div class="short">Url used to load toolbox json from defaults to <this.file>/Ext.ux.plugin.Designer.json</div>
+                    <div class="long">
+                        Url used to load toolbox json from defaults to <this.file>/Ext.ux.plugin.Designer.json
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#toolboxJson" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>customProperties</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the usage of customProperties (defaults false). When disabled only properties which are defined within Ext.ux.Designer.ComponentsDoc.json are available.</div>
+                    <div class="long">
+                        Enable or disable the usage of customProperties (defaults false). When disabled only properties which are defined within Ext.ux.Designer.ComponentsDoc.json are available.
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#customProperties" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>enableCopy</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the Copy menu button (defaults true).</div>
+                    <div class="long">
+                        Enable or disable the Copy menu button (defaults true).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableCopy" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>enableShow</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the Show menu button (defaults true).</div>
+                    <div class="long">
+                        Enable or disable the Show menu button (defaults true).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableShow" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>enableEdit</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the Edit Json menu button (defaults true).</div>
+                    <div class="long">
+                        Enable or disable the Edit Json menu button (defaults true).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableEdit" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>enableVersion</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the Help/Version information menu button (defaults true).</div>
+                    <div class="long">
+                        Enable or disable the Help/Version information menu button (defaults true).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableVersion" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>enableSave</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the Save file menu button (defaults false).</div>
+                    <div class="long">
+                        Enable or disable the Save file menu button (defaults false).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableSave" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>enableReload</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Enable or disable the Reload file menu button (defaults false).</div>
+                    <div class="long">
+                        Enable or disable the Reload file menu button (defaults false).
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableReload" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+        
+        
+    </table>
+    <a id="Ext.ux.plugin.Designer-props"></a>      
+    
+    <h2>Public Properties</h2> 
+    <p>This class has no public properties.</p>        
+    <table cellspacing="0" class="x-hidden">            
+        <tr>
+            <th class="sig-header" colspan="2">Property</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+        
+        <!-- TODO: implement this alt row.  also notice non-linked "Defined by" when property is a part of this class.     
+        <tr class="property-row alt">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.Component-hidden"></a>
+                <b>hidden</b> : Boolean            
+                <div class="mdesc">                            
+                    True if this component is hidden. Read-only.                       
+                </div>
+            </td>
+            <td class="msource">Component</td>
+        </tr>
+        -->
+    </table>
+                   
+    <a id="Ext.ux.plugin.Designer-methods"></a>
+    <h2>Public Methods</h2>    
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Method</th>            
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>init</b>(&nbsp;<code>Component field</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Init the plugin ad assoiate it to a field</div>
+                    <div class="long">
+                        Init the plugin ad assoiate it to a field    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>field</code> : Component
+                                    <div class="sub-desc">&nbsp;The component to connect this plugin to</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#init" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>fileControl</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Return the file control object</div>
+                    <div class="long">
+                        Return the file control object    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#fileControl" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>initContextMenu</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#initContextMenu" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>removeElement</b>(&nbsp;<code> source,  internal</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>source</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>internal</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#removeElement" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>menuUpdate</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#menuUpdate" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>markUndo</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#markUndo" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>undo</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#undo" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>redo</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#redo" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>appendConfig</b>(&nbsp;<code>Element el, Object config,  select,  dropLocation,  source</code>&nbsp;) : Component                                
+                <div class="mdesc">
+                    <div class="short">Append the config to the element</div>
+                    <div class="long">
+                        Append the config to the element    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element to which the config would be added</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>config</code> : Object
+                                    <div class="sub-desc">&nbsp;The config object to be added</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>select</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>dropLocation</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>source</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Component<div class="sub-desc">The component added</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#appendConfig" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>canAppend</b>(&nbsp;<code>Element el, Object config</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Can the config be appended to the element</div>
+                    <div class="long">
+                        Can the config be appended to the element    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element to which the config would be added</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>config</code> : Object
+                                    <div class="sub-desc">&nbsp;The config object to be added</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#canAppend" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>createConfig</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Create the codeConfig object and apply it to the field</div>
+                    <div class="long">
+                        Create the codeConfig object and apply it to the field    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#createConfig" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getConfig</b>(&nbsp;<code>Element el</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Get the config of the specified element</div>
+                    <div class="long">
+                        Get the config of the specified element    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element for which to get the config object</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">The config object</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#getConfig" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setConfig</b>(&nbsp;<code>String/Object json</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Set the config to the design element</div>
+                    <div class="long">
+                        Set the config to the design element    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>json</code> : String/Object
+                                    <div class="sub-desc">&nbsp;The json to be applied</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">true when succesfull applied</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#setConfig" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>refresh</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Refresh the content of the designer</div>
+                    <div class="long">
+                        Refresh the content of the designer    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#refresh" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getContainer</b>(&nbsp;<code> el</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#getContainer" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>updateElement</b>(&nbsp;<code>Element element, Object config,  selectId</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Update an element with the changed config</div>
+                    <div class="long">
+                        Update an element with the changed config    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>element</code> : Element
+                                    <div class="sub-desc">&nbsp;The elmenent to update</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>config</code> : Object
+                                    <div class="sub-desc">&nbsp;The config</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>selectId</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">Indicator that update was applied</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#updateElement" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>selectElement</b>(&nbsp;<code>Element el, Boolean fieldOnNull</code>&nbsp;) : Component                                
+                <div class="mdesc">
+                    <div class="short">Select a designElement</div>
+                    <div class="long">
+                        Select a designElement    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element of the item to select</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>fieldOnNull</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Use the designer field when element not found</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Component<div class="sub-desc">The selected component</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#selectElement" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>highlightElement</b>(&nbsp;<code>Element el</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Highlight a element within the component, removing old highlight</div>
+                    <div class="long">
+                        Highlight a element within the component, removing old highlight    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element to highlight</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">True when element highlighted</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#highlightElement" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>isElementOf</b>(&nbsp;<code>Element cmp, Element container</code>&nbsp;) : Component                                
+                <div class="mdesc">
+                    <div class="short">Check if a element is contained within a other element</div>
+                    <div class="long">
+                        Check if a element is contained within a other element    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>cmp</code> : Element
+                                    <div class="sub-desc">&nbsp;The component to search</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>container</code> : Element
+                                    <div class="sub-desc">&nbsp;The component to search within</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Component<div class="sub-desc">The ExtJs component found, false when not valid</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#isElementOf" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getDesignElement</b>(&nbsp;<code>Element el,  allowField</code>&nbsp;) : Component                                
+                <div class="mdesc">
+                    <div class="short">Find a designElement, this is a ExtJs component which is embedded within this.container</div>
+                    <div class="long">
+                        Find a designElement, this is a ExtJs component which is embedded within this.container    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element to search the designelement for</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>allowField</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Component<div class="sub-desc">The ExtJs component found, false when not valid</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#getDesignElement" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>findByJsonId</b>(&nbsp;<code> id</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>id</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#findByJsonId" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getDragData</b>(&nbsp;<code>Event e</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Create the drag data for a element on designerpanel</div>
+                    <div class="long">
+                        Create the drag data for a element on designerpanel    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>e</code> : Event
+                                    <div class="sub-desc">&nbsp;The drag event</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">the drag data</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#getDragData" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>isContainer</b>(&nbsp;<code>Component cmp</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Check if the given component is a container which can contain other xtypes</div>
+                    <div class="long">
+                        Check if the given component is a container which can contain other xtypes    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>cmp</code> : Component
+                                    <div class="sub-desc">&nbsp;The component to validate if it is in the list</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">True indicates the xtype is a container capable of contain other elements</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#isContainer" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>notifyOver</b>(&nbsp;<code>Object src, Event e, Object data</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Called when a element is dragged over the component</div>
+                    <div class="long">
+                        Called when a element is dragged over the component    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>src</code> : Object
+                                    <div class="sub-desc">&nbsp;The source element</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>e</code> : Event
+                                    <div class="sub-desc">&nbsp;The drag event</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>data</code> : Object
+                                    <div class="sub-desc">&nbsp;The dataobject of event</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">return true to accept or false to reject</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#notifyOver" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>notifyDrop</b>(&nbsp;<code>Object src, Event e, Object data</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Called when a element is dropped on the component</div>
+                    <div class="long">
+                        Called when a element is dropped on the component    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>src</code> : Object
+                                    <div class="sub-desc">&nbsp;The source element</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>e</code> : Event
+                                    <div class="sub-desc">&nbsp;The drag event</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>data</code> : Object
+                                    <div class="sub-desc">&nbsp;The dataobject of event</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">return true to accept or false to reject</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#notifyDrop" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>toolbox</b>(&nbsp;<code>Boolean visible</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Show or hide the toolbox</div>
+                    <div class="long">
+                        Show or hide the toolbox    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>visible</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Should toolbox be hidden or shown (defaults true)</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#toolbox" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>propertyFilter</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#propertyFilter" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                                                          
+    </table>
+    
+    <a id="Ext.ux.plugin.Designer-events"></a>
+    <h2>Public Events</h2>
+    
+    <table cellspacing="0" class="member-table">        
+        <tr>
+            <th class="sig-header" colspan="2">Event</th>   
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>beforeshow</b> : (&nbsp;<code>Object toolbox</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires before the toolbox is shown, returning false will disable show</div>
+                    <div class="long">
+                        Fires before the toolbox is shown, returning false will disable show  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>toolbox</code> : Object
+                                    <div class="sub-desc">The toolbox window</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#beforeshow" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>                                 
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>beforehide</b> : (&nbsp;<code>Object toolbox</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires before the toolbox is hidden, returning false will cancel hide</div>
+                    <div class="long">
+                        Fires before the toolbox is hidden, returning false will cancel hide  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>toolbox</code> : Object
+                                    <div class="sub-desc">The toolbox window</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#beforehide" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>                                 
+        </tr>
+                    
+    </table>            
+</div>

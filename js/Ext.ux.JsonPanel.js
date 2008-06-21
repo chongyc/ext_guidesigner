@@ -98,14 +98,26 @@ Ext.ux.ScriptLoader = function(url,cachingOff) {
 
 
 /**
- * A class 
+ * A class used by JsonPanel and JsonWindow to load a jsonFile
  */
-Ext.ux.JSON = new (function(){
-  return {
+Ext.ux.Json = Ext.extend(Ext.util.Observable,{
+    /**
+     * Boolean indicator when true loadMsg will be shown
+     @cfg */
+    loadMask: true,
+    /**
+     * The loading message
+     @cfg */
+    loadMsg: 'Loading...',
+    /**
+     * Mask used for loading message
+     @cfg */
+    msgCls : 'x-mask-loading',
+   
     /** 
-    * The string used to indent   
-    * @type {String} 
-    @cfg */
+     * The string used to indent   
+     * @type {String} 
+     @cfg */
     indentString : '  ',
 
     /**
@@ -277,31 +289,38 @@ Ext.ux.JSON = new (function(){
     */
     applyJson : function (json,element) {
      var el = element || this;
-     var items = this.jsonId ? this.editableJson(json) : json || {};
-     if (typeof(items) !== 'object') items = this.decode(json);
-     if (items) {
-       //Apply global json vars to element
-       if (el instanceof Ext.Container) {
-         //Clear out orignal content of container
-         while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
-         if(items instanceof Array) {
-           for (var i=0;i<items.length;i++) this.jsonInit(items[i].json);
-           el.add.apply(el,items);
-         } else { // Only add items when it is not empty
-           var l = 0;
-           for (var i in items) {if (i!=this.jsonId)  l++;}
-           if (!this.isEmptyObject(items)) { 
-              this.jsonInit(items.json);
-              el.add(items);
-           }              
-         }         
-       } else {
-         //This is not a container so try to update element using jsonInit construction
-         this.jsonInit(items.json,el);
-         this.jsonInit(items,el);
+     try {
+       if (this.loadMask && el.ownerCt) el.ownerCt.el.mask(this.loadMsg, this.msgCls);
+       var items = this.jsonId ? this.editableJson(json) : json || {};
+       if (typeof(items) !== 'object') items = this.decode(json);
+       if (items) {
+         //Apply global json vars to element
+         if (el instanceof Ext.Container) {
+           //Clear out orignal content of container
+           while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
+           if(items instanceof Array) {
+             for (var i=0;i<items.length;i++) this.jsonInit(items[i].json);
+             el.add.apply(el,items);
+           } else { // Only add items when it is not empty
+             var l = 0;
+             for (var i in items) {if (i!=this.jsonId)  l++;}
+             if (!this.isEmptyObject(items)) { 
+                this.jsonInit(items.json);
+                el.add(items);
+             }              
+           } 
+         } else {
+           //This is not a container so try to update element using jsonInit construction
+           this.jsonInit(items.json,el);
+           this.jsonInit(items,el);
+         }
        }
+       if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
+     } catch (e) {     
+      throw e;
+     } finally {
+      if (this.loadMask && el.ownerCt) el.ownerCt.el.unmask();
      }
-     if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      return items;
     },
 
@@ -598,8 +617,9 @@ Ext.ux.JSON = new (function(){
     clone : function(o) {
       return this.decode(this.encode(o));
     }
-  }
-})();
+});
+
+Ext.ux.JSON = new Ext.ux.Json();
 
 /**
  * Component extending a panel giving it the capability to read or create a JSON file.
@@ -679,17 +699,25 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
   Ext.ux.JsonPanel.superclass.onRender.call(this, ct, position);
   var um = this.getUpdater();
   um.showLoadIndicator = false; //disable it.
-  um.on('failure',function(el, response){this.fireEvent('failedjsonload',response)}.createDelegate(this));
+  um.on('failure',function(el, response){
+    this.ownerCt.el.unmask();
+    this.fireEvent('failedjsonload',response)
+ }.createDelegate(this));
   um.setRenderer({render:
        function(el, response, updater, callback){
      //add item configs to the panel layout
         //Load the code to check if we should javascripts
+        if (this.loadMask)
+          this.ownerCt.el.mask(this.loadMsg, this.msgCls);
         this.fireEvent('beforejsonload', response);
         try { 
-          this.applyJson(response.responseText); 
+          this.applyJson(response.responseText);           
           this.fireEvent('afterjsonload');
+          this.ownerCt.el.unmask();
+
           if(callback) {callback();}
         } catch (e) {
+          this.ownerCt.el.unmask();
           if (!this.fireEvent('afterjsonload',response,e))
              Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
         }
@@ -704,6 +732,7 @@ Ext.reg('jsonpanel', Ext.ux.JsonPanel);
 
 /* FOR NOW WE COPY CODE TO ALSO HAVE A WINDOW, WE NEED TO FIND A SOLUTION */
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
+
  //@private Window is hidden by moving X out of screen
  x     : -1000,
  //@private Window is hidden by moving Y out of screen
@@ -776,6 +805,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
   var um = this.getUpdater();
   um.showLoadIndicator = false; //disable it.
   um.on('failure',function(el, response){this.fireEvent('failedjsonload',response)}.createDelegate(this));
+
   um.setRenderer({render:
        function(el, response, updater, callback){
      //add item configs to the panel layout

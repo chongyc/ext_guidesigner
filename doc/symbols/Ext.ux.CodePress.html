@@ -1,0 +1,716 @@
+
+<div class="body-wrap">
+    <div class="top-tools">
+        <a class="inner-link" href="#Ext.ux.CodePress-props"><img src="resources/s.gif" class="item-icon icon-prop">Properties</a>
+        <a class="inner-link" href="#Ext.ux.CodePress-methods"><img src="resources/s.gif" class="item-icon icon-method">Methods</a>
+        <a class="inner-link" href="#Ext.ux.CodePress-events"><img src="resources/s.gif" class="item-icon icon-event">Events</a>
+        <a class="inner-link" href="#Ext.ux.CodePress-configs"><img src="resources/s.gif" class="item-icon icon-config">Config Options</a>
+        <a class="bookmark" href="NEED_TO_CREATE_DIRECT_LINK_HREF"><img src="resources/s.gif" class="item-icon icon-fav">Direct Link</a>
+    </div>
+    
+    <div class="inheritance res-block"><pre class="res-block-inner">
+<a ext:cls="Ext.form.Field" ext_member="" href="Ext.form.Field">Ext.form.Field</a>
+<img src="resources/elbow-end.gif"/>Ext.ux.CodePress
+</pre></div>
+    <h1>Class Ext.ux.CodePress</h1>     
+    <table cellspacing="0">
+        <tr><td class="label">Package:</td><td class="hd-info">Ext.ux</td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.CodePress" ext:member="" href="src/GuiBuilder_js_codepress_Ext.ux.CodePress.js.html">Ext.ux.CodePress.js</a></td></tr>
+        <tr><td class="label">Class:</td><td class="hd-info">CodePress</td></tr>
+<!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.CodePress" ext:member="" href="Ext.form.Field">Ext.form.Field</a></td></tr>        
+    </table>
+    
+    <div class="description">
+        Component which wraps the <a href="http://codepress.org">CodePress</a> library to makeit available for ExtJs. CodePress gives syntax highlighting for different programminglanguages. 
+    </div>
+    
+    <div class="hr"></div>
+    <a id="Ext.ux.CodePress-configs"></a>
+    <h2>Config Options</h2>
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Config Options</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>sourceEl</b> : String
+                <div class="mdesc">
+                    <div class="short">The id of the element to pull code from</div>
+                    <div class="long">
+                        The id of the element to pull code from
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#sourceEl" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>code</b> : String
+                <div class="mdesc">
+                    <div class="short">The code to use in the editor</div>
+                    <div class="long">
+                        The code to use in the editor
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#code" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>language</b> : String
+                <div class="mdesc">
+                    <div class="short">The language to render the code with (defaults none)</div>
+                    <div class="long">
+                        The language to render the code with (defaults none)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#language" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>url</b> : String
+                <div class="mdesc">
+                    <div class="short">The url used to read code which is display in editor</div>
+                    <div class="long">
+                        The url used to read code which is display in editor
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#url" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>height</b> : Int
+                <div class="mdesc">
+                    <div class="short">Height of the editor (defaults false)</div>
+                    <div class="long">
+                        Height of the editor (defaults false)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#height" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>width</b> : Int
+                <div class="mdesc">
+                    <div class="short">Width of the editor (defaults false)</div>
+                    <div class="long">
+                        Width of the editor (defaults false)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#width" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>autoResize</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">AutoResize window on change container (defaults false)</div>
+                    <div class="long">
+                        AutoResize window on change container (defaults false)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#autoResize" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>trim</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Trim the code of trailing spaces and empty lines (defaults true)</div>
+                    <div class="long">
+                        Trim the code of trailing spaces and empty lines (defaults true)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#trim" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>autoComplete</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Is autoComplete for keywords turned on or off (defaults true)</div>
+                    <div class="long">
+                        Is autoComplete for keywords turned on or off (defaults true)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#autoComplete" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>readOnly</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Is the editor readonly (defaults false)</div>
+                    <div class="long">
+                        Is the editor readonly (defaults false)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#readOnly" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>lineNumbers</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Are lineNumbers visible (defaults true)</div>
+                    <div class="long">
+                        Are lineNumbers visible (defaults true)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#lineNumbers" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+        
+        
+    </table>
+    <a id="Ext.ux.CodePress-props"></a>      
+    
+    <h2>Public Properties</h2> 
+    <p>This class has no public properties.</p>        
+    <table cellspacing="0" class="x-hidden">            
+        <tr>
+            <th class="sig-header" colspan="2">Property</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+        
+        <!-- TODO: implement this alt row.  also notice non-linked "Defined by" when property is a part of this class.     
+        <tr class="property-row alt">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.Component-hidden"></a>
+                <b>hidden</b> : Boolean            
+                <div class="mdesc">                            
+                    True if this component is hidden. Read-only.                       
+                </div>
+            </td>
+            <td class="msource">Component</td>
+        </tr>
+        -->
+    </table>
+                   
+    <a id="Ext.ux.CodePress-methods"></a>
+    <h2>Public Methods</h2>    
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Method</th>            
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>resize</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Resize the the editor depending, behavior depends on height,width and autoResize</div>
+                    <div class="long">
+                        Resize the the editor depending, behavior depends on height,width and autoResize    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#resize" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>edit</b>(&nbsp;<code>Object obj, String language</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Initailize the editor with a element and set the langauge</div>
+                    <div class="long">
+                        Initailize the editor with a element and set the langauge    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>obj</code> : Object
+                                    <div class="sub-desc">&nbsp;Can by a textarea id or a string</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>language</code> : String
+                                    <div class="sub-desc">&nbsp;The langauge to use</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#edit" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getLanguage</b>(&nbsp;<code></code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Get the current langauge used by the editor</div>
+                    <div class="long">
+                        Get the current langauge used by the editor    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">The language used by editor</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#getLanguage" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setOptions</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Set the options of editorSee config items autoComplete, readOnly, lineNumbers</div>
+                    <div class="long">
+                        Set the options of editorSee config items autoComplete, readOnly, lineNumbers    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#setOptions" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getCode</b>(&nbsp;<code></code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Original CodePress function to get the code from the editor. For compatibility reasonswith ExtJs TextArea whe implemented getValue</div>
+                    <div class="long">
+                        Original CodePress function to get the code from the editor. For compatibility reasonswith ExtJs TextArea whe implemented getValue    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">The code from editor</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#getCode" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setCode</b>(&nbsp;<code>String code</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Original CodePress function to set the code of the editor.For compatibility reasonswith ExtJs TextArea whe implemented setValue</div>
+                    <div class="long">
+                        Original CodePress function to set the code of the editor.For compatibility reasonswith ExtJs TextArea whe implemented setValue    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>code</code> : String
+                                    <div class="sub-desc">&nbsp;The code to be display in editor</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#setCode" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setValue</b>(&nbsp;<code>String text</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Set the value to be used by the editor</div>
+                    <div class="long">
+                        Set the value to be used by the editor    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>text</code> : String
+                                    <div class="sub-desc">&nbsp;The code to be display in editor</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#setValue" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getValue</b>(&nbsp;<code></code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Get the value of the code within the editor</div>
+                    <div class="long">
+                        Get the value of the code within the editor    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">The code within the editor</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#getValue" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>toggleAutoComplete</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Toggle autocomplreate on or off</div>
+                    <div class="long">
+                        Toggle autocomplreate on or off    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#toggleAutoComplete" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>toggleReadOnly</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Toggle readonly on or off</div>
+                    <div class="long">
+                        Toggle readonly on or off    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#toggleReadOnly" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>toggleLineNumbers</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Toggle line numbers on or off</div>
+                    <div class="long">
+                        Toggle line numbers on or off    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#toggleLineNumbers" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>toggleEditor</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Toggle between codepress and textarea</div>
+                    <div class="long">
+                        Toggle between codepress and textarea    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#toggleEditor" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>
+        </tr>
+                                                          
+    </table>
+    
+    <a id="Ext.ux.CodePress-events"></a>
+    <h2>Public Events</h2>
+    
+    <table cellspacing="0" class="member-table">        
+        <tr>
+            <th class="sig-header" colspan="2">Event</th>   
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>initialize</b> : (&nbsp;<code>Object editor</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires when the editor is fully initialized (including the iframe)</div>
+                    <div class="long">
+                        Fires when the editor is fully initialized (including the iframe)  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>editor</code> : Object
+                                    <div class="sub-desc">The editor</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#initialize" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>                                 
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>activate</b> : (&nbsp;<code>Object editor</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires when the editor is first receives the focus. Any insertion must waituntil after this event.</div>
+                    <div class="long">
+                        Fires when the editor is first receives the focus. Any insertion must waituntil after this event.  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>editor</code> : Object
+                                    <div class="sub-desc">The editor when activated</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                CodePress
+                <a class="x-hidden" ext:cls="Ext.ux.CodePress" ext:member="Ext.ux.CodePress#activate" href="symbols/Ext.ux.CodePress.html">CodePress</a>
+            </td>                                 
+        </tr>
+                    
+    </table>            
+</div>
