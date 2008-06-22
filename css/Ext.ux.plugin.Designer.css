@@ -28,6 +28,8 @@
 .icon-help { background-image:url(../icons/help.png) !important; }
 .icon-designcopy {background-image:url(../icons/cog_go.png) !important; }
 .icon-save {background-image:url(../icons/drive_disk.png) !important; }
+.icon-filerename {background-image:url(../icons/drive_edit.png) !important; }
+.icon-filedelete {background-image:url(../icons/drive_delete.png) !important; }
 .icon-saveas {background-image:url(../icons/drive_add.png) !important; }
 .icon-filerefresh {background-image:url(../icons/database_refresh.png) !important; }
 .icon-reload {background-image:url(../icons/drive_go.png) !important; }

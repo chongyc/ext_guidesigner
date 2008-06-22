@@ -99,6 +99,7 @@ Ext.ux.plugin.CookieFiles = function(config) {
 Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
   files : null,
   last  : null,
+  activeNode : null,
   
   init : function(){
     this.cookies = new Ext.state.CookieProvider();     
@@ -109,48 +110,61 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
     this.cookies.clear('Designer.files');
   },
   
-  saveChanges : function(id,action,content) {
+  saveChanges : function(id,action,callback,content) {
+    this.files[id] = id;
     this.cookies.set('Designer.files',this.files);
     if (content) this.cookies.set('Designer/' + id,escape(content));
     if (action=='delete') {
+      delete this.files[id];
       this.cookies.clear('Designer.'+id);
-      this.last = null;
+      if (id==this.last) this.last = null;
     } else {
       this.last = id;
     }
+    if(typeof callback == "function") callback(true);
   },
   
-  deleteFile : function(fileInfo){
-    delete this.files[fileInfo];
-    this.saveChanges(fileInfo,'delete');
+  deleteFile : function(fileInfo,callback){
+    this.saveChanges(fileInfo,'delete',callback);
   },
   
-  renameFile : function(fileInfo){
-    this.files[fileInfo] = fileInfo;
-    this.saveChanges(fileInfo,'rename');
+  renameFile : function(fileFrom,fileTo,callback){
+    var last = this.last;
+    this.openFile(fileFrom,function(success,content) {
+      if (success) {
+         this.saveChanges(fileTo,'save',function(success){          
+           if (success) {              
+              this.deleteFile(fileFrom,function(success){
+                if (success && last==fileFrom) this.last=fileTo;
+                if(typeof callback == "function") callback(success);
+              }.createDelegate(this));
+           } else if(typeof callback == "function") callback(success);
+         }.createDelegate(this),content);
+      } else if(typeof callback == "function") callback(success);
+    }.createDelegate(this));
   },
   
-  saveFile : function(fileInfo,content){
-    this.files[fileInfo] = fileInfo;
-    this.saveChanges(fileInfo,'save',content);
+  saveFile : function(fileInfo,content,callback){
+    this.saveChanges(fileInfo,'save',callback,content);
   },
   
-  newFile  : function(fileInfo,content){
-    this.files[fileInfo] = fileInfo;
-    this.saveChanges(fileInfo,'new',content);
+  newFile  : function(fileInfo,content,callback){
+    this.saveChanges(fileInfo,'new',callback,content);
   },
   
   openFile : function(fileInfo,callback) {
     var result = unescape(this.cookies.get('Designer/' + fileInfo));
-    if(typeof callback == "function") callback(result);
+    this.last = fileInfo;
+    if(typeof callback == "function") callback(true,result);
   },
   
   load : function(node, callback){ 
    this.loadNodes(node,false);
-   if(typeof callback == "function") callback();   
+   if(typeof callback == "function")  callback();   
   },
   
   loadNodes : function(node,append){
+    this.activeNode = null;
     if (!append) while(node.firstChild) node.removeChild(node.firstChild);
     node.beginUpdate();
     for (f in this.files){
@@ -166,22 +180,24 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
              if (c[j].attributes.text==path[i]) n = c[j];
            }
            if (!n) {
-             var leaf = (i==path.length-1);
+             var leaf = (i==path.length-1);             
              n = new Ext.tree.TreeNode({
-                     text: path[i],
+                     text: (name==this.last ? '<B>' + path[i] + '</B>' : path[i]),
                      cls:  leaf ? 'file' : 'folder' , 
                      leaf : leaf,
                      id  : name
              }); 
              cnode.appendChild(n);
+             if (name==this.last) this.activeNode = n;
            }
            cnode = n;
            name += '/' 
         }
     }
     node.endUpdate();
+    return this.activeNode;      
   }
-      
+
 });
 
 

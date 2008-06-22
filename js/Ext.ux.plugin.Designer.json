@@ -233,47 +233,70 @@
         },{
           title:"Files",
           xtype:"treepanel",
-          id   : scope.FileTreeId,
+          id   : scope.FileTreeId,          
           saveAs: /*BEGIN*/function(){
              Ext.Msg.prompt('Filename', 'Please enter full file name:', function(btn, text){
                if (btn == 'ok'){
-                scope.fileControl.saveFile(text,scope.getCode());
-                this.root.reload();
+                var t = text.replace(/\\/g,'/').split('/');
+                text = '';
+                for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
+                scope.fileControl.saveFile(text,scope.getCode(),function(success){
+                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.fileControl.last);
+                 if (typeof callback == "function") callback(success);
+                });
+                this.reload();
                } 
              }.createDelegate(this));              
 
           }/*END*/,
+          reload : /*BEGIN*/function(){
+            this.root.reload(function(){
+             var node = scope.fileControl.activeNode;
+             if (node) {
+               this.expandPath(node.getPath());
+               node.select();
+             }
+            }.createDelegate(this));
+          }/*END*/,
           tbar:/*BEGIN*/[{
-            tooltip : 'Save the design file ',
+            tooltip : 'Save the design, reusing last name',
             iconCls:'icon-save',
             handler: function(){
               if (scope.fileControl.last) {
-                scope.fileControl.saveFile(scope.fileControl.last,scope.getCode());              
+                scope.fileControl.saveFile(scope.fileControl.last,scope.getCode(),function(success){
+                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.fileControl.last);
+                });              
               } else {
                 Ext.getCmp(scope.FileTreeId).saveAs();
               }              
             }
           },{
-            tooltip : 'Save the design file as other',
+            tooltip : 'Save the design with different name',
             iconCls:'icon-saveas',
             handler : function(){
                Ext.getCmp(scope.FileTreeId).saveAs();
             }
           },'-',{
             iconCls:'icon-reload',
-            tooltip : 'Reload the design file',
+            tooltip : 'Reload the design from file',
             handler : function(){
               if (scope.fileControl.last) {
-                scope.fileControl.openFile(scope.fileControl.last,function(result){
-                   scope.setConfig(result);
+                scope.fileControl.openFile(scope.fileControl.last,function(success,result){
+                  if (success){
+                    scope.setConfig(result);
+                  } else {
+                    Ext.Msg.alert('Error','Failed to reload file ' + scope.fileControl.last);
+                  }
                  });
+              } else {
+                Ext.Msg.alert('Error','No file selected');
               }
             }
           },'-',{
             tooltip : 'Refresh files',
             iconCls:'icon-filerefresh',
             handler: function (){
-               Ext.getCmp(scope.FileTreeId).root.reload();
+               Ext.getCmp(scope.FileTreeId).reload();
             }
           }]/*END*/,
           disabled : scope.fileControl == null,
@@ -287,11 +310,78 @@
             'dblclick' : function(node,e){
                e.preventDefault();
                if (node.leaf) {
-                 this.loader.openFile(node.id,function(result){
-                   scope.setConfig(result);
-                 });
+                 scope.fileControl.openFile(node.id,function(success,result){
+                   if (success) {
+                     scope.setConfig(result);
+                     this.reload();
+                   } else {
+                     Ext.Msg.alert('Error','Could not load file ' + node.id);
+                   }
+                 }.createDelegate(this));
                }
-             }
+             },
+            'render': function() {
+                //Create context menu
+                var contextMenu = new Ext.menu.Menu({items:[{
+                  text    : 'open',
+                  tooltip : 'Open file',        
+                  iconCls : 'icon-reload',
+                  scope   : this,
+                  handler : function(item,e) {
+                      scope.fileControl.openFile(contextMenu.node.id,function(success,result){
+                        if (success) {
+                          scope.setConfig(result);
+                          Ext.getCmp(scope.FileTreeId).reload();
+                        } else {
+                          Ext.Msg.alert('Error','Could not load file ' + contextMenu.node.id);
+                        }
+                      });
+                    }
+                },{
+                  text    : 'rename',
+                  tooltip : 'Rename the file',        
+                  iconCls : 'icon-filerename',
+                  scope   : this,
+                  handler : function(item,e) {
+                     Ext.Msg.prompt('Filename', 'Please enter new full filename:', function(btn, text){
+                       if (btn == 'ok'){
+                        var t = text.replace(/\\/g,'/').split('/');
+                        text = '';
+                        for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
+                        if (text && contextMenu.id != text ) {
+                          scope.fileControl.renameFile(contextMenu.node.id,text,function(success){
+                            if (!success) Ext.Msg.alert('Error','Failed to rename file ' + contextMenu.id);
+                            Ext.getCmp(scope.FileTreeId).reload();
+                          });
+                        } else {
+                          Ext.Msg.alert('Error','File name not valid');
+                        }
+                       } 
+                      });
+                    }
+                },{
+                  text    : 'delete',
+                  tooltip : 'Delete file',        
+                  iconCls : 'icon-filedelete',
+                  scope   : this,
+                  handler : function(item,e) {
+                      scope.fileControl.deleteFile(contextMenu.node.id,function(success){
+                        if (success) {
+                          Ext.getCmp(scope.FileTreeId).reload();
+                        } else {
+                          Ext.Msg.alert('Error','Failed to delete ' + contextMenu.node.id);
+                        }
+                      });
+                    }
+                }]});
+                this.on('contextmenu', function(node,e) {
+                     e.preventDefault();
+                     if (node.leaf) {
+                       contextMenu.node = node;
+                       contextMenu.showAt(e.getXY());
+                     }
+                }, this);
+            }
         }/*END*/
         }]
       },{

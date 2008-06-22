@@ -172,9 +172,6 @@ properties : [{
     name : "id",
     desc : "<b>String</b> The unique id of this component (defaults to an auto-assigned id)."
   },{
-    name : "cls",
-    desc : "<b>String</b> An optional extra CSS class that will be added to this component's Element (defaults to ''). This can be useful for adding customized styles to the component or any of its children using standard CSS rules."
-  },{
     name : "style",
     desc : "<b>String</b> A custom style specification to be applied to this component's Element. Should be a valid argument to {@link Ext.Element#applyStyles}."
   },{
@@ -378,9 +375,6 @@ properties : [{
     type : "mixed",
     desc : "<b>Mixed</b> The data value of the underlying field (defaults to \"\")"
   },{
-    name : "alignment",
-    desc : "<b>String</b> The position to align to (see {@link Ext.Element#alignTo} for more details, defaults to \"c-c?\")."
-  },{
     name : "constrain",
     type : "boolean",
     desc : "<b>Boolean</b> True to constrain the editor to the viewport"
@@ -451,10 +445,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> Set to true if this form is a file upload."
   },{
-    name : "baseParams",
-    type : "object",
-    desc : "<b>Object</b> Parameters to pass with all requests. e.g. baseParams: {id: '123', foo: 'bar'}."
-  },{
     name : "timeout",
     type : "number",
     desc : "<b>Number</b> Timeout for form actions in seconds (default is 30 seconds)."
@@ -490,10 +480,6 @@ properties : [{
     name : "lazyRender",
     type : "boolean",
     desc : "<b>Boolean</b> True to prevent the ComboBox from rendering until requested (should always be used when rendering into an Ext.Editor, defaults to false)"
-  },{
-    name : "autoCreate",
-    type : "mixed",
-    desc : "<b>Boolean/Object</b> A DomHelper element spec, or true for a default element spec (defaults to: {tag: \"input\", type: \"text\", size: \"24\", autocomplete: \"off\"})"
   },{
     name : "title",
     desc : "<b>String</b> If supplied, a header element is created containing this text and added into the top of the dropdown list (defaults to undefined, with no header element)"
@@ -631,10 +617,6 @@ properties : [{
     name : "triggerClass",
     desc : "<b>String</b> An additional CSS class used to style the trigger button. The trigger will always get the class 'x-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x-form-date-trigger' which displays a calendar icon)."
   },{
-    name : "autoCreate",
-    type : "mixed",
-    desc : "<b>String/Object</b> A DomHelper element spec, or true for a default element spec (defaults to {tag: \"input\", type: \"text\", size: \"10\", autocomplete: \"off\"})"
-  },{
     name : "invalidClass",
     desc : "<b>String</b> The CSS class to use when marking a field invalid (defaults to \"x-form-invalid\")"
   },{
@@ -651,10 +633,6 @@ properties : [{
     name : "validationDelay",
     type : "number",
     desc : "<b>Number</b> The length of time in milliseconds after user input begins until validation is initiated (defaults to 250)"
-  },{
-    name : "autoCreate",
-    type : "mixed",
-    desc : "<b>String/Object</b> A DomHelper element spec, or true for a default element spec (defaults to {tag: \"input\", type: \"text\", size: \"20\", autocomplete: \"off\"})"
   },{
     name : "fieldClass",
     desc : "<b>String</b> The default CSS class for the field (defaults to \"x-form-field\")"
@@ -686,9 +664,6 @@ properties : [{
   },{
     name : "name",
     desc : "<b>String</b> The field's HTML name attribute."
-  },{
-    name : "cls",
-    desc : "<b>String</b> A CSS class to apply to the field's underlying element."
   },{
     name : "checkboxToggle",
     type : "boolean",
@@ -821,10 +796,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to prevent scrollbars from appearing regardless of how much text is in the field (equivalent to setting overflow: hidden, defaults to false)"
   },{
-    name : "autoCreate",
-    type : "string/object",
-    desc : "<b>String/Object</b> A DomHelper element spec, or true for a default element spec (defaults to {tag: \"textarea\", style: \"width:100px;height:60px;\", autocomplete: \"off\"})"
-  },{
     name : "grow",
     type : "boolean",
     desc : "<b>Boolean</b> True if this field should automatically grow and shrink to its content"
@@ -910,19 +881,12 @@ properties : [{
     name : "format",
     desc : "<b>String</b> The default date format string which can be overriden for localization support. The format must be valid according to {@link Date#parseDate} (defaults to 'm/d/y')."
   },{
-    name : "altFormats",
-    desc : "<b>String</b> Multiple date formats separated by \"|\" to try when parsing a user input value and it doesn't match the defined format (defaults to 'm/d/Y|m-d-y|m-d-Y|m/d|m-d|d')."
-  },{
     name : "increment",
     type : "number",
     desc : "<b>Number</b> The number of minutes between each time value in the list (defaults to 15)."
   },{
     name : "triggerClass",
     desc : "<b>String</b> A CSS class to apply to the trigger"
-  },{
-    name : "autoCreate",
-    type : "string/object",
-    desc : "<b>String/Object</b> A DomHelper element spec, or true for a default element spec (defaults to {tag: \"input\", type: \"text\", size: \"16\", autocomplete: \"off\"})"
   },{
     name : "hideTrigger",
     type : "boolean",
@@ -1127,9 +1091,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> False to disable constrain to viewport (defaults to true)"
   },{
-    name : "cls",
-    desc : "<b>String</b> CSS class to add to the element"
-  },{
     name : "zindex",
     type : "number",
     desc : "<b>Number</b> Starting z-index (defaults to 11000)"
@@ -1141,10 +1102,6 @@ properties : [{
     name : "fill",
     type : "boolean",
     desc : "<b>Boolean</b> True to adjust the active item's height to fill the available space in the container, false to use the item's current height, or auto height if not explicitly set (defaults to true)."
-  },{
-    name : "autoWidth",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to set each contained item's width to 'auto', false to use the item's current width (defaults to true)."
   },{
     name : "titleCollapse",
     type : "boolean",
@@ -1285,10 +1242,6 @@ properties : [{
     name : "groupClass",
     desc : "<b>String</b> The default CSS class to use for radio group check items (defaults to \"x-menu-group-item\")"
   },{
-    name : "checked",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to initialize this checkbox as checked (defaults to false). Note that if this checkbox is part of a radio group (group = true) only the last item in the group that is initialized with checked = true will be rendered as checked."
-  },{
     name : "icon",
     desc : "<b>String</b> The path to an icon to display in this menu item (defaults to Ext.BLANK_IMAGE_URL)"
   },{
@@ -1300,10 +1253,6 @@ properties : [{
   },{
     name : "itemCls",
     desc : "<b>String</b> The default CSS class to use for menu items (defaults to 'x-menu-item')"
-  },{
-    name : "canActivate",
-    type : "boolean",
-    desc : "<b>Boolean</b> True if this item can be visually activated (defaults to true)"
   },{
     name : "showDelay",
     type : "number",
@@ -1443,9 +1392,6 @@ properties : [{
     type : "object/array",
     desc : "<b>Object/Array</b> A KeyMap config object (in the format expected by {@link Ext.KeyMap#addBinding) used to assign custom key handling to this panel (defaults to null)."
   },{
-    name : "baseCls",
-    desc : "<b>String</b> The base CSS class to apply to this panel's element (defaults to 'x-panel')."
-  },{
     name : "collapsedCls",
     desc : "<b>String</b> A CSS class to add to the panel's element after it has been collapsed (defaults to 'x-panel-collapsed')."
   },{
@@ -1460,9 +1406,6 @@ properties : [{
     name : "headerAsText",
     type : "boolean",
     desc : "<b>Boolean</b> True to display the panel title in the header, false to hide it (defaults to true)."
-  },{
-    name : "buttonAlign",
-    desc : "<b>String</b> The alignment of any buttons added to this panel. Valid values are 'right,' 'left' and 'center' (defaults to 'right')."
   },{
     name : "collapsed",
     type : "boolean",
@@ -1489,9 +1432,6 @@ properties : [{
   },{
     name : "id",
     desc : "<b>String</b> The progress bar element's id (defaults to an auto-generated id)"
-  },{
-    name : "baseCls",
-    desc : "<b>String</b> The base CSS class to apply to the progress bar's wrapper element (defaults to 'x-progress')"
   },{
     name : "mode",
     desc : "<b>String</b> The shadow display mode. Supports the following options:<br /> sides: Shadow displays on both sides and bottom only<br /> frame: Shadow displays equally on all four sides<br /> drop: Traditional bottom-right drop shadow (default)"
@@ -1563,9 +1503,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to hide the bound element while the editor is displayed (defaults to false)"
   },{
-    name : "cls",
-    desc : "<b>String</b> CSS class to apply to the editor (defaults to \"x-small-editor x-tree-editor\")"
-  },{
     name : "shim",
     type : "boolean",
     desc : "<b>Boolean</b> True to shim the editor if selects/iframes could be displayed beneath it (defaults to false)"
@@ -1619,9 +1556,6 @@ properties : [{
     name : "icon",
     desc : "<b>String</b> The path to an icon for the node. The preferred way to do this is to use the cls or iconCls attributes and add the icon via a CSS background image."
   },{
-    name : "cls",
-    desc : "<b>String</b> A css class to be added to the node"
-  },{
     name : "iconCls",
     desc : "<b>String</b> A css class to be added to the nodes icon element for applying css background images"
   },{
@@ -1648,10 +1582,6 @@ properties : [{
     name : "uiProvider",
     type : "function",
     desc : "<b>Function</b> A UI <b>class</b> to use for this node (defaults to Ext.tree.TreeNodeUI)"
-  },{
-    name : "checked",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to render a checked checkbox for this node, false to render an unchecked checkbox (defaults to undefined with no checkbox rendered) @constructor @param {Object/String} attributes The attributes/config for the node or just a string with the text for the node"
   },{
     name : "rootVisible",
     type : "boolean",
@@ -1701,10 +1631,6 @@ properties : [{
   },{
     name : "hlColor",
     desc : "<b>String</b> The color of the node highlight (defaults to C3DAF9)"
-  },{
-    name : "animate",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to enable animated expand/collapse (defaults to the value of Ext.enableFx)"
   },{
     name : "singleExpand",
     type : "boolean",
@@ -1756,9 +1682,6 @@ properties : [{
     name : "manager",
     type : "mixed",
     desc : "<b>Ext.WindowGroup</b> A reference to the WindowGroup that should manage this window (defaults to {@link Ext.WindowMgr})."
-  },{
-    name : "baseCls",
-    desc : "<b>String</b> The base CSS class to apply to this panel's element (defaults to 'x-window')."
   },{
     name : "resizable",
     type : "boolean",
@@ -1823,17 +1746,6 @@ properties : [{
     type : "object",
     desc : "<b>Object</b> Shorthand for selModel."
   },{
-    name : "autoExpandColumn",
-    desc : "<b>String</b> The id of a column in this grid that should expand to fill unused space. This id can not be 0."
-  },{
-    name : "autoExpandMax",
-    type : "number",
-    desc : "<b>Number</b> The maximum width the autoExpandColumn can have (if enabled). Defaults to 1000."
-  },{
-    name : "autoExpandMin",
-    type : "number",
-    desc : "<b>Number</b> The minimum width the autoExpandColumn can have (if enabled). defaults to 50."
-  },{
     name : "columns",
     type : "array",
     desc : "<b>Array</b> An array of columns to auto create a ColumnModel"
@@ -1897,10 +1809,6 @@ properties : [{
     name : "viewConfig",
     type : "object",
     desc : "<b>Object</b> A config object that will be applied to the grid's UI view. Any of the config options available for Ext.grid.GridView"
-  },{
-    name : "animate",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to enable animated expand/collapse (defaults to the value of Ext.enableFx) true to enable animated expand/collapse (defaults to the value of Ext.enableFx)"
   },{
     name : "containerScroll",
     type : "boolean",
