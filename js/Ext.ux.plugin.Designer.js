@@ -475,7 +475,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       config.call(this,function(config) {
         this.appendConfig(el,config,true);
       }.createDelegate(this),this);
-    } else if (this.canAppend(el,config)) {
+    } else {
      //Get the config of the items
      var ccmp,cmp= this.getDesignElement(el,true);
      var items = this.editableJson(this.clone(config));
@@ -498,21 +498,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        add(ccmp,items);
      this.modified = true;
      this.fireEvent('add');
-     this.updateElement(ccmp,null,items[this.jsonId]);     
-    }
+     this.updateElement(ccmp,null,items[this.jsonId]); 
+    } 
     return false;
   },
-  
-  /**
-   * Can the config be appended to the element
-   * @param {Element} el The element to which the config would be added
-   * @param {Object} config The config object to be added
-   */
-  canAppend : function (el,config) {
-    //TODO: Check if we do not add at root container twice
-    return true;
-  },
-  
+
   /**
    * Create the codeConfig object and apply it to the field
    */
@@ -813,23 +803,21 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   notifyOver : function (src,e,data) {
     if (data.config) {
       var cmp = this.getDesignElement(this.getTarget(e),true);
-      if (this.canAppend(cmp)) {
-        this.selectElement(cmp);
-        //"x-tree-drop-ok-above" "x-tree-drop-ok-between" "x-tree-drop-ok-below"        
-        var el=cmp.getEl();
-        if (data.internal && !data.clone) {
-          //Only allow move if not within same container
-          if (this.isElementOf(cmp,data.source,true)) return false;
-          data.drop = this.isContainer(cmp) ? "move" : 
-           (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "movebefore" : "moveafter");
-          return (data.drop=='movebefore' ?  "icon-element-move-before" :
-            (data.drop=='moveafter'  ? "icon-element-move-after"  : "icon-element-move"));
-        } else {
-          data.drop = this.isContainer(cmp) ? "append" : 
-           (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "appendbefore" : "appendafter");
-          return (data.drop=='appendbefore' ?  "icon-element-add-before" :
-            (data.drop=='appendafter'  ? "icon-element-add-after"  : "icon-element-add"));
-        }
+      this.selectElement(cmp);
+      //"x-tree-drop-ok-above" "x-tree-drop-ok-between" "x-tree-drop-ok-below"        
+      var el=cmp.getEl();
+      if (data.internal && !data.clone) {
+        //Only allow move if not within same container
+        if (this.isElementOf(cmp,data.source,true)) return false;
+        data.drop = this.isContainer(cmp) ? "move" : 
+         (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "movebefore" : "moveafter");
+        return (data.drop=='movebefore' ?  "icon-element-move-before" :
+          (data.drop=='moveafter'  ? "icon-element-move-after"  : "icon-element-move"));
+      } else {
+        data.drop = this.isContainer(cmp) ? "append" : 
+         (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "appendbefore" : "appendafter");
+        return (data.drop=='appendbefore' ?  "icon-element-add-before" :
+          (data.drop=='appendafter'  ? "icon-element-add-after"  : "icon-element-add"));
       }
     }
     data.drop = null;

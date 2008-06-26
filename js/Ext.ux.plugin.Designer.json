@@ -323,7 +323,7 @@
             'render': function() {
                 //Create context menu
                 var contextMenu = new Ext.menu.Menu({items:[{
-                  text    : 'open',
+                  text    : 'Open',
                   tooltip : 'Open file',        
                   iconCls : 'icon-reload',
                   scope   : this,
@@ -338,7 +338,7 @@
                       });
                     }
                 },{
-                  text    : 'rename',
+                  text    : 'Rename',
                   tooltip : 'Rename the file',        
                   iconCls : 'icon-filerename',
                   scope   : this,
@@ -360,7 +360,7 @@
                       });
                     }
                 },{
-                  text    : 'delete',
+                  text    : 'Delete',
                   tooltip : 'Delete file',        
                   iconCls : 'icon-filedelete',
                   scope   : this,

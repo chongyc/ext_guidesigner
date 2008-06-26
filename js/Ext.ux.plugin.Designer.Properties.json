@@ -579,26 +579,12 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to not initialize the list for this combo until the field is focused. (defaults to true)"
   },{
-    name : "format",
-    desc : "<b>String</b> The default date format string which can be overriden for localization support. The format must be valid according to {@link Date#parseDate} (defaults to 'm/d/y')."
-  },{
     name : "altFormats",
     desc : "<b>String</b> Multiple date formats separated by \"|\" to try when parsing a user input value and it doesn't match the defined format (defaults to 'm/d/Y|m-d-y|m-d-Y|m/d|m-d|d')."
-  },{
-    name : "disabledDays",
-    type : "array",
-    desc : "<b>Array</b> An array of days to disable, 0 based. For example, [0, 6] disables Sunday and Saturday (defaults to null)."
-  },{
-    name : "disabledDaysText",
-
-    desc : "<b>String</b> The tooltip to display when the date falls on a disabled day (defaults to 'Disabled')"
   },{
     name : "disabledDates",
     type : "array",
     desc : "<b>Array</b> An array of \"dates\" to disable, as strings. These strings will be used to build a dynamic regular expression so they are very powerful. Some examples: <ul> <li>[\"03/08/2003\", \"09/16/2003\"] would disable those exact dates</li> <li>[\"03/08\", \"09/16\"] would disable those days for every year</li> <li>[\"^03/08\"] would only match the beginning (useful if you are using short years)</li> <li>[\"03/../2006\"] would disable every day in March 2006</li> <li>[\"^03\"] would disable every day in every March</li> </ul> In order to support regular expressions, if you are using a date format that has \".\" in it, you will have to escape the dot when restricting dates. For example: [\"03\\.08\\.03\"]."
-  },{
-    name : "disabledDatesText",
-    desc : "<b>String</b> The tooltip text to display when the date falls on a disabled date (defaults to 'Disabled')"
   },{
     name : "minValue",
     type : "mixed",
@@ -620,9 +606,6 @@ properties : [{
     name : "invalidClass",
     desc : "<b>String</b> The CSS class to use when marking a field invalid (defaults to \"x-form-invalid\")"
   },{
-    name : "focusClass",
-    desc : "<b>String</b> The CSS class to use when the field receives focus (defaults to \"x-form-focus\")"
-  },{
     name : "validationEvent",
     desc : "<b>String/Boolean</b> The event that should initiate field validation. Set to false to disable automatic validation (defaults to \"keyup\")."
   },{
@@ -634,9 +617,6 @@ properties : [{
     type : "number",
     desc : "<b>Number</b> The length of time in milliseconds after user input begins until validation is initiated (defaults to 250)"
   },{
-    name : "fieldClass",
-    desc : "<b>String</b> The default CSS class for the field (defaults to \"x-form-field\")"
-  },{
     name : "msgTarget",
     desc : "<b>String</b> The location where error text should display. Should be one of the following values (defaults to 'qtip'): <pre> Value Description ----------- ---------------------------------------------------------------------- qtip Display a quick tip when the user hovers over the field title Display a default browser title attribute popup under Add a block div beneath the field containing the error text side Add an error icon to the right of the field with a popup on hover [element id] Add the error text directly to the innerHTML of the specified element </pre>"
   },{
@@ -646,10 +626,6 @@ properties : [{
     name : "readOnly",
     type : "boolean",
     desc : "<b>Boolean</b> True to mark the field as readOnly in HTML (defaults to false) -- Note: this only sets the element's readOnly DOM attribute."
-  },{
-    name : "disabled",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to disable the field (defaults to false)."
   },{
     name : "inputType",
     desc : "<b>String</b> The type attribute for input fields -- e.g. radio, text, password (defaults to \"text\")."
@@ -749,9 +725,6 @@ properties : [{
     type : "array",
     desc : "<b>Array</b> An array of available font families"
   },{
-    name : "fieldClass",
-    desc : "<b>String</b> The default CSS class for the field (defaults to \"x-form-field x-form-num-field\")"
-  },{
     name : "allowDecimals",
     type : "boolean",
     desc : "<b>Boolean</b> False to disallow decimal values (defaults to true)"
@@ -800,14 +773,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True if this field should automatically grow and shrink to its content"
   },{
-    name : "growMin",
-    type : "number",
-    desc : "<b>Number</b> The minimum width to allow when grow = true (defaults to 30)"
-  },{
-    name : "growMax",
-    type : "number",
-    desc : "<b>Number</b> The maximum width to allow when grow = true (defaults to 800)"
-  },{
     name : "vtype",
     desc : "<b>String</b> A validation type name as defined in {@link Ext.form.VTypes} (defaults to null)"
   },{
@@ -855,9 +820,6 @@ properties : [{
     name : "regexText",
     desc : "<b>String</b> The error text to display if {@link #regex} is used and the test fails during validation (defaults to \"\")"
   },{
-    name : "emptyText",
-    desc : "<b>String</b> The default text to display in an empty field (defaults to null)."
-  },{
     name : "emptyClass",
     desc : "<b>String</b> The CSS class to apply to an empty field to style the {@link #emptyText} (defaults to 'x-form-empty-field'). This class is automatically added and removed as needed depending on the current field value."
   },{
@@ -877,9 +839,6 @@ properties : [{
   },{
     name : "invalidText",
     desc : "<b>String</b> The error text to display when the time in the field is invalid (defaults to '{value} is not a valid time - it must be in the format {format}')."
-  },{
-    name : "format",
-    desc : "<b>String</b> The default date format string which can be overriden for localization support. The format must be valid according to {@link Date#parseDate} (defaults to 'm/d/y')."
   },{
     name : "increment",
     type : "number",
@@ -906,9 +865,6 @@ properties : [{
     name : "id",
     desc : "<b>String</b> (Optional) Defaults to the column's initial ordinal position. A name which identifies this column. The id is used to create a CSS class which is applied to all table cells in that column of the form <pre>x-grid-td-<b>id<b></pre> <br><br> The {@link Ext.grid.Grid#autoExpandColumn} grid config option references the column via this identifier."
   },{
-    name : "header",
-    desc : "<b>String</b> The header text to display in the Grid view."
-  },{
     name : "dataIndex",
     desc : "<b>String</b> (Optional) The name of the field in the grid's {@link Ext.data.Store}'s {@link Ext.data.Record} definition from which to draw the column's value. If not specified, the column's index is used as an index into the Record's data Array."
   },{
@@ -931,10 +887,6 @@ properties : [{
     name : "resizable",
     type : "boolean",
     desc : "<b>Boolean</b> (Optional) False to disable column resizing. Defaults to true."
-  },{
-    name : "hidden",
-    type : "boolean",
-    desc : "<b>Boolean</b> (Optional) True to hide the column. Defaults to false."
   },{
     name : "renderer",
     type : "function",
@@ -982,10 +934,6 @@ properties : [{
     name : "enableDragDrop",
     type : "boolean",
     desc : "<b>Boolean</b> True to enable drag and drop of rows."
-  },{
-    name : "enableColumnMove",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to enable drag and drop reorder of columns."
   },{
     name : "enableColumnHide",
     type : "boolean",
@@ -1064,9 +1012,6 @@ properties : [{
     name : "groupTextTpl",
     desc : "<b>String</b> The template used to render the group text"
   },{
-    name : "header",
-    desc : "<b>String</b> Any valid text or HTML fragment to display in the header cell for the row number column (defaults to '')."
-  },{
     name : "width",
     type : "number",
     desc : "<b>Number</b> The default width in pixels of the row number column (defaults to 23)."
@@ -1086,10 +1031,6 @@ properties : [{
     name : "dh",
     type : "object",
     desc : "<b>Object</b> DomHelper object config to create element with (defaults to {tag: \"div\", cls: \"x-layer\"})."
-  },{
-    name : "constrain",
-    type : "boolean",
-    desc : "<b>Boolean</b> False to disable constrain to viewport (defaults to true)"
   },{
     name : "zindex",
     type : "number",
@@ -1192,10 +1133,6 @@ properties : [{
     name : "labelSeparator",
     desc : "<b>String</b> The standard separator to display after the text of each form label (defaults to a colon ':'). To turn off separators completely specify empty string ''."
   },{
-    name : "columns",
-    type : "number",
-    desc : "<b>Number</b> The total number of columns to create in the table for this layout. If not specified, all panels added to this layout will be rendered into a single row using a column per panel."
-  },{
     name : "rowspan",
     type : "number",
     desc : "<b>Number</b> Row span to be used"
@@ -1213,10 +1150,6 @@ properties : [{
   },{
     name : "msgCls",
     desc : "<b>String</b> The CSS class to apply to the loading message element (defaults to \"x-mask-loading\")"
-  },{
-    name : "handler",
-    type : "function",
-    desc : "<b>Function</b> A function that will handle the click event of this menu item (defaults to undefined)"
   },{
     name : "canActivate",
     type : "boolean",
@@ -1257,10 +1190,6 @@ properties : [{
     name : "showDelay",
     type : "number",
     desc : "<b>Number</b> Length of time in milliseconds to wait before showing this item (defaults to 200)"
-  },{
-    name : "defaults",
-    type : "object",
-    desc : "<b>Object</b> A config object that will be applied to all items added to this container either via the {@link #items} config or via the {@link #add} method. The defaults config can contain any number of name/value property pairs to be added to each item, and should be valid for the types of items being added to the menu."
   },{
     name : "items",
     type : "mixed",
@@ -1316,10 +1245,6 @@ properties : [{
     type : "object/array",
     desc : "<b>Object/Array</b> The bottom toolbar of the panel. This can be a {@link Ext.Toolbar} object, a toolbar config, or an array of buttons/button configs to be added to the toolbar. Note that this is not available as a property after render. To access the bottom toolbar after render, use {@link #getBottomToolbar}."
   },{
-    name : "header",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to create the header element explicitly, false to skip creating it. By default, when header is not specified, if a {@link #title} is set the header will be created automatically, otherwise it will not. If a title is set but header is explicitly set to false, the header will not be rendered."
-  },{
     name : "footer",
     type : "boolean",
     desc : "<b>Boolean</b> True to create the footer element explicitly, false to skip creating it. By default, when footer is not specified, if one or more buttons have been added to the panel the footer will be created automatically, otherwise it will not."
@@ -1353,17 +1278,9 @@ properties : [{
     name : "iconCls",
     desc : "<b>String</b> A CSS class that will provide a background image to be used as the panel header icon (defaults to '')."
   },{
-    name : "collapsible",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to make the panel collapsible and have the expand/collapse toggle button automatically rendered into the header tool button area, false to keep the panel statically sized with no button (defaults to false)."
-  },{
     name : "tools",
     type : "array",
     desc : "<b>Array</b> An array of tool button configs to be added to the header tool area. Each tool config should contain the id of the tool, and can also contain an 'on' event handler config containing one or more event handlers to assign to this tool. The optional property 'hidden:true' can be included to hide the tool by default. Example usage: <pre><code> tools:[{ id:'refresh', // hidden:true, on:{ click: function(){ // refresh logic } } }] </code></pre> A valid tool id should correspond to the CSS classes 'x-tool-{id}' (normal) and 'x-tool-{id}-over' (mouseover). By default, the following tools are provided: toggle (default when collapsible = true), close, minimize, maximize, restore, gear, pin, unpin, right, left, up, down, refresh, minus, plus, search and save. Note that these tool classes only provide the visual button -- any required functionality must be provided by adding event handlers that implement the necessary behavior."
-  },{
-    name : "hideCollapseTool",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to hide the expand/collapse toggle button when {@link #collapsible} = true, false to display it (defaults to false)."
   },{
     name : "titleCollapse",
     type : "boolean",
@@ -1410,10 +1327,6 @@ properties : [{
     name : "collapsed",
     type : "boolean",
     desc : "<b>Boolean</b> True to render the panel collapsed, false to render it expanded (defaults to false)."
-  },{
-    name : "collapseFirst",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to make sure the collapse/expand toggle button always renders first (to the left of) any other tools in the panel's title bar, false to render it last (defaults to true)."
   },{
     name : "minButtonWidth",
     type : "number",
@@ -1470,9 +1383,6 @@ properties : [{
     type : "number",
     desc : "<b>Number</b> The maximum width of the tip in pixels (defaults to 300)"
   },{
-    name : "defaultAlign",
-    desc : "<b>String</b> The default {@link Ext.Element#alignTo) anchor position value for this tip relative to its element of origin (defaults to \"tl-bl?\")"
-  },{
     name : "loader",
     type : "treeloader",
     desc : "<b>TreeLoader</b> A TreeLoader to be used by this node (defaults to the loader defined on the tree) @constructor @param {Object/String} attributes The attributes/config for the node or just a string with the text for the node "
@@ -1490,18 +1400,11 @@ properties : [{
     name : "appendOnly",
     desc : "<b>String</b> True if the tree should only allow append drops (use for trees which are sorted, defaults to false)"
   },{
-    name : "ddGroup",
-    desc : "<b>String</b> A named drag drop group to which this object belongs. If a group is specified, then this object will only interact with other drag drop objects in the same group (defaults to 'TreeDD')."
-  },{
     name : "expandDelay",
     desc : "<b>String</b> The delay in milliseconds to wait before expanding a target tree node while dragging a droppable node over the target (defaults to 1000)"
   },{
     name : "alignment",
     desc : "<b>String</b> The position to align to (see {@link Ext.Element#alignTo} for more details, defaults to \"l-l\")."
-  },{
-    name : "hideEl",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to hide the bound element while the editor is displayed (defaults to false)"
   },{
     name : "shim",
     type : "boolean",
@@ -1548,10 +1451,6 @@ properties : [{
     name : "allowDrop",
     type : "boolean",
     desc : "<b>Boolean</b> false if this node cannot be drop on"
-  },{
-    name : "disabled",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to start the node disabled"
   },{
     name : "icon",
     desc : "<b>String</b> The path to an icon for the node. The preferred way to do this is to use the cls or iconCls attributes and add the icon via a CSS background image."
@@ -1610,9 +1509,6 @@ properties : [{
     name : "dropConfig",
     type : "object",
     desc : "<b>Object</b> Custom config to pass to the {@link Ext.tree.TreeDropZone} instance"
-  },{
-    name : "ddGroup",
-    desc : "<b>String</b> The DD group this TreePanel belongs to"
   },{
     name : "ddAppendOnly",
     desc : "<b>String</b> True if the tree should only allow append drops (use for trees which are sorted)"
@@ -1695,10 +1591,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to display the 'close' tool button and allow the user to close the window, false to hide the button and disallow closing the window (default to true)."
   },{
-    name : "constrain",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to constrain the window to the viewport, false to allow it to fall outside of the viewport (defaults to false). Optionally the header only can be constrained using {@link #constrainHeader}."
-  },{
     name : "constrainHeader",
     type : "boolean",
     desc : "<b>Boolean</b> True to constrain the window header to the viewport, allowing the window body to fall outside of the viewport, false to allow the header to fall outside the viewport (defaults to false). Optionally the entire window can be constrained using {@link #constrain}."
@@ -1738,25 +1630,9 @@ properties : [{
     type : "function",
     desc : "<b>function</b> Shorthand for store. "
   },{
-    name : "cm",
-    type : "function",
-    desc : "<b>function</b> Shorthand for colModel."
-  },{
-    name : "sm",
-    type : "object",
-    desc : "<b>Object</b> Shorthand for selModel."
-  },{
-    name : "columns",
-    type : "array",
-    desc : "<b>Array</b> An array of columns to auto create a ColumnModel"
-  },{
     name : "colModel",
     type : "object",
     desc : "<b>Object</b> The Ext.grid.ColumnModel to use when rendering the grid (required)."
-  },{
-    name : "enableColumnHide",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to enable hiding of columns with the header context menu."
   },{
     name : "enableColumnMove",
     type : "boolean",
@@ -1765,14 +1641,6 @@ properties : [{
     name : "enableColumnResize",
     type : "boolean",
     desc : "<b>Boolean</b> False to turn off column resizing for the whole grid (defaults to true)."
-  },{
-    name : "enableDragDrop",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to enable drag and drop of rows."
-  },{
-    name : "disableSelection",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to disable selections in the grid (defaults to false). - ignored a SelectionModel is specified"
   },{
     name : "hideHeaders",
     type : "boolean",
@@ -1809,37 +1677,6 @@ properties : [{
     name : "viewConfig",
     type : "object",
     desc : "<b>Object</b> A config object that will be applied to the grid's UI view. Any of the config options available for Ext.grid.GridView"
-  },{
-    name : "containerScroll",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to register this container with ScrollManage"
-  },{
-    name : "ddGroup",
-    desc : "<b>String</b> The DD group this TreePanel belongs to"
-  },{
-    name : "ddScroll",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to enable body scrolling"
-  },{
-    name : "dragConfig",
-    type : "object",
-    desc : "<b>Object</b> Custom config to pass to the Ext.tree.TreeDragZone instance"
-  },{
-    name : "dropConfig",
-    type : "object",
-    desc : "<b>Object</b> Custom config to pass to the Ext.tree.TreeDropZone instance"
-  },{
-    name : "enableDD",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to enable drag and drop"
-  },{
-    name : "enableDrag",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to enable just drag"
-  },{
-    name : "enableDrop",
-    type : "boolean",
-    desc : "<b>Boolean</b> true to enable just drop"
   },{
     name : "hlColor",
     desc : "<b>String</b> The color of the node highlight (defaults to C3DAF9)"
