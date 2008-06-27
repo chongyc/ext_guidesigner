@@ -701,13 +701,16 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
   um.on('failure',function(el, response){
     this.ownerCt.el.unmask();
     this.fireEvent('failedjsonload',response)
- }.createDelegate(this));
+  }.createDelegate(this));
+  um.on('beforeupdate',function() {
+   if (this.loadMask)
+     this.ownerCt.el.mask(this.loadMsg, this.msgCls);
+  }.createDelegate(this));
+ 
   um.setRenderer({render:
        function(el, response, updater, callback){
      //add item configs to the panel layout
         //Load the code to check if we should javascripts
-        if (this.loadMask)
-          this.ownerCt.el.mask(this.loadMsg, this.msgCls);
         this.fireEvent('beforejsonload', response);
         try { 
           this.applyJson(response.responseText);           

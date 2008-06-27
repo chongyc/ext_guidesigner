@@ -10,8 +10,16 @@
  -  Add loading indicator in jsonpanel
  -  Add warning when adding second item to root
  - Removed duplicate items from selection list.
+ - Delete of item JsonPanel + Textitem fails
+ - JSON Path should always be relative, directory protection
+ - Clean old code from subversion
  
  Change History:
+ Version 2.0.5:
+  * Fixed problem in CodePress and Designer with path
+  * Fixed load indicator in JsonPanel
+  * Delete of item with single element failed
+  
  Version 2.0.4:
   + Loading indicator
   + Documentation window added under Question Mark
@@ -19,7 +27,6 @@
   + Added autoLoad option in config to load json from URL
   + Added Cookie files
   - Remove debug message Created, for special scope objects
-  
   * Config is now shown in window
   * Fixed layout problem
   

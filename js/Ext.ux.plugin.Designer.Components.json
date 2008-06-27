@@ -906,7 +906,7 @@
         xtype : "jsonpanel",
         title : "JSON Panel",
         layout : "fit",
-        __JSON__autoLoad : "{url : 'myjson.json'}"
+        __JSON__autoLoad : "{url : 'json/myjson.json'}"
       },
       cls : "file"
     }]

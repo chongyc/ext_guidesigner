@@ -276,7 +276,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */\n",
    
   //@private The version of the designer
-  version : '2.0.4',
+  version : '2.0.5',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -387,11 +387,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   removeElement : function(source,internal) {
     if (!source) return false;
     var own = this.getContainer(source.ownerCt);
-    if (internal) this.markUndo();
+    if (!internal) this.markUndo();
     for (var i=0;i<own.items.length;i++) {
       if (own.items.items[i]==source) {
         if (!own.codeConfig) own.codeConfig = this.getConfig(own);
         own.codeConfig.items.splice(i,1);
+        if (own.codeConfig.items.length==0) delete own.codeConfig.items;
         if (!internal) {
           this.fireEvent('remove');
           this.updateElement(own,null);
@@ -869,8 +870,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         var path ='';
         for (var i=0;i<elements.length;i++) {
           var s = elements[i].src ? elements[i].src : elements[i].id;
-          if (s.match(/Ext.ux.plugin.Designer\.js(\?.*)?$/)) {
-            path = s.replace(/Ext.ux.plugin.Designer\.js(\?.*)?$/,'');
+          if (s.match(/Ext\.ux\.plugin\.Designer\.js(\?.*)?$/)) {
+            path = s.replace(/Ext\.ux\.plugin\.Designer\.js(\?.*)?$/,'');
           }
         }
         this.toolboxPath = path;

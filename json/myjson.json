@@ -1,0 +1,9 @@
+/* This file is created with Ext.ux.plugin.GuiDesigner */
+{
+xtype : "panel",
+title : "MyJson",
+items : [{
+    xtype : "label",
+    text : "This is a demo json file (myjson.json)"
+  }]
+}

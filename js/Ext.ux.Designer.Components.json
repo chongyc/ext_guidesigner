@@ -793,6 +793,6 @@
       ['Advanced','JSON Panel','A panel supporting JSON load',{xtype:'jsonpanel',
          title:"JSON Panel",
          layout:"fit",
-         autoLoad:"{url : 'myjson.json'}"
+         autoLoad:"{url : 'json\myjson.json'}"
        }]
 ]

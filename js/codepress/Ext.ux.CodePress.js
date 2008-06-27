@@ -99,7 +99,7 @@ Ext.ux.CodePress = Ext.extend(Ext.form.Field, {
          for(var i=0,n=s.length;i<n;i++) {
            var name = s[i].src ? s[i].src : s[i].id;
            if(name.match('Ext\.ux\.CodePress\.js')) {
-             Ext.ux.CodePress.path = name.replace('Ext\.ux\.CodePress\.js','');
+             Ext.ux.CodePress.path = name.replace("Ext.ux.CodePress.js",'');
             break;
            }
          }
