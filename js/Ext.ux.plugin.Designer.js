@@ -123,6 +123,13 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
     }
     if(typeof callback == "function") callback(true);
   },
+
+  openFile : function(fileInfo,callback) {
+    var result = unescape(this.cookies.get('Designer/' + fileInfo));
+    this.last = fileInfo;
+    if(typeof callback == "function") callback(true,result);
+  },
+  
   
   deleteFile : function(fileInfo,callback){
     this.saveChanges(fileInfo,'delete',callback);
@@ -150,12 +157,6 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
   
   newFile  : function(fileInfo,content,callback){
     this.saveChanges(fileInfo,'new',callback,content);
-  },
-  
-  openFile : function(fileInfo,callback) {
-    var result = unescape(this.cookies.get('Designer/' + fileInfo));
-    this.last = fileInfo;
-    if(typeof callback == "function") callback(true,result);
   },
   
   load : function(node, callback){ 

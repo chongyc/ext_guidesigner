@@ -19,6 +19,7 @@
   * Fixed problem in CodePress and Designer with path
   * Fixed load indicator in JsonPanel
   * Delete of item with single element failed
+  * Fixed problem with required_js and required_css
   
  Version 2.0.4:
   + Loading indicator

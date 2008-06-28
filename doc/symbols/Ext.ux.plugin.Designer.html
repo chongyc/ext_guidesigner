@@ -202,35 +202,17 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-listeners"></a>
-                <b>enableSave</b> : Boolean
+                <b>autoLoad</b> : Url
                 <div class="mdesc">
-                    <div class="short">Enable or disable the Save file menu button (defaults false).</div>
+                    <div class="short">An url specifing the json to load</div>
                     <div class="long">
-                        Enable or disable the Save file menu button (defaults false).
+                        An url specifing the json to load
                     </div>
                 </div>
             </td>
             <td class="msource">
                 Designer
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableSave" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
-            </td>
-        </tr>
-             
-        <tr class="config-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-listeners"></a>
-                <b>enableReload</b> : Boolean
-                <div class="mdesc">
-                    <div class="short">Enable or disable the Reload file menu button (defaults false).</div>
-                    <div class="long">
-                        Enable or disable the Reload file menu button (defaults false).
-                    </div>
-                </div>
-            </td>
-            <td class="msource">
-                Designer
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#enableReload" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#autoLoad" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
             </td>
         </tr>
         
@@ -239,11 +221,30 @@
     <a id="Ext.ux.plugin.Designer-props"></a>      
     
     <h2>Public Properties</h2> 
-    <p>This class has no public properties.</p>        
-    <table cellspacing="0" class="x-hidden">            
+            
+    <table cellspacing="0" class="member-table">            
         <tr>
             <th class="sig-header" colspan="2">Property</th>
             <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+                    
+        <tr class="property-row">
+            <td class="micon">
+                <a class="exi" href="#expand">&nbsp;</a>
+            </td>
+            <td class="sig">
+                <a id="Ext.Component-disabled"></a>
+                <b>fileControl</b> :             
+                <div class="mdesc">   
+                    A file control config item                        
+                </div>
+            </td>
+            <td class="msource">                
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#fileControl" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
         </tr>
         
         
@@ -304,35 +305,6 @@
             <td class="msource">
                 Designer
                 <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#init" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>fileControl</b>(&nbsp;<code></code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short">Return the file control object</div>
-                    <div class="long">
-                        Return the file control object    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                Designer
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#fileControl" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
             </td>
         </tr>
                 
@@ -578,45 +550,6 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>canAppend</b>(&nbsp;<code>Element el, Object config</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short">Can the config be appended to the element</div>
-                    <div class="long">
-                        Can the config be appended to the element    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>el</code> : Element
-                                    <div class="sub-desc">&nbsp;The element to which the config would be added</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>config</code> : Object
-                                    <div class="sub-desc">&nbsp;The config object to be added</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                Designer
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#canAppend" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>createConfig</b>(&nbsp;<code></code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Create the codeConfig object and apply it to the field</div>
@@ -639,6 +572,74 @@
             <td class="msource">
                 Designer
                 <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#createConfig" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>loadConfig</b>(&nbsp;<code>Element el</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Load a config from URL</div>
+                    <div class="long">
+                        Load a config from URL    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The url to load</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#loadConfig" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getCode</b>(&nbsp;<code>Element el</code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Get the config as string of the specified element</div>
+                    <div class="long">
+                        Get the config as string of the specified element    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>el</code> : Element
+                                    <div class="sub-desc">&nbsp;The element for which to get the config object</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">The config string</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#getCode" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
             </td>
         </tr>
                 
@@ -1289,6 +1290,41 @@
             <td class="msource">
                 Designer
                 <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#beforehide" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
+            </td>                                 
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>loadfailed</b> : (&nbsp;<code>Url url, Object response</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires after loadConfig fails</div>
+                    <div class="long">
+                        Fires after loadConfig fails  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>url</code> : Url
+                                    <div class="sub-desc">The url tried to load</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>response</code> : Object
+                                    <div class="sub-desc">Response object</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                Designer
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.Designer" ext:member="Ext.ux.plugin.Designer#loadfailed" href="symbols/Ext.ux.plugin.Designer.html">Designer</a>
             </td>                                 
         </tr>
                     

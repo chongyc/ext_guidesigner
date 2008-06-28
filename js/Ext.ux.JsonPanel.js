@@ -124,7 +124,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      * Array with items which should be blocked during init
      * @type {Array}
      @cfg */
-    blockedJsonInit : ['required_js','required_css','items'],
+    blockedJsonInit : ['items'],
 
     /** 
     * Should caching be disabled when JSON are loaded (defaults false).   
@@ -618,6 +618,9 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
     }
 });
 
+/**
+ * Create global object 
+ */
 Ext.ux.JSON = new Ext.ux.Json();
 
 /**
@@ -638,7 +641,6 @@ Ext.ux.JSON = new Ext.ux.Json();
  * to fix the problem of ExtJs not supporting Ajax from local file system</p>
  * @type component
  */
- 
 Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
  
  //@private Layout is by default fit
@@ -654,7 +656,7 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
    * Array with items which should be blocked during init
    * @type {Array}
    @cfg */
-  blockedJsonInit : ['required_js','required_css','alignTo','anchorTo','items'],
+  blockedJsonInit : ['alignTo','anchorTo','items'],
     
  
  /**
@@ -702,8 +704,8 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
     this.ownerCt.el.unmask();
     this.fireEvent('failedjsonload',response)
   }.createDelegate(this));
-  um.on('beforeupdate',function() {
-   if (this.loadMask)
+  um.on('beforeupdate',function(el, url, params) {
+   if (this.loadMask && this.ownerCt)
      this.ownerCt.el.mask(this.loadMsg, this.msgCls);
   }.createDelegate(this));
  
@@ -806,8 +808,15 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
   Ext.ux.JsonWindow.superclass.onRender.call(this, ct, position);
   var um = this.getUpdater();
   um.showLoadIndicator = false; //disable it.
-  um.on('failure',function(el, response){this.fireEvent('failedjsonload',response)}.createDelegate(this));
-
+  um.on('failure',function(el, response){
+      this.ownerCt.el.unmask();
+      this.fireEvent('failedjsonload',response)
+    }.createDelegate(this));
+    um.on('beforeupdate',function(el, url, params) {
+     if (this.loadMask && this.ownerCt)
+       this.ownerCt.el.mask(this.loadMsg, this.msgCls);
+  }.createDelegate(this));
+  
   um.setRenderer({render:
        function(el, response, updater, callback){
      //add item configs to the panel layout
