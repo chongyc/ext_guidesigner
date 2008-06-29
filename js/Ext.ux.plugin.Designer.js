@@ -88,35 +88,33 @@ Ext.ux.plugin.DesignerWizard = function(json){
   }
 }
 */
-
-
-Ext.ux.plugin.CookieFiles = function(config) {
+/**
+ * FileControl
+ */
+Ext.ux.plugin.FileControl = function(config) {
   Ext.apply(this,config);
-  Ext.ux.plugin.CookieFiles.superclass.constructor.call(this);
+  Ext.ux.plugin.FileControl.superclass.constructor.call(this);
   this.init();
 }
 
-Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
-  files : null,
+Ext.extend(Ext.ux.plugin.FileControl,Ext.util.Observable,{
+  files : {},
   last  : null,
   activeNode : null,
   
   init : function(){
-    this.cookies = new Ext.state.CookieProvider();     
-    this.files = this.cookies.get('Designer.files') || {};
+    this.refreshFiles();
   },
   
-  reset : function(){
-    this.cookies.clear('Designer.files');
+  refreshFiles : function (callback) {
+    this.files = this.files || {};
+    if(typeof callback == "function") callback(true);
   },
   
   saveChanges : function(id,action,callback,content) {
     this.files[id] = id;
-    this.cookies.set('Designer.files',this.files);
-    if (content) this.cookies.set('Designer/' + id,escape(content));
     if (action=='delete') {
       delete this.files[id];
-      this.cookies.clear('Designer.'+id);
       if (id==this.last) this.last = null;
     } else {
       this.last = id;
@@ -124,15 +122,14 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
     if(typeof callback == "function") callback(true);
   },
 
-  openFile : function(fileInfo,callback) {
-    var result = unescape(this.cookies.get('Designer/' + fileInfo));
-    this.last = fileInfo;
-    if(typeof callback == "function") callback(true,result);
+  openFile : function(id,callback,content) {
+    this.last = id;
+    if(typeof callback == "function") callback(true,content);
   },
   
   
-  deleteFile : function(fileInfo,callback){
-    this.saveChanges(fileInfo,'delete',callback);
+  deleteFile : function(id,callback){
+    this.saveChanges(id,'delete',callback);
   },
   
   renameFile : function(fileFrom,fileTo,callback){
@@ -151,20 +148,25 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
     }.createDelegate(this));
   },
   
-  saveFile : function(fileInfo,content,callback){
-    this.saveChanges(fileInfo,'save',callback,content);
+  saveFile : function(id,content,callback){
+    this.saveChanges(id,'save',callback,content);
   },
   
-  newFile  : function(fileInfo,content,callback){
-    this.saveChanges(fileInfo,'new',callback,content);
+  newFile  : function(id,content,callback){
+    this.saveChanges(id,'new',callback,content);
   },
   
-  load : function(node, callback){ 
-   this.loadNodes(node,false);
-   if(typeof callback == "function")  callback();   
+  load : function(node, callback,refresh){ 
+   if (refresh) {
+     this.refreshFiles(function(){
+        this.loadNodes(node,false,callback);
+      }.createDelegate(this));
+   } else {
+     this.loadNodes(node,false,callback);
+   }
   },
   
-  loadNodes : function(node,append){
+  loadNodes : function(node,append,callback){
     this.activeNode = null;
     if (!append) while(node.firstChild) node.removeChild(node.firstChild);
     node.beginUpdate();
@@ -196,9 +198,102 @@ Ext.extend(Ext.ux.plugin.CookieFiles,Ext.util.Observable,{
         }
     }
     node.endUpdate();
+    if(typeof callback == "function")  callback(this.activeNode);   
     return this.activeNode;      
   }
 
+});
+
+
+/*
+ * CookieFiles
+ */
+Ext.ux.plugin.CookieFiles = Ext.extend(Ext.ux.plugin.FileControl,{
+  
+  init : function(){
+    this.cookies = new Ext.state.CookieProvider();     
+    Ext.ux.plugin.CookieFiles.superclass.init.call(this);
+  },
+  
+  refreshFiles : function (callback) {
+    this.files = this.cookies.get('Designer.files');
+    Ext.ux.plugin.CookieFiles.superclass.refreshFiles.call(this,callback);
+  },
+
+  saveChanges : function(id,action,callback,content) {  
+    if (content) this.cookies.set('Designer/' + id,escape(content));
+    if (action=='delete') this.cookies.clear('Designer.'+id);
+    Ext.ux.plugin.CookieFiles.superclass.saveChanges.call(this,id,action,callback,content);
+    this.cookies.set('Designer.files',this.files);
+  },
+
+  openFile : function(id,callback,content) {
+    content = unescape(this.cookies.get('Designer/' + id));
+    Ext.ux.plugin.CookieFiles.superclass.openFile.call(this,id,callback,content)
+  }
+    
+});
+
+/*
+ * PHPFiles
+ */
+Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
+    
+  refreshFiles : function (callback) {
+    Ext.Ajax.request({
+      url: this.url || "backend.php",
+      params: {
+         cmd: 'get_files',
+         baseDir: this.baseDir
+      },            
+      callback: function(options, success, response) {
+        this.files= success ? Ext.util.JSON.decode(response.responseText) : {};
+        if(typeof callback == "function") callback(success);
+      },            
+      scope: this        
+    });    
+  },
+
+  saveChanges : function(id,action,callback,content) {  
+    Ext.Ajax.request({
+       url: this.url || "backend.php",
+       params: {
+         cmd: 'save_changes',
+         baseDir: this.baseDir,
+         filename: id,
+         action: action,
+         content: content
+       },
+       callback: function(options, success, response) {
+         if(success && response.responseText=='1') { 
+           if(action=='delete') {
+             delete this.files[id];
+             if (id==this.last) this.last = null;
+           } else {
+             this.last = id;
+           } 
+         }
+         if(typeof callback == "function") callback(response.responseText=='1');
+       },
+       scope: this        
+    }); 
+  },
+
+  openFile : function(id,callback,content) {
+    Ext.Ajax.request({
+      url: this.url || "backend.php",
+      params: {
+        cmd: 'get_content',
+        baseDir: this.baseDir,
+        filename: id 
+      },
+      callback: function(options, success, response) {
+        if (success) this.last = id;
+        if(typeof callback == "function") callback(success,response.responseText);
+      },
+      scope: this        
+    }); 
+  }    
 });
 
 
