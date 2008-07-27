@@ -279,7 +279,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      for (var i in obj) {if (i!=this.jsonId)  return false;}
      return true;
     },
-
+    
    /**
     * Apply the Json to given element
     * @param {Object/String} json The json to apply
@@ -403,7 +403,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      encodeArray  : function(o,indent,keepJsonId){
        indent = indent || 0;
        var a = ["["], b, i, l = o.length, v;
-       for (i = 0; i < l; i += 1) {
+       for (var i = 0; i < l; i += 1) {
          v = o[i];
          switch (typeof v) {
            case "undefined":
@@ -484,36 +484,42 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
           }
          }
          var a = [], b, i, v;
-         if (indent==0 && this.licenseText && !noLicense) a.push(this.licenseText);
+         //Check if whe should create a license text
+         if (indent==0 && !noLicense) {
+          if (this.licenseText) a.push(this.licenseText + "\n");
+         }
          a.push("{\n");
-         for (i in o) {
+         for (var i in o) {
+           v = o[i];   
+           //Check if key (i) is an internal jsonId and original is empty then use this
            if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) {
              var orgK = i.substring(this.jsonId.length);
-             if (orgK && typeof(o[orgK])=='undefined') {
+             if (orgK && typeof(o[orgK])=='undefined' && v) {
                 if(b) a.push(',\n'); 
-                a.push(this.indentStr(indent), orgK, " : ", this.scriptStart,o[i],this.scriptEnd);
+                a.push(this.indentStr(indent), orgK, " : ", this.scriptStart,v,this.scriptEnd);
                 b = true;
              }
-             continue; //internal id skip it during decode
+             continue; //internal id skip it during encode
            }
+           //Create code for item
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
              if (this.jsonId && o[this.jsonId + i]) {
                  if(b) a.push(',\n'); 
                  a.push(this.indentStr(indent), i, " : ", this.scriptStart,o[this.jsonId + i],this.scriptEnd);
                  b = true;
-             } else {
-               v = o[i];      
+             } else {               
                switch (typeof v) {
+                 case "undefined":
+                 case "unknown":               
+                     break;            
                  case "function":
                    if(b) a.push(',\n'); 
                    a.push(this.indentStr(indent), i, " : ", this.scriptStart,""+v,this.scriptEnd);
                    b = true;
                    break;
-                 case "undefined":
-                 case "unknown":               
-                     break;            
+                 case "object" :
                  case "string" :
-                    if (!v) break; //Skip empty string
+                    if (!v) break; //Skip empty string and objects else default
                  default:
                      if(b) a.push(',\n');
                      a.push(this.indentStr(indent), i, " : ",
@@ -575,6 +581,33 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
       */
      getJsonScope : function(){
        return  this.jsonScope || this.scope || this;  
+     },
+     
+     /**
+      * Clean null elements from json object
+      */
+     deleteJsonNull : function(json) {
+       var c=0;      
+       for (var k in json) {
+         if(!this.useHasOwn || json.hasOwnProperty(k)) {
+           if (k=='items') {
+             if (json[k] instanceof Array) {
+              var n =[];
+              for (var i=0,a=json[k];i<a.length;i++) {
+                var o = this.deleteJsonNull(a[i]);
+                if (o!=null) n.push(o); 
+              }
+              json[k] = (n.length>0) ? n : null; 
+             } else json[k]=this.deleteJsonNull(json[k]);
+           }
+           if (json[k]===null) {
+             delete json[k];
+           } else {
+             c++;
+           }
+         }
+       }
+       return c ? json : null;
      },
      
      /**

@@ -1,20 +1,23 @@
- TODO
-  - Save state in cookie based on name of designerfield
-  - Support loading and saving of file
-  - Add a visual resize option to item
-  - Add Grid Wirzard
-  - Add loading page when initailizing index.html en index.php
- -  Make toolbox global if required, so only one exits by screen
- -  Label is not selected after alter
- -  SetConfig calls jsonInit 1 time to mutch 
- -  Add loading indicator in jsonpanel
- -  Add warning when adding second item to root
+TODO
+ - Save state in cookie based on name of designerfield
+ - Support loading and saving of file
+ - Add a visual resize option to item
+ - Add Grid Wirzard
+ - Add loading page when initailizing index.html en index.php
+ - Make toolbox global if required, so only one exits by screen
+ - Label is not selected after alter
+ - Add warning when adding second item to root
  - Removed duplicate items from selection list.
  - Delete of item JsonPanel + Textitem fails
  - JSON Path should always be relative, directory protection
  - Clean old code from subversion
+ - Enable reorder from code tree
  
  Change History:
+ Version 2.0.6:
+  + Added PHPFile control thanks to Epsylon
+  * Fixed problem with null values in json causing error message (layout wizards)
+
  Version 2.0.5:
   * Fixed problem in CodePress and Designer with path
   * Fixed load indicator in JsonPanel

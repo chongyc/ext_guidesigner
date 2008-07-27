@@ -170,7 +170,7 @@ Ext.extend(Ext.ux.plugin.FileControl,Ext.util.Observable,{
     this.activeNode = null;
     if (!append) while(node.firstChild) node.removeChild(node.firstChild);
     node.beginUpdate();
-    for (f in this.files){
+    for (var f in this.files){
         var file = this.files[f];
         var path = f.split('/');
         var name = '';
@@ -369,10 +369,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
   
-  licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */\n",
+  licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */",
    
   //@private The version of the designer
-  version : '2.0.5',
+  version : '2.0.6',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -575,7 +575,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     } else {
      //Get the config of the items
      var ccmp,cmp= this.getDesignElement(el,true);
-     var items = this.editableJson(this.clone(config));
+     var items = this.editableJson(this.deleteJsonNull(this.clone(config)));
      //Find the container that should be changed
      ccmp = this.getContainer(cmp); 
      if (dropLocation == 'appendafter') {
@@ -686,6 +686,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     var id = this.activeElement ? this.activeElement[this.jsonId] : null;
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
+    items = this.deleteJsonNull(items);
     this.container.codeConfig.items=[this.editableJson(items)];
     this.applyJson(items,this.container); //Recreate childs
     this.redrawContainer=false;
