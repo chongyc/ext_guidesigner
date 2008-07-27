@@ -17,6 +17,7 @@ TODO
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon
   * Fixed problem with null values in json causing error message (layout wizards)
+  * Fixed undo problem, changes made with grid could not be un done
 
  Version 2.0.5:
   * Fixed problem in CodePress and Designer with path

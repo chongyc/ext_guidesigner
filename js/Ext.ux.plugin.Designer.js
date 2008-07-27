@@ -491,7 +491,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         if (own.codeConfig.items.length==0) delete own.codeConfig.items;
         if (!internal) {
           this.fireEvent('remove');
-          this.updateElement(own,null);
+          this.redrawElement(own);
         } else {
           this.redrawContainer = true;
         }
@@ -595,7 +595,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        add(ccmp,items);
      this.modified = true;
      this.fireEvent('add');
-     this.updateElement(ccmp,null,items[this.jsonId]); 
+     this.redrawElement(ccmp,items[this.jsonId]); 
     } 
     return false;
   },
@@ -711,17 +711,16 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   },
   
   /**
-   * Update an element with the changed config
+   * redraw an element with the changed config
    * @param {Element} element The elmenent to update
    * @param {Object} config The config 
    * @return {Boolean} Indicator that update was applied
    */
-  updateElement : function (element,config,selectId) {
+  redrawElement : function (element,selectId) {
     var el = element || this.activeElement;
     if (el) {
       try {
         var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
-        if (config) {Ext.apply(this.getConfig(el),config);}
         var p = this.container; //Redraw whole canvas          
         if (!this.redrawContainer && el!=p) {
            //Check if whe can find parent which can be redraw
@@ -739,7 +738,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         this.applyJson(this.getConfig(p).items,p);
         this.redrawContainer=false;
         this.selectElement(id);
-      } catch (e) { Ext.Msg.alert('Failure', 'Failed to update element ' + e); }
+      } catch (e) { Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); }
       this.fireEvent('change',el);
       this.modified = true;
       return true;
@@ -945,14 +944,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   setPropertyGrid : function(propertyGrid) {
     this.propertyGrid = propertyGrid;
     this.propertyGrid.jsonScope = this.getJsonScope();
-    propertyGrid.store.on('update', function(s,r,t) {
-      if (t == Ext.data.Record.EDIT) {
-        var change = {};
-        change[r.id] = r.data.changeValue || r.data.value;
+    propertyGrid.on('beforepropertychange', function() {
         this.markUndo();
-        this.updateElement(this.activeElement,change);
-      }
-    }, this, {buffer:100});
+    },this);
+    propertyGrid.on('propertychange', function() {
+        this.redrawElement(this.activeElement);
+    }, this);
   },
   
   /**

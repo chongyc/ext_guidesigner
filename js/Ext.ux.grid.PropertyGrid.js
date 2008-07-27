@@ -286,7 +286,7 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
          this.source[this.jsonId + prop] = value;
          try {
           //Set the jsonScope to be used during eval
-           if (this.grid) var scope = this.grid.jsonScope;
+           var scope = (this.grid) ? this.grid.jsonScope : this.scope;
            var o = eval("( { data :" + value + "})");
            this.source[prop] = o.data;
          } catch (e) {Ext.Msg.alert('Exception','Could not set ' + prop + ' to ' + value + '/n' + e);}

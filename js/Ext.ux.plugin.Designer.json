@@ -405,7 +405,7 @@
                    delete this.getSource()[item.record.id];
                    ds.remove(item.record);
                    delete item.record;
-                   scope.updateElement();
+                   scope.redrawElement();
                  }.createDelegate(this)
              }]});
              //Connect property grid contextMenu
