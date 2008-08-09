@@ -1,5 +1,4 @@
 TODO
- - Save state in cookie based on name of designerfield
  - Support loading and saving of file
  - Add a visual resize option to item
  - Add Grid Wirzard
@@ -7,17 +6,26 @@ TODO
  - Make toolbox global if required, so only one exits by screen
  - Label is not selected after alter
  - Add warning when adding second item to root
- - Removed duplicate items from selection list.
- - Delete of item JsonPanel + Textitem fails
  - JSON Path should always be relative, directory protection
  - Clean old code from subversion
  - Enable reorder from code tree
+ - Chaning Xtype to json makes error, variable k
+ - Drop element when not allowed, element is removed
+ - Drop element in tabpanel throws error this.el , notifyover
+ - See if it is possible to ignore xtype error when type does not exists
+ - Add option to use window as designer container, handy for form design
+ - Move extjs to own folder so it can be removed from packages
+ - Form goes wrong when adding first, items of form is different, problem comes from removal null
+ - Dragging element onto designer is slow
  
  Change History:
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon
   * Fixed problem with null values in json causing error message (layout wizards)
-  * Fixed undo problem, changes made with grid could not be un done
+  * Fixed undo problem, changes made with grid could not be undone
+  * Cleaned duplicated values from the propertyselection list
+  * Drag element, pressing shift changes to clone mode
+ 
 
  Version 2.0.5:
   * Fixed problem in CodePress and Designer with path

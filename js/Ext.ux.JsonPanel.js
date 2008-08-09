@@ -297,16 +297,12 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
          if (el instanceof Ext.Container) {
            //Clear out orignal content of container
            while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
-           if(items instanceof Array) {
+           if (items instanceof Array) {
              for (var i=0;i<items.length;i++) this.jsonInit(items[i].json);
              el.add.apply(el,items);
-           } else { // Only add items when it is not empty
-             var l = 0;
-             for (var i in items) {if (i!=this.jsonId)  l++;}
-             if (!this.isEmptyObject(items)) { 
-                this.jsonInit(items.json);
-                el.add(items);
-             }              
+           } else if (!this.isEmptyObject(items)) { 
+             this.jsonInit(items.json);
+             el.add(items);
            } 
          } else {
            //This is not a container so try to update element using jsonInit construction
@@ -315,7 +311,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
          }
        }
        if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
-     } catch (e) {     
+     } catch (e) {   
       throw e;
      } finally {
       if (this.loadMask && el.ownerCt) el.ownerCt.el.unmask();

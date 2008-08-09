@@ -901,8 +901,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     if (data.config) {
       var cmp = this.getDesignElement(this.getTarget(e),true);
       this.selectElement(cmp);
-      //"x-tree-drop-ok-above" "x-tree-drop-ok-between" "x-tree-drop-ok-below"        
       var el=cmp.getEl();
+      data.clone=(e.shiftKey);
       if (data.internal && !data.clone) {
         //Only allow move if not within same container
         if (this.isElementOf(cmp,data.source,true)) return false;

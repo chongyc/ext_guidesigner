@@ -28,7 +28,7 @@ properties : [{
     values : ["center","west","north","south","east"]
   },{
     name : "title",
-    desc : "<b>String</b> The title of a panel"
+    desc : "<b>String</b> The title of a container"
   },{
     name : "hideMode",
     desc : "<b>String</b> Style used for hide mode",
@@ -96,7 +96,7 @@ properties : [{
   },{
     name : "minWidth",
     type : "number",
-    desc : "<b>Number</b> The minimum width for this button (used to give a set of buttons a common width)"
+    desc : "<b>Number</b> The minimum width in pixels"
   },{
     name : "tooltip",
     type : "mixed",
@@ -162,9 +162,6 @@ properties : [{
     name : "itemCls",
     desc : "<b>String</b> The CSS class to apply to the containing element (defaults to \"x-color-palette\")"
   },{
-    name : "value",
-    desc : "<b>String</b> The initial color to highlight (should be a valid 6-digit color hex code without the # symbol). Note that the hex codes are case-sensitive."
-  },{
     name : "allowReselect",
     type : "boolean",
     desc : "<b>Boolean</b> If set to true then reselecting a color that is already selected fires the selection event"
@@ -201,9 +198,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True if the component should check for hidden classes (e.g. 'x-hidden' or 'x-hide-display') and remove them on render (defaults to false)."
   },{
-    name : "hideMode",
-    desc : "<b>String</b> How this component should hidden. Supported values are \"visibility\" (css visibility), \"offsets\" (negative offset position) and \"display\" (css display) - defaults to \"display\"."
-  },{
     name : "hideParent",
     type : "boolean",
     desc : "<b>Boolean</b> True to hide and show the component's container when hide/show is called on the component, false to hide and show the component itself (defaults to false). For example, this can be used as a shortcut for a hide button on a window by setting hide:true on the button when adding it to its parent container."
@@ -237,10 +231,6 @@ properties : [{
   },{
     name : "defaultType",
     desc : "<b>String</b> The default type of container represented by this object as registered in {@link Ext.ComponentMgr} (defaults to 'panel')."
-  },{
-    name : "items",
-    type : "array",
-    desc : "<b>Array</b> An array of {@link Ext.menu.CheckItem} <b>config</b> objects to be used when creating the button's menu items (e.g., {text:'Foo', iconCls:'foo-icon'})"
   },{
     name : "showText",
     type : "boolean",
@@ -308,12 +298,6 @@ properties : [{
     type : "date",
     desc : "<b>Date</b> Maximum allowable date (JavaScript date object, defaults to null)"
   },{
-    name : "minText",
-    desc : "<b>String</b> The error text to display if the minDate validation fails (defaults to \"This date is before the minimum date\")"
-  },{
-    name : "maxText",
-    desc : "<b>String</b> The error text to display if the maxDate validation fails (defaults to \"This date is after the maximum date\")"
-  },{
     name : "format",
     desc : "<b>String</b> The default date format string which can be overriden for localization support. The format must be valid according to {@link Date#parseDate} (defaults to 'm/d/y')."
   },{
@@ -373,7 +357,7 @@ properties : [{
   },{
     name : "value",
     type : "mixed",
-    desc : "<b>Mixed</b> The data value of the underlying field (defaults to \"\")"
+    desc : "<b>Mixed</b> The data value of the underlying field"
   },{
     name : "constrain",
     type : "boolean",
@@ -427,9 +411,6 @@ properties : [{
     type : "html",
     desc : "<b>HTML</b> A text that will be shown in label without htmlencode."
   },{
-    name : "method",
-    desc : "<b>String</b> The request method to use (GET or POST) for form actions if one isn't supplied in the action options."
-  },{
     name : "reader",
     type : "mixed",
     desc : "<b>DataReader</b> An Ext.data.DataReader (e.g. {@link Ext.data.XmlReader}) to be used to read data when executing \"load\" actions. This is optional as there is built-in support for processing JSON."
@@ -437,9 +418,6 @@ properties : [{
     name : "errorReader",
     type : "mixed",
     desc : "<b>DataReader</b> An Ext.data.DataReader (e.g. {@link Ext.data.XmlReader}) to be used to read data when reading validation errors on \"submit\" actions. This is completely optional as there is built-in support for processing JSON."
-  },{
-    name : "url",
-    desc : "<b>String</b> The URL to use for form actions if one isn't supplied in the action options."
   },{
     name : "fileUpload",
     type : "boolean",
@@ -481,9 +459,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to prevent the ComboBox from rendering until requested (should always be used when rendering into an Ext.Editor, defaults to false)"
   },{
-    name : "title",
-    desc : "<b>String</b> If supplied, a header element is created containing this text and added into the top of the dropdown list (defaults to undefined, with no header element)"
-  },{
     name : "listWidth",
     type : "number",
     desc : "<b>Number</b> The width in pixels of the dropdown list (defaults to the width of the ComboBox field)"
@@ -491,27 +466,17 @@ properties : [{
     name : "displayField",
     desc : "<b>String</b> The underlying data field name to bind to this CombBox (defaults to undefined if mode = 'remote' or 'text' if mode = 'local')"
   },{
-    name : "valueField",
-    desc : "<b>String</b> The underlying data value name to bind to this CombBox (defaults to undefined if mode = 'remote' or 'value' if mode = 'local') Note: use of a valueField requires the user make a selection in order for a value to be mapped."
-  },{
     name : "hiddenName",
     desc : "<b>String</b> If specified, a hidden form field with this name is dynamically generated to store the field's data value (defaults to the underlying DOM element's name)"
   },{
     name : "listClass",
     desc : "<b>String</b> CSS class to apply to the dropdown list element (defaults to '')"
   },{
-    name : "selectedClass",
-    desc : "<b>String</b> CSS class to apply to the selected item in the dropdown list (defaults to 'x-combo-selected')"
-  },{
     name : "triggerClass",
     desc : "<b>String</b> An additional CSS class used to style the trigger button. The trigger will always get the class 'x-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x-form-arrow-trigger' which displays a downward arrow icon)."
   },{
     name : "listAlign",
     desc : "<b>String</b> A valid anchor position value. See {@link Ext.Element#alignTo} for details on supported anchor positions (defaults to 'tl-bl')"
-  },{
-    name : "maxHeight",
-    type : "number",
-    desc : "<b>Number</b> The maximum height in pixels of the dropdown list before scrollbars are shown (defaults to 300)"
   },{
     name : "triggerAction",
     desc : "<b>String</b> The action to execute when the trigger field is activated. Use 'all' to run the query specified by the allQuery config option (defaults to 'query')"
@@ -530,7 +495,7 @@ properties : [{
   },{
     name : "pageSize",
     type : "number",
-    desc : "<b>Number</b> If greater than 0, a paging toolbar is displayed in the footer of the dropdown list and the filter queries will execute with page start and limit parameters. Only applies when mode = 'remote' (defaults to 0)"
+    desc : "<b>Number</b> Number of element to be shown on page"
   },{
     name : "selectOnFocus",
     type : "boolean",
@@ -538,13 +503,6 @@ properties : [{
   },{
     name : "queryParam",
     desc : "<b>String</b> Name of the query as it will be passed on the querystring (defaults to 'query')"
-  },{
-    name : "loadingText",
-    desc : "<b>String</b> The text to display in the dropdown list while data is loading. Only applies when mode = 'remote' (defaults to 'Loading...')"
-  },{
-    name : "resizable",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to add a resize handle to the bottom of the dropdown list (defaults to false)"
   },{
     name : "handleHeight",
     type : "number",
@@ -558,7 +516,7 @@ properties : [{
     desc : "<b>String</b> The text query to send to the server to return all records for the list with no filtering (defaults to '')"
   },{
     name : "mode",
-    desc : "<b>String</b> Set to 'local' if the ComboBox loads local data (defaults to 'remote' which loads from the server)"
+    desc : "<b>String</b> Set to 'local' if the ComboBox loads local data (defaults to 'remote' which loads from the server) also used for shadow"
   },{
     name : "minListWidth",
     type : "number",
@@ -586,22 +544,9 @@ properties : [{
     type : "array",
     desc : "<b>Array</b> An array of \"dates\" to disable, as strings. These strings will be used to build a dynamic regular expression so they are very powerful. Some examples: <ul> <li>[\"03/08/2003\", \"09/16/2003\"] would disable those exact dates</li> <li>[\"03/08\", \"09/16\"] would disable those days for every year</li> <li>[\"^03/08\"] would only match the beginning (useful if you are using short years)</li> <li>[\"03/../2006\"] would disable every day in March 2006</li> <li>[\"^03\"] would disable every day in every March</li> </ul> In order to support regular expressions, if you are using a date format that has \".\" in it, you will have to escape the dot when restricting dates. For example: [\"03\\.08\\.03\"]."
   },{
-    name : "minValue",
-    type : "mixed",
-    desc : "<b>Date/String</b> The minimum allowed date. Can be either a Javascript date object or a string date in a valid format (defaults to null)."
-  },{
     name : "maxValue",
     type : "mixed",
-    desc : "<b>Date/String</b> The maximum allowed date. Can be either a Javascript date object or a string date in a valid format (defaults to null)."
-  },{
-    name : "minText",
-    desc : "<b>String</b> The error text to display when the date in the cell is before minValue (defaults to 'The date in this field must be after {minValue}')."
-  },{
-    name : "maxText",
-    desc : "<b>String</b> The error text to display when the date in the cell is after maxValue (defaults to 'The date in this field must be before {maxValue}')."
-  },{
-    name : "triggerClass",
-    desc : "<b>String</b> An additional CSS class used to style the trigger button. The trigger will always get the class 'x-form-trigger' and triggerClass will be <b>appended</b> if specified (defaults to 'x-form-date-trigger' which displays a calendar icon)."
+    desc : "<b>Value/Date/String</b> The maximum allowed value/date. Can be either a Javascript date object or a string date in a valid format (defaults to null)."
   },{
     name : "invalidClass",
     desc : "<b>String</b> The CSS class to use when marking a field invalid (defaults to \"x-form-invalid\")"
@@ -617,9 +562,6 @@ properties : [{
     type : "number",
     desc : "<b>Number</b> The length of time in milliseconds after user input begins until validation is initiated (defaults to 250)"
   },{
-    name : "msgTarget",
-    desc : "<b>String</b> The location where error text should display. Should be one of the following values (defaults to 'qtip'): <pre> Value Description ----------- ---------------------------------------------------------------------- qtip Display a quick tip when the user hovers over the field title Display a default browser title attribute popup under Add a block div beneath the field containing the error text side Add an error icon to the right of the field with a popup on hover [element id] Add the error text directly to the innerHTML of the specified element </pre>"
-  },{
     name : "msgFx",
     desc : "<b>String</b> <b>Experimental</b> The effect used when displaying a validation message under the field (defaults to 'normal')."
   },{
@@ -629,14 +571,6 @@ properties : [{
   },{
     name : "inputType",
     desc : "<b>String</b> The type attribute for input fields -- e.g. radio, text, password (defaults to \"text\")."
-  },{
-    name : "tabIndex",
-    type : "number",
-    desc : "<b>Number</b> The tabIndex for this field. Note this only applies to fields that are rendered, not those which are built via applyTo (defaults to undefined)."
-  },{
-    name : "value",
-    type : "mixed",
-    desc : "<b>Mixed</b> A value to initialize this field with."
   },{
     name : "name",
     desc : "<b>String</b> The field's HTML name attribute."
@@ -652,18 +586,8 @@ properties : [{
     type : "number",
     desc : "<b>Number</b> The width of labels. This property cascades to child containers."
   },{
-    name : "itemCls",
-    desc : "<b>String</b> A css class to apply to the x-form-item of fields. This property cascades to child containers."
-  },{
     name : "baseCls",
     desc : "<b>String</b> The base CSS class applied to the fieldset (defaults to 'x-fieldset')."
-  },{
-    name : "labelWidth",
-    type : "number",
-    desc : "<b>Number</b> The width of labels. This property cascades to child containers."
-  },{
-    name : "itemCls",
-    desc : "<b>String</b> A css class to apply to the x-form-item of fields. This property cascades to child containers."
   },{
     name : "buttonAlign",
     desc : "<b>String</b> Valid values are \"left,\" \"center\" and \"right\" (defaults to \"center\")"
@@ -741,12 +665,8 @@ properties : [{
     desc : "<b>Boolean</b> False to prevent entering a negative sign (defaults to true)"
   },{
     name : "minValue",
-    type : "number",
-    desc : "<b>Number</b> The minimum allowed value (defaults to Number.NEGATIVE_INFINITY)"
-  },{
-    name : "maxValue",
-    type : "number",
-    desc : "<b>Number</b> The maximum allowed value (defaults to Number.MAX_VALUE)"
+    type : "mixed",
+    desc : "<b>Number</b> The minimum allowed value"
   },{
     name : "minText",
     desc : "<b>String</b> Error text to display if the minimum value validation fails (defaults to \"The minimum value for this field is {minValue}\")"
@@ -802,10 +722,6 @@ properties : [{
     name : "maxLengthText",
     desc : "<b>String</b> Error text to display if the maximum length validation fails (defaults to \"The maximum length for this field is {maxLength}\")"
   },{
-    name : "selectOnFocus",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to automatically select any existing field text when the field receives input focus (defaults to false)"
-  },{
     name : "blankText",
     desc : "<b>String</b> Error text to display if the allow blank validation fails (defaults to \"This field is required\")"
   },{
@@ -823,29 +739,12 @@ properties : [{
     name : "emptyClass",
     desc : "<b>String</b> The CSS class to apply to an empty field to style the {@link #emptyText} (defaults to 'x-form-empty-field'). This class is automatically added and removed as needed depending on the current field value."
   },{
-    name : "minValue",
-    type : "mixed",
-    desc : "<b>Date/String</b> The minimum allowed time. Can be either a Javascript date object or a string date in a valid format (defaults to null)."
-  },{
-    name : "maxValue",
-    type : "date/string",
-    desc : "<b>Date/String</b> The maximum allowed time. Can be either a Javascript date object or a string date in a valid format (defaults to null)."
-  },{
-    name : "minText",
-    desc : "<b>String</b> The error text to display when the date in the cell is before minValue (defaults to 'The time in this field must be equal to or after {0}')."
-  },{
-    name : "maxText",
-    desc : "<b>String</b> The error text to display when the time is after maxValue (defaults to 'The time in this field must be equal to or before {0}')."
-  },{
     name : "invalidText",
     desc : "<b>String</b> The error text to display when the time in the field is invalid (defaults to '{value} is not a valid time - it must be in the format {format}')."
   },{
     name : "increment",
     type : "number",
     desc : "<b>Number</b> The number of minutes between each time value in the list (defaults to 15)."
-  },{
-    name : "triggerClass",
-    desc : "<b>String</b> A CSS class to apply to the trigger"
   },{
     name : "hideTrigger",
     type : "boolean",
@@ -854,23 +753,8 @@ properties : [{
     name : "header",
     desc : "<b>String</b> Any valid text or HTML fragment to display in the header cell for the checkbox column (defaults to '&lt;div class=\"x-grid3-hd-checker\">&#160;&lt;/div>'). The default CSS class of 'x-grid3-hd-checker' displays a checkbox in the header and provides support for automatic check all/none behavior on header click. This string can be replaced by any valid HTML fragment, including a simple text string (e.g., 'Select Rows'), but the automatic check all/none behavior will only work if the 'x-grid3-hd-checker' class is supplied."
   },{
-    name : "width",
-    type : "number",
-    desc : "<b>Number</b> The default width in pixels of the checkbox column (defaults to 20)."
-  },{
-    name : "sortable",
-    type : "boolean",
-    desc : "<b>Boolean</b> True if the checkbox column is sortable (defaults to false)."
-  },{
-    name : "id",
-    desc : "<b>String</b> (Optional) Defaults to the column's initial ordinal position. A name which identifies this column. The id is used to create a CSS class which is applied to all table cells in that column of the form <pre>x-grid-td-<b>id<b></pre> <br><br> The {@link Ext.grid.Grid#autoExpandColumn} grid config option references the column via this identifier."
-  },{
     name : "dataIndex",
     desc : "<b>String</b> (Optional) The name of the field in the grid's {@link Ext.data.Store}'s {@link Ext.data.Record} definition from which to draw the column's value. If not specified, the column's index is used as an index into the Record's data Array."
-  },{
-    name : "width",
-    type : "number",
-    desc : "<b>Number</b> (Optional) The initial width in pixels of the column. Using this instead of {@link Ext.grid.Grid#autoSizeColumns} is more efficient."
   },{
     name : "sortable",
     type : "boolean",
@@ -883,10 +767,6 @@ properties : [{
     name : "fixed",
     type : "boolean",
     desc : "<b>Boolean</b> (Optional) True if the column width cannot be changed. Defaults to false."
-  },{
-    name : "resizable",
-    type : "boolean",
-    desc : "<b>Boolean</b> (Optional) False to disable column resizing. Defaults to true."
   },{
     name : "renderer",
     type : "function",
@@ -976,7 +856,7 @@ properties : [{
   },{
     name : "maxHeight",
     type : "number",
-    desc : "<b>Number</b> Sets the maximum height of the grid - ignored if autoHeight is not on."
+    desc : "<b>Number</b> Sets the maximum height - ignored if autoHeight is not on."
   },{
     name : "enableRowBody",
     type : "boolean",
@@ -1011,18 +891,6 @@ properties : [{
   },{
     name : "groupTextTpl",
     desc : "<b>String</b> The template used to render the group text"
-  },{
-    name : "width",
-    type : "number",
-    desc : "<b>Number</b> The default width in pixels of the row number column (defaults to 23)."
-  },{
-    name : "sortable",
-    type : "boolean",
-    desc : "<b>Boolean</b> True if the row number column is sortable (defaults to false)."
-  },{
-    name : "singleSelect",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to allow selection of only one row at a time (defaults to false)"
   },{
     name : "shim",
     type : "boolean",
@@ -1095,13 +963,9 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to allow clicking a collapsed region's bar to display the region's panel floated above the layout, false to force the user to fully expand a collapsed region by clicking the expand button to see it again (defaults to true)."
   },{
-    name : "minWidth",
-    type : "number",
-    desc : "<b>Number</b> The minimum allowable width in pixels for this region (defaults to 50)"
-  },{
     name : "minHeight",
     type : "number",
-    desc : "<b>Number</b> The minimum allowable height in pixels for this region (defaults to 50)"
+    desc : "<b>Number</b> The minimum allowable height in pixels"
   },{
     name : "splitTip",
     desc : "<b>String</b> The tooltip to display when the user hovers over a non-collapsible region's split bar (defaults to \"Drag to resize.\"). Only applies if {@link #useSplitTips} = true."
@@ -1169,35 +1033,15 @@ properties : [{
     name : "group",
     desc : "<b>String</b> All check items with the same group name will automatically be grouped into a single-select radio button group (defaults to '')"
   },{
-    name : "itemCls",
-    desc : "<b>String</b> The default CSS class to use for check items (defaults to \"x-menu-item x-menu-check-item\")"
-  },{
     name : "groupClass",
     desc : "<b>String</b> The default CSS class to use for radio group check items (defaults to \"x-menu-group-item\")"
-  },{
-    name : "icon",
-    desc : "<b>String</b> The path to an icon to display in this menu item (defaults to Ext.BLANK_IMAGE_URL)"
   },{
     name : "text",
     desc : "<b>String</b> The text to display for this item (defaults to '')"
   },{
-    name : "iconCls",
-    desc : "<b>String</b> A CSS class which sets a background image to be used as the icon for this item (defaults to '')"
-  },{
-    name : "itemCls",
-    desc : "<b>String</b> The default CSS class to use for menu items (defaults to 'x-menu-item')"
-  },{
     name : "showDelay",
     type : "number",
     desc : "<b>Number</b> Length of time in milliseconds to wait before showing this item (defaults to 200)"
-  },{
-    name : "items",
-    type : "mixed",
-    desc : "<b>Mixed</b> An array of items to be added to this menu. See {@link #add} for a list of valid item types."
-  },{
-    name : "minWidth",
-    type : "number",
-    desc : "<b>Number</b> The minimum width of the menu in pixels (defaults to 120)"
   },{
     name : "subMenuAlign",
     desc : "<b>String</b> The {@link Ext.Element#alignTo} anchor position value to use for submenus of this menu (defaults to \"tl-tr?\")"
@@ -1209,27 +1053,9 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to allow multiple menus to be displayed at the same time (defaults to false)"
   },{
-    name : "itemCls",
-    desc : "<b>String</b> The default CSS class to use for separators (defaults to \"x-menu-sep\")"
-  },{
-    name : "hideOnClick",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to hide the containing menu after this item is clicked (defaults to false)"
-  },{
-    name : "hideOnClick",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to hide the containing menu after this item is clicked (defaults to false)"
-  },{
-    name : "itemCls",
-    desc : "<b>String</b> The default CSS class to use for text items (defaults to \"x-menu-text\")"
-  },{
     name : "displayInfo",
     type : "boolean",
     desc : "<b>Boolean</b> True to display the displayMsg (defaults to false)"
-  },{
-    name : "pageSize",
-    type : "number",
-    desc : "<b>Number</b> The number of records to display per page (defaults to 20)"
   },{
     name : "displayMsg",
     desc : "<b>String</b> The paging status message to display (defaults to \"Displaying {start} - {end} of {total}\")"
@@ -1248,9 +1074,6 @@ properties : [{
     name : "footer",
     type : "boolean",
     desc : "<b>Boolean</b> True to create the footer element explicitly, false to skip creating it. By default, when footer is not specified, if one or more buttons have been added to the panel the footer will be created automatically, otherwise it will not."
-  },{
-    name : "title",
-    desc : "<b>String</b> The title text to display in the panel header (defaults to ''). When a title is specified the header element will automatically be created and displayed unless {@link #header} is explicitly set to false."
   },{
     name : "buttons",
     type : "array",
@@ -1275,16 +1098,9 @@ properties : [{
     name : "bodyStyle",
     desc : "<b>String</b> Custom CSS styles to be applied to the body element in the format expected by {@link Ext.Element#applyStyles} (defaults to null)."
   },{
-    name : "iconCls",
-    desc : "<b>String</b> A CSS class that will provide a background image to be used as the panel header icon (defaults to '')."
-  },{
     name : "tools",
     type : "array",
     desc : "<b>Array</b> An array of tool button configs to be added to the header tool area. Each tool config should contain the id of the tool, and can also contain an 'on' event handler config containing one or more event handlers to assign to this tool. The optional property 'hidden:true' can be included to hide the tool by default. Example usage: <pre><code> tools:[{ id:'refresh', // hidden:true, on:{ click: function(){ // refresh logic } } }] </code></pre> A valid tool id should correspond to the CSS classes 'x-tool-{id}' (normal) and 'x-tool-{id}-over' (mouseover). By default, the following tools are provided: toggle (default when collapsible = true), close, minimize, maximize, restore, gear, pin, unpin, right, left, up, down, refresh, minus, plus, search and save. Note that these tool classes only provide the visual button -- any required functionality must be provided by adding event handlers that implement the necessary behavior."
-  },{
-    name : "titleCollapse",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to allow expanding and collapsing the panel (when {@link #collapsible} = true) by clicking anywhere in the header bar, false to allow it only by clicking to tool button (defaults to false)."
   },{
     name : "autoScroll",
     type : "boolean",
@@ -1293,14 +1109,6 @@ properties : [{
     name : "floating",
     type : "boolean",
     desc : "<b>Boolean</b> True to float the panel (absolute position it with automatic shimming and shadow), false to display it inline where it is rendered (defaults to false). Note that by default, setting floating to true will cause the panel to display at negative offsets so that it is hidden -- because the panel is absolute positioned, the position must be set explicitly after render (e.g., myPanel.setPosition(100,100);). Also, when floating a panel you should always assign a fixed width, otherwise it will be auto width and will expand to fill to the right edge of the viewport."
-  },{
-    name : "shim",
-    type : "boolean",
-    desc : "<b>Boolean</b> False to disable the iframe shim in browsers which need one (defaults to true). Note that this option opnly applies when floating = true."
-  },{
-    name : "html",
-    type : "html",
-    desc : "<b>HTML</b> An arbitrary HTML fragment to use as the panel's body content (defaults to '')."
   },{
     name : "contentEl",
     desc : "<b>String</b> The id of an existing HTML node to use as the panel's body content (defaults to '')."
@@ -1328,26 +1136,12 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to render the panel collapsed, false to render it expanded (defaults to false)."
   },{
-    name : "minButtonWidth",
-    type : "number",
-    desc : "<b>Number</b> Minimum width in pixels of all buttons in this panel (defaults to 75)"
-  },{
     name : "elements",
     desc : "<b>String</b> A comma-delimited list of panel elements to initialize when the panel is rendered. Normally, this list will be generated automatically based on the items added to the panel at config time, but sometimes it might be useful to make sure a structural element is rendered even if not specified at config time (for example, you may want to add a button or toolbar dynamically after the panel has been rendered). Adding those elements to this list will allocate the required placeholders in the panel when it is rendered. Valid values are: 'header,' 'body,' 'footer,' 'tbar' (top bar) abd 'bbar' (bottom bar) - defaults to 'body.'"
-  },{
-    name : "value",
-    type : "float",
-    desc : "<b>Float</b> A floating point value between 0 and 1 (e.g., .5, defaults to 0)"
   },{
     name : "textEl",
     type : "mixed",
     desc : "<b>Mixed</b> The element to render the progress text to (defaults to the progress bar's internal text element)"
-  },{
-    name : "id",
-    desc : "<b>String</b> The progress bar element's id (defaults to an auto-generated id)"
-  },{
-    name : "mode",
-    desc : "<b>String</b> The shadow display mode. Supports the following options:<br /> sides: Shadow displays on both sides and bottom only<br /> frame: Shadow displays equally on all four sides<br /> drop: Traditional bottom-right drop shadow (default)"
   },{
     name : "offset",
     desc : "<b>String</b> The number of pixels to offset the shadow from the element (defaults to 4)"
@@ -1375,17 +1169,9 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> Enable auto tab scroll"
   },{
-    name : "minWidth",
-    type : "number",
-    desc : "<b>Number</b> The minimum width of the tip in pixels (defaults to 40)"
-  },{
     name : "maxWidth",
     type : "number",
-    desc : "<b>Number</b> The maximum width of the tip in pixels (defaults to 300)"
-  },{
-    name : "loader",
-    type : "treeloader",
-    desc : "<b>TreeLoader</b> A TreeLoader to be used by this node (defaults to the loader defined on the tree) @constructor @param {Object/String} attributes The attributes/config for the node or just a string with the text for the node "
+    desc : "<b>Number</b> The maximum width in pixels"
   },{
     name : "ddGroup",
     desc : "<b>String</b> A named drag drop group to which this object belongs. If a group is specified, then this object will only interact with other drag drop objects in the same group (defaults to 'TreeDD')."
@@ -1406,19 +1192,8 @@ properties : [{
     name : "alignment",
     desc : "<b>String</b> The position to align to (see {@link Ext.Element#alignTo} for more details, defaults to \"l-l\")."
   },{
-    name : "shim",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to shim the editor if selects/iframes could be displayed beneath it (defaults to false)"
-  },{
-    name : "maxWidth",
-    type : "number",
-    desc : "<b>Number</b> The maximum width in pixels of the editor field (defaults to 250). Note that if the maxWidth would exceed the containing tree element's size, it will be automatically limited for you to the container width, taking scroll and client offsets into account prior to each edit."
-  },{
     name : "dataUrl",
     desc : "<b>String</b> The URL from which to request a Json string which specifies an array of node definition object representing the child nodes to be loaded."
-  },{
-    name : "url",
-    desc : "<b>String</b> Equivalent to {@link #dataUrl}."
   },{
     name : "preloadChildren",
     type : "boolean",
@@ -1452,12 +1227,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> false if this node cannot be drop on"
   },{
-    name : "icon",
-    desc : "<b>String</b> The path to an icon for the node. The preferred way to do this is to use the cls or iconCls attributes and add the icon via a CSS background image."
-  },{
-    name : "iconCls",
-    desc : "<b>String</b> A css class to be added to the nodes icon element for applying css background images"
-  },{
     name : "href",
     desc : "<b>String</b> URL of the link used for the node (defaults to #)"
   },{
@@ -1477,14 +1246,6 @@ properties : [{
     name : "singleClickExpand",
     type : "boolean",
     desc : "<b>Boolean</b> True for single click expand on this node"
-  },{
-    name : "uiProvider",
-    type : "function",
-    desc : "<b>Function</b> A UI <b>class</b> to use for this node (defaults to Ext.tree.TreeNodeUI)"
-  },{
-    name : "rootVisible",
-    type : "boolean",
-    desc : "<b>Boolean</b> false to hide the root node (defaults to true)"
   },{
     name : "lines",
     type : "boolean",
@@ -1532,14 +1293,6 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> true if only 1 node per branch may be expanded"
   },{
-    name : "selModel",
-    type : "boolean",
-    desc : "<b>Boolean</b> A tree selection model to use with this TreePanel (defaults to a {@link Ext.tree.DefaultSelectionModel})"
-  },{
-    name : "loader",
-    type : "boolean",
-    desc : "<b>Boolean</b> A TreeLoader for use with this TreePanel"
-  },{
     name : "pathSeparator",
     desc : "<b>String</b> The token used to separate sub-paths in path strings (defaults to '/') @constructor @param {Object} config"
   },{
@@ -1581,7 +1334,7 @@ properties : [{
   },{
     name : "resizable",
     type : "boolean",
-    desc : "<b>Boolean</b> True to allow user resizing at each edge and corner of the window, false to disable resizing (defaults to true)."
+    desc : "<b>Boolean</b> True to allow user resizing."
   },{
     name : "draggable",
     type : "boolean",
@@ -1606,14 +1359,6 @@ properties : [{
     name : "maximizable",
     type : "boolean",
     desc : "<b>Boolean</b> True to display the 'maximize' tool button and allow the user to maximize the window, false to hide the button and disallow maximizing the window (defaults to false). Note that when a window is maximized, the tool button will automatically change to a 'restore' button with the appropriate behavior already built-in that will restore the window to its previous size."
-  },{
-    name : "minHeight",
-    type : "number",
-    desc : "<b>Number</b> The minimum height in pixels allowed for this window (defaults to 100). Only applies when resizable = true."
-  },{
-    name : "minWidth",
-    type : "number",
-    desc : "<b>Number</b> The minimum width in pixels allowed for this window (defaults to 200). Only applies when resizable = true."
   },{
     name : "expandOnShow",
     type : "boolean",
@@ -1646,55 +1391,13 @@ properties : [{
     type : "boolean",
     desc : "<b>Boolean</b> True to hide the grid's header (defaults to false)."
   },{
-    name : "loadMask",
-    type : "object",
-    desc : "<b>Object</b> An Ext.LoadMask config or true to mask the grid while loading (defaults to false)"
-  },{
-    name : "maxHeight",
-    type : "number",
-    desc : "<b>Number</b> Sets the maximum height of the grid - ignored if autoHeight is not on"
-  },{
-    name : "minColumnWidth",
-    type : "number",
-    desc : "<b>Number</b> The minimum width a column can be resized to. Defaults to 25."
-  },{
-    name : "selModel",
-    type : "object",
-    desc : "<b>Object</b> Any subclass of AbstractSelectionModel that will provide the selection model for the grid (defaults to Ext.grid.RowSe..."
-  },{
-    name : "stripeRows",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to stripe the rows. Default is false"
-  },{
-    name : "trackMouseOver",
-    type : "boolean",
-    desc : "<b>Boolean</b> True to highlight rows when the mouse is over. Default is true."
-  },{
-    name : "view",
-    type : "object",
-    desc : "<b>Object</b> The Ext.grid.GridView used by the grid. This can be set before a call to render()"
-  },{
     name : "viewConfig",
     type : "object",
     desc : "<b>Object</b> A config object that will be applied to the grid's UI view. Any of the config options available for Ext.grid.GridView"
   },{
-    name : "hlColor",
-    desc : "<b>String</b> The color of the node highlight (defaults to C3DAF9)"
-  },{
-    name : "hlDrop",
-    type : "boolean",
-    desc : "<b>Boolean</b> false to disable node highlight on drop (defaults to the value of Ext.enableFx)"
-  },{
-    name : "lines",
-    type : "boolean",
-    desc : "<b>Boolean</b> false to disable tree lines (defaults to true)"
-  },{
     name : "loader",
     type : "object",
     desc : "<b>Object</b> A Ext.tree.TreeLoader for use with this TreePanel"
-  },{
-    name : "pathSeparator",
-    desc : "<b>String</b> The token used to separate sub-paths in path strings (defaults to '/')"
   },{
     name : "root",
     type : "object",
@@ -1703,18 +1406,6 @@ properties : [{
     name : "rootVisible",
     type : "boolean",
     desc : "<b>Boolean</b> false to hide the root node (defaults to true)"
-  },{
-    name : "selModel",
-    type : "object/boolean",
-    desc : "<b>Object/Boolean</b> A tree selection model to use with this TreePanel (defaults to a Ext.tree.DefaultSelectionModel)"
-  },{
-    name : "singleExpand",
-    type : "boolean",
-    desc : "<b>Boolean</b> true if only 1 node per branch may be expanded"
-  },{
-    name : "trackMouseOver",
-    type : "boolean",
-    desc : "<b>Boolean</b> False to disable mouse over highlighting"
   },{
     name : "useArrows",
     type : "boolean",
