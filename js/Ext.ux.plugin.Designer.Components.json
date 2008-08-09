@@ -6,7 +6,8 @@
         qtip : "A panel containing form elements",
         config : {
           xtype : "form",
-          title : "Form"
+          title : "Form",
+          items : {}
         },
         cls : "file"
   },{

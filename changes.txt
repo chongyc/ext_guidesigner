@@ -14,7 +14,6 @@ TODO
  - Drop element in tabpanel throws error this.el , notifyover
  - See if it is possible to ignore xtype error when type does not exists
  - Add option to use window as designer container, handy for form design
- - Move extjs to own folder so it can be removed from packages
  - Form goes wrong when adding first, items of form is different, problem comes from removal null
  - Dragging element onto designer is slow
  
@@ -25,6 +24,7 @@ TODO
   * Fixed undo problem, changes made with grid could not be undone
   * Cleaned duplicated values from the propertyselection list
   * Drag element, pressing shift changes to clone mode
+  - Moved ExtJs to seperate folder, so you can choose your version of extjs
  
 
  Version 2.0.5:

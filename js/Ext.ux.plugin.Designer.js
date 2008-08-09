@@ -843,7 +843,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
        return {
          ddel:el,
          config : cmp.initialConfig,
-         clone:(e.shiftKey),
          internal : true,
          source   : cmp
        }; 
@@ -902,15 +901,14 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
       var cmp = this.getDesignElement(this.getTarget(e),true);
       this.selectElement(cmp);
       var el=cmp.getEl();
-      data.clone=(e.shiftKey);
-      if (data.internal && !data.clone) {
+      if (data.internal && !e.shiftKey) {
         //Only allow move if not within same container
         if (this.isElementOf(cmp,data.source,true)) return false;
         data.drop = this.isContainer(cmp) ? "move" : 
          (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "movebefore" : "moveafter");
         return (data.drop=='movebefore' ?  "icon-element-move-before" :
           (data.drop=='moveafter'  ? "icon-element-move-after"  : "icon-element-move"));
-      } else {
+      } else { //Clone
         data.drop = this.isContainer(cmp) ? "append" : 
          (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "appendbefore" : "appendafter");
         return (data.drop=='appendbefore' ?  "icon-element-add-before" :

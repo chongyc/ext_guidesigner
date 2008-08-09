@@ -583,6 +583,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
       * Clean null elements from json object
       */
      deleteJsonNull : function(json) {
+       return json;
        var c=0;      
        for (var k in json) {
          if(!this.useHasOwn || json.hasOwnProperty(k)) {
@@ -593,8 +594,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                 var o = this.deleteJsonNull(a[i]);
                 if (o!=null) n.push(o); 
               }
-              json[k] = (n.length>0) ? n : null; 
-             } else json[k]=this.deleteJsonNull(json[k]);
+              json[k] = (n.length>0) ? n : {}; //Was null but form crashed on it
+             } else json[k]=this.deleteJsonNull(json[k]) || {};
            }
            if (json[k]===null) {
              delete json[k];
