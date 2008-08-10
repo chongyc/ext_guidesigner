@@ -238,10 +238,12 @@ Ext.ux.plugin.CookieFiles = Ext.extend(Ext.ux.plugin.FileControl,{
  * PHPFiles
  */
 Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
+  url : "phpFiles.php",  
+  baseDir : "json",
     
   refreshFiles : function (callback) {
     Ext.Ajax.request({
-      url: this.url || "backend.php",
+      url: this.url,
       params: {
          cmd: 'get_files',
          baseDir: this.baseDir
@@ -256,7 +258,7 @@ Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
 
   saveChanges : function(id,action,callback,content) {  
     Ext.Ajax.request({
-       url: this.url || "backend.php",
+       url: this.url,
        params: {
          cmd: 'save_changes',
          baseDir: this.baseDir,
@@ -281,7 +283,7 @@ Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
 
   openFile : function(id,callback,content) {
     Ext.Ajax.request({
-      url: this.url || "backend.php",
+      url: this.url,
       params: {
         cmd: 'get_content',
         baseDir: this.baseDir,
@@ -717,6 +719,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Boolean} Indicator that update was applied
    */
   redrawElement : function (element,selectId) {
+    alert('Redraw');
     var el = element || this.activeElement;
     if (el) {
       try {
@@ -942,10 +945,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   setPropertyGrid : function(propertyGrid) {
     this.propertyGrid = propertyGrid;
     this.propertyGrid.jsonScope = this.getJsonScope();
-    propertyGrid.on('beforepropertychange', function() {
+    propertyGrid.on('beforepropertychange', function(source,id,value,oldvalue) {
         this.markUndo();
     },this);
-    propertyGrid.on('propertychange', function() {
+    propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
+        if (id=='json') this.jsonInit(this.decode(value));
         this.redrawElement(this.activeElement);
     }, this);
   },

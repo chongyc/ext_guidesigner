@@ -281,8 +281,7 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
       var propType = this.getPropertyType(prop);
       if (!type && propType) type=propType.type;
       if (typeof(this.source[this.jsonId + prop])!='undefined' ||
-       ['object','function','mixed'].indexOf(type)!=-1 ||
-       !propType) {
+       ['object','function','mixed'].indexOf(type)!=-1 || !propType) {
          this.source[this.jsonId + prop] = value;
          try {
           //Set the jsonScope to be used during eval

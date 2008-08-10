@@ -50,6 +50,7 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
   You can now use the designer as panel, JSON can contain javascript and information
   of base info is stored in special tag Window. enabling auto create window/frame see show code
  */
+ var phpSupport;
  var designer = new Ext.Viewport({
 	layout : 'border',
 	items: [ /* When adding region west toolbox is renderd to this area
@@ -78,7 +79,7 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 					  toolboxTarget : 'toolbox',
 					  disableCaching : true,
 					  customProperties : true
-					  , fileControl      : new Ext.ux.plugin.CookieFiles()
+					 , fileControl      : phpSupport ? new Ext.ux.plugin.PHPFiles() : new Ext.ux.plugin.CookieFiles()
 					//, autoLoad         : 'json/myjson.json'
 					})
 				  ]

@@ -38,6 +38,37 @@ Ext.override(Ext.Panel,{
     }
 });
 
+
+/**
+ * Override Ext.FormPanel so that in case whe create a form without items from a json
+ * it still has a item list.
+ */
+Ext.override(Ext.FormPanel, {
+    // private
+    initFields : function(){
+        //BEGIN FIX It can happend that there is a form created without items (json)
+        this.initItems(); 
+        //END FIX
+        var f = this.form;
+        var formPanel = this;
+        var fn = function(c){
+            if(c.doLayout && c != formPanel){
+                Ext.applyIf(c, {
+                    labelAlign: c.ownerCt.labelAlign,
+                    labelWidth: c.ownerCt.labelWidth,
+                    itemCls: c.ownerCt.itemCls
+                });
+                if(c.items){
+                    c.items.each(fn);
+                }
+            }else if(c.isFormField){
+                f.add(c);
+            }
+        }
+        this.items.each(fn);
+    }
+});
+
 /**
  * A Synchronized Content loader for data from url
  * @param {String} url The url to load synchronized
@@ -298,27 +329,23 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
            //Clear out orignal content of container
            while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
            if (items instanceof Array) {
-             for (var i=0;i<items.length;i++) this.jsonInit(items[i].json);
              el.add.apply(el,items);
            } else if (!this.isEmptyObject(items)) { 
-             this.jsonInit(items.json);
              el.add(items);
-           } 
+           }
          } else {
-           //This is not a container so try to update element using jsonInit construction
-           this.jsonInit(items.json,el);
            this.jsonInit(items,el);
          }
        }
-       if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
+      if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      } catch (e) {   
       throw e;
      } finally {
       if (this.loadMask && el.ownerCt) el.ownerCt.el.unmask();
      }
-     return items;
+      return items;
     },
-
+    
    /**
     * Convert a Json to a editableJson by adding an edtiableId when set
     * @param {Object/String} json The json to add an id to
@@ -594,8 +621,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                 var o = this.deleteJsonNull(a[i]);
                 if (o!=null) n.push(o); 
               }
-              json[k] = (n.length>0) ? n : {}; //Was null but form crashed on it
-             } else json[k]=this.deleteJsonNull(json[k]) || {};
+              json[k] = (n.length>0) ? n : null; //Was null but form crashed on it
+             } else json[k]=this.deleteJsonNull(json[k]);
            }
            if (json[k]===null) {
              delete json[k];
