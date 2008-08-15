@@ -588,7 +588,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
        }
        v += value;   
        var scope = this.getJsonScope(); 
-       var items = eval("(" + v + ")");
+       var items = v ? eval("(" + v + ")") : null;
        if(items && items.json) { 
           items.json = eval("(" + items.json + ")");
           this.jsonInit(items.json,null,null,true);
@@ -660,7 +660,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
        var items = this.decodeAsString(json);
        //Now we can do decode by using eval setting scope
        var scope = this.getJsonScope();
-       items = applyJsonId(eval("(" + json + ")"),items); 
+       items = applyJsonId(json ? eval("(" + json + ")") : {},items); 
        if(items) this.jsonInit(items.json); 
        return items;
      },

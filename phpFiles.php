@@ -102,7 +102,7 @@ class phpFiles {
 
   function get_content($filename) {
     if($this->is_json_file($filename))
-      echo file_get_contents($this->baseDir.$filename);
+      echo file_get_contents($this->baseDir."/".$filename);
   }
 
   function save_changes($filename,$action,$content) {
@@ -111,7 +111,7 @@ class phpFiles {
     }
 
     if($action=='delete'){
-      $full_name=$this->baseDir.$filename;
+      $full_name=$this->baseDir."/".$filename;
       if(file_exists($full_name)) {
         unlink($full_name);
         die('1');

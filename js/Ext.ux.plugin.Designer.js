@@ -227,8 +227,8 @@ Ext.ux.plugin.CookieFiles = Ext.extend(Ext.ux.plugin.FileControl,{
     this.cookies.set('Designer.files',this.files);
   },
 
-  openFile : function(id,callback,content) {
-    content = unescape(this.cookies.get('Designer/' + id));
+  openFile : function(id,callback) {
+    var content = unescape(this.cookies.get('Designer/' + id));
     Ext.ux.plugin.CookieFiles.superclass.openFile.call(this,id,callback,content)
   }
     
@@ -281,7 +281,7 @@ Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
     }); 
   },
 
-  openFile : function(id,callback,content) {
+  openFile : function(id,callback) {
     Ext.Ajax.request({
       url: this.url,
       params: {
