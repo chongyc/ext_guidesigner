@@ -461,30 +461,29 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
 // Fix problem for now that ds.indexOf can return -1, throwning exception
     getView : function(){
-            if(!this.view){
-                this.view = Ext.apply(new Ext.grid.GridView(this.viewConfig),{ 
-                   refreshRow : function(record){
-                       var ds = this.ds, index;
-                       if(typeof record == 'number'){
-                           index = record;
-                           record = ds.getAt(index);
-                       }else{
-                           index = ds.indexOf(record);
-                       }
-                       if (index!=-1) {
-                         var cls = [];
-                         this.insertRows(ds, index, index, true);
-                         this.getRow(index).rowIndex = index;
-                         this.onRemove(ds, record, index+1, true);
-                         this.fireEvent("rowupdated", this, index, record);
-                       }
-                   }
-                }); 
-            }
-            return this.view;
-    },
+      if(!this.view){
+          this.view = Ext.apply(new Ext.grid.GridView(this.viewConfig),{ 
+             refreshRow : function(record){
+                 var ds = this.ds, index;
+                 if(typeof record == 'number'){
+                     index = record;
+                     record = ds.getAt(index);
+                 }else{
+                     index = ds.indexOf(record);
+                 }
+                 if (index!=-1) {
+                   var cls = [];
+                   this.insertRows(ds, index, index, true);
+                   this.getRow(index).rowIndex = index;
+                   this.onRemove(ds, record, index+1, true);
+                   this.fireEvent("rowupdated", this, index, record);
+                 }
+             }
+          }); 
+      }
+      return this.view;
+    }
     
-        
 });    
 
 //Is not registered but required by designer
