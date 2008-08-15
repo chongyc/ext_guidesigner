@@ -719,7 +719,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
    * @return {Boolean} Indicator that update was applied
    */
   redrawElement : function (element,selectId) {
-    alert('Redraw');
     var el = element || this.activeElement;
     if (el) {
       try {

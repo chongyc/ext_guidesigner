@@ -85,7 +85,7 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
      * @private Override the init of ComboBox so that local data store is used
      */
     initComponent  : function(){
-        Ext.form.ComboBox.superclass.initComponent.call(this);
+        Ext.ux.form.SimpleCombo.superclass.initComponent.call(this);
         if(!this.store && this.data){
             this.store = new Ext.data.SimpleStore({
                 fields: ['value','name','cls'],
@@ -98,7 +98,7 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
     setList : function(list){
       data = [];
       if (list) {
-        for (var i=0;i<list.length;i++) {data.push([list[i],list[i]])};
+        for (var i=0;i<list.length;i++) {data.push([list[i],list[i],null])};
       }
       this.store.loadData(data,false);
     },
@@ -108,7 +108,7 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
      * the rawValues is returned
      */
     getValue : function (){
-      return Ext.form.ComboBox.superclass.getValue.call(this) || 
+      return Ext.ux.form.SimpleCombo.superclass.getValue.call(this) || 
         (this.customProperties ? this.getRawValue() : '');
     }
 
@@ -233,6 +233,17 @@ Ext.ux.form.ScriptEditor = Ext.extend(Ext.BoxComponent, {
 });
 Ext.reg('scripteditor', Ext.ux.form.ScriptEditor);
 
+Ext.ux.grid.PropertyRecord = Ext.data.Record.create([
+    {name:'name',type:'string'}, 'value' , 'type'
+]);
+
+Ext.ux.grid.PropertyStore = function(grid, source){
+    Ext.ux.grid.PropertyStore.superclass.constructor.call(this,grid,source);
+    this.store = new Ext.data.Store({
+        recordType : Ext.ux.grid.PropertyRecord
+    });
+    this.store.on('update', this.onUpdate,  this);    
+};
 
 Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     jsonId : "__JSON__",
@@ -241,8 +252,7 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
       if (this.grid && this.grid.getPropertyType) return this.grid.getPropertyType(name);
       return null;
     },
-
-
+    
     // protected - should only be called by the grid.  Use grid.setSource instead.
     setSource : function(o){
         this.source = o;
@@ -260,7 +270,6 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         }
         this.store.loadRecords({records: data}, {}, true);
     },
-    
     
     // private
     onUpdate : function(ds, record, type){
@@ -296,8 +305,8 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     },
 
     setValue : function(prop, value){
-        this.updateSource(prop,value);
         this.store.getById(prop).set('value', value);
+        this.updateSource(prop,value);
     }
     
 });
@@ -354,9 +363,8 @@ Ext.extend(Ext.ux.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
             return this.editors['number'];
         }else if(typeof val == 'boolean'){
             return this.editors['boolean'];
-        }else{
-            return this.defaultEditor || this.editors[prop ? 'string' : 'mixed'];
         }
+        return this.defaultEditor || this.editors[prop ? 'string' : 'mixed'];
     },
     
     valueRenderer  : function(value, p, r) {
@@ -449,7 +457,34 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     getSource : function(){
         return this.propStore.getSource();
-    }
+    },
+    
+// Fix problem for now that ds.indexOf can return -1, throwning exception
+    getView : function(){
+            if(!this.view){
+                this.view = Ext.apply(new Ext.grid.GridView(this.viewConfig),{ 
+                   refreshRow : function(record){
+                       var ds = this.ds, index;
+                       if(typeof record == 'number'){
+                           index = record;
+                           record = ds.getAt(index);
+                       }else{
+                           index = ds.indexOf(record);
+                       }
+                       if (index!=-1) {
+                         var cls = [];
+                         this.insertRows(ds, index, index, true);
+                         this.getRow(index).rowIndex = index;
+                         this.onRemove(ds, record, index+1, true);
+                         this.fireEvent("rowupdated", this, index, record);
+                       }
+                   }
+                }); 
+            }
+            return this.view;
+    },
+    
+        
 });    
 
 //Is not registered but required by designer

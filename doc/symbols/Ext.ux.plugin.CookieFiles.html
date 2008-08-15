@@ -9,7 +9,7 @@
     </div>
     
     <div class="inheritance res-block"><pre class="res-block-inner">
-<a ext:cls="Ext.util.Observable" ext_member="" href="Ext.util.Observable">Ext.util.Observable</a>
+<a ext:cls="Ext.ux.plugin.FileControl" ext_member="" href="symbols/Ext.ux.plugin.FileControl.html">Ext.ux.plugin.FileControl</a>
 <img src="resources/elbow-end.gif"/>Ext.ux.plugin.CookieFiles
 </pre></div>
     <h1>Class Ext.ux.plugin.CookieFiles</h1>     
@@ -18,7 +18,7 @@
         <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.plugin.CookieFiles" ext:member="" href="src/GuiBuilder_js_Ext.ux.plugin.Designer.js.html">Ext.ux.plugin.Designer.js</a></td></tr>
         <tr><td class="label">Class:</td><td class="hd-info">CookieFiles</td></tr>
 <!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
-        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.plugin.CookieFiles" ext:member="" href="Ext.util.Observable">Ext.util.Observable</a></td></tr>        
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.plugin.CookieFiles" ext:member="" href="symbols/Ext.ux.plugin.FileControl.html">Ext.ux.plugin.FileControl</a></td></tr>        
     </table>
     
     <div class="description">
@@ -108,7 +108,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>reset</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <b>refreshFiles</b>(&nbsp;<code> callback</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
                     <div class="long">
@@ -116,6 +116,11 @@
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
+                            
+                                <li>
+                                    <code>callback</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
                             
                             </ul>
                                                         
@@ -129,7 +134,7 @@
             </td>
             <td class="msource">
                 CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#reset" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
+                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#refreshFiles" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
             </td>
         </tr>
                 
@@ -182,11 +187,11 @@
             </td>
         </tr>
                 
-        <tr class="method-row expandable">
+        <tr class="method-row expandable inherited">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>openFile</b>(&nbsp;<code> fileInfo,  callback</code>&nbsp;) : void                                
+                <b>openFile</b>(&nbsp;<code> id,  callback,  content</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
                     <div class="long">
@@ -196,7 +201,51 @@
                             <ul>
                             
                                 <li>
-                                    <code>fileInfo</code> : 
+                                    <code>id</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>callback</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>content</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.plugin.FileControl" ext:member="Ext.ux.plugin.FileControl#openFile" href="symbols/Ext.ux.plugin.FileControl.html">FileControl</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>deleteFile</b>(&nbsp;<code> id,  callback</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>id</code> : 
                                     <div class="sub-desc">&nbsp;</div>                                   
                                 </li>
                             
@@ -216,51 +265,12 @@
                 </div>
             </td>
             <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#openFile" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
+                
+                <a class="" ext:cls="Ext.ux.plugin.FileControl" ext:member="Ext.ux.plugin.FileControl#deleteFile" href="symbols/Ext.ux.plugin.FileControl.html">FileControl</a>
             </td>
         </tr>
                 
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>deleteFile</b>(&nbsp;<code> fileInfo,  callback</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>fileInfo</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#deleteFile" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
+        <tr class="method-row expandable inherited">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
@@ -299,16 +309,16 @@
                 </div>
             </td>
             <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#renameFile" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
+                
+                <a class="" ext:cls="Ext.ux.plugin.FileControl" ext:member="Ext.ux.plugin.FileControl#renameFile" href="symbols/Ext.ux.plugin.FileControl.html">FileControl</a>
             </td>
         </tr>
                 
-        <tr class="method-row expandable">
+        <tr class="method-row expandable inherited">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>saveFile</b>(&nbsp;<code> fileInfo,  content,  callback</code>&nbsp;) : void                                
+                <b>saveFile</b>(&nbsp;<code> id,  content,  callback</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
                     <div class="long">
@@ -318,7 +328,7 @@
                             <ul>
                             
                                 <li>
-                                    <code>fileInfo</code> : 
+                                    <code>id</code> : 
                                     <div class="sub-desc">&nbsp;</div>                                   
                                 </li>
                             
@@ -343,16 +353,16 @@
                 </div>
             </td>
             <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#saveFile" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
+                
+                <a class="" ext:cls="Ext.ux.plugin.FileControl" ext:member="Ext.ux.plugin.FileControl#saveFile" href="symbols/Ext.ux.plugin.FileControl.html">FileControl</a>
             </td>
         </tr>
                 
-        <tr class="method-row expandable">
+        <tr class="method-row expandable inherited">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>newFile</b>(&nbsp;<code> fileInfo,  content,  callback</code>&nbsp;) : void                                
+                <b>newFile</b>(&nbsp;<code> id,  content,  callback</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
                     <div class="long">
@@ -362,7 +372,7 @@
                             <ul>
                             
                                 <li>
-                                    <code>fileInfo</code> : 
+                                    <code>id</code> : 
                                     <div class="sub-desc">&nbsp;</div>                                   
                                 </li>
                             
@@ -387,16 +397,16 @@
                 </div>
             </td>
             <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#newFile" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
+                
+                <a class="" ext:cls="Ext.ux.plugin.FileControl" ext:member="Ext.ux.plugin.FileControl#newFile" href="symbols/Ext.ux.plugin.FileControl.html">FileControl</a>
             </td>
         </tr>
                 
-        <tr class="method-row expandable">
+        <tr class="method-row expandable inherited">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>load</b>(&nbsp;<code> node,  callback</code>&nbsp;) : void                                
+                <b>load</b>(&nbsp;<code> node,  callback,  refresh</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
                     <div class="long">
@@ -415,6 +425,11 @@
                                     <div class="sub-desc">&nbsp;</div>                                   
                                 </li>
                             
+                                <li>
+                                    <code>refresh</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
                             </ul>
                                                         
                             <strong>Returns:</strong>
@@ -426,47 +441,8 @@
                 </div>
             </td>
             <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#load" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
-            </td>
-        </tr>
                 
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>loadNodes</b>(&nbsp;<code> node,  append</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>node</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>append</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                CookieFiles
-                <a class="x-hidden" ext:cls="Ext.ux.plugin.CookieFiles" ext:member="Ext.ux.plugin.CookieFiles#loadNodes" href="symbols/Ext.ux.plugin.CookieFiles.html">CookieFiles</a>
+                <a class="" ext:cls="Ext.ux.plugin.FileControl" ext:member="Ext.ux.plugin.FileControl#load" href="symbols/Ext.ux.plugin.FileControl.html">FileControl</a>
             </td>
         </tr>
                                                           

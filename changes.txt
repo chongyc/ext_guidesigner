@@ -1,12 +1,10 @@
 TODO
  - Add a visual resize option to item
  - Add Grid Wirzard
- - Add loading page when initailizing index.html en index.php
  - Make toolbox global if required, so only one exits by screen
  - Label is not selected after alter
  - Add warning when adding second item to root
  - JSON Path should always be relative, directory protection
- - Clean old code from subversion
  - Enable reorder from code tree
  - Changing Xtype to json makes error, variable k
  - Drop element when not allowed, element is removed
@@ -26,7 +24,9 @@ TODO
   * JsonInit is removed from redraw to increase performance
   * Made code override for Ext.FormPanel so it does not crash on a empty item list
   - Moved ExtJs to seperate folder, so you can choose your version of extjs
- 
+  - Cleaned old code from subversion
+  + Workarround for error in property grid throwing error variable k
+
 
  Version 2.0.5:
   * Fixed problem in CodePress and Designer with path
