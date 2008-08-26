@@ -1,7 +1,30 @@
+ /*
+  * Author: Sierk Hoeksma. WebBlocks.eu
+  * Copyright 2007-2008, WebBlocks.  All rights reserved.
+  *
+  * This file implements a property grid which is used on the edit panel of designer
+  ************************************************************************************
+  *   This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY;
+  *   without even the implied warranty of MERCHANTABILITY or
+  *   FITNESS FOR A PARTICULAR PURPOSE.
+  ************************************************************************************
+
+  License: This source is licensed under the terms of the Open Source LGPL 3.0 license.
+  Commercial use is permitted to the extent that the code/component(s) do NOT become
+  part of another Open Source or Commercially licensed development library or toolkit
+  without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
+
+  * Donations are welcomed: http://donate.webblocks.eu
+  */
+
 Ext.namespace('Ext.ux.grid');
 Ext.namespace('Ext.ux.form');
 Ext.namespace('Ext.ux.tree');
 
+/**
+ * Extend Ext.tree.TreeLoader to enable loading of the designer Components
+ * The name of the element is created based on components data
+ */
 Ext.ux.tree.CodeLoader = function(designer,config) {
    Ext.apply(this, config);
    this.designer = designer;
@@ -9,15 +32,13 @@ Ext.ux.tree.CodeLoader = function(designer,config) {
 };
 
 Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
+ // @private jsonId is the id used to store the original code
  jsonId : '__JSON__',
- 
- load : function(node, callback){ 
-     while(node.firstChild) node.removeChild(node.firstChild);
-     if(this.doLoad(node,this.designer.getConfig())){
-       if(typeof callback == "function") callback();
-     }
-  },
   
+  /**
+   * Convert an element into a self explaining name
+   * @param c {component} The component for which to create a name
+   */
   elementToText : function(c) {
       var txt = [];
       c = c || {};
@@ -31,6 +52,15 @@ Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
       return (txt.length == 0 ? "Element" : txt.join(" "));
   },
   
+ // @private load is called when content of tree should be reloaded
+ load : function(node, callback){ 
+     while(node.firstChild) node.removeChild(node.firstChild);
+     if(this.doLoad(node,this.designer.getConfig())){
+       if(typeof callback == "function") callback();
+     }
+  },
+ 
+  // @private the interal loop used to go through the data and build a tree
   doLoad : function(node,data){
     if(data){
       node.beginUpdate();
@@ -95,6 +125,10 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
         this.tpl = '<tpl for="."><div class="x-combo-list-item {cls}">{' + this.displayField + '}</div></tpl>';
     },
     
+    /**
+     * A fast loading function for element in combobox. 
+     * @param list {Array} a list of elements which are convert into name,value pairs for combobox.
+     */
     setList : function(list){
       data = [];
       if (list) {
@@ -104,8 +138,9 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
     },
     
     /**
-     * @private Override the getValue so that when customProperties is set
+     * Override the getValue so that when customProperties is set
      * the rawValues is returned
+     * @return {Object} Based the entered key the combobox value or when not found and customProperties is true the raw entered value
      */
     getValue : function (){
       return Ext.ux.form.SimpleCombo.superclass.getValue.call(this) || 
@@ -233,7 +268,12 @@ Ext.ux.form.ScriptEditor = Ext.extend(Ext.BoxComponent, {
 });
 Ext.reg('scripteditor', Ext.ux.form.ScriptEditor);
 
-Ext.ux.grid.PropertyRecord = Ext.data.Record.create([
+/**
+ * The propertyrecord used by the property grid. 
+ * Name is the key of a property, Value is the value of the property and
+ * type is type of element. This type flag will control which editor is loaded
+ */
+ Ext.ux.grid.PropertyRecord = Ext.data.Record.create([
     {name:'name',type:'string'}, 'value' , 'type'
 ]);
 
@@ -457,33 +497,7 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     getSource : function(){
         return this.propStore.getSource();
-    },
-    
-// Fix problem for now that ds.indexOf can return -1, throwning exception
-    getView : function(){
-      if(!this.view){
-          this.view = Ext.apply(new Ext.grid.GridView(this.viewConfig),{ 
-             refreshRow : function(record){
-                 var ds = this.ds, index;
-                 if(typeof record == 'number'){
-                     index = record;
-                     record = ds.getAt(index);
-                 }else{
-                     index = ds.indexOf(record);
-                 }
-                 if (index!=-1) {
-                   var cls = [];
-                   this.insertRows(ds, index, index, true);
-                   this.getRow(index).rowIndex = index;
-                   this.onRemove(ds, record, index+1, true);
-                   this.fireEvent("rowupdated", this, index, record);
-                 }
-             }
-          }); 
-      }
-      return this.view;
-    }
-    
+    } 
 });    
 
 //Is not registered but required by designer

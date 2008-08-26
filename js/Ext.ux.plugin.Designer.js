@@ -374,7 +374,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */",
    
   //@private The version of the designer
-  version : '2.0.6',
+  version : '2.0.7',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -949,7 +949,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
         if (id=='json') this.jsonInit(this.decode(value));
-        this.redrawElement(this.activeElement);
+        //this.redrawElement(this.activeElement);
+        this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);
   },
   

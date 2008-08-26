@@ -6,7 +6,6 @@ TODO
  - Add warning when adding second item to root
  - JSON Path should always be relative, directory protection
  - Enable reorder from code tree
- - Changing Xtype to json makes error, variable k
  - Drop element when not allowed, element is removed
  - Drop element in tabpanel throws error this.el , notifyover
  - See if it is possible to ignore xtype error when type does not exists
@@ -14,6 +13,9 @@ TODO
  - Update documentation
  
  Change History:
+ Version 2.0.7:
+  + Found a good solotion for property grid error
+ 
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon
   + index.php is added again to release, wraps index.html
@@ -26,7 +28,6 @@ TODO
   - Moved ExtJs to seperate folder, so you can choose your version of extjs
   - Cleaned old code from subversion
   + Workarround for error in property grid throwing error variable k
-
 
  Version 2.0.5:
   * Fixed problem in CodePress and Designer with path
