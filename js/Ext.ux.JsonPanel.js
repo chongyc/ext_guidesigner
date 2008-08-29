@@ -188,6 +188,9 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
     jsonId : null, 
     //@private Last id used to create json
     lastJsonId : 0,
+    
+    //@private Temporary varaible for testing the new jsonparser
+    useParser  : true,
 
     
     //@private The maximum number of json histories to keep
@@ -514,9 +517,11 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
          a.push("{\n");
          for (var i in o) {
            v = o[i];   
+           
            //Check if key (i) is an internal jsonId and original is empty then use this
            if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) {
              var orgK = i.substring(this.jsonId.length);
+             
              if (orgK && typeof(o[orgK])=='undefined' && v) {
                 if(b) a.push(',\n'); 
                 a.push(this.indentStr(indent), orgK, " : ", this.scriptStart,v,this.scriptEnd);
@@ -556,7 +561,388 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
          return a.join("");
        }
      },
+     
+     /**
+      * Function returning the scope to beused for the json
+      * @return {Object} 
+      */
+     getJsonScope : function(){
+       return  this.jsonScope || this.scope || this;  
+     },
+     
+     /**
+      * Clean null elements from json object
+      */
+     deleteJsonNull : function(json) {
+       var c=0;      
+       for (var k in json) {
+         if(!this.useHasOwn || json.hasOwnProperty(k)) {
+           if (k=='items') {
+             if (json[k] instanceof Array) {
+              var n =[];
+              for (var i=0,a=json[k];i<a.length;i++) {
+                var o = this.deleteJsonNull(a[i]);
+                if (o!=null) n.push(o); 
+              }
+              json[k] = (n.length>0) ? n : null; //Was null but form crashed on it
+             } else json[k]=this.deleteJsonNull(json[k]);
+           }
+           if (json[k]===null) {
+             delete json[k];
+           } else {
+             c++;
+           }
+         }
+       }
+       return c ? json : null;
+     },
 
+     
+     /**
+      * Parse function for parsing json into objects
+      * parsing will go in four stages. 
+      * First stage the json is parsed and code is transformed into strings
+      * Second stage All empty objects are removed
+      * Third stage the json key of the main object (if exists) is evaluated 
+      *   to check if stylesheets or javascipt should be loaded
+      * Fourth stage the code objects are evaluated and there code is stored as __json__[key]
+      */
+      parse : function (text) {
+          var at = 0;
+          var ch = ' ';
+          var self = this;
+          var isCode = false;
+     
+          function error(m) {
+              var e = new SyntaxError(m);
+              e.at = at - 1;
+              e.text = text;
+              throw e;
+          }
+     
+          function next() {
+              ch = text.charAt(at);
+              at += 1;
+              return ch;
+          }
+          
+          function prev(count) {
+              at -= count ? count : 1;
+              ch = text.charAt(at);
+              at += 1;
+              return ch;
+          }
+     
+          function wordMatch(word,offset) {
+            if (typeof(offset)=='undefined') offset = -1;
+            var i=0;
+            for (;i<word.length && text.charAt(at+i+offset)==word.charAt(i);i++) {}
+            if (i>=word.length) {
+              at += offset+i;
+              next();
+              return true;
+            }
+            return false;
+          }
+     
+          function white() {
+              while (ch) {
+                  if (ch <= ' ') {
+                      next();
+                  } else if (ch == '/') {
+                      switch (next()) {
+                          case '/':
+                              while (next() && ch != '\n' && ch != '\r') {}
+                              break;
+                          case '*':
+                              next();
+                              for (;;) {
+                                  if (ch) {
+                                      if (ch == '*') {
+                                          if (next() == '/') {
+                                              next();
+                                              break;
+                                          }
+                                      } else {
+                                          next();
+                                      }
+                                  } else {
+                                      error("Unterminated comment");
+                                  }
+                              }
+                              break;
+                          default:
+                              prev(2);
+                              return;
+                      }
+                  } else {
+                      break;
+                  }
+              }
+          }
+     
+          function singleWord(){
+            var s = ch;
+            while (next() && ": \t\n\r.-+={(".indexOf(ch)==-1) {s+= ch}
+            return s;
+          }
+     
+          function string(qoute) {
+              qoute = qoute || ch;
+              var start=at-1,i, s = '', t, u;
+     
+              if (ch == qoute) {
+      outer:          while (next()) {
+                      if (ch == qoute) {
+                          next();
+                          return s;
+                      } else if (ch == '\\') {
+                          switch (next()) {
+                          case 'b':
+                              s += '\b';
+                              break;
+                          case 'f':
+                              s += '\f';
+                              break;
+                          case 'n':
+                              s += '\n';
+                              break;
+                          case 'r':
+                              s += '\r';
+                              break;
+                          case 't':
+                              s += '\t';
+                              break;
+                          case 'u':
+                              u = 0;
+                              for (i = 0; i < 4; i += 1) {
+                                  t = parseInt(next(), 16);
+                                  if (!isFinite(t)) {
+                                      break outer;
+                                  }
+                                  u = u * 16 + t;
+                              }
+                              s += String.fromCharCode(u);
+                              break;
+                          default:
+                              s += ch;
+                          }
+                      } else {
+                          s += ch;
+                      }
+                  }
+              }
+              error("Bad string " + text.substring(start,at-1));
+          }
+     
+          function array(asCode) {
+              var start=at-1,a = [];
+     
+              if (ch == '[') {
+                  next();
+                  white();
+                  if (ch == ']') {
+                      next();
+                      return a;
+                  }
+                  while (ch) {
+                      a.push(value(asCode));
+                      white();
+                      if (ch == ']') {
+                          next();
+                          return a;
+                      } else if (ch != ',') {
+                          break;
+                      }
+                      next();
+                      white();
+                  }
+              }
+              error("Bad array " + text.substring(start,at-1));
+          }
+     
+          function object(asCode) {
+              var start=at-1,k, o = {};
+     
+              if (ch == '{') {
+                  next();
+                  white();
+                  if (ch == '}') {
+                      next();
+                      return o;
+                  }
+                  while (ch) {
+                      k = ch=='"' || ch=="'" ? string() : singleWord();
+                      white();
+                      if (ch != ':') {
+                          break;
+                      }
+                      next();
+                      white();
+                      start = at-1;
+                      o[k] = value(k!='items');
+                      if (o[k]===null) {
+                        delete o[k];
+                      } else if (k=='json' && asCode) {
+                        self.jsonInit(o[k],null,null,true);
+                      } else if (asCode && self.jsonId && isCode) { 
+                         o[self.jsonId + k] = text.substring(start,at-1);
+                      }
+                      
+                      white();
+                      if (ch == '}') {
+                          next();
+                          return o;
+                      } else if (ch != ',') {
+                          break;
+                      }
+                      next();
+                      white();
+                  }
+              }
+              error("Bad object ["+k+"]" + text.substring(start,at-1));
+          }
+     
+          function number() {
+              var n = '', v;
+              if (ch == '-') {
+                  n = '-';
+                  next();
+              }
+              while (ch >= '0' && ch <= '9') {
+                  n += ch;
+                  next();
+              }
+              if (ch == '.') {
+                  n += '.';
+                  while (next() && ch >= '0' && ch <= '9') {
+                      n += ch;
+                  }
+              }
+              if (ch == 'e' || ch == 'E') {
+                  n += 'e';
+                  next();
+                  if (ch == '-' || ch == '+') {
+                      n += ch;
+                      next();
+                  }
+                  while (ch >= '0' && ch <= '9') {
+                      n += ch;
+                      next();
+                  }
+              }
+              v = +n;
+              if (!isFinite(v)) {
+                  ////error("Bad number");
+              } else {
+                  return v;
+              }
+          }
+     
+          function codeBlock(){
+            while (next()) {
+              white();
+              switch (ch) {
+                case '}' :
+                  return;
+                case '{' :
+                  codeBlock();
+                  break;
+                case '"' :
+                case "'" :
+                  string();
+                  at--;
+              }
+            }
+          }
+     
+          function paramBlock(){
+            while (next()) {
+              white();
+              switch (ch) {
+                case '{' :
+                  codeBlock();
+                  break;
+                case ')' :
+                  return;
+                case '(' :
+                  paramBlock();
+                  break;
+                case '"' :
+                case "'" :
+                  string();
+                  at--;
+              }
+            }
+          }
+     
+          function code(){
+            //Search for , or } ]
+            at--; //restart code block
+            var start = at;
+            while (next()){
+              white();
+              switch (ch) {
+                case '(' :
+                  paramBlock();
+                  break;
+                case '{' :
+                  codeBlock();
+                  break;
+                case '"' :
+                case "'" :
+                  string();
+                  break;
+                case ',' :
+                case ']' :
+                case '}' :
+                  var lastCode = text.substring(start,at-1);
+                  try {
+                    var scope = self.getJsonScope();
+                    return eval("(" + lastCode + ")");
+                  } catch (e) {                    
+                    error("Invalid code:" + lastCode);
+                  }
+                  
+              }
+            }
+          }
+     
+          function other() {
+              if (wordMatch('true')) return true;
+              else if (wordMatch('false')) return false;
+              else if (wordMatch('null')) return null;
+              else {
+                var c = code();
+                isCode=true;
+                return c;
+              }
+          }
+     
+          function value(asCode) {
+              isCode=false;
+              white();
+              switch (ch) {
+                  case '{':
+                      return object(asCode);
+                  case '[':
+                      return array(asCode);
+                  case '"':
+                  case "'":
+                      return string(ch);
+                  case '-':
+                      return number();
+                  default:
+                      return ch >= '0' && ch <= '9' ? number() : other();
+              }
+          }            
+        var v = value(true);
+        white();
+        if (ch) error("Invalid Json");
+        (new Ext.Window({title: 'test',layout:'fit',x : 10, y : 10, width:600, height : 450,items:{xtype:'textarea',value:this.encode(v)}})).show();
+        return v;
+     },
+     
      /**
       * Decode json evaluating Json tag (required_js,required_css) returning all elements as string
       * @param {String} value The string to decode
@@ -597,49 +983,15 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
        //When jsonId is set convert changed fields to jsonId+key=StringValue
        return items;
      },
-     
-     /**
-      * Function returning the scope to beused for the json
-      * @return {Object} 
-      */
-     getJsonScope : function(){
-       return  this.jsonScope || this.scope || this;  
-     },
-     
-     /**
-      * Clean null elements from json object
-      */
-     deleteJsonNull : function(json) {
-       return json;
-       var c=0;      
-       for (var k in json) {
-         if(!this.useHasOwn || json.hasOwnProperty(k)) {
-           if (k=='items') {
-             if (json[k] instanceof Array) {
-              var n =[];
-              for (var i=0,a=json[k];i<a.length;i++) {
-                var o = this.deleteJsonNull(a[i]);
-                if (o!=null) n.push(o); 
-              }
-              json[k] = (n.length>0) ? n : null; //Was null but form crashed on it
-             } else json[k]=this.deleteJsonNull(json[k]);
-           }
-           if (json[k]===null) {
-             delete json[k];
-           } else {
-             c++;
-           }
-         }
-       }
-       return c ? json : null;
-     },
-     
+
+
      /**
       * Decode json evaluating Json tag (required_js,required_css) 
       * @param {String} value The string to decode
       * @return {Object} The decoded object
       */
      decode : function(json) {
+      if (this.useParser) return this.parse(json);
        var applyJsonId=function(o,j) {
          if (!this.jsonId) return o;
          for (var i in o) {
@@ -663,8 +1015,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
        items = applyJsonId(json ? eval("(" + json + ")") : {},items); 
        if(items) this.jsonInit(items.json); 
        return items;
-     },
-
+     },     
+     
     /**
      * Function used to clone a object
      * @param {Object} o the object to be cloned
@@ -791,8 +1143,15 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,Ext.applyIf({
 Ext.reg('jsonpanel', Ext.ux.JsonPanel);
 
 
-/* FOR NOW WE COPY CODE TO ALSO HAVE A WINDOW, WE NEED TO FIND A SOLUTION */
+/**
+ * JsonWindow implements a way to load a json directly into a window
+ * The window config elements of this window for example x,y can be set 
+ * by specifing the values in the json tag
+ */
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
+
+ //TODO REMOVE THIS JUST FOR TESTING
+ jsonId : '_JSON_', 
 
  //@private Window is hidden by moving X out of screen
  x     : -1000,
@@ -839,19 +1198,29 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
    });
  },
  
+ /**
+  * Set the x position of window
+  * @param x {number} the postion in pixels
+  */
  setX : function(x) {
    this.setPosition(x,this.y);
  },
  
+ /**
+  * Set the y position of window
+  * @param y {number} the postion in pixels
+  */
  setY : function(y) {
     this.setPosition(this.x,y);
  },
  
+ //@private internal function to call allignTo with array
  setAlignTo : function(arg) {
    this.alignTo(arg[0],arg[1],arg[2]);
  },
  
- setAnchorTo : function(ar) {
+ //@private internal function to call anchorTo with array
+ setAnchorTo : function(arg) {
    this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
  },
  
@@ -860,6 +1229,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
   * @private We override the render function of the panel, so that the updater.renderer is changed to accept JSON
   * @param {Component} ct The component to render
   * @param {Object} position A object containing the position of the component
+  * @see For more information about usages see jsonpanel
   */
  onRender : function(ct, position){
   Ext.ux.JsonWindow.superclass.onRender.call(this, ct, position);
