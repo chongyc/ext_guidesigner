@@ -933,7 +933,10 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
         var v = value(false);
         white();
         if (ch) error("Invalid Json");
-        (new Ext.Window({title: 'test',layout:'fit',x : 10, y : 10, width:600, height : 450,items:{xtype:'textarea',value:this.encode(v)}})).show();
+        (new Ext.Window({title: 'test',layout:'fit',x : 10, y : 10, width:600, height : 450,
+          //items:{xtype:'textarea',value:this.encode(v)}
+          items:v
+         })).show();
         return v;
         } catch (e) {alert(e)};
      },
