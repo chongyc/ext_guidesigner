@@ -612,6 +612,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
           var ch = ' ';
           var self = this;
           var isCode = false;
+          var lastCode;
      
           function error(m) {
               var e = new SyntaxError(m);
@@ -783,10 +784,11 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                       o[k] = value(k!='items');
                       if (o[k]===null) {
                         delete o[k];
-                      } else if (k=='json' && asCode) {
+                      } else if (k=='json') {
+                        o[self.jsonId + k] = lastCode;
                         self.jsonInit(o[k],null,null,true);
-                      } else if (asCode && self.jsonId && isCode) { 
-                         o[self.jsonId + k] = text.substring(start,at-1);
+                      } else if (self.jsonId && isCode && k!='items') { 
+                         o[self.jsonId + k] = lastCode;
                       }
                       
                       white();
@@ -839,34 +841,20 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
               }
           }
      
-          function codeBlock(){
+          function codeBlock(breaker){
             while (next()) {
               white();
               switch (ch) {
-                case '}' :
-                  return;
-                case '{' :
-                  codeBlock();
-                  break;
-                case '"' :
-                case "'" :
-                  string();
-                  at--;
-              }
-            }
-          }
-     
-          function paramBlock(){
-            while (next()) {
-              white();
-              switch (ch) {
-                case '{' :
-                  codeBlock();
-                  break;
-                case ')' :
+                case breaker :
                   return;
                 case '(' :
-                  paramBlock();
+                  codeBlock(')');
+                  break;
+                case '[' :
+                  codeBlock(']');
+                  break;
+                case '{' :
+                  codeBlock('}');
                   break;
                 case '"' :
                 case "'" :
@@ -875,19 +863,24 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
               }
             }
           }
-     
+          
           function code(){
             //Search for , or } ]
             at--; //restart code block
             var start = at;
+            var wat;
             while (next()){
+              wat = at;
               white();
               switch (ch) {
                 case '(' :
-                  paramBlock();
+                  codeBlock(')');
+                  break;
+                case '[' :
+                  codeBlock(']');
                   break;
                 case '{' :
-                  codeBlock();
+                  codeBlock('}');
                   break;
                 case '"' :
                 case "'" :
@@ -896,7 +889,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                 case ',' :
                 case ']' :
                 case '}' :
-                  var lastCode = text.substring(start,at-1);
+                  lastCode = text.substring(start,wat-1);
                   try {
                     var scope = self.getJsonScope();
                     return eval("(" + lastCode + ")");
@@ -924,9 +917,9 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
               white();
               switch (ch) {
                   case '{':
-                      return object(asCode);
-                  case '[':
-                      return array(asCode);
+                    return asCode ? other() : object(asCode);
+                  case '[' :
+                    return asCode ? other() : array(asCode);
                   case '"':
                   case "'":
                       return string(ch);
@@ -935,12 +928,14 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                   default:
                       return ch >= '0' && ch <= '9' ? number() : other();
               }
-          }            
-        var v = value(true);
+          }          
+        try {  
+        var v = value(false);
         white();
         if (ch) error("Invalid Json");
         (new Ext.Window({title: 'test',layout:'fit',x : 10, y : 10, width:600, height : 450,items:{xtype:'textarea',value:this.encode(v)}})).show();
         return v;
+        } catch (e) {alert(e)};
      },
      
      /**
