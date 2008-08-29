@@ -923,22 +923,14 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                   case '"':
                   case "'":
                       return string(ch);
-                  case '-':
-                      return number();
                   default:
-                      return ch >= '0' && ch <= '9' ? number() : other();
+                      return "-.0123456789".indexOf(ch)>=0 ? number() : other();
               }
           }          
-        try {  
         var v = value(false);
         white();
         if (ch) error("Invalid Json");
-        (new Ext.Window({title: 'test',layout:'fit',x : 10, y : 10, width:600, height : 450,
-          //items:{xtype:'textarea',value:this.encode(v)}
-          items:v
-         })).show();
         return v;
-        } catch (e) {alert(e)};
      },
      
      /**
@@ -989,28 +981,32 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
       * @return {Object} The decoded object
       */
      decode : function(json) {
-      if (this.useParser) return this.parse(json);
-       var applyJsonId=function(o,j) {
-         if (!this.jsonId) return o;
-         for (var i in o) {
-           if(!this.useHasOwn || o.hasOwnProperty(i)) {
-            if (i=='items') {
-              for (var k=0,len=o.items.length;k<len;k++){
-                 o.items[k] = applyJsonId(o.items[k],j.items[k]);
+      var items;
+      if (this.useParser) {
+         items = this.parse(json);
+       } else {
+         var applyJsonId=function(o,j) {
+           if (!this.jsonId) return o;
+           for (var i in o) {
+             if(!this.useHasOwn || o.hasOwnProperty(i)) {
+              if (i=='items') {
+                for (var k=0,len=o.items.length;k<len;k++){
+                   o.items[k] = applyJsonId(o.items[k],j.items[k]);
+                }
+              }
+              else if (j[this.jsonId+i]) {
+               o[this.jsonId+i] = j[this.jsonId+i];
               }
             }
-            else if (j[this.jsonId+i]) {
-             o[this.jsonId+i] = j[this.jsonId+i];
-            }
-          }
-         }
-         return o;
-       }.createDelegate(this);
-       this.addJsonHistory(json);
-       var items = this.decodeAsString(json);
-       //Now we can do decode by using eval setting scope
-       var scope = this.getJsonScope();
-       items = applyJsonId(json ? eval("(" + json + ")") : {},items); 
+           }
+           return o;
+         }.createDelegate(this);
+         this.addJsonHistory(json);
+         items = this.decodeAsString(json);
+         //Now we can do decode by using eval setting scope
+         var scope = this.getJsonScope();
+         items = applyJsonId(json ? eval("(" + json + ")") : {},items); 
+       }
        if(items) this.jsonInit(items.json); 
        return items;
      },     
@@ -1147,10 +1143,7 @@ Ext.reg('jsonpanel', Ext.ux.JsonPanel);
  * by specifing the values in the json tag
  */
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,Ext.applyIf({
-
- //TODO REMOVE THIS JUST FOR TESTING
- jsonId : '_JSON_', 
-
+ 
  //@private Window is hidden by moving X out of screen
  x     : -1000,
  //@private Window is hidden by moving Y out of screen
