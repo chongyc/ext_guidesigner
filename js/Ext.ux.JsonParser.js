@@ -33,11 +33,17 @@ Ext.ux.JsonParser = function(config){
  */
 Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{   
     /** 
+     * The string used to indent   
+     * @type {String} 
+     @cfg */
+    indentString : '  ',
+
+    /** 
      * Should the result of a encode be readable   
      * @type {Boolean} 
      @cfg */
     readable : true,
-
+    
     /**
      * The custom licenseText that should be added to each JSON File Created
      * @type {String}
@@ -314,7 +320,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      indentStr : function(n) {
        var str = "", i = 0;
        while (i<n) {
-         str += '  ';
+         str += this.indentString;
          i++;
        }
        return str;
