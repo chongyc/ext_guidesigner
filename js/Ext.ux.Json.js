@@ -22,7 +22,7 @@
  * Constuctor for the JsonParser
  * @param {Object} config The configuration used to intialize the parser.
  */
-Ext.ux.JsonParser = function(config){
+Ext.ux.Json = function(config){
   Ext.apply(this, config);
   Ext.ux.JsonParser.superclass.constructor.call(this);
   this.init();
@@ -31,7 +31,7 @@ Ext.ux.JsonParser = function(config){
 /**
  * A class used by JsonPanel and JsonWindow to load a jsonFile
  */
-Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{   
+Ext.ux.Json = Ext.extend(Ext.util.Observable,{   
     /** 
      * The string used to indent   
      * @type {String} 
@@ -795,4 +795,4 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
 /**
  * Create global object 
  */
-Ext.ux.Json = new Ext.ux.JsonParser();
+Ext.ux.json = new Ext.ux.Json();
