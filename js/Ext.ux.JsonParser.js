@@ -40,10 +40,13 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      */
     useHasOwn : ({}.hasOwnProperty ? true : false),
     
-    //@private The internal tag used to create unique, when null no id is generated
+    /**
+     * The internal tag added to an objectkey used to store original code of a objectvalue,
+     * when null the original code is not stored and encode will not be able to recreate
+     * javascript code.
+     * @type {String}
+     @cfg */
     jsonId : null, 
-    //@private Last id used to create json
-    lastJsonId : 0,
     
     /**
      * Load one or more javascripts. Is trigger by root element window.required_js in json file. 
