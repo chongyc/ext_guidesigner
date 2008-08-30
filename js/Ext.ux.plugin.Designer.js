@@ -688,13 +688,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     var id = this.activeElement ? this.activeElement[this.jsonId] : null;
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
-    items = this.deleteJsonNull(items);
     this.container.codeConfig.items=[this.editableJson(items)];
-    this.applyJson(items,this.container); //Recreate childs
-    this.redrawContainer=false;
+    this.redrawElement(this.container);
     this.modified = true;
     this.fireEvent('newconfig');
-    this.selectElement(this.findByJsonId(id));
     return true;
   },
   

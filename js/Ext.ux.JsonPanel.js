@@ -249,6 +249,34 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      for (var i in obj) {if (i!=this.jsonId)  return false;}
      return true;
     },
+
+    /**
+      * Clean null elements from json object
+      */
+     deleteJsonNull : function(json) {
+       var c=0;      
+       for (var k in json) {
+         if(!this.useHasOwn || json.hasOwnProperty(k)) {
+           if (k=='items') {
+             if (json[k] instanceof Array) {
+              var n =[];
+              for (var i=0,a=json[k];i<a.length;i++) {
+                var o = this.deleteJsonNull(a[i]);
+                if (o!=null) n.push(o); 
+              }
+              json[k] = (n.length>0) ? n : null; 
+             } else json[k]=this.deleteJsonNull(json[k]);
+           }
+           if (json[k]===null) {
+             delete json[k];
+           } else {
+             c++;
+           }
+         }
+       }
+       return c ? json : null;
+     },
+
     
    /**
     * Apply the Json to given element
@@ -263,6 +291,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
        var items = this.jsonId ? this.editableJson(json) : json || {};
        if (typeof(items) !== 'object') items = this.decode(json);
        if (items) {
+         items = this.deleteJsonNull(items);        
          //Apply global json vars to element
          if (el instanceof Ext.Container) {
            //Clear out orignal content of container
@@ -312,7 +341,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
            if (typeof(items[k]) == 'function') {
              items[this.jsonId + k]=String(items[k]);
            } else if (typeof(items[k]) == 'object' && k!='items') {
-            items[this.jsonId + k] = Ext.ux.JSON.encode(items[k]);
+            items[this.jsonId + k] = this.encode(items[k]);
            } 
          } 
        }
@@ -479,35 +508,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
       */
      getJsonScope : function(){
        return  this.jsonScope || this.scope || this;  
-     },
-     
-     /**
-      * Clean null elements from json object
-      */
-     deleteJsonNull : function(json) {
-       var c=0;      
-       for (var k in json) {
-         if(!this.useHasOwn || json.hasOwnProperty(k)) {
-           if (k=='items') {
-             if (json[k] instanceof Array) {
-              var n =[];
-              for (var i=0,a=json[k];i<a.length;i++) {
-                var o = this.deleteJsonNull(a[i]);
-                if (o!=null) n.push(o); 
-              }
-              json[k] = (n.length>0) ? n : null; //Was null but form crashed on it
-             } else json[k]=this.deleteJsonNull(json[k]);
-           }
-           if (json[k]===null) {
-             delete json[k];
-           } else {
-             c++;
-           }
-         }
-       }
-       return c ? json : null;
-     },
-
+     },     
      
      /**
       * Decode function for parsing json text into objects
