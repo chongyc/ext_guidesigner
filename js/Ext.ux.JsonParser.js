@@ -33,10 +33,10 @@ Ext.ux.JsonParser = function(config){
  */
 Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{   
     /** 
-     * The string used to indent   
-     * @type {String} 
+     * Should the result of a encode be readable   
+     * @type {Boolean} 
      @cfg */
-    indentString : '  ',
+    readable : true,
 
     /**
      * The custom licenseText that should be added to each JSON File Created
@@ -259,7 +259,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
     apply : function (json,el,clean) {
      var items;
      try {
-       items = this.jsonId ? this.editableJson(json) : json || {};
+       items = this.jsonId ? this.editable(json) : json || {};
        if (typeof(items) !== 'object') items = this.decode(json);
        if (items) {
          if (clean!==false) items = this.clean(items);        
@@ -314,7 +314,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      indentStr : function(n) {
        var str = "", i = 0;
        while (i<n) {
-         str += this.indentString;
+         str += '  ';
          i++;
        }
        return str;
@@ -367,6 +367,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
       * @return {String} The object encode as string
       */  
     encode : function(o,indent,keepJsonId,noLicense){       
+       if (!this.readable) return Ext.encode(o);
        indent = indent || 0;
        if(typeof o == "undefined" || o === null){
            return "null";
