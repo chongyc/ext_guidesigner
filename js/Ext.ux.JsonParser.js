@@ -18,6 +18,15 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
+/**
+ * Constuctor for the JsonParser
+ * @param {Object} config The configuration used to intialize the parser.
+ */
+Ext.ux.JsonParser = function(config){
+  Ext.apply(this, config);
+  Ext.ux.JsonParser.superclass.constructor.call(this);
+  this.init();
+};
 
 /**
  * A class used by JsonPanel and JsonWindow to load a jsonFile
@@ -34,12 +43,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      * @type {String}
      @cfg */
     licenseText  : null,
-    
-    /**
-     * @private Indicator if object hasOwnProperty
-     */
-    useHasOwn : ({}.hasOwnProperty ? true : false),
-    
+        
     /**
      * The internal tag added to an objectkey used to store original code of a objectvalue,
      * when null the original code is not stored and encode will not be able to recreate
@@ -47,6 +51,66 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      * @type {String}
      @cfg */
     jsonId : null, 
+
+    /**
+     * @private Indicator if object hasOwnProperty
+     */
+    useHasOwn : ({}.hasOwnProperty ? true : false),
+    
+    /**
+     * Called from within the constructor allowing to initialize the parser
+     */
+    init: function() {
+        this.addEvents({
+          /**
+           * Fires when there is a parsing error
+           * @event error
+           * @param {String} func The function throwing the error
+           * @param {Object} error The error object created by parser
+           * @return {Boolean} when true the error is supressed
+           */
+          'error' : false,
+          
+          /**
+           * Fires before a json is been applied to a visual component
+           * @event beforeapply
+           * @param {Object} element The visual component
+           * @param {Object} json The json used
+           */
+          'beforeapply' : true,
+          
+          /**
+           * Fires after a json has been applied to a visual component
+           * @event afterapply
+           * @param {Object} element The visual component
+           * @param {Object} json The json used
+           */
+          'afterapply' : true
+        });
+     },
+
+     /**
+      * Function returning the scope to beused for the json
+      * @return {Object} the object which should be used as scope when parsing
+      */
+     getJsonScope : function(){
+       return  this.jsonScope || this.scope || this;  
+     },     
+
+    /**
+     * Check if a object is empty, ignoring jsonId keys
+     * @param {Object} obj The json object to be checked
+     * @return {Boolean} true when object does not contain any data
+     */
+    isEmpty : function(obj) {
+     for (var i in obj) {
+       if ((!this.useHasOwn || obj.hasOwnProperty(i)) && 
+           (!this.jsonId || i.indexOf(this.jsonId)!=0)) {
+          return false;
+       }
+     }
+     return true;
+    },
     
     /**
      * Load one or more javascripts. Is trigger by root element window.required_js in json file. 
@@ -119,18 +183,13 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      return allSet;
     },
     
-    /**
-     * Check if a object is empty
-     */
-    isEmptyObject : function(obj) {
-     for (var i in obj) {if (i!=this.jsonId)  return false;}
-     return true;
-    },
 
   /**
-   * @private Clean null elements from json object
+   * @private Clean the null elements from json object
+   * @param {Object} json The json object to be cleaned
+   * @return {Object} The cleaned json object;
    */
-   deleteJsonNull : function(json) {
+   clean : function(json) {
      var c=0;      
      for (var k in json) {
        if(!this.useHasOwn || json.hasOwnProperty(k)) {
@@ -138,11 +197,11 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
            if (json[k] instanceof Array) {
             var n =[];
             for (var i=0,a=json[k];i<a.length;i++) {
-              var o = this.deleteJsonNull(a[i]);
+              var o = this.clean(a[i]);
               if (o!=null) n.push(o); 
             }
             json[k] = (n.length>0) ? n : null; 
-           } else json[k]=this.deleteJsonNull(json[k]);
+           } else json[k]=this.clean(json[k]);
          }
          if (json[k]===null) {
            delete json[k];
@@ -154,62 +213,24 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
      return c ? json : null;
    },
 
-    
    /**
-    * Apply the Json to given element
-    * @param {Object/String} json The json to apply
-    * @param {Element} element The element to apply the json to
-    * @return {Object} The elements applied
-    */
-    applyJson : function (json,element) {
-     var el = element || this;
-     try {
-       if (this.loadMask && el.ownerCt) el.ownerCt.el.mask(this.loadMsg, this.msgCls);
-       var items = this.jsonId ? this.editableJson(json) : json || {};
-       if (typeof(items) !== 'object') items = this.decode(json);
-       if (items) {
-         items = this.deleteJsonNull(items);        
-         //Apply global json vars to element
-         if (el instanceof Ext.Container) {
-           //Clear out orignal content of container
-           while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
-           if (items instanceof Array) {
-             el.add.apply(el,items);
-           } else if (!this.isEmptyObject(items)) { 
-             el.add(items);
-           }
-         } else {
-           this.jsonInit(items,el);
-         }
-       }
-      if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
-     } catch (e) {   
-      throw e;
-     } finally {
-      if (this.loadMask && el.ownerCt) el.ownerCt.el.unmask();
-     }
-      return items;
-    },
-    
-   /**
-    * Convert a Json to a editableJson by adding an edtiableId when set
+    * Convert a Json to a editable Json by adding an jsonId when set to each object
     * @param {Object/String} json The json to add an id to
-    * @param {Object} id The id object used to give id
-    * @return {Object} The decoded object with id
+    * @return {Object} The decoded object with new ids
     */
-    editableJson : function(json) {
+    editable : function(json) {
      var items = json || {};
      if (typeof(items) !== 'object') items = this.decode(json);
+     if (!this.jsonId) return items;
      if (items instanceof Array) {
        for (var i=0;i<items.length;i++) {
-        items[i]=this.editableJson(items[i]);
+        items[i]=this.editable(items[i]);
        }
        return items;
      }
-     if (this.jsonId) {
-       if (!items[this.jsonId]) {
-         items[this.jsonId]=Ext.id();
-       }
+     //Check if the object is allready editable
+     if (!items[this.jsonId]) {
+       items[this.jsonId]=Ext.id();
        for (var k in items) {      
          if (k.indexOf(this.jsonId)==0 && k!=this.jsonId) {
            var orgK = k.substring(this.jsonId.length);
@@ -218,15 +239,53 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
            if (typeof(items[k]) == 'function') {
              items[this.jsonId + k]=String(items[k]);
            } else if (typeof(items[k]) == 'object' && k!='items') {
-            items[this.jsonId + k] = this.encode(items[k]);
+             items[this.jsonId + k] = this.encode(items[k]);
            } 
          } 
        }
-       if (items.items) items.items=this.editableJson(items.items);
      }
+     if (items.items) items.items=this.editable(items.items);
      return items;
     },
 
+
+   /**
+    * Apply the Json to given visual element
+    * @param {Object/String} json The json to apply
+    * @param {Element} el The element to apply the json to
+    * @param {Boolean} clean When false object will not be cleaned, defaults true
+    * @return {Object} The elements applied
+    */
+    apply : function (json,el,clean) {
+     var items;
+     try {
+       items = this.jsonId ? this.editableJson(json) : json || {};
+       if (typeof(items) !== 'object') items = this.decode(json);
+       if (items) {
+         if (clean!==false) items = this.clean(items);        
+         this.fireEvent('beforeapply',el,items);
+         //Apply global json vars to element
+         if (el instanceof Ext.Container) {
+           //Clear out orignal content of container
+           while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
+           if (items instanceof Array) {
+             el.add.apply(el,items);
+           } else if (!this.isEmpty(items)) { 
+             el.add(items);
+           }
+         } else {
+           this.jsonInit(items,el);
+         }
+       }
+      if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
+     } catch (e) {   
+      if (this.fireEvent('error','apply',e)!==true) throw e;
+     } finally {
+      this.fireEvent('afterapply',el,items);
+     }
+      return items;
+    },
+    
     /**
      * @private Encode a string to Json
      * @param {String} s The string to encode
@@ -378,15 +437,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
          return a.join("");
        }
      },
-     
-     /**
-      * Function returning the scope to beused for the json
-      * @return {Object} 
-      */
-     getJsonScope : function(){
-       return  this.jsonScope || this.scope || this;  
-     },     
-     
+          
      /**
       * Decode function for parsing json text into objects
       * The parsing contains four stages. 
@@ -396,9 +447,10 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
       *   to check if stylesheets or javascipt or scipe objects should be loaded
       * Fourth stage the code objects are checked if there code should be stored __json__[key]
       * @param {String} text The string to decode
+      * @param {Boolean} full Should parsing walk trough all object or just with key 'items', (defaults false)
       * @return {Object} The decoded object
       */
-     decode : function(text) {
+     decode : function(text,full) {
           var at = 0;
           var ch = ' ';
           var self = this;
@@ -484,7 +536,7 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
               var start=at-1,i, s = '', t, u;
      
               if (ch == qoute) {
-      outer:          while (next()) {
+           outer: while (next()) {
                       if (ch == qoute) {
                           next();
                           return s;
@@ -554,47 +606,47 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
           }
      
           function object(asCode) {
-              var start=at-1,k, o = {};
-     
-              if (ch == '{') {
-                  next();
-                  white();
-                  if (ch == '}') {
-                      next();
-                      return o;
-                  }
-                  while (ch) {
-                      k = ch=='"' || ch=="'" ? string() : singleWord();
-                      white();
-                      if (ch != ':') {
-                          break;
-                      }
-                      next();
-                      white();
-                      start = at-1;
-                      o[k] = value(k!='items');
-                      if (o[k]===null) {
-                        //Phase two remove empty object results
-                        delete o[k];
-                      } else if (isCode && k!='items') { 
-                         //Phase four save readable code for editing
-                         if (self.jsonId) o[self.jsonId + k] = lastCode;
-                         //Phase three load javascript, stylesheet and evalute scope objects
-                         if (k=='json') self.jsonInit(o[k]);
-                      }
-                      
-                      white();
-                      if (ch == '}') {
-                          next();
-                          return o;
-                      } else if (ch != ',') {
-                          break;
-                      }
-                      next();
-                      white();
-                  }
-              }
-              error("Bad object ["+k+"]" + text.substring(start,at-1));
+            var start=at-1,k, o = {};
+
+            if (ch == '{') {
+                next();
+                white();
+                if (ch == '}') {
+                    next();
+                    return o;
+                }
+                while (ch) {
+                    k = ch=='"' || ch=="'" ? string() : singleWord();
+                    white();
+                    if (ch != ':') {
+                        break;
+                    }
+                    next();
+                    white();
+                    start = at-1;
+                    o[k] = value(k!='items' );
+                    if (o[k]===null) {
+                      //Phase two remove empty object results
+                      delete o[k];
+                    } else if (isCode && k!='items') { 
+                       //Phase four save readable code for editing
+                       if (self.jsonId) o[self.jsonId + k] = lastCode;
+                       //Phase three load javascript, stylesheet and evalute scope objects
+                       if (k=='json') self.jsonInit(o[k]);
+                    }
+
+                    white();
+                    if (ch == '}') {
+                        next();
+                        return o;
+                    } else if (ch != ',') {
+                        break;
+                    }
+                    next();
+                    white();
+                }
+            }
+            error("Bad object ["+k+"]" + text.substring(start,at-1));
           }
      
           function number() {
@@ -655,9 +707,8 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
               }
             }
           }
-          
-          function code(){
-            //Search for , or } ]
+               
+          function code() {
             at--; //restart code block
             var start = at;
             var wat;
@@ -684,24 +735,15 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
                   lastCode = text.substring(start,wat-1);
                   try {
                     var scope = self.getJsonScope();
-                    return eval("(" + lastCode + ")");
+                    var c = eval("(" + lastCode + ")");
+                    isCode=true;
+                    return c;                        
                   } catch (e) {                    
                     error("Invalid code:" + lastCode);
                   }
-                  
               }
             }
-          }
-     
-          function other() {
-              if (wordMatch('true')) return true;
-              else if (wordMatch('false')) return false;
-              else if (wordMatch('null')) return null;
-              else {
-                var c = code();
-                isCode=true;
-                return c;
-              }
+            error('Unexpected end of code');
           }
      
           function value(asCode) {
@@ -709,20 +751,28 @@ Ext.ux.JsonParser = Ext.extend(Ext.util.Observable,{
               white();
               switch (ch) {
                   case '{':
-                    return asCode ? other() : object(asCode);
+                    return asCode && !full ? code() : object(false);
                   case '[' :
-                    return asCode ? other() : array(asCode);
+                    return asCode && !full ? code() : array(false);
                   case '"':
                   case "'":
-                      return string(ch);
+                    return string(ch);
                   default:
-                      return "-.0123456789".indexOf(ch)>=0 ? number() : other();
+                    if (wordMatch('true')) return true;
+                    else if (wordMatch('false')) return false;
+                    else if (wordMatch('null')) return null;
+                    else if ("-.0123456789".indexOf(ch)>=0) return  number();
+                    else code();
               }
           }          
-        var v = value(false);
-        white();
-        if (ch) error("Invalid Json");
-        return v;
+        try {  
+          var v = value(false);
+          white();
+          if (ch) error("Invalid Json");
+          return v;
+        } catch (e) {
+          if (this.fireEvent('error','decode',e)!==true) throw e;
+        }
      },
           
     /**
