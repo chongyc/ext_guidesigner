@@ -4,6 +4,8 @@ Ext.onReady(function(){
 	use( ['Ext::ux::Json::Parser'], function(use){		
 		plan({ tests: 2 });
 		
+		
+		diag('Basic operations:');
 		var a = Ext.ux.Json.Parser.decode('{ test1 : "test1", test2 : ["A1","A2"]}');
 
  		is(a.test1,'test1', 'String parsed');		 	
