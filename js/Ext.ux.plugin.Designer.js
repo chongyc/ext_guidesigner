@@ -371,10 +371,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
   
-  licenseText  :  "/* This file is created with Ext.ux.plugin.GuiDesigner */",
+  licenseText  :  "/* This file is created or modified with Ext.ux.plugin.GuiDesigner */",
    
   //@private The version of the designer
-  version : '2.0.7',
+  version : '2.1.0',
   
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -577,7 +577,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     } else {
      //Get the config of the items
      var ccmp,cmp= this.getDesignElement(el,true);
-     var items = this.editableJson(this.deleteJsonNull(this.clone(config)));
+     var items = this.editableJson(this.clone(config));
      //Find the container that should be changed
      ccmp = this.getContainer(cmp); 
      if (dropLocation == 'appendafter') {
@@ -948,8 +948,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
         this.markUndo();
     },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
+        //When somebody changed the json, then make sure we init the changes
         if (id=='json') this.jsonInit(this.decode(value));
-        //this.redrawElement(this.activeElement);
         this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);
   },
