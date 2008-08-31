@@ -55,11 +55,6 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      scope : null,
 
     /**
-     * @private Indicator if this version support hasOwnProperty
-     */
-    useHasOwn : ({}.hasOwnProperty ? true : false),
-    
-    /**
      * Called from within the constructor allowing to initialize the parser
      */
     init: function() {
