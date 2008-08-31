@@ -750,9 +750,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   lastCode = text.substring(start,wat-1);
                   try {
                     var scope = self.getScope();
-                    //Scope and this variable are now the same
-                   // this = scope;
-                    var c = eval("(" + lastCode + ")");
+                    //Scope and this variable are now the same by creating a delegate function
+                    var c,func = function(){c=eval("(" + lastCode + ")");}.createDelegate(scope);
+                    func();
                     isCode=true;
                     return c;                        
                   } catch (e) {                    

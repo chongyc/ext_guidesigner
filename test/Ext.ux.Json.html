@@ -15,7 +15,7 @@
 		<script>
 		  Ext.onReady(function(){
 			plan({ tests: 2 });
-		  //diag('Basic operations:');
+		    //diag('Basic operations:');
 			var a = Ext.ux.JSON.decode('{ test1 : "test1", test2 : ["A1","A2"]}');
 			is(a.test1,'test1', 'String parsed');
 			ok(a.test2[0] == 'A1' && a.test2[1] == 'A2', 'Array parsed');
