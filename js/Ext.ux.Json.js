@@ -128,7 +128,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     throw new Error('Failure during load');
                   }
                 } catch (e) {
-                  (this.fireEvent('error','load',e);
+                  this.fireEvent('error','load',e);
                 }
               },            
               scope: this        

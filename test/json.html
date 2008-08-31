@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css" />
+		<script type="text/javascript" src="../extjs/adapter/ext/ext-base.js"></script>
+		<script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
+
+		<script src="../lib/Test/Builder.js" type="text/javascript"></script>
+		<script src="../lib/Test/More.js" type="text/javascript"></script>
+
+		<!--The custom script to test -->
+		<script src="../js/Ext.ux.Util.js" type="text/javascript"></script>
+		<script src="../js/Ext.ux.Json.js" type="text/javascript"></script>
+
+		<!--The test function that fires when body is loaded -->
+		<script>
+		  Ext.onReady(function(){
+			plan({ tests: 2 });
+		  //diag('Basic operations:');
+			var a = Ext.ux.Json.decode('{ test1 : "test1", test2 : ["A1","A2"]}');
+			is(a.test1,'test1', 'String parsed');
+			ok(a.test2[0] == 'A1' && a.test2[1] == 'A2', 'Array parsed');
+
+		  });
+		</script>
+	</head>
+
+ 	<body>
+		<H1>JSON Parser test suite</H1>
+
+
+	</body>
+ </html>

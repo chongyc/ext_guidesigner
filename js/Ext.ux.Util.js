@@ -117,7 +117,7 @@ Ext.ux.Util = Ext.extend(Ext.util.Observable,{
    return true;
   }
 
-}
+});
 
 /**
  * Create global object 
