@@ -138,7 +138,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
 
 
    /**
-    * Function called to set config to object using values for items
+    * Function called to set the values of items to element using element functions
     * Special keys within the object are required_css and required_js
     * these keys can contain a comma seperated list of javascript or stylesheets
     * to load. Style sheets are loaded asynchone but javascript are loaded synchrone.
