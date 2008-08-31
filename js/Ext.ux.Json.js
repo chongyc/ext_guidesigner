@@ -756,7 +756,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   try {
                     var scope = self.getScope();
                     //Scope and this variable are now the same
-                    this = scope;
+                   // this = scope;
                     var c = eval("(" + lastCode + ")");
                     isCode=true;
                     return c;                        
@@ -813,4 +813,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
 /**
  * Create global object 
  */
-Ext.ux.JSON = new Ext.ux.Json();
+Ext.ux.JSON = new Ext.ux.Json({
+   jsonId:'__JSON__',
+   licenseText :'/* This file is created or modified by Ext.ux.Json */'
+});
