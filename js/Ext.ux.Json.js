@@ -19,19 +19,9 @@
   */
 
 /**
- * Constuctor for the JsonParser
- * @param {Object} config The configuration used to intialize the parser.
- */
-Ext.ux.Json = function(config){
-  Ext.apply(this, config);
-  Ext.ux.JsonParser.superclass.constructor.call(this);
-  this.init();
-};
-
-/**
  * A class used by JsonPanel and JsonWindow to load a jsonFile
  */
-Ext.ux.Json = Ext.extend(Ext.util.Observable,{   
+Ext.ux.Json = Ext.extend(Ext.ux.Util,{   
     /** 
      * The string used to indent   
      * @type {String} 
@@ -57,9 +47,15 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      * @type {String}
      @cfg */
     jsonId : null, 
+    
+    /**
+     * Scope is used as binding varaible for <b>this</b> within the json
+     * @type {Object}
+     @cfg */
+     scope : null,
 
     /**
-     * @private Indicator if object hasOwnProperty
+     * @private Indicator if this version support hasOwnProperty
      */
     useHasOwn : ({}.hasOwnProperty ? true : false),
     
@@ -67,40 +63,32 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      * Called from within the constructor allowing to initialize the parser
      */
     init: function() {
-        this.addEvents({
-          /**
-           * Fires when there is a parsing error
-           * @event error
-           * @param {String} func The function throwing the error
-           * @param {Object} error The error object created by parser
-           * @return {Boolean} when true the error is supressed
-           */
-          'error' : false,
-          
-          /**
-           * Fires before a json is been applied to a visual component
-           * @event beforeapply
-           * @param {Object} element The visual component
-           * @param {Object} json The json used
-           */
-          'beforeapply' : true,
-          
-          /**
-           * Fires after a json has been applied to a visual component
-           * @event afterapply
-           * @param {Object} element The visual component
-           * @param {Object} json The json used
-           */
-          'afterapply' : true
-        });
+      Ext.ux.Json.superclass.init.call(this);
+      this.addEvents({
+        /**
+         * Fires before a json is been applied to a visual component
+         * @event beforeapply
+         * @param {Object} element The visual component
+         * @param {Object} json The json used
+         */
+        'beforeapply' : true,
+
+        /**
+         * Fires after a json has been applied to a visual component
+         * @event afterapply
+         * @param {Object} element The visual component
+         * @param {Object} json The json used
+         */
+        'afterapply' : true
+      });
      },
 
      /**
       * Function returning the scope to beused for the json
       * @return {Object} the object which should be used as scope when parsing
       */
-     getJsonScope : function(){
-       return  this.jsonScope || this.scope || this;  
+     getScope : function(){
+       return  this.scope || this;  
      },     
 
     /**
@@ -117,71 +105,95 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
      }
      return true;
     },
-    
+        
     /**
-     * Load one or more javascripts. Is trigger by root element window.required_js in json file. 
-     * The javascripts are synchonrized load before the JSON is evaluated. Base on the config item
-     * disableCaching (defaults true) the url of the javascript to load is made unique with parameter _dc.
-     * @param {String} list A comma seperated list of javascripts to load
+     * Load a json object directly from url. Target can be a callback function or
+     * visual component. When target is not set load will be come a synchrone call
+     * @param {String/Object} url The url information to be used for loading 
+     * @param {function/Container} target A callback function or container to render json\
+     * @return {Object} null when target is set otherwise the loaded json.
      */
-    setRequired_js : function(list) {   
-     if (!list) return;
-     var files = list.split(',');
-     for (var f=0;f<files.length;f++) {
-     /* Must be converted into other function that loads external javascript file
-       if (!Ext.ux.ScriptLoader(files[f],this.disableCaching)) {
-          Ext.Msg.alert('Failure','Failed to load javascript '+ files[f]);
-       }
-     */  
-     }
-    },
-
-    /**
-     * Load one or more stylesheets. Is triggered by root element window.required_css in json file
-     * @param {String} list A comma seperated list of stylesheets to load
-     */
-    setRequired_css : function(list) {
-      if (!list) return;
-      var files = list.split(',');
-      for (var f=0;f<files.length;f++) {    
-        if(document.getElementById(files[f])) {continue;}
-        Ext.util.CSS.swapStyleSheet(files[f], files[f]);
-     }
+    load : function(url,target) {
+      if (target && target instanceof Ext.Container) {
+        return this.load(url,function(items){this.apply(target,items)}.createDelegate(this));
+      } else if (typeof(target)=='function') {
+        Ext.Ajax.request({
+              url: url,
+              callback: function(options, success, response) {
+                try {
+                  if (success) {
+                    var items = this.decode(response.responseText);
+                    if(typeof callback == "function") target(items);
+                  } else {
+                    throw new Error('Failure during load');
+                  }
+                } catch (e) {
+                  (this.fireEvent('error','load',e);
+                }
+              },            
+              scope: this        
+        });  
+        return null;
+      } else {
+        return this.decode((typeof(url)=='object') 
+                   ? this.syncContent(url.url,url.disableChaching) 
+                   : this.syncContent(url.url,false));           
+      }
     },
 
 
    /**
-    * Function called with config object of json file
-    * @param {Object} config The config object that can be applied
+    * Function called to set config to object using values for items
+    * Special keys within the object are required_css and required_js
+    * these keys can contain a comma seperated list of javascript or stylesheets
+    * to load. Style sheets are loaded asynchone but javascript are loaded synchrone.
+    * @param {Object} items The config object with items that should be set
+    * @param {Element} element The element to which to set the values
     * @return {Boolean} indicator if all changes where set
     */
-    jsonInit : function (config,element,scopeOnly) {
+    set : function (element,items,scopeOnly) {
      var allSet = true, el = element || this;
-     if (config) {
-      for (var i in config) {       
+     if (items) {
+      for (var i in items) {       
         var j = i;
           if (i=='required_js') { 
-            this.setRequired_js(config[i]);
+            if (items[i]) {
+              var files = items[i].split(',');
+              for (var f=0;f<files.length;f++) {    
+                if(document.getElementById(files[f])) {continue;}
+                if (!this.scriptLoader(files[f],false)) {
+                  var e = new Error('Failed to load javascript '+ files[f]);
+                  if (this.fireEvent('error','set',e)!==true)
+                    throw e;
+                }
+              }
+            }
           } else if (i=='required_css') {
-             this.setRequired_css(config[i]);
+            if (items[i]) {
+              var files = items[i].split(',');
+              for (var f=0;f<files.length;f++) {    
+                if(document.getElementById(files[f])) {continue;}
+                Ext.util.CSS.swapStyleSheet(files[f], files[f]);
+              }
+            }
           } else {
             var applyTo = el;
             //When scope of var set if
             if (i.indexOf('scope.')==0) {
                j = i.substring(6);
-               applyTo = this.getJsonScope();
+               applyTo = this.getScope();
             } else if (scopeOnly) continue;
             var k = 'set' + j.substring(0,1).toUpperCase() + j.substring(1);
             try {
               if (applyTo[k] && typeof applyTo[k] == 'function') {
-                applyTo[k].call(el,config[i]);
+                applyTo[k].call(el,items[i]);
               } else if (applyTo[j] && typeof applyTo[j] == 'function') {
-                applyTo[j].call(el,config[i]);
+                applyTo[j].call(el,items[i]);
               } else {
-                applyTo[j] = config[i];
+                applyTo[j] = items[i];
               }
             } catch (e) {
-              allSet = false;
+              allSet |= (this.fireEvent('error','set',e)===true);
             }
           }
       }
@@ -191,38 +203,38 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
     
 
   /**
-   * @private Clean the null elements from json object
-   * @param {Object} json The json object to be cleaned
-   * @return {Object} The cleaned json object;
+   * Clean the null elements from items object
+   * @param {Object} items The items object to be cleaned
+   * @return {Object} The cleaned items object
    */
-   clean : function(json) {
+   clean : function(items) {
      var c=0;      
-     for (var k in json) {
-       if(!this.useHasOwn || json.hasOwnProperty(k)) {
+     for (var k in items) {
+       if(!this.useHasOwn || items.hasOwnProperty(k)) {
          if (k=='items') {
-           if (json[k] instanceof Array) {
+           if (items[k] instanceof Array) {
             var n =[];
-            for (var i=0,a=json[k];i<a.length;i++) {
+            for (var i=0,a=items[k];i<a.length;i++) {
               var o = this.clean(a[i]);
               if (o!=null) n.push(o); 
             }
-            json[k] = (n.length>0) ? n : null; 
-           } else json[k]=this.clean(json[k]);
+            items[k] = (n.length>0) ? n : null; 
+           } else items[k]=this.clean(items[k]);
          }
-         if (json[k]===null) {
-           delete json[k];
+         if (items[k]===null) {
+           delete items[k];
          } else {
            c++;
          }
        }
      }
-     return c ? json : null;
+     return c ? items : null;
    },
 
    /**
     * Convert a Json to a editable Json by adding an jsonId when set to each object
-    * @param {Object/String} json The json to add an id to
-    * @return {Object} The decoded object with new ids
+    * @param {Object/String} json The json as text or object to add an id to
+    * @return {Object} The decoded object with id's added
     */
     editable : function(json) {
      var items = json || {};
@@ -262,7 +274,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
     * @param {Boolean} clean When false object will not be cleaned, defaults true
     * @return {Object} The elements applied
     */
-    apply : function (json,el,clean) {
+    apply : function (el,json,clean) {
      var items;
      try {
        items = this.jsonId ? this.editable(json) : json || {};
@@ -280,7 +292,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
              el.add(items);
            }
          } else {
-           this.jsonInit(items,el);
+           this.set(el,items);
          }
        }
       if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
@@ -319,7 +331,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
       */
      indentStr : function(n) {
        var str = "", i = 0;
-       while (i<n) {
+       while (this.readable && i<n) {
          str += this.indentString;
          i++;
        }
@@ -373,7 +385,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
       * @return {String} The object encode as string
       */  
     encode : function(o,indent,keepJsonId,noLicense){       
-       if (!this.readable) return Ext.encode(o);
+       var nl = this.readable ? "\n" : "";
+       var nc = this.readable ? " : ": "";
        indent = indent || 0;
        if(typeof o == "undefined" || o === null){
            return "null";
@@ -397,7 +410,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
          if (indent==0 && !noLicense) {
           if (this.licenseText) a.push(this.licenseText + "\n");
          }
-         a.push("{\n");
+         a.push("{" + nl);
          for (var i in o) {
            v = o[i];   
            
@@ -406,8 +419,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
              var orgK = i.substring(this.jsonId.length);
              
              if (orgK && typeof(o[orgK])=='undefined' && v) {
-                if(b) a.push(',\n'); 
-                a.push(this.indentStr(indent), orgK, " : ", v);
+                if(b) a.push(',' + nl); 
+                a.push(this.indentStr(indent), orgK, nc, v);
                 b = true;
              }
              continue; //internal id skip it during encode
@@ -415,8 +428,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
            //Create code for item
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
              if (this.jsonId && o[this.jsonId + i]) {
-                 if(b) a.push(',\n'); 
-                 a.push(this.indentStr(indent), i, " : ", o[this.jsonId + i]);
+                 if(b) a.push(',' + nl); 
+                 a.push(this.indentStr(indent), i, nc, o[this.jsonId + i]);
                  b = true;
              } else {               
                switch (typeof v) {
@@ -424,23 +437,23 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                  case "unknown":               
                      break;            
                  case "function":
-                   if(b) a.push(',\n'); 
-                   a.push(this.indentStr(indent), i, " : ", ""+v);
+                   if(b) a.push(',' + nl); 
+                   a.push(this.indentStr(indent), i, nc, ""+v);
                    b = true;
                    break;
                  case "object" :
                  case "string" :
                     if (!v) break; //Skip empty string and objects else default
                  default:
-                     if(b) a.push(',\n');
-                     a.push(this.indentStr(indent), i, " : ",
+                     if(b) a.push(',' + nl);
+                     a.push(this.indentStr(indent), i, nc,
                            v === null ? "null" : this.encode(v,indent + 1,keepJsonId));
                      b = true;
                }
              }
            }
          }
-         a.push("\n" + this.indentStr(indent-1) + "}");
+         a.push(nl + this.indentStr(indent-1) + "}");
          return a.join("");
        }
      },
@@ -639,7 +652,7 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                        //Phase four save readable code for editing
                        if (self.jsonId) o[self.jsonId + k] = lastCode;
                        //Phase three load javascript, stylesheet and evalute scope objects
-                       if (k=='json') self.jsonInit(o[k]);
+                       if (k=='json') self.set(self.getScope(),o[k]);
                     }
 
                     white();
@@ -741,7 +754,9 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
                 case '}' :
                   lastCode = text.substring(start,wat-1);
                   try {
-                    var scope = self.getJsonScope();
+                    var scope = self.getScope();
+                    //Scope and this variable are now the same
+                    this = scope;
                     var c = eval("(" + lastCode + ")");
                     isCode=true;
                     return c;                        
@@ -776,6 +791,8 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
           var v = value(false);
           white();
           if (ch) error("Invalid Json");
+          //Check if we should make the code editable
+          if (this.jsonId) v = this.editable(v);
           return v;
         } catch (e) {
           if (this.fireEvent('error','decode',e)!==true) throw e;
@@ -784,15 +801,16 @@ Ext.ux.Json = Ext.extend(Ext.util.Observable,{
           
     /**
      * Function used to clone a object
-     * @param {Object} o the object to be cloned
+     * IMPORTANT: works only when items are build with jsonid set
+     * @param {Object} items The object to be cloned
      * @return {Object} The cloned object
      */
-    clone : function(o) {
-      return this.decode(this.encode(o));
+    clone : function(items) {
+      return this.decode(this.encode(items));
     }
 });
 
 /**
  * Create global object 
  */
-Ext.ux.json = new Ext.ux.Json();
+Ext.ux.JSON = new Ext.ux.Json();
