@@ -292,6 +292,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        }
       if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      } catch (e) {   
+      alert('apply ' + e);
       if (this.fireEvent('error','apply',e)!==true) throw e;
      } finally {
       this.fireEvent('afterapply',el,items);

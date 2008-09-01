@@ -25,14 +25,13 @@
  */
 Ext.ux.Util = function(config){
   Ext.apply(this, config);
-  Ext.ux.Util.superclass.constructor.call(this);
   this.init();
 };
 
 /**
  * A class used by JsonPanel and JsonWindow to load a jsonFile
  */
-Ext.ux.Util = Ext.extend(Ext.util.Observable,{ 
+Ext.extend(Ext.ux.Util,Ext.util.Observable,{ 
 
   /**
    * Indicator if this version support hasOwnProperty
@@ -44,7 +43,6 @@ Ext.ux.Util = Ext.extend(Ext.util.Observable,{
    * Called from within the constructor allowing to initialize the parser
    */
   init: function() {
-      Ext.ux.Util.superclass.init.call(this);
       this.addEvents({
         /**
          * Fires when there is a parsing error

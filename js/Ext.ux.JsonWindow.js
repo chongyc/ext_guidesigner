@@ -18,26 +18,18 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-
+  
 /**
- * Component extending a panel giving it the capability to read or create a JSON file.
- * When using Json file created with designer this JsonPanel will also evaluate the special items 
- * under Json root called <b>winbow</b>. The JsonPanel currently evaluates two special window items 
- * called <i>required_js,required_css</i> that enable loading of javascripts and stylesheets directly from the json.
- *
- *<p>Example how to create a Json from a external file filling the browser:</p>
- * <pre><code>new Ext.Viewport({
-     items : new Ext.ux.JsonPanel({autoLoad:'json/designer.json'}),
-     layout: 'fit'
-   }).show();</code></pre>
- *<p>Example how to (re)load a JsonPanel that is allready loaded:</p>
- * <pre><code>this.load({url:'new url'});</code></pre>   
- * <p><b>IMPORTANT:</b>When you want use the JsonPanel to load a Json file in a local browser make sure that you include a
- * local xhr package like <a href="http://extjs.com/forum/showthread.php?t=10672">localXHR</a> or any other
- * to fix the problem of ExtJs not supporting Ajax from local file system</p>
- * @type component
+ * JsonWindow implements a way to load a json directly into a window
+ * The window config elements of this window for example x,y can be set 
+ * by specifing the values in the json tag
  */
-Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
+Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
+ 
+ //@private Window is hidden by moving X out of screen
+ x     : -1000,
+ //@private Window is hidden by moving Y out of screen
+ y     : -1000,
  
  //@private Layout is by default fit
  layout: 'fit',
@@ -47,7 +39,9 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
  
  //@private Whe only read a JSON file once
  single:true,  //only needed once
-   
+ 
+ //@private The json parser used is set in initComponent
+ json : null, 
  /**
   * @private Init the JSON Panel making sure caching is set depending on disableCaching 
   */
@@ -56,8 +50,8 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
      if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
      if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
    }                
-   Ext.ux.JsonPanel.superclass.initComponent.call(this);
-   
+   Ext.ux.JsonWindow.superclass.initComponent.call(this);
+   this.json = new Ext.ux.Json({scope:this});   
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel
@@ -78,40 +72,65 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
     'failedjsonload' : false
    });
  },
-
-
+ 
+ /**
+  * Set the x position of window
+  * @param x {number} the postion in pixels
+  */
+ setX : function(x) {
+   this.setPosition(x,this.y);
+ },
+ 
+ /**
+  * Set the y position of window
+  * @param y {number} the postion in pixels
+  */
+ setY : function(y) {
+    this.setPosition(this.x,y);
+ },
+ 
+ //@private internal function to call allignTo with array
+ setAlignTo : function(arg) {
+   this.alignTo(arg[0],arg[1],arg[2]);
+ },
+ 
+ //@private internal function to call anchorTo with array
+ setAnchorTo : function(arg) {
+   this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
+ },
+ 
+  
  /**
   * @private We override the render function of the panel, so that the updater.renderer is changed to accept JSON
   * @param {Component} ct The component to render
   * @param {Object} position A object containing the position of the component
+  * @see For more information about usages see jsonpanel
   */
  onRender : function(ct, position){
-  Ext.ux.JsonPanel.superclass.onRender.call(this, ct, position);
+  Ext.ux.JsonWindow.superclass.onRender.call(this, ct, position);
   var um = this.getUpdater();
   um.showLoadIndicator = false; //disable it.
   um.on('failure',function(el, response){
-    if (this.ownerCt) this.ownerCt.el.unmask();
-    this.fireEvent('failedjsonload',response)
+      if (this.ownerCt) this.ownerCt.el.unmask();
+      this.fireEvent('failedjsonload',response)
+    }.createDelegate(this));
+    um.on('beforeupdate',function(el, url, params) {
+     if (this.loadMask && this.ownerCt)
+       this.ownerCt.el.mask(this.loadMsg, this.msgCls);
   }.createDelegate(this));
-  um.on('beforeupdate',function(el, url, params) {
-   if (this.loadMask && this.ownerCt)
-     this.ownerCt.el.mask(this.loadMsg, this.msgCls);
-  }.createDelegate(this));
- 
+  
   um.setRenderer({render:
        function(el, response, updater, callback){
      //add item configs to the panel layout
         //Load the code to check if we should javascripts
         this.fireEvent('beforejsonload', response);
         try { 
-         // this.applyJson(response.responseText);           
-          Ext.ux.JSON.apply(this,response.responseText);
+          //this.applyJson(response.responseText); 
+          this.json.apply(this,response.responseText);
           this.fireEvent('afterjsonload');
-          this.ownerCt.el.unmask();
-
           if(callback) {callback();}
         } catch (e) {
-          this.ownerCt.el.unmask();
+          alert(e);
           if (!this.fireEvent('afterjsonload',response,e))
              Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
         }
@@ -120,5 +139,6 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
   }
 
 });
-//Register the panel
-Ext.reg('jsonpanel', Ext.ux.JsonPanel);
+
+//Register the window
+Ext.reg('jsonwindow', Ext.ux.JsonWindow);

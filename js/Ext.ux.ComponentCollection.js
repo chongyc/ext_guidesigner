@@ -18,19 +18,7 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
-/**
- * A simple implementation of the IFrame loading a url as content.
- * @type component
- */  
-Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
-    onRender : function(ct, position){
-        var url = this.url;
-        url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
-        this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: url});
-    }
-});
-Ext.reg('iframe', Ext.ux.IFrameComponent);
-
+Ext.namespace('Ext.ux.form');
 
 /**
  * A combo that can be filed by a single array. When customProperties is true
@@ -97,3 +85,17 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
 
 });
 Ext.reg('simplecombo', Ext.ux.form.SimpleCombo);
+
+
+/**
+ * A simple implementation of the IFrame loading a url as content.
+ * @type component
+ */  
+Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+    onRender : function(ct, position){
+        var url = this.url;
+        url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
+        this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: url});
+    }
+});
+Ext.reg('iframe', Ext.ux.IFrameComponent);

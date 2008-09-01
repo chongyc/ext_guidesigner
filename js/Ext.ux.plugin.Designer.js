@@ -17,63 +17,6 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
-Ext.override(Ext.form.Label, {   
-    onRender : function(ct, position){
-        if(!this.el){
-            this.el = document.createElement('label');
-            this.el.innerHTML = this.text ? Ext.util.Format.htmlEncode(this.text) : (this.html || '');
-            if(this.forId){
-                this.el.setAttribute('htmlFor', this.forId);
-            }
-            //Swap the ids, so it becomes selectable in designer
-            this.el.id = this.id;
-            this.id = this.id + '-';
-        }
-        Ext.form.Label.superclass.onRender.call(this, ct, position);
-    }
-});
-
-Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
-    onRender : function(ct, position){
-        var url = this.url;
-        url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
-        this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: url});
-    }
-});
-Ext.reg('iframe', Ext.ux.IFrameComponent);
-
-Ext.namespace('Ext.ux.tree');
-Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
- /**
-  * Create node but enabling childeren from Json
-  */
-  createNode : function(attr){
-    var childeren = attr.childeren;
-    delete attr.childeren;
-    if(this.baseAttrs){
-        Ext.applyIf(attr, this.baseAttrs);
-    }
-    if(this.applyLoader !== false){
-        attr.loader = this;
-    }
-    if(typeof attr.uiProvider == 'string'){
-       attr.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
-    }
-    if (!childeren) {
-      return(attr.leaf===false ? 
-            new Ext.tree.AsyncTreeNode(attr) : 
-            new Ext.tree.TreeNode(attr) );
-    } else {
-      var node = new Ext.tree.TreeNode(Ext.applyIf(attr,{draggable:false}));
-      for(var i = 0, len = childeren.length; i < len; i++){
-       var n = this.createNode(childeren[i]);
-       if(n) node.appendChild(n);
-      }
-      return node;
-    }
-  }
-});
-
 Ext.namespace('Ext.ux.plugin');
 
 /*
@@ -87,226 +30,14 @@ Ext.ux.plugin.DesignerWizard = function(json){
      (new Ext.Window(cache[json])).show();
   }
 }
-*/
-/**
- * FileControl
- */
-Ext.ux.plugin.FileControl = function(config) {
-  Ext.apply(this,config);
-  Ext.ux.plugin.FileControl.superclass.constructor.call(this);
-  this.init();
-}
-
-Ext.extend(Ext.ux.plugin.FileControl,Ext.util.Observable,{
-  files : {},
-  last  : null,
-  activeNode : null,
-  
-  init : function(){
-    this.refreshFiles();
-  },
-  
-  refreshFiles : function (callback) {
-    this.files = this.files || {};
-    if(typeof callback == "function") callback(true);
-  },
-  
-  saveChanges : function(id,action,callback,content) {
-    this.files[id] = id;
-    if (action=='delete') {
-      delete this.files[id];
-      if (id==this.last) this.last = null;
-    } else {
-      this.last = id;
-    }
-    if(typeof callback == "function") callback(true);
-  },
-
-  openFile : function(id,callback,content) {
-    this.last = id;
-    if(typeof callback == "function") callback(true,content);
-  },
-  
-  
-  deleteFile : function(id,callback){
-    this.saveChanges(id,'delete',callback);
-  },
-  
-  renameFile : function(fileFrom,fileTo,callback){
-    var last = this.last;
-    this.openFile(fileFrom,function(success,content) {
-      if (success) {
-         this.saveChanges(fileTo,'save',function(success){          
-           if (success) {              
-              this.deleteFile(fileFrom,function(success){
-                if (success && last==fileFrom) this.last=fileTo;
-                if(typeof callback == "function") callback(success);
-              }.createDelegate(this));
-           } else if(typeof callback == "function") callback(success);
-         }.createDelegate(this),content);
-      } else if(typeof callback == "function") callback(success);
-    }.createDelegate(this));
-  },
-  
-  saveFile : function(id,content,callback){
-    this.saveChanges(id,'save',callback,content);
-  },
-  
-  newFile  : function(id,content,callback){
-    this.saveChanges(id,'new',callback,content);
-  },
-  
-  load : function(node, callback,refresh){ 
-   if (refresh) {
-     this.refreshFiles(function(){
-        this.loadNodes(node,false,callback);
-      }.createDelegate(this));
-   } else {
-     this.loadNodes(node,false,callback);
-   }
-  },
-  
-  loadNodes : function(node,append,callback){
-    this.activeNode = null;
-    if (!append) while(node.firstChild) node.removeChild(node.firstChild);
-    node.beginUpdate();
-    for (var f in this.files){
-        var file = this.files[f];
-        var path = f.split('/');
-        var name = '';
-        var cnode = node;
-        var n;
-        for (var i=0;i<path.length;i++) {
-           name += path[i];
-           n=null;
-           for (var j=0,c=cnode.childNodes;j<c.length && !n;j++) {
-             if (c[j].attributes.text==path[i]) n = c[j];
-           }
-           if (!n) {
-             var leaf = (i==path.length-1);             
-             n = new Ext.tree.TreeNode({
-                     text: (name==this.last ? '<B>' + path[i] + '</B>' : path[i]),
-                     cls:  leaf ? 'file' : 'folder' , 
-                     leaf : leaf,
-                     id  : name
-             }); 
-             cnode.appendChild(n);
-             if (name==this.last) this.activeNode = n;
-           }
-           cnode = n;
-           name += '/' 
-        }
-    }
-    node.endUpdate();
-    if(typeof callback == "function")  callback(this.activeNode);   
-    return this.activeNode;      
-  }
-
-});
-
-
-/*
- * CookieFiles
- */
-Ext.ux.plugin.CookieFiles = Ext.extend(Ext.ux.plugin.FileControl,{
-  
-  init : function(){
-    this.cookies = new Ext.state.CookieProvider();     
-    Ext.ux.plugin.CookieFiles.superclass.init.call(this);
-  },
-  
-  refreshFiles : function (callback) {
-    this.files = this.cookies.get('Designer.files');
-    Ext.ux.plugin.CookieFiles.superclass.refreshFiles.call(this,callback);
-  },
-
-  saveChanges : function(id,action,callback,content) {  
-    if (content) this.cookies.set('Designer/' + id,escape(content));
-    if (action=='delete') this.cookies.clear('Designer.'+id);
-    Ext.ux.plugin.CookieFiles.superclass.saveChanges.call(this,id,action,callback,content);
-    this.cookies.set('Designer.files',this.files);
-  },
-
-  openFile : function(id,callback) {
-    var content = unescape(this.cookies.get('Designer/' + id));
-    Ext.ux.plugin.CookieFiles.superclass.openFile.call(this,id,callback,content)
-  }
-    
-});
-
-/*
- * PHPFiles
- */
-Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
-  url : "phpFiles.php",  
-  baseDir : "json",
-    
-  refreshFiles : function (callback) {
-    Ext.Ajax.request({
-      url: this.url,
-      params: {
-         cmd: 'get_files',
-         baseDir: this.baseDir
-      },            
-      callback: function(options, success, response) {
-        this.files= success ? Ext.util.JSON.decode(response.responseText) : {};
-        if(typeof callback == "function") callback(success);
-      },            
-      scope: this        
-    });    
-  },
-
-  saveChanges : function(id,action,callback,content) {  
-    Ext.Ajax.request({
-       url: this.url,
-       params: {
-         cmd: 'save_changes',
-         baseDir: this.baseDir,
-         filename: id,
-         action: action,
-         content: content
-       },
-       callback: function(options, success, response) {
-         if(success && response.responseText=='1') { 
-           if(action=='delete') {
-             delete this.files[id];
-             if (id==this.last) this.last = null;
-           } else {
-             this.last = id;
-           } 
-         }
-         if(typeof callback == "function") callback(response.responseText=='1');
-       },
-       scope: this        
-    }); 
-  },
-
-  openFile : function(id,callback) {
-    Ext.Ajax.request({
-      url: this.url,
-      params: {
-        cmd: 'get_content',
-        baseDir: this.baseDir,
-        filename: id 
-      },
-      callback: function(options, success, response) {
-        if (success) this.last = id;
-        if(typeof callback == "function") callback(success,response.responseText);
-      },
-      scope: this        
-    }); 
-  }    
-});
-
 
 /** Create a desginer */
 Ext.ux.plugin.Designer = function(config){
-  Ext.apply(this, config);
-  Ext.ux.plugin.Designer.superclass.constructor.call(this);
+  Ext.ux.plugin.Designer.superclass.constructor.call(this,config);
   this.initialConfig = config;
 };
 
-Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({  
+Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {  
   
   /**
    * When true the toolbox is show on init
@@ -1012,4 +743,24 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.util.Observable, Ext.applyIf({
     }
   }
 
-},Ext.ux.JSON));
+});
+
+/**
+ * Override the label is such a way that it can be selected in designer
+ * This override should not go outside the designer
+ */
+Ext.override(Ext.form.Label, {   
+    onRender : function(ct, position){
+        if(!this.el){
+            this.el = document.createElement('label');
+            this.el.innerHTML = this.text ? Ext.util.Format.htmlEncode(this.text) : (this.html || '');
+            if(this.forId){
+                this.el.setAttribute('htmlFor', this.forId);
+            }
+            //Swap the ids, so it becomes selectable in designer
+            this.el.id = this.id;
+            this.id = this.id + '-';
+        }
+        Ext.form.Label.superclass.onRender.call(this, ct, position);
+    }
+});
