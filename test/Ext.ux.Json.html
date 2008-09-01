@@ -14,18 +14,21 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 8 });
+				plan({ tests: 9 });
 
 				//diag('Basic operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
 
 				is(a.str,'string', 'String parsed');
 				ok(a.arr[0] == 'A1' && a.arr[1] == 'A2', 'Array parsed');
+				
 				is(a.num,.8, 'Num parsed');
 				
 				ok( typeof a.obj == 'object', "Object parsed");
 				var o = a.obj;
 				is(o.key1, 'value1', "property parsed");
+				
+				ok(o.key2[0] == 1 && o.key2[1] == 2, "sub-array parsed");
 				
 				try {
 					a = Ext.ux.JSON.decode('{ {{ }');
