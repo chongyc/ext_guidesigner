@@ -21,21 +21,22 @@
 
 				is(a.str,'string', 'String parsed');
 				ok(a.arr[0] == 'A1' && a.arr[1] == 'A2', 'Array parsed');
-				
+
 				is(a.num,.8, 'Num parsed');
-				
+
 				ok( typeof a.obj == 'object', "Object parsed");
 				var o = a.obj;
 				is(o.key1, 'value1', "property parsed");
-				
+
 				ok(o.key2[0] == 1 && o.key2[1] == 2, "sub-array parsed");
-				
+
 				try {
 					a = Ext.ux.JSON.decode('{ {{ }');
+			        ok(fale, "Syntax error expected");
 				} catch (e) {
-					isaOK(e,'SyntaxError', 'SyntaxError throwed');					
+					isaOK(e,'SyntaxError', 'SyntaxError throwed');
 				}
-				
+
 				a = Ext.ux.JSON.decode('{\
 					scope : this,\
 					handler : function (){\
@@ -43,11 +44,11 @@
 					},\
 					xtype : \'gmappanel\'\
 			 	}');
-			 	
+
 			 	is(a.scope, 'this', "this stringified1");
 			 	is(a.__JSON__scope, 'this', "this stringified2");
-			 	
-				 
+
+
 			});
 		</script>
 	</head>

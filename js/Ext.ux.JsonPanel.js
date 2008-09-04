@@ -47,7 +47,10 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
  
  //@private Whe only read a JSON file once
  single:true,  //only needed once
-   
+ 
+ //@private The json parser used is set in initComponent
+ json : null, 
+  
  /**
   * @private Init the JSON Panel making sure caching is set depending on disableCaching 
   */
@@ -57,7 +60,7 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
      if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
    }                
    Ext.ux.JsonPanel.superclass.initComponent.call(this);
-   
+   this.json = new Ext.ux.Json({scope:this.scope || this});      
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel
@@ -105,7 +108,7 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
         this.fireEvent('beforejsonload', response);
         try { 
          // this.applyJson(response.responseText);           
-          Ext.ux.JSON.apply(this,response.responseText);
+          this.json.apply(this,response.responseText);
           this.fireEvent('afterjsonload');
           this.ownerCt.el.unmask();
 

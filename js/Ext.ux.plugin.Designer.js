@@ -308,7 +308,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     } else {
      //Get the config of the items
      var ccmp,cmp= this.getDesignElement(el,true);
-     var items = this.editableJson(this.clone(config));
+     var items = this.editable(this.clone(config));
      //Find the container that should be changed
      ccmp = this.getContainer(cmp); 
      if (dropLocation == 'appendafter') {
@@ -344,7 +344,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
           this.container.items.remove(this.container.items.first());
        }       
        //Re create a panel with items from config editable root
-       var config = { 'border' : false, 'layout' : this.container.getLayout(),'items' : this.editableJson(items)};
+       var config = { 'border' : false, 'layout' : this.container.getLayout(),'items' : this.editable(items)};
        config[this.jsonId]=Ext.id();
        var el = this.container.add(config);
        el.codeConfig = config;
@@ -419,7 +419,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     var id = this.activeElement ? this.activeElement[this.jsonId] : null;
     var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
-    this.container.codeConfig.items=[this.editableJson(items)];
+    this.container.codeConfig.items=[this.editable(items)];
     this.redrawElement(this.container);
     this.modified = true;
     this.fireEvent('newconfig');
@@ -465,7 +465,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
            }
            p = c ? p : this.getContainer(el.ownerCt);
         }
-        this.applyJson(this.getConfig(p).items,p);
+        this.apply(this.getConfig(p).items,p);
         this.redrawContainer=false;
         this.selectElement(id);
       } catch (e) { Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); }

@@ -27,9 +27,9 @@
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
  
  //@private Window is hidden by moving X out of screen
- x     : -1000,
+// x     : -1000,
  //@private Window is hidden by moving Y out of screen
- y     : -1000,
+// y     : -1000,
  
  //@private Layout is by default fit
  layout: 'fit',
@@ -50,8 +50,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
      if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
      if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
    }                
-   Ext.ux.JsonWindow.superclass.initComponent.call(this);
-   this.json = new Ext.ux.Json({scope:this});   
+   this.json = new Ext.ux.Json({scope:this.scope || this});   
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel
@@ -71,6 +70,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
       */
     'failedjsonload' : false
    });
+   Ext.ux.JsonWindow.superclass.initComponent.call(this);
  },
  
  /**

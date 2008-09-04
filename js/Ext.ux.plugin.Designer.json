@@ -25,7 +25,7 @@
    width : 235,
    height: 350,
    alignTo: [scope.container.id,'br',[-235,-350]],
-   "scope.!FileTreeId" : (scope.FileTreeId || Ext.id())
+   "scope.!FileTreeId" : Ext.id()
   }/*END*/,
     layout: 'border',
     border: false,
