@@ -14,7 +14,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 9 });
+				plan({ tests: 12 });
 
 				//diag('Basic operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
@@ -39,15 +39,19 @@
 
 				a = Ext.ux.JSON.decode('{\
 					scope : this,\
-					handler : function (){\
-						handler\
+					handler : function (a,b){\
+						return a + b;\
 					},\
 					xtype : \'gmappanel\'\
 			 	}');
 
-			 	is(a.scope, 'this', "this stringified1");
-			 	is(a.__JSON__scope, 'this', "this stringified2");
-
+			 	is(a.scope, Ext.ux.JSON, "scope: this decoded as object");
+			 	is(a.__JSON__scope, 'this', "scope: this decoded as string into __JSON__scope");
+			 	
+			 	ok(typeof a.handler == 'function', "function decoded as object");
+			 	is(a.handler(1,5),6, ".. and it works");
+			 	
+			 	like(a.__JSON__handler, /return a \+ b/, "function decoded as string");
 
 			});
 		</script>
