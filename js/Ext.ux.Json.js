@@ -57,8 +57,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     /**
      * Called from within the constructor allowing to initialize the parser
      */
-    init: function() {
-      Ext.ux.Json.superclass.init.call(this);
+    initialize: function() {
+      Ext.ux.Json.superclass.initialize.call(this);
       this.addEvents({
         /**
          * Fires before a json is been applied to a visual component
@@ -175,8 +175,13 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             var applyTo = el;
             //When scope of var set if
             if (i.indexOf('scope.')==0) {
-               j = i.substring(6);
                applyTo = this.getScope();
+               j = i.substring(6);
+               if (j.charAt(0)=='!') { 
+                 //Check if it only should be set when not available
+                 j=j.substring(1);
+                 if (applyTo[j]) continue;
+               }
             } else if (scopeOnly) continue;
             var k = 'set' + j.substring(0,1).toUpperCase() + j.substring(1);
             try {
@@ -292,12 +297,11 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        }
       if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      } catch (e) {   
-      alert('apply ' + e);
       if (this.fireEvent('error','apply',e)!==true) throw e;
      } finally {
       this.fireEvent('afterapply',el,items);
-     }
-      return items;
+     } 
+     return items;
     },
     
     /**
@@ -752,8 +756,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   try {
                     var scope = self.getScope();
                     //Scope and this variable are now the same by creating a delegate function
-                    var c,func = function(){c=eval("(" + lastCode + ")");}.createDelegate(scope);
-                    func();
+                    var thisEval = function(code){return eval("(" + code+ ")");}.createDelegate(scope);
+                    var c=thisEval(lastCode);
                     isCode=true;
                     return c;                        
                   } catch (e) {                    
@@ -780,7 +784,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     else if (wordMatch('false')) return false;
                     else if (wordMatch('null')) return null;
                     else if ("-.0123456789".indexOf(ch)>=0) return  number();
-                    else code();
+                    return code();
               }
           }          
         try {  

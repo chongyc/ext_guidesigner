@@ -11,9 +11,11 @@ TODO
  - See if it is possible to ignore xtype error when type does not exists
  - Add option to use window as designer container, handy for form design
  - Update documentation
+ - Problem to that designer json is load in window and not in designer
  
  Change History:
- Version 2.0.7:
+ Version 2.1.0:
+  + Added a new json parser therefor begin and end tags are no longer needed in code
   + Found a good solotion for property grid error
  
  Version 2.0.6:

@@ -25,7 +25,7 @@
  */
 Ext.ux.Util = function(config){
   Ext.apply(this, config);
-  this.init();
+  this.initialize();
 };
 
 /**
@@ -42,7 +42,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
   /**
    * Called from within the constructor allowing to initialize the parser
    */
-  init: function() {
+  initialize: function() {
       this.addEvents({
         /**
          * Fires when there is a parsing error
