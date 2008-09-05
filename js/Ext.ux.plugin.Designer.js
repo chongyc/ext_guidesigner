@@ -169,6 +169,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         
     //Init the components drag & drop and toolbox when it is rendered
     this.container.on('render', function() {    
+      //Drag Drop
       this.drag = new Ext.dd.DragZone(this.container.el, {
         ddGroup:'designerddgroup',
         getDragData     : this.getDragData.createDelegate(this)
@@ -178,12 +179,26 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         notifyOver : this.notifyOver.createDelegate(this),
         notifyDrop : this.notifyDrop.createDelegate(this)
       });
+      //Focus element
       this.container.el.on('click', function(e,el) {
          var cmp = this.selectElement(el);
          if (el.focus) el.focus();
       }, this);
+      //Visual resize
+      this.resizeLayer = new Ext.Layer({cls:'resizeLayer',html:'Resize me'});
+      this.resizeLayer.setOpacity(0.5);
+      this.resizeLayer.resizer = new Ext.Resizable(this.resizeLayer, {
+         handles:'all',
+         draggable:true,
+         dynamic:true});
+      this.resizeLayer.resizer.dd.lock();
+      this.resizeLayer.resizer.on('resize', this.resizeElement,this);
+      this.resizeLayer.resizer.dd.endDrag = this.moveElement.createDelegate(this);     
+      //Toolbox
       this.toolbox(this.autoShow);
+      //Empty desinger
       this.createConfig();
+      //Context Menu
       this.initContextMenu();
       // Check if whe have to load a external file
       if (this.autoLoad) {
@@ -202,6 +217,14 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
           handler : function(item) {
               this.removeElement(contextMenu.element);
             }
+        },{
+        text    : 'Visual resize / move',
+        tooltip : 'Visual resize the element.<br/>You can move it too if in an <b>absolute</b> layout',
+        iconCls : 'icon-resize',
+        scope   : this,
+        handler : function(item) {
+            this.visualResize(contextMenu.element);
+          }
         }]});
       this.container.el.on('contextmenu', function(e) {
           e.preventDefault();
@@ -213,13 +236,68 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
       }, this);
   },
   
+  /**
+   * Start resize of an element, it will become active element
+   * @param {Element} element The element to resize
+   */
+  visualResize : function(element) {
+    var cmp= this.selectElement(element);
+    if (!cmp) return;
+    var layout = cmp.ownerCt && cmp.ownerCt.codeConfig ? cmp.ownerCt.codeConfig.layout : null;
+    if (layout=='fit') {
+     Ext.Msg.alert('Error','Cannot resize element within fit layout');
+    } else {
+      //Incase of absolute layout enable movement within element
+      if (layout=='absolute') {
+        this.resizeLayer.resizer.dd.unlock();
+        this.resizeLayer.resizer.dd.constrainTo(cmp.ownerCt.el.body);
+      } else {
+        this.resizeLayer.resizer.dd.lock();
+      }
+      this.resizeLayer.setBox(cmp.el.getBox());
+      this.resizeLayer.show();
+    }
+  },
+  
+  moveElement : function(e) {
+   /*
+    var n = this.editPanel.currentNode;
+    if (!n || !n.elConfig) { return false; }
+    var pos = this.resizeLayer.getXY();
+    var pPos = n.parentNode.fEl.body.getXY();
+    var x = pos[0] - pPos[0];
+    var y = pos[1] - pPos[1];
+    this.markUndo("Move element to " + x + "x" + y);
+    n.elConfig.x = x;
+    n.elConfig.y = y;
+    this.updateForm(true, n.parentNode);
+    this.setCurrentNode(n);
+    this.highlightElement(n.fEl.el);
+  */},
+  
+  resizeElement : function(r,w,h) {
+    var s = this.activeElement.el.getSize();
+    this.markUndo();
+    if (s.width != w) {
+      this.activeElement.codeConfig.width = w;
+      /*if (n.parentNode.elConfig.layout == 'column') {
+              delete n.elConfig.columnWidth;
+            }
+      */
+    }
+    if (s.height !=h) {
+      this.activeElement.codeConfig.height = h;
+      delete this.activeElement.codeConfig.autoHeight;
+    }
+    this.redrawElement();
+  }, 
+  
   removeElement : function(source,internal) {
     if (!source) return false;
     var own = this.getContainer(source.ownerCt);
     if (!internal) this.markUndo();
     for (var i=0;i<own.items.length;i++) {
       if (own.items.items[i]==source) {
-        if (!own.codeConfig) own.codeConfig = this.getConfig(own);
         own.codeConfig.items.splice(i,1);
         if (own.codeConfig.items.length==0) delete own.codeConfig.items;
         if (!internal) {
@@ -290,7 +368,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
           i=src.items.length;
         }
       }
-      if (!src.codeConfig) src.codeConfig = this.getConfig(src);
       if (!src.codeConfig.items || !(src.codeConfig.items instanceof Array)) 
           src.codeConfig.items =  [];
       delete src.codeConfig.html; //items and html go not together in IE
@@ -437,6 +514,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   getContainer : function(el) {
     var p = el;
     while (p && p!=this.container && !this.isContainer(p)) p = p.ownerCt;
+    if (p && !p.codeConfig) p.codeConfig = this.getConfig(p);
     return p;
   },
   
@@ -458,7 +536,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
            p = this.getContainer(el);
            //Search if whe find a layout capeble contianer
            while (p!=this.container && !c) {
-             if (!p.codeConfig) p.codeConfig = this.getConfig(p);
              c = p.codeConfig.layout;
              if (!c || (p==el && c)) 
                 p = this.getContainer(p.ownerCt);
@@ -491,7 +568,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
       if (this.propertyGrid) {
         this.propertyFilter();
         this.propertyGrid.enable();
-        this.propertyGrid.setSource(this.getConfig(this.activeElement));
+        this.propertyGrid.setSource(cmp.codeConfig);
       }
     } else {
       if (this.propertyGrid) {
@@ -510,6 +587,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    */
   highlightElement : function (el) {
     //Remove old highlight and drag support
+    this.resizeLayer.hide();
     this.container.el.removeClass('selectedElement');
     this.container.el.select('.selectedElement').removeClass('selectedElement');
     this.container.el.select('.designerddgroup').removeClass('designerddgroup');
@@ -548,6 +626,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     while (loops && el) {
       cmp = Ext.getCmp(el.id);
       if (cmp) {
+        if (!cmp.codeConfig) cmp.codeConfig = this.getConfig(cmp);
         if (!allowField && cmp == this.container) return false;
         return this.isElementOf(cmp,this.container) ? cmp : (allowField ? this.container : false);
       }

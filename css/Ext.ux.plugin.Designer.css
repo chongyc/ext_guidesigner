@@ -16,6 +16,13 @@
   background:#ffc;
 }
 
+.resizeLayer {
+ background:#ffc;
+ text-align:center;
+ font:bold 10px arial;
+ overflow:hidden;
+}
+
 .text-scripteditor {float:left;font:normal 12px arial}                    
 .icon-scripteditor {background-image: url(../icons/layout_edit.png) !important;
                     background-repeat: no-repeat;float:left;width:20px;height:20px;}
