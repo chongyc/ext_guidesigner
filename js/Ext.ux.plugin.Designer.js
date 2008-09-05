@@ -186,11 +186,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
       }, this);
       //Visual resize
       this.resizeLayer = new Ext.Layer({cls:'resizeLayer',html:'Resize me'});
-      this.resizeLayer.setOpacity(0.5);
+      this.resizeLayer.setOpacity(0.7);
       this.resizeLayer.resizer = new Ext.Resizable(this.resizeLayer, {
-         handles:'all',
+         handles:'se,s,e',
          draggable:true,
-         dynamic:true});
+         dynamic:true,
+         pinned:true});
       this.resizeLayer.resizer.dd.lock();
       this.resizeLayer.resizer.on('resize', this.resizeElement,this);
       this.resizeLayer.resizer.dd.endDrag = this.moveElement.createDelegate(this);     
@@ -251,7 +252,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
       //Incase of absolute layout enable movement within element
       if (layout=='absolute') {
         this.resizeLayer.resizer.dd.unlock();
-        this.resizeLayer.resizer.dd.constrainTo(own.el.body);
+        this.resizeLayer.resizer.dd.constrainTo(own.body);
       } else {
         this.resizeLayer.resizer.dd.lock();
       }
@@ -260,18 +261,25 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     }
   },
   
-  moveElement : function(event) {
+  /**
+   * Move a element within absolute layout based on drag event of the resize layer
+   */
+  moveElement : function() {
     var cmp = this.activeElement;
     var pos = this.resizeLayer.getXY();
-    var oPos = cmp.ownerCt.el.body.getXY();
-    var x = pos[0] - oPos[0];
-    var y = pos[1] - oPos[1];
+    var oPos = this.getContainer(cmp.ownerCt).body.getXY();
     this.markUndo();
     cmp.codeConfig.x = pos[0] - oPos[0];
     cmp.codeConfig.y = pos[1] - oPos[1];
     this.redrawElement();
   },
   
+  /**
+   * resize an element based on the resize of resizelayer
+   * @param {} r
+   * @param {int} w New width of element
+   * @param {int] h New height of element
+   */
   resizeElement : function(r,w,h) {
     var cmp = this.activeElement;
     var s = cmp.el.getSize();
@@ -559,6 +567,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     var cmp = this.getDesignElement(el);
     this.highlightElement(cmp);
     this.resizeLayer.hide();
+    this.resizeLayer.resizer.dd.lock();
     this.activeElement = cmp;
     if (cmp) {
       if (this.propertyGrid) {

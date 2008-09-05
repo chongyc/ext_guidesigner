@@ -19,14 +19,15 @@ TODO
  - Adding item to property grid is not adding
  - Second time resize on same component throws error
  - Code tree not visible
- - Drag of visual component does not work on absolute layout
  
  Change History:
  Version 2.1.0:
   + Added a new json parser therefor begin and end tags are no longer needed in code
   + Visual resize added for active element
+  + Visual move of element in absolute layout
+  + All xtypes which are loaded before guidesigner is load are now selectable
   + Found a good solotion for property grid error
-  + Split single files containing multiple classes into files
+  + Split single javascript files containing multiple classes into files
   + Added "scope.!<VAR>" in json object, so you can create local objects if they don't exist
  
  Version 2.0.6:

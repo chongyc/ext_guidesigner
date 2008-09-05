@@ -21,7 +21,8 @@ properties : [{
     name : "xtype",
     editable : true,
     desc : "<b>String</b> xtype of object",
-    values : ["jsonpanel","designer","component","box","viewport","panel","window","dataview","colorpalette","datepicker","tabpanel","button","splitbutton","cycle","toolbar","tbitem","tbseparator","tbspacer","tbfill","tbtext","tbbutton","tbsplit","paging","editor","treepanel","field","textfield","trigger","textarea","numberfield","datefield","combo","checkbox","radio","hidden","form","fieldset","htmleditor","timefield","grid","editorgrid","progress"]
+    values : Ext.ComponentMgr.allTypes()
+    //values : ["jsonpanel","designer","component","box","viewport","panel","window","dataview","colorpalette","datepicker","tabpanel","button","splitbutton","cycle","toolbar","tbitem","tbseparator","tbspacer","tbfill","tbtext","tbbutton","tbsplit","paging","editor","treepanel","field","textfield","trigger","textarea","numberfield","datefield","combo","checkbox","radio","hidden","form","fieldset","htmleditor","timefield","grid","editorgrid","progress"]
   },{
     name : "region",
     desc : "<b>String</b> The region of a borderlayout",

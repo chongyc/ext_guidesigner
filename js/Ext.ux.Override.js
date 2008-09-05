@@ -19,15 +19,43 @@
   */
 
 /**
- * TODO: Make a function that checks current version of ExtJs 
- *       and checks if the override should be applied
+ * Check if ExtJS version is between from and to version
+ * @param {String} fromVersion The version which is at least required
+ * @param {String} toVersion The version which is used as end (default ExtJS version)
+ * @return {Boolean} True when ExtJS version is between from and to version
  */
+Ext.isVersion = function(fromVersion,toVersion) {
+  var getVersion = function(ver) {    
+    var major = ver.match(/^(\d)\.\d/);
+    major = major ? major[1] : 0;
+    var minor = ver.match(/^\d\.(\d)/);
+    minor = minor ? minor[1] : 0; 
+    var revision = ver.match(/^\d\.\d\.(\d)/);
+    revision = revision ? revision[1] : 0;
+    return (major*1) + (minor*0.1) + (revision*0.001);
+  }
+  var f = getVersion(fromVersion);
+  var t = getVersion(toVersion || Ext.version);
+  var e = getVersion(Ext.version);
+  return (e>=f && e<=t);
+}
+
+/**
+ * Override a class when the version matches according to isVersion
+ * @param {Class} cl The class to override
+ * @param {Object} obj The object containing the function to be overwritten
+ */
+Ext.overrideIf = function(cl,obj,fromVersion,toVersion) {
+  if (Ext.isVersion(fromVersion,toVersion)) {
+    return Ext.override(cl,obj);
+  }
+};
 
 /**
  * Override Ext.Panel so that scope of keymap is always set to object when not set, 
  * instead of window 
  */
-Ext.override(Ext.Panel,{
+Ext.overrideIf(Ext.Panel,{
    // private
     getKeyMap : function(){
       if(!this.keyMap){
@@ -40,14 +68,14 @@ Ext.override(Ext.Panel,{
       }
       return this.keyMap;
     }
-});
+},'2.0');
 
 
 /**
  * Override Ext.FormPanel so that in case whe create a form without items from a json
  * it still has a item list.
  */
-Ext.override(Ext.FormPanel, {
+Ext.overrideIf(Ext.FormPanel, {
     // private
     initFields : function(){
         //BEGIN FIX It can happend that there is a form created without items (json)
@@ -71,114 +99,69 @@ Ext.override(Ext.FormPanel, {
         }
         this.items.each(fn);
     }
-});
+},'2.0');
 
 
-//Ext.apply(Ext.ComponentMgr, {
-//	
-//	isTypeAvailable : function (xtype) {
-//		
-//		try {
-//			return !!Ext.ComponentMgr.create( { xtype : xtype } ); //toBoolean
-//		} catch (e) {
-//			return false;
-//		}
-//	}
-//	
-//});
-
-
-Ext.ComponentMgr = function(){
-    var all = new Ext.util.MixedCollection();
+/**
+ * Override the Ext.ComponentMgr so that whe can validate if a type is available
+ */ 
+Ext.ComponentMgr = function(extMgr){
     var types = {};
+    
+    function addTypes(condition,typeLine){
+      if (!condition || !typeLine) return;
+      for (var t=typeLine.split(','),i=0;i<t.length;i++) {types[t[i]]=t[i];}
+    }
+    
+    addTypes(Ext.isVersion('2.0'),'box,button,colorpalette,component,container,cycle,' +
+      'dataview,datepicker,editor,editorgrid,grid,paging,panel,progress,propertygrid,' +
+      'splitbutton,tabpanel,treepanel,viewport,window,toolbar,tbbutton,tbfill,tbitem,' +
+      'tbseparator,tbspacer,tbsplit,tbtext,form,checkbox,combo,datefield,field,fieldset,' +
+      'hidden,htmleditor,label,numberfield,radio,textarea,textfield,timefield,trigger');
+
+    addTypes(Ext.isVersion('2.1'),'slider,statusbar');
 
     return {
         register : function(c){
-            all.add(c);
+            extMgr.register(c);
         },
+
         unregister : function(c){
-            all.remove(c);
+            extMgr.unregister(c);
         },
+
         get : function(id){
-            return all.get(id);
+            return extMgr.get(id);
         },
+
         onAvailable : function(id, fn, scope){
-            all.on("add", function(index, o){
-                if(o.id == id){
-                    fn.call(scope || o, o);
-                    all.un("add", fn, scope);
-                }
-            });
+            extMgr.onAvailable(id,fn,scope);
         },
-        all : all,
+
+        all : extMgr.all,
+
         registerType : function(xtype, cls){
-            types[xtype] = cls;
-            cls.xtype = xtype;
+            extMgr.registerType(xtype,cls);
+            types[xtype] = xtype;
         },
+
         create : function(config, defaultType){
-            return new types[config.xtype || defaultType](config);
+            return extMgr.create(config,defaultType);
         },
         
         isTypeAvailable : function (xtype) {
-        	return !!types[xtype];
-		}
+          return !!types[xtype];
+        },
+        
+        allTypes : function(){
+          var arr = [];
+          for (var key in types) {
+            arr.push(key);
+          }
+          return arr;
+        }
+                
     };
-}();
+}(Ext.ComponentMgr);
 Ext.reg = Ext.ComponentMgr.registerType; // this will be called a lot internally, shorthand to keep the bytes down
 
-Ext.reg('box', Ext.BoxComponent);
-Ext.reg('button', Ext.Button);
-Ext.reg('colorpalette', Ext.ColorPalette);
-Ext.reg('component', Ext.Component);
-Ext.reg('container', Ext.Container);
-Ext.reg('cycle', Ext.CycleButton);
-Ext.reg('dataview', Ext.DataView);
-Ext.reg('datepicker', Ext.DatePicker);
-Ext.reg('editor', Ext.Editor);
-Ext.reg('editorgrid', Ext.grid.EditorGridPanel);
-Ext.reg('grid', Ext.grid.GridPanel);
-Ext.reg('paging', Ext.PagingToolbar);
-Ext.reg('panel', Ext.Panel);
-Ext.reg('progress', Ext.ProgressBar);
-Ext.reg('propertygrid', Ext.grid.PropertyGrid);
-
-var minor_version = Ext.version.match(/^2\.(\d)/)[1];
-
-if (minor_version >= 1) {
-	Ext.reg('slider', Ext.Slider);
-	Ext.reg('statusbar', Ext.StatusBar);
-}
-
-if (minor_version >= 2) {
-//	Ext.reg('slider', Ext.Slider);
-//	Ext.reg('statusbar', Ext.StatusBar);
-}
-
-Ext.reg('splitbutton', Ext.SplitButton);
-Ext.reg('tabpanel', Ext.TabPanel);
-Ext.reg('treepanel', Ext.tree.TreePanel);
-Ext.reg('viewport', Ext.Viewport);
-Ext.reg('window', Ext.Window);
-Ext.reg('toolbar', Ext.Toolbar);
-Ext.reg('tbbutton', Ext.Toolbar.Button);
-Ext.reg('tbfill', Ext.Toolbar.Fill);
-Ext.reg('tbitem', Ext.Toolbar.Item);
-Ext.reg('tbseparator', Ext.Toolbar.Separator);
-Ext.reg('tbspacer', Ext.Toolbar.Spacer);
-Ext.reg('tbsplit', Ext.Toolbar.SplitButton);
-Ext.reg('tbtext', Ext.Toolbar.TextItem);
-Ext.reg('form', Ext.FormPanel);
-Ext.reg('checkbox', Ext.form.Checkbox);
-Ext.reg('combo', Ext.form.ComboBox);
-Ext.reg('datefield', Ext.form.DateField);
-Ext.reg('field', Ext.form.Field);
-Ext.reg('fieldset', Ext.form.FieldSet);
-Ext.reg('hidden', Ext.form.Hidden);
-Ext.reg('htmleditor', Ext.form.HtmlEditor);
-Ext.reg('label', Ext.form.Label);
-Ext.reg('numberfield', Ext.form.NumberField);
-Ext.reg('radio', Ext.form.Radio);
-Ext.reg('textarea', Ext.form.TextArea);
-Ext.reg('textfield', Ext.form.TextField);
-Ext.reg('timefield', Ext.form.TimeField);
-Ext.reg('trigger', Ext.form.TriggerField);
