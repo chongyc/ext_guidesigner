@@ -12,10 +12,8 @@ TODO
  - Update documentation
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
- - Make sure that componentMgr override is still calling old when not found
  - Double click on folder tree component element will add a panel
  - Clear element does not work corretly
- - Make xtype a list because of new ComponentMgr
  - Adding item to property grid is not adding
  - Second time resize on same component throws error
  - Code tree not visible
@@ -29,6 +27,7 @@ TODO
   + Found a good solotion for property grid error
   + Split single javascript files containing multiple classes into files
   + Added "scope.!<VAR>" in json object, so you can create local objects if they don't exist
+  + Toolbox is forced to do a layout before showing.
  
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon

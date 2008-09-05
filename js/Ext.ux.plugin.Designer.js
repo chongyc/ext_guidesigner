@@ -822,7 +822,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     }
     //Now show or hide the toolbox
     if (visible || visible === true) {
-      if (this.fireEvent('beforeshow',this._toolbox)) this._toolbox.show();
+      if (this.fireEvent('beforeshow',this._toolbox)) {
+        this._toolbox.doLayout();
+        this._toolbox.show();        
+      }
     } else {
       if (this.fireEvent('beforehide',this._toolbox)) this._toolbox.hide();
     }
