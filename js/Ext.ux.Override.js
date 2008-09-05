@@ -142,8 +142,7 @@ Ext.reg('panel', Ext.Panel);
 Ext.reg('progress', Ext.ProgressBar);
 Ext.reg('propertygrid', Ext.grid.PropertyGrid);
 
-var minor_version = Ext.version.match(/^2\.(\d)/);
-minor_version = minor_version[1];
+var minor_version = Ext.version.match(/^2\.(\d)/)[1];
 
 if (minor_version >= 1) {
 	Ext.reg('slider', Ext.Slider);
