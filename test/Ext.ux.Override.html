@@ -1,8 +1,8 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css" />
-		<script type="text/javascript" src="../lib/Ext/adapter/ext/ext-base.js"></script>
-		<script type="text/javascript" src="../lib/Ext/ext-all-debug.js"></script>
+		<script type="text/javascript" src="../extjs/adapter/ext/ext-base.js"></script>
+		<script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
 
 		<script src="../lib/Test/Builder.js" type="text/javascript"></script>
 		<script src="../lib/Test/More.js" type="text/javascript"></script>
@@ -13,7 +13,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 47 });
+				plan({ tests: 45 });
 
 				ok(Ext.ComponentMgr.isTypeAvailable('box'), 'xtype "box" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('button'), 'xtype "button" passed');
@@ -30,9 +30,9 @@
 				ok(Ext.ComponentMgr.isTypeAvailable('panel'), 'xtype "panel" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('progress'), 'xtype "progress" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('propertygrid'), 'xtype "propertygrid" passed');
-				ok(Ext.ComponentMgr.isTypeAvailable('slider'), 'xtype "slider" passed');
+				//ok(Ext.ComponentMgr.isTypeAvailable('slider'), 'xtype "slider" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('splitbutton'), 'xtype "splitbutton" passed');
-				ok(Ext.ComponentMgr.isTypeAvailable('statusbar'), 'xtype "statusbar" passed');
+				//ok(Ext.ComponentMgr.isTypeAvailable('statusbar'), 'xtype "statusbar" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('tabpanel'), 'xtype "tabpanel" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('treepanel'), 'xtype "treepanel" passed');
 				ok(Ext.ComponentMgr.isTypeAvailable('viewport'), 'xtype "viewport" passed');
