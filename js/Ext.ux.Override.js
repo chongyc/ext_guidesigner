@@ -72,3 +72,102 @@ Ext.override(Ext.FormPanel, {
         this.items.each(fn);
     }
 });
+
+
+//Ext.apply(Ext.ComponentMgr, {
+//	
+//	isTypeAvailable : function (xtype) {
+//		
+//		try {
+//			return !!Ext.ComponentMgr.create( { xtype : xtype } ); //toBoolean
+//		} catch (e) {
+//			return false;
+//		}
+//	}
+//	
+//});
+
+
+Ext.ComponentMgr = function(){
+    var all = new Ext.util.MixedCollection();
+    var types = {};
+
+    return {
+        register : function(c){
+            all.add(c);
+        },
+        unregister : function(c){
+            all.remove(c);
+        },
+        get : function(id){
+            return all.get(id);
+        },
+        onAvailable : function(id, fn, scope){
+            all.on("add", function(index, o){
+                if(o.id == id){
+                    fn.call(scope || o, o);
+                    all.un("add", fn, scope);
+                }
+            });
+        },
+        all : all,
+        registerType : function(xtype, cls){
+            types[xtype] = cls;
+            cls.xtype = xtype;
+        },
+        create : function(config, defaultType){
+            return new types[config.xtype || defaultType](config);
+        },
+        
+        isTypeAvailable : function (xtype) {
+        	return !!types[xtype];
+		}
+    };
+}();
+Ext.reg = Ext.ComponentMgr.registerType; // this will be called a lot internally, shorthand to keep the bytes down
+
+Ext.reg('box', Ext.BoxComponent);
+Ext.reg('button', Ext.Button);
+Ext.reg('colorpalette', Ext.ColorPalette);
+Ext.reg('component', Ext.Component);
+Ext.reg('container', Ext.Container);
+Ext.reg('cycle', Ext.CycleButton);
+Ext.reg('dataview', Ext.DataView);
+Ext.reg('datepicker', Ext.DatePicker);
+Ext.reg('editor', Ext.Editor);
+Ext.reg('editorgrid', Ext.grid.EditorGridPanel);
+Ext.reg('grid', Ext.grid.GridPanel);
+Ext.reg('paging', Ext.PagingToolbar);
+Ext.reg('panel', Ext.Panel);
+Ext.reg('progress', Ext.ProgressBar);
+Ext.reg('propertygrid', Ext.grid.PropertyGrid);
+Ext.reg('slider', Ext.Slider);
+Ext.reg('splitbutton', Ext.SplitButton);
+Ext.reg('statusbar', Ext.StatusBar);
+Ext.reg('tabpanel', Ext.TabPanel);
+Ext.reg('treepanel', Ext.tree.TreePanel);
+Ext.reg('viewport', Ext.Viewport);
+Ext.reg('window', Ext.Window);
+Ext.reg('toolbar', Ext.Toolbar);
+Ext.reg('tbbutton', Ext.Toolbar.Button);
+Ext.reg('tbfill', Ext.Toolbar.Fill);
+Ext.reg('tbitem', Ext.Toolbar.Item);
+Ext.reg('tbseparator', Ext.Toolbar.Separator);
+Ext.reg('tbspacer', Ext.Toolbar.Spacer);
+Ext.reg('tbsplit', Ext.Toolbar.SplitButton);
+Ext.reg('tbtext', Ext.Toolbar.TextItem);
+Ext.reg('form', Ext.FormPanel);
+Ext.reg('checkbox', Ext.form.Checkbox);
+Ext.reg('combo', Ext.form.ComboBox);
+Ext.reg('datefield', Ext.form.DateField);
+Ext.reg('field', Ext.form.Field);
+Ext.reg('fieldset', Ext.form.FieldSet);
+Ext.reg('hidden', Ext.form.Hidden);
+Ext.reg('htmleditor', Ext.form.HtmlEditor);
+Ext.reg('label', Ext.form.Label);
+Ext.reg('numberfield', Ext.form.NumberField);
+Ext.reg('radio', Ext.form.Radio);
+Ext.reg('textarea', Ext.form.TextArea);
+Ext.reg('textfield', Ext.form.TextField);
+Ext.reg('timefield', Ext.form.TimeField);
+Ext.reg('trigger', Ext.form.TriggerField);
