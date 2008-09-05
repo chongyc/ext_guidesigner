@@ -141,9 +141,21 @@ Ext.reg('paging', Ext.PagingToolbar);
 Ext.reg('panel', Ext.Panel);
 Ext.reg('progress', Ext.ProgressBar);
 Ext.reg('propertygrid', Ext.grid.PropertyGrid);
-//Ext.reg('slider', Ext.Slider);
+
+var minor_version = Ext.version.match(/^2\.(\d)/);
+minor_version = minor_version[1];
+
+if (minor_version >= 1) {
+	Ext.reg('slider', Ext.Slider);
+	Ext.reg('statusbar', Ext.StatusBar);
+}
+
+if (minor_version >= 2) {
+//	Ext.reg('slider', Ext.Slider);
+//	Ext.reg('statusbar', Ext.StatusBar);
+}
+
 Ext.reg('splitbutton', Ext.SplitButton);
-//Ext.reg('statusbar', Ext.StatusBar);
 Ext.reg('tabpanel', Ext.TabPanel);
 Ext.reg('treepanel', Ext.tree.TreePanel);
 Ext.reg('viewport', Ext.Viewport);
