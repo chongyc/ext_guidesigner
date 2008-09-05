@@ -25,12 +25,7 @@
  * by specifing the values in the json tag
  */
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
- 
- //@private Window is hidden by moving X out of screen
-// x     : -1000,
- //@private Window is hidden by moving Y out of screen
-// y     : -1000,
- 
+  
  //@private Layout is by default fit
  layout: 'fit',
  
@@ -130,8 +125,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
           this.fireEvent('afterjsonload');
           if(callback) {callback();}
         } catch (e) {
-          alert(e);
-          if (!this.fireEvent('afterjsonload',response,e))
+          if (this.fireEvent('failedjsonload',response,e)!==true)
              Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
         }
       }.createDelegate(this)

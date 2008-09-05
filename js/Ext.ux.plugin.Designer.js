@@ -465,7 +465,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
            }
            p = c ? p : this.getContainer(el.ownerCt);
         }
-        this.apply(this.getConfig(p).items,p);
+        this.apply(p,this.getConfig(p).items);
         this.redrawContainer=false;
         this.selectElement(id);
       } catch (e) { Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); }
@@ -606,7 +606,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
        if (event.xy[0] >= pos[0] && event.xy[0]<=pos[0] + size.width &&
            event.xy[1] >= pos[1] && event.xy[1]<=pos[1] + size.height) {
          n = c
-         if(c.items){
+         if(c.items && c.items.items){
             var cs = c.items.items;
             for(var i = 0, len = cs.length; i < len  && !findNode(cs[i]); i++) {}
          }
@@ -671,7 +671,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    */
   setPropertyGrid : function(propertyGrid) {
     this.propertyGrid = propertyGrid;
-    this.propertyGrid.jsonScope = this.getJsonScope();
+    this.propertyGrid.jsonScope = this.getScope();
     propertyGrid.on('beforepropertychange', function(source,id,value,oldvalue) {
         this.markUndo();
     },this);
@@ -728,6 +728,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         );
       } else {
         this._toolbox = new Ext.ux.JsonWindow({
+            x     : -1000, // Window is hidden by moving X out of screen
+            y     : -1000, //Window is hidden by moving Y out of screen
             autoLoad:this.toolboxJson,
             disableCaching :this.disableCaching,
             scope   : this,

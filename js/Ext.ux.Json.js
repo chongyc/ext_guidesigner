@@ -291,6 +291,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            } else if (!this.isEmpty(items)) { 
              el.add(items);
            }
+           //Apply json settings if there
+           this.set(el,items.json);
          } else {
            this.set(el,items);
          }
@@ -652,7 +654,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                        //Phase four save readable code for editing
                        if (self.jsonId) o[self.jsonId + k] = lastCode;
                        //Phase three load javascript, stylesheet and evalute scope objects
-                       if (k=='json') self.set(self.getScope(),o[k]);
+                       if (k=='json') self.set(self.getScope(),o[k],true);
                     }
 
                     white();
