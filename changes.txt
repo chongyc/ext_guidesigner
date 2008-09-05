@@ -10,7 +10,7 @@ TODO
  - See if it is possible to ignore xtype error when type does not exists
  - Add option to use window as designer container, handy for form design
  - Update documentation
-==> Problems after creating 2.1 
+==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
  - Make sure that componentMgr override is still calling old when not found
  - Double click on folder tree component element will add a panel
@@ -19,7 +19,7 @@ TODO
  - Adding item to property grid is not adding
  - Second time resize on same component throws error
  - Code tree not visible
- - Drag of visual component does not work
+ - Drag of visual component does not work on absolute layout
  
  Change History:
  Version 2.1.0:
