@@ -1,0 +1,73 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css" />
+		<script type="text/javascript" src="../lib/Ext/adapter/ext/ext-base.js"></script>
+		<script type="text/javascript" src="../lib/Ext/ext-all-debug.js"></script>
+
+		<script src="../lib/Test/Builder.js" type="text/javascript"></script>
+		<script src="../lib/Test/More.js" type="text/javascript"></script>
+
+		<!--The custom script to test -->
+		<script src="../js/Ext.ux.Override.js" type="text/javascript"></script>
+
+		<!--The test function that fires when body is loaded -->
+		<script>
+			Ext.onReady(function(){
+				plan({ tests: 47 });
+
+				ok(Ext.ComponentMgr.isTypeAvailable('box'), 'xtype "box" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('button'), 'xtype "button" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('colorpalette'), 'xtype "colorpalette" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('component'), 'xtype "component" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('container'), 'xtype "container" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('cycle'), 'xtype "cycle" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('dataview'), 'xtype "dataview" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('datepicker'), 'xtype "datepicker" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('editor'), 'xtype "editor" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('editorgrid'), 'xtype "editorgrid" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('grid'), 'xtype "grid" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('paging'), 'xtype "paging" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('panel'), 'xtype "panel" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('progress'), 'xtype "progress" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('propertygrid'), 'xtype "propertygrid" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('slider'), 'xtype "slider" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('splitbutton'), 'xtype "splitbutton" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('statusbar'), 'xtype "statusbar" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tabpanel'), 'xtype "tabpanel" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('treepanel'), 'xtype "treepanel" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('viewport'), 'xtype "viewport" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('window'), 'xtype "window" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('toolbar'), 'xtype "toolbar" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbbutton'), 'xtype "tbbutton" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbfill'), 'xtype "tbfill" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbitem'), 'xtype "tbitem" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbseparator'), 'xtype "tbseparator" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbspacer'), 'xtype "tbspacer" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbsplit'), 'xtype "tbsplit" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('tbtext'), 'xtype "tbtext" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('form'), 'xtype "form" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('checkbox'), 'xtype "checkbox" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('combo'), 'xtype "combo" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('datefield'), 'xtype "datefield" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('field'), 'xtype "field" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('fieldset'), 'xtype "fieldset" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('hidden'), 'xtype "hidden" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('htmleditor'), 'xtype "htmleditor" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('label'), 'xtype "label" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('numberfield'), 'xtype "numberfield" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('radio'), 'xtype "radio" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('textarea'), 'xtype "textarea" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('textfield'), 'xtype "textfield" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('timefield'), 'xtype "timefield" passed');
+				ok(Ext.ComponentMgr.isTypeAvailable('trigger'), 'xtype "trigger" passed');				
+				
+				ok(!Ext.ComponentMgr.isTypeAvailable('gmappanel'), 'xtype "gmappanel" passed');
+				ok(!Ext.ComponentMgr.isTypeAvailable('custom'), 'xtype "custom" passed');
+			});
+		</script>
+	</head>
+
+ 	<body>
+		<H1>Ext.ux.Json test suite</H1>
+	</body>
+ </html>
