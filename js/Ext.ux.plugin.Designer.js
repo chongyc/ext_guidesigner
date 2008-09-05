@@ -243,14 +243,15 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   visualResize : function(element) {
     var cmp= this.selectElement(element);
     if (!cmp) return;
-    var layout = cmp.ownerCt && cmp.ownerCt.codeConfig ? cmp.ownerCt.codeConfig.layout : null;
+    var own = this.getContainer(cmp.ownerCt);
+    var layout = own.codeConfig ? own.codeConfig.layout : null;
     if (layout=='fit') {
      Ext.Msg.alert('Error','Cannot resize element within fit layout');
     } else {
       //Incase of absolute layout enable movement within element
       if (layout=='absolute') {
         this.resizeLayer.resizer.dd.unlock();
-        this.resizeLayer.resizer.dd.constrainTo(cmp.ownerCt.el.body);
+        this.resizeLayer.resizer.dd.constrainTo(own.el.body);
       } else {
         this.resizeLayer.resizer.dd.lock();
       }
@@ -259,35 +260,29 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     }
   },
   
-  moveElement : function(e) {
-   /*
-    var n = this.editPanel.currentNode;
-    if (!n || !n.elConfig) { return false; }
+  moveElement : function(event) {
+    var cmp = this.activeElement;
     var pos = this.resizeLayer.getXY();
-    var pPos = n.parentNode.fEl.body.getXY();
-    var x = pos[0] - pPos[0];
-    var y = pos[1] - pPos[1];
-    this.markUndo("Move element to " + x + "x" + y);
-    n.elConfig.x = x;
-    n.elConfig.y = y;
-    this.updateForm(true, n.parentNode);
-    this.setCurrentNode(n);
-    this.highlightElement(n.fEl.el);
-  */},
+    var oPos = cmp.ownerCt.el.body.getXY();
+    var x = pos[0] - oPos[0];
+    var y = pos[1] - oPos[1];
+    this.markUndo();
+    cmp.codeConfig.x = pos[0] - oPos[0];
+    cmp.codeConfig.y = pos[1] - oPos[1];
+    this.redrawElement();
+  },
   
   resizeElement : function(r,w,h) {
-    var s = this.activeElement.el.getSize();
+    var cmp = this.activeElement;
+    var s = cmp.el.getSize();
     this.markUndo();
     if (s.width != w) {
-      this.activeElement.codeConfig.width = w;
-      /*if (n.parentNode.elConfig.layout == 'column') {
-              delete n.elConfig.columnWidth;
-            }
-      */
+      cmp.codeConfig.width = w;
+      delete cmp.codeConfig.columnWidth;
     }
     if (s.height !=h) {
-      this.activeElement.codeConfig.height = h;
-      delete this.activeElement.codeConfig.autoHeight;
+      cmp.codeConfig.height = h;
+      delete cmp.codeConfig.autoHeight;
     }
     this.redrawElement();
   }, 
@@ -563,6 +558,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     if (typeof(el)=='string') el = this.findByJsonId(el);
     var cmp = this.getDesignElement(el);
     this.highlightElement(cmp);
+    this.resizeLayer.hide();
     this.activeElement = cmp;
     if (cmp) {
       if (this.propertyGrid) {
@@ -587,7 +583,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    */
   highlightElement : function (el) {
     //Remove old highlight and drag support
-    this.resizeLayer.hide();
     this.container.el.removeClass('selectedElement');
     this.container.el.select('.selectedElement').removeClass('selectedElement');
     this.container.el.select('.designerddgroup').removeClass('designerddgroup');
