@@ -14,7 +14,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 12 });
+				plan({ tests: 15 });
 
 				//diag('Decoder operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
@@ -47,12 +47,19 @@
 
 			 	is(a.scope, Ext.ux.JSON, "scope: this decoded as object");
 			 	is(a.__JSON__scope, 'this', "scope: this decoded as string into __JSON__scope");
-			 	
+
 			 	ok(typeof a.handler == 'function', "function decoded as object");
 			 	is(a.handler(1,5),6, ".. and it works");
-			 	
+
 			 	like(a.__JSON__handler, /return a \+ b/, "function decoded as string");
-			 	
+
+
+  			    a = Ext.ux.JSON.merge({a:'1',c:{d:1,e:2},g:[1,2]},
+  			                          {b:'2',c:{d:2,f:3},g:[4,3]});
+			    is(a['b'],'2','Merge main merge ok');
+			    ok(a['c']['d']='2' && a['c']['e']=='2' && a['c']['f']=='3' ,'Merge object ok');
+			    is(a['g'].toString(),[1,2,4,3].toString(),'Merge array ok');
+
 			 	//diag('Encoder operations:');
 
 			});

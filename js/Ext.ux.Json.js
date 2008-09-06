@@ -271,6 +271,35 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      if (items.items) items.items=this.editable(items.items);
      return items;
     },
+        
+    /**
+     * Merge two json files into one, incase same items exists 
+     * then second json is leading
+     * @param {Object\Array} json1 The first json file
+     * @param {Object\Array} json2 The second json file
+     * @return {Object\Array} The merged json
+     */
+    merge : function (item1,item2) {
+      if (item1 instanceof Array && item2 instanceof Array) {
+        var arr = [];
+        for (var i=0;i<item1.length;i++) arr.push(item1[i]);
+        for (var i=0;i<item2.length;i++) arr.push(item2[i]);
+        return arr;
+      } else if (typeof(item1)==typeof(item2) && typeof(item1)=='object') {
+        var obj = {};
+        for (var i in item1) {obj[i] = this.merge(item1[i],item2[i]);}
+        for (var i in item2) {if (!obj[i]) obj[i]=item2[i];}
+        return obj;
+      } else if (typeof(item1)==typeof(item2)) {
+        return item2;
+      } else if (typeof(item1)=='undefined') {
+        return item2;
+      } else if (typeof(item2)=='undefined') {
+        return item1;      
+      } else { 
+        throw new SyntaxError('Object items cannot be joined because items mismatch');
+      }
+    },
 
 
    /**
