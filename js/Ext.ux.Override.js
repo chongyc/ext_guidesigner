@@ -121,34 +121,12 @@ Ext.ComponentMgr = function(extMgr){
 
     addTypes(Ext.isVersion('2.1'),'slider,statusbar');
 
-    return {
-        register : function(c){
-            extMgr.register(c);
-        },
-
-        unregister : function(c){
-            extMgr.unregister(c);
-        },
-
-        get : function(id){
-            return extMgr.get(id);
-        },
-
-        onAvailable : function(id, fn, scope){
-            extMgr.onAvailable(id,fn,scope);
-        },
-
-        all : extMgr.all,
-
+    return Ext.apply(extMgr,{
         registerType : function(xtype, cls){
             extMgr.registerType(xtype,cls);
             types[xtype] = xtype;
         },
 
-        create : function(config, defaultType){
-            return extMgr.create(config,defaultType);
-        },
-        
         isTypeAvailable : function (xtype) {
           return !!types[xtype];
         },
@@ -161,7 +139,7 @@ Ext.ComponentMgr = function(extMgr){
           return arr;
         }
                 
-    };
+    });
 }(Ext.ComponentMgr);
 Ext.reg = Ext.ComponentMgr.registerType; // this will be called a lot internally, shorthand to keep the bytes down
 
