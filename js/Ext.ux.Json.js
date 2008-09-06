@@ -88,16 +88,22 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
 
     /**
      * Check if a object is empty, ignoring jsonId keys
-     * @param {Object} obj The json object to be checked
+     * @param {Object\Array} obj The json object to be checked
      * @return {Boolean} true when object does not contain any data
      */
     isEmpty : function(obj) {
-     for (var i in obj) {
-       if ((!this.useHasOwn || obj.hasOwnProperty(i)) && 
-           (!this.jsonId || i.indexOf(this.jsonId)!=0)) {
-          return false;
+     if (obj instanceof Array) {
+       for (var i=0;i<obj.length;i++) {
+         if (!this.isEmpty(obj[i])) return false;         
        }
-     }
+     } else if (typeof(obj) == 'object')  {
+       for (var i in obj) {
+         if ((!this.useHasOwn || obj.hasOwnProperty(i)) && 
+             (!this.jsonId || i.indexOf(this.jsonId)!=0)) {
+            return false;
+         }
+       }
+     } else if (typeof(obj)!='undefined') return false;
      return true;
     },
         
@@ -286,13 +292,15 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
          if (el instanceof Ext.Container) {
            //Clear out orignal content of container
            while (el.items && el.items.first()) {el.remove(el.items.first(), true);}
-           if (items instanceof Array) {
-             el.add.apply(el,items);
-           } else if (!this.isEmpty(items)) { 
-             el.add(items);
+           if (!this.isEmpty(items)) { 
+             if (items instanceof Array) {
+                el.add.apply(el,items);
+             } else { 
+               el.add(items);
+             }
+            //Apply json settings if there
+            this.set(el,items.json);
            }
-           //Apply json settings if there
-           this.set(el,items.json);
          } else {
            this.set(el,items);
          }

@@ -12,11 +12,6 @@ TODO
  - Update documentation
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
- - Double click on folder tree component element will add a panel
- - Clear element does not work corretly
- - Adding item to property grid is not adding
- - Second time resize on same component throws error
- - Code tree not visible
  
  Change History:
  Version 2.1.0:
@@ -28,6 +23,7 @@ TODO
   + Split single javascript files containing multiple classes into files
   + Added "scope.!<VAR>" in json object, so you can create local objects if they don't exist
   + Toolbox is forced to do a layout before showing.
+  + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
  
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon

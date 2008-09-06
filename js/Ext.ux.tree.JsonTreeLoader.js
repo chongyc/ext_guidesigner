@@ -1,5 +1,5 @@
 /*global Ext document */
-/*  
+ /*  
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -17,8 +17,17 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
-
+//Register name spaces used
 Ext.namespace('Ext.ux.tree');
+
+/**
+ * Create a tree based on the content of a json file
+ * When attr of json item is false a dynamic node is created
+ * otherwhise a static tree node is created.
+ * If json contains a list called childeren this list will be walked
+ * to create childeren in tree
+ * By default the treeNodes are not draggable
+ */
 Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
  /**
   * Create node but enabling childeren from Json

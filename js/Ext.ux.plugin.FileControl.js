@@ -17,6 +17,7 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
+//Register name spaces used
 Ext.namespace('Ext.ux.plugin');
 
 /**

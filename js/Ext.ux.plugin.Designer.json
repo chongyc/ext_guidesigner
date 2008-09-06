@@ -429,7 +429,6 @@
             store          : scope.properties,
             listeners    : {
               'specialkey' : function(tf,e) {
-              /*
                     var name = tf.getValue() || (scope.customProperties ? tf.getRawValue() : '');
                     var ds = scope.propertyGrid.store, defaultVal = "";
                     if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
@@ -439,7 +438,7 @@
                        ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
                        scope.propertyGrid.startEditing(ds.getCount()-1, 1);
                     } 
-              */}
+              }
             }
          })
        ]

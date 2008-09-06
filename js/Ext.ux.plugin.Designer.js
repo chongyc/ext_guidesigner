@@ -497,7 +497,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    */
   setConfig : function (json) {
     var id = this.activeElement ? this.activeElement[this.jsonId] : null;
-    var items = (typeof(json)=='object' ? json : this.decode(json)) || {};
+    var items = (typeof(json)=='object' ? json : this.decode(json)) || null;
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
     this.container.codeConfig.items=[this.editable(items)];
     this.redrawElement(this.container);

@@ -106,7 +106,7 @@ Ext.overrideIf(Ext.FormPanel, {
  * Override the Ext.ComponentMgr so that whe can validate if a type is available
  */ 
 Ext.ComponentMgr = function(extMgr){
-    var types = {};
+    var types = {}; //List of all types
     
     function addTypes(condition,typeLine){
       if (!condition || !typeLine) return;
@@ -120,8 +120,8 @@ Ext.ComponentMgr = function(extMgr){
       'hidden,htmleditor,label,numberfield,radio,textarea,textfield,timefield,trigger');
 
     addTypes(Ext.isVersion('2.1'),'slider,statusbar');
-
-    return Ext.apply(extMgr,{
+   
+    return Ext.applyIf({
         registerType : function(xtype, cls){
             extMgr.registerType(xtype,cls);
             types[xtype] = xtype;
@@ -139,7 +139,7 @@ Ext.ComponentMgr = function(extMgr){
           return arr;
         }
                 
-    });
+    },extMgr);
 }(Ext.ComponentMgr);
 Ext.reg = Ext.ComponentMgr.registerType; // this will be called a lot internally, shorthand to keep the bytes down
 

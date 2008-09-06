@@ -17,6 +17,7 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
+//Register name spaces used
 Ext.namespace('Ext.ux.grid');
 Ext.namespace('Ext.ux.form');
 Ext.namespace('Ext.ux.tree');
@@ -64,7 +65,7 @@ Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
   doLoad : function(node,data){
     if(data){
       node.beginUpdate();
-      if (!this.designer.isEmptyObject(data)) {
+      if (!this.designer.isEmpty(data)) {
         var cs = {
              text: this.elementToText(data),
              cls: data.items ? 'folder' : 'file' , 
@@ -84,189 +85,6 @@ Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
     return false;
   }
 });
-
-/**
- * Used by designer when selecting a value from a ComponentDoc defined value property in the grid
- * @type component
- */  
-Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
-    // @private Data is loaded localy
-    mode           : 'local',
-    // @private We trigger on all
-    triggerAction  : 'all',
-    // @private We allow type ahead
-    typeAhead      : true,
-    // @private The value field bound to field called value    
-    valueField     : 'value',
-    // @private The display name is called name
-    displayField   : 'name',
-    // @private Forceselection is by default enabled
-    forceSelection : true,
-    // @private The Combobox is by default editable
-    editable       : true,
-    // @private No charachters are required
-    minChars       : 0,
-    /**
-     * Are customProperties (values) allowed to be entered (defaults false)
-     * @type {Boolean}
-     @cfg */
-    customProperties : false,
-    /**
-     * @private Override the init of ComboBox so that local data store is used
-     */
-    initComponent  : function(){
-        Ext.ux.form.SimpleCombo.superclass.initComponent.call(this);
-        if(!this.store && this.data){
-            this.store = new Ext.data.SimpleStore({
-                fields: ['value','name','cls'],
-                data : this.data
-            });
-        }
-        this.tpl = '<tpl for="."><div class="x-combo-list-item {cls}">{' + this.displayField + '}</div></tpl>';
-    },
-    
-    /**
-     * A fast loading function for element in combobox. 
-     * @param list {Array} a list of elements which are convert into name,value pairs for combobox.
-     */
-    setList : function(list){
-      data = [];
-      if (list) {
-        for (var i=0;i<list.length;i++) {data.push([list[i],list[i],null])};
-      }
-      this.store.loadData(data,false);
-    },
-    
-    /**
-     * Override the getValue so that when customProperties is set
-     * the rawValues is returned
-     * @return {Object} Based the entered key the combobox value or when not found and customProperties is true the raw entered value
-     */
-    getValue : function (){
-      return Ext.ux.form.SimpleCombo.superclass.getValue.call(this) || 
-        (this.customProperties ? this.getRawValue() : '');
-    }
-
-});
-Ext.reg('simplecombo', Ext.ux.form.SimpleCombo);
-
-/**
- * Used by designer to edit javascript code. 
- * When codepress is installed it will used as the editor otherwise textarea
- * @type component
- */  
-Ext.ux.form.ScriptEditor = Ext.extend(Ext.BoxComponent, {
-  
-  /**
-   * The value used by the scripteditor (defaults null)
-   * @type {String}
-   */
-  value : undefined,
-  
-  /**
-   * Default language of scripteditor (defaults javascript)
-   * @type {String}
-   @cfg */
-  language : 'javascript',
-  
-  /**
-   * Should it use codePress as code editor (defaults true)
-   * @type {Boolean}
-   @cfg */
-  codePress : true, //codePress enabled
-  
-  /**
-   * @private overridde setValue so value property value is set
-   */
-  setValue : function(text){
-    this.value =  text;
-  },
-
-  /**
-   * @private overridde getValue so value property value is read
-   */  
-  getValue : function(){
-    return this.value || "";
-  },
-  
-  /**
-   * @private The data is always valid
-   */
-  isValid : function(preventMark){
-     return true;
-  },
-   
-  /**
-   * We open the scripteditor window on this event
-   */
-  onTriggerClick : function() {
-    if(this.disabled){return;}
-    if (!this.editorWin) {
-      var tf = (this.codePress && Ext.ux.CodePress) 
-             ?  new Ext.ux.CodePress({language: this.language ,autoResize:true,trim : true})
-             :  new Ext.form.TextArea({resize:Ext.emptyFn});
-      this.editorWin = new Ext.Window({
-          title  : "ScriptEditor",
-          iconCls: 'icon-editEl',
-          closable:true,
-          width:600,
-          height:450,
-          plain:true,
-          modal: true,
-          maximizable : true,          
-          layout      : 'fit',
-          items       : tf,
-          closeAction : 'hide',
-          keys: [{
-              key: 27,
-              scope: this,
-              fn: function() {
-                this.editorWin.hide();
-                Ext.getCmp(this.editor).cancelEdit();
-              }}],
-          buttons: [{
-             text    : "Close",
-             scope   : this,
-             handler : function() {             
-               this.editorWin.hide(); 
-               Ext.getCmp(this.editor).cancelEdit();  
-             }
-            },{
-             text    : "Apply",
-             scope   : this,
-             handler : function() {       
-               this.setValue(tf.getValue());
-               this.editorWin.hide();
-               this.editorWin.el.unmask(); 
-               Ext.getCmp(this.editor).completeEdit();
-             }
-           }] 
-        });
-      this.editorWin.tf = tf;
-      this.editorWin.doLayout();
-      this.editorWin.on('resize',function () {tf.resize()});
-      }
-    this.editorWin.show();
-    this.editorWin.tf.setValue(this.value || this.defaultValue);
-  },
-  
-  /**
-   * @private During render we create the the 'Click to edit' box
-   * @param {Component} ct The component to render
-   * @param {Object} position A object containing the position of the component
-   */
-  onRender : function(ct, position){
-   this.editor = ct.id;
-   Ext.ux.form.ScriptEditor.superclass.onRender.call(this, ct, position);
-   this.el = ct.createChild({tag: "div",cls:'x-form-text'},position);
-   this.trigger = this.el.createChild({tag: "div"});
-   this.trigger.createChild({tag:"div", cls:"icon-scripteditor",html:"&nbsp;"});
-   this.trigger.createChild({tag:"div",cls:"text-scripteditor",html:"Click to edit"});
-   this.trigger.on("click", this.onTriggerClick, this, {preventDefault:true});
-  }
-
-});
-Ext.reg('scripteditor', Ext.ux.form.ScriptEditor);
 
 /**
  * The propertyrecord used by the property grid. 
