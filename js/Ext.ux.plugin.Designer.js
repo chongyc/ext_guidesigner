@@ -92,6 +92,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * @type {Boolean}
    @cfg */    
   enableVersion : true,
+
+  /**
+   * An array of property defintion to add. This is the list under add item
+   * @type {Array}
+   @cfg */
+  propertyDefintionFiles : null ,
   
   /**
    * An url specifing the json to load
@@ -101,6 +107,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
+  
   
   licenseText  :  "/* This file is created or modified with Ext.ux.plugin.GuiDesigner */",
    
@@ -781,8 +788,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         }
         this.toolboxPath = path;
         this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
+        //Build the url array used to load the property list
+        var urls = [this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json']
+        for (var i=0;this.propertyDefintionFiles && i<this.propertyDefintionFiles.length;i++)
+           urls.push(this.propertyDefintionFiles[i]);  
         this.properties = new Ext.data.JsonStore({
-            url: this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json',
+            proxy : new Ext.ux.data.HttpMergeProxy(urls),
             sortInfo : {field:'name',order:'ASC'},
             root: 'properties',
             fields: ['name', 'type','defaults','desc','instance','editable','values']

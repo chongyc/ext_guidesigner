@@ -13,6 +13,8 @@ TODO
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
  - Simplify the code used for Ext.ux.grid.PropertyGrid.
+ - Add more design elements which are available to Ext.ux.Designer.Components
+ - Add multipleAjax(callback,array of url,baseparam) function to Util. 
  
  Change History:
  Version 2.1.0:
