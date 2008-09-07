@@ -537,13 +537,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
            //Check if whe can find parent which can be redraw
            var c = '';
            p = this.getContainer(el);
-           //Search if whe find a layout capeble contianer
+           //Search if whe find a layout capable contianer
            while (p!=this.container && !c) {
              c = p.codeConfig.layout;
-             if (!c || (p==el && c)) 
-                p = this.getContainer(p.ownerCt);
+             p = this.getContainer(p.ownerCt);
            }
-           p = c ? p : this.getContainer(el.ownerCt);
         }
         this.apply(p,this.getConfig(p).items);
         this.redrawContainer=false;
