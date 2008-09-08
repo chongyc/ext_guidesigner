@@ -32,7 +32,7 @@
 
 				try {
 					a = Ext.ux.JSON.decode('{ {{ }');
-			        ok(fale, "Syntax error expected");
+			        fail("Syntax error expected");
 				} catch (e) {
 					isaOK(e,'SyntaxError', 'SyntaxError throwed');
 				}
@@ -61,6 +61,18 @@
 			    is(a['g'].toString(),[1,2,4,3].toString(),'Merge array ok');
 
 			 	//diag('Encoder operations:');
+				/*a = Ext.ux.JSON.decode('{\
+					scope : this,\
+					handler : function (a,b){\
+						return a + b;\
+					},\
+					xtype : \'gmappanel\'\
+			 	}');
+			 	
+			 	var b = Ext.ux.JSON.encode(a);
+			 	
+			 	ok(b,'ok');
+			 	*/
 
 			});
 		</script>
