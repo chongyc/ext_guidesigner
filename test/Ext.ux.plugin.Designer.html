@@ -70,73 +70,13 @@ width : 800,\
 height : 500,\
 modal : true,\
 title : "title",\
-layout : "border",\
 items : [{\
-    region : "west",\
-    split : true,\
     width : 300,\
     xtype : "form",\
-    slot : "add_place_form",\
-    bodyStyle : "padding:10px",\
-    labelAlign : "top",\
-    onSubmit : Ext.emptyFn,\
-    submit : Ext.emptyFn,\
-    buttons : [{\
-                        xtype : "button",\
-                        text : "add",\
-                        handler : this.addPlaceSubmit,\
-                        scope : this\
-                    },{\
-                        xtype : "button",\
-                        text : "cancel",\
-                        handler : function () {\
-                            this.close();\
-                        },\
-                        scope : this\
-                    }],\
     items : [{\
-        xtype : "textfield",\
-        fieldLabel : "name",\
-        name : "place_name",\
-        anchor : "98%"\
-      },{\
         anchor : "98%",\
         xtype : "panel",\
         border : false,\
-        defaults : {\
-                            border : false\
-                        },\
-        layout : "column",\
-        items : [{\
-            columnWidth : 0.99,\
-            layout : "form",\
-            items : [{\
-                xtype : "textfield",\
-                slot : "add_place_address_fld",\
-                fieldLabel : "address",\
-                name : "place_adr",\
-                anchor : "98%"\
-              }],\
-            border : false\
-          },{\
-            width : 60,\
-            bodyStyle : "padding-top:18px",\
-            items : [{\
-                id : "add_place_geocode_btn",\
-                xtype : "button",\
-                text : "search",\
-                handler : this.geoCode,\
-                scope : this\
-              }],\
-            border : false\
-          }]\
-      },{\
-        anchor : "98%",\
-        xtype : "panel",\
-        border : false,\
-        defaults : {\
-                            border : false\
-                        },\
         layout : "column",\
         items : [{\
             columnWidth : 0.5,\
@@ -160,28 +100,8 @@ items : [{\
                 anchor : "98%"\
               }],\
             border : false\
-          },{\
-            width : 85,\
-            bodyStyle : "padding-top:18px",\
-            items : [{\
-                id : "add_place_marker_btn",\
-                xtype : "button",\
-                text : "set"\
-              }],\
-            border : false\
           }]\
-      },{\
-        xtype : "textarea",\
-        fieldLabel : "desc",\
-        name : "place_desc",\
-        anchor : "98%"\
       }]\
-  },{\
-    id : "add_place_gmap",\
-    region : "center",\
-    xtype : "panel",\
-    gMapCustomize : this.gMapCustomize,\
-    gMapCustomizeScope : this\
   }]\
 }\
 				';
