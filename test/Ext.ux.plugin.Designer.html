@@ -69,7 +69,7 @@
 width : 800,\
 height : 500,\
 modal : true,\
-title : "Добавить новое место",\
+title : "title",\
 layout : "border",\
 items : [{\
     region : "west",\
@@ -83,12 +83,12 @@ items : [{\
     submit : Ext.emptyFn,\
     buttons : [{\
                         xtype : "button",\
-                        text : "Добавить",\
+                        text : "add",\
                         handler : this.addPlaceSubmit,\
                         scope : this\
                     },{\
                         xtype : "button",\
-                        text : "Отменить",\
+                        text : "cancel",\
                         handler : function () {\
                             this.close();\
                         },\
@@ -96,7 +96,7 @@ items : [{\
                     }],\
     items : [{\
         xtype : "textfield",\
-        fieldLabel : "Название места",\
+        fieldLabel : "name",\
         name : "place_name",\
         anchor : "98%"\
       },{\
@@ -113,7 +113,7 @@ items : [{\
             items : [{\
                 xtype : "textfield",\
                 slot : "add_place_address_fld",\
-                fieldLabel : "Адрес места",\
+                fieldLabel : "address",\
                 name : "place_adr",\
                 anchor : "98%"\
               }],\
@@ -124,7 +124,7 @@ items : [{\
             items : [{\
                 id : "add_place_geocode_btn",\
                 xtype : "button",\
-                text : "Искать",\
+                text : "search",\
                 handler : this.geoCode,\
                 scope : this\
               }],\
@@ -144,7 +144,7 @@ items : [{\
             items : [{\
                 xtype : "textfield",\
                 id : "add_place_lat_fld",\
-                fieldLabel : "Широта",\
+                fieldLabel : "lat",\
                 name : "place_lat",\
                 anchor : "98%"\
               }],\
@@ -155,7 +155,7 @@ items : [{\
             items : [{\
                 xtype : "textfield",\
                 id : "add_place_lng_fld",\
-                fieldLabel : "Долгота",\
+                fieldLabel : "long",\
                 name : "place_lng",\
                 anchor : "98%"\
               }],\
@@ -166,13 +166,13 @@ items : [{\
             items : [{\
                 id : "add_place_marker_btn",\
                 xtype : "button",\
-                text : "Установить"\
+                text : "set"\
               }],\
             border : false\
           }]\
       },{\
         xtype : "textarea",\
-        fieldLabel : "Краткое описание",\
+        fieldLabel : "desc",\
         name : "place_desc",\
         anchor : "98%"\
       }]\
