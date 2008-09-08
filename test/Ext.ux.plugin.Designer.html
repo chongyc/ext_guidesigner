@@ -41,7 +41,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 1 });
+				plan({ tests: 2 });
 
 				//diag('Designer operations:');
 				var phpSupport;
@@ -113,7 +113,8 @@ items : [{\
                     },cfg.json));
                 w.show();
 				
-				pass('ok');
+				ok(w.getComponent('add_place_lng_fld'),'lng founded');
+				ok(w.getComponent('add_place_lat_fld'),'lat founded');
 			});
 		</script>
 	</head>
