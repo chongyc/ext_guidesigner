@@ -164,8 +164,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 if(document.getElementById(files[f])) {continue;}
                 if (!this.scriptLoader(files[f],false)) {
                   var e = new Error('Failed to load javascript '+ files[f]);
-                  if (this.fireEvent('error','set',e)!==true)
-                    throw e;
+                  if (this.fireEvent('error','set',e)) throw e;
                 }
               }
             }
@@ -199,7 +198,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 applyTo[j] = items[i];
               }
             } catch (e) {
-              allSet |= (this.fireEvent('error','set',e)===true);
+              allSet |= (this.fireEvent('error','set',e)===false);
             }
           }
       }
@@ -336,7 +335,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        }
       if (el.rendered && el.layout && el.layout.layout) el.doLayout();     
      } catch (e) {   
-      if (this.fireEvent('error','apply',e)!==true) throw e;
+      if (this.fireEvent('error','apply',e)) throw e;
      } finally {
       this.fireEvent('afterapply',el,items);
      } 
@@ -586,7 +585,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      
           function singleWord(){
             var s = ch;
-            while (next() && ": \t\n\r.-+={(".indexOf(ch)==-1) {s+= ch}
+            while (next() && ": \t\n\r.-+={(}[])'\"".indexOf(ch)==-1) {s+= ch}
             return s;
           }
      
@@ -678,7 +677,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     k = ch=='"' || ch=="'" ? string() : singleWord();
                     white();
                     if (ch != ':') {
-                        break;
+                      error("Bad key for object");
                     }
                     next();
                     white();
@@ -765,6 +764,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   at--;
               }
             }
+            error('Unexpected end of code');
           }
                
           function code() {
@@ -826,7 +826,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     return code();
               }
           }          
-        try {  
+        try {
           var v = value(false);
           white();
           if (ch) error("Invalid Json");
@@ -834,7 +834,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           if (this.jsonId) v = this.editable(v);
           return v;
         } catch (e) {
-          if (this.fireEvent('error','decode',e)!==true) throw e;
+          if (this.fireEvent('error','decode',e)) throw e;
         }
      },
           

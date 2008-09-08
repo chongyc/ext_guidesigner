@@ -25,6 +25,7 @@
  */
 Ext.ux.Util = function(config){
   Ext.apply(this, config);
+  Ext.ux.Util.superclass.constructor.call(this);
   this.initialize();
 };
 
@@ -51,7 +52,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
          * @param {Object} error The error object created by parser
          * @return {Boolean} when true the error is supressed
          */
-        'error' : false
+        'error' : true
       });
    },
 

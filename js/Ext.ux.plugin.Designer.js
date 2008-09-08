@@ -553,7 +553,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         this.apply(p,this.getConfig(p).items);
         this.redrawContainer=false;
         this.selectElement(id);
-      } catch (e) { Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); }
+      } catch (e) { 
+         Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); 
+         return false;
+      }
       this.fireEvent('change',el);
       this.modified = true;
       return true;
