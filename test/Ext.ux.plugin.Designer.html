@@ -68,38 +68,25 @@
 {\
 width : 800,\
 height : 500,\
-modal : true,\
-title : "title",\
+xtype : "form",\
 items : [{\
-    width : 300,\
-    xtype : "form",\
+    xtype : "panel",\
+    layout : "column",\
     items : [{\
-        anchor : "98%",\
-        xtype : "panel",\
-        border : false,\
-        layout : "column",\
+        columnWidth : 0.5,\
+        layout : "form",\
         items : [{\
-            columnWidth : 0.5,\
-            layout : "form",\
-            items : [{\
-                xtype : "textfield",\
-                id : "add_place_lat_fld",\
-                fieldLabel : "lat",\
-                name : "place_lat",\
-                anchor : "98%"\
-              }],\
-            border : false\
-          },{\
-            columnWidth : 0.5,\
-            layout : "form",\
-            items : [{\
-                xtype : "textfield",\
-                id : "add_place_lng_fld",\
-                fieldLabel : "long",\
-                name : "place_lng",\
-                anchor : "98%"\
-              }],\
-            border : false\
+            xtype : "textfield",\
+            id : "add_place_lat_fld",\
+            fieldLabel : "lat"\
+          }]\
+      },{\
+        columnWidth : 0.5,\
+        layout : "form",\
+        items : [{\
+            xtype : "textfield",\
+            id : "add_place_lng_fld",\
+            fieldLabel : "long"\
           }]\
       }]\
   }]\
