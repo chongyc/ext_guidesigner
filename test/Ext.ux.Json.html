@@ -14,7 +14,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 16 });
+				plan({ tests: 19 });
 
 				//diag('Decoder operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
@@ -72,12 +72,11 @@
 			 	
 			 		is(a.__JSON__scope, 'config.DATA.field', "scope: undefined decoded as string into __JSON__scope #2");
 			 	} catch (e) {
-			 		fail("scope: undefined decoded as string into __JSON__scope #2");s
+			 		fail("scope: undefined decoded as string into __JSON__scope #2");
 			 	}
 
-
 			 	//diag('Encoder operations:');
-				/*a = Ext.ux.JSON.decode('{\
+				var obj = Ext.ux.JSON.decode('{\
 					scope : this,\
 					handler : function (a,b){\
 						return a + b;\
@@ -85,10 +84,12 @@
 					xtype : \'gmappanel\'\
 			 	}');
 			 	
-			 	var b = Ext.ux.JSON.encode(a);
+			 	var obj_string = Ext.ux.JSON.encode(obj);
+			 	var obj_copy = Ext.ux.JSON.decode(obj_string);
 			 	
-			 	ok(b,'ok');
-			 	*/
+			 	is(obj.scope, obj_copy.scope, "Encoded equally: scope");
+			 	is(obj.handler(1,10), obj_copy.handler(5,6), "Encoded equally: handler");
+			 	is(obj.xtype, obj_copy.xtype, "Encoded equally: gmappanel");
 
 			});
 		</script>
