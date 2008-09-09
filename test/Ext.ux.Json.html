@@ -14,7 +14,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 15 });
+				plan({ tests: 16 });
 
 				//diag('Decoder operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
@@ -59,6 +59,22 @@
 			    is(a['b'],'2','Merge main merge ok');
 			    ok(a['c']['d']='2' && a['c']['e']=='2' && a['c']['f']=='3' ,'Merge object ok');
 			    is(a['g'].toString(),[1,2,4,3].toString(),'Merge array ok');
+
+
+				try {
+					a = Ext.ux.JSON.decode('{\
+						scope : config.DATA.field,\
+						handler : function (a,b){\
+							return a + b;\
+						},\
+						xtype : \'gmappanel\'\
+				 	}');
+			 	
+			 		is(a.__JSON__scope, 'config.DATA.field', "scope: undefined decoded as string into __JSON__scope #2");
+			 	} catch (e) {
+			 		fail("scope: undefined decoded as string into __JSON__scope #2");s
+			 	}
+
 
 			 	//diag('Encoder operations:');
 				/*a = Ext.ux.JSON.decode('{\
