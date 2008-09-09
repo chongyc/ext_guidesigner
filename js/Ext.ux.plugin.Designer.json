@@ -124,22 +124,18 @@
             tooltip : 'Show design in window',
             hidden  : !scope.enableShow,
             handler : function(){
-              //Disable the designer so tabindex is disabled
-              scope.container.disable();
               var cfg = scope.getConfig();
               var w = new Ext.Window(Ext.apply({
                     title  : 'Show Config', 
                     border  : false,
+                    layout  : 'fit',
                     width:600,
                     height: 400,
                     iconCls: 'icon-show',
                     modal       : true,
                     maximizable : true,
                     closeAction : 'close',
-                    items       : cfg,
-                    listeners   : { 'beforeclose' : function(){
-                                      scope.container.enable();
-                                  }} 
+                    items       : cfg
                     },cfg.json));
                 w.show();
             }

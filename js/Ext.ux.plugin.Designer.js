@@ -94,10 +94,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   enableVersion : true,
 
   /**
-   * An array of property defintion to add. This is the list under add item
+   * An array of property defintion to add. This is the list under add item needs ext2.2
    * @type {Array}
    @cfg */
-  propertyDefintionFiles : null ,
+  propertyDefinitionFiles : null ,
   
   /**
    * An url specifing the json to load
@@ -132,15 +132,13 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    */
   fileControl : null,
    
+   
   /**
-   * Init the plugin ad assoiate it to a field
-   * @param {Component} field The component to connect this plugin to
+   * Called from within the constructor allowing to initialize the parser
    */
-  init: function(field) {
-    Ext.QuickTips.init();
-    this.container = field;
-    this.jsonScope = this.scope || this.container;
-    
+  initialize: function() {
+    Ext.ux.plugin.Designer.superclass.initialize.call(this);
+    Ext.QuickTips.init();    
     this.addEvents({
       /**
        * Fires before the toolbox is shown, returning false will disable show
@@ -154,17 +152,31 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
        * @param {Object} toolbox The toolbox window
        */
       'beforehide' : true,
-      
+      /**
+       * Fires after a item is added to designer
+       * @event add
+       */      
       'add' : true,
-      
+      /**
+       * Fires after a item is removed from designer
+       * @event remove
+       */            
       'remove' : true,
-      
+      /**
+       * Fires after a item is changed in designer
+       * @event change
+       */            
       'change' : true,
-      
+      /**
+       * Fires after a new configuration is loaded into the designer
+       * @event newconfig
+       */            
       'newconfig': true,
-      
+      /**
+       * Fires after a item is selected in designer
+       * @event add
+       */            
       'select'   : true,
-
       /**
        * Fires after loadConfig fails
        * @event loadfailed
@@ -172,7 +184,16 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
        * @param {Object} response Response object
        */      
       'loadfailed' : false
-    });
+    });        
+   },      
+      
+  /**
+   * Init the plugin ad assoiate it to a field
+   * @param {Component} field The component to connect this plugin to
+   */
+  init: function(field) {
+    this.container = field;
+    this.jsonScope = this.scope || this.container;
         
     //Init the components drag & drop and toolbox when it is rendered
     this.container.on('render', function() {    
@@ -217,6 +238,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     }, this);
   },
     
+  /** 
+   * Create the context menu for a selected element
+   */
   initContextMenu : function () {
     var contextMenu = new Ext.menu.Menu({items:[{
           text    : 'Delete this element',
@@ -302,6 +326,12 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     this.redrawElement();
   }, 
   
+  /**
+   * Remove an element
+   * @param {Element} source The element to remove
+   * @param {Boolean} internal When true no remove event and redraw is fired (defaults false)
+   * @return {Boolean} Indicator telling element was removed
+   */
   removeElement : function(source,internal) {
     if (!source) return false;
     var own = this.getContainer(source.ownerCt);
@@ -322,6 +352,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     return false;
   },
   
+  /**
+   * Update the menu buttons for undo and redo
+   */
   menuUpdate : function(){
     var menu = Ext.getCmp(this.undoBtnId);
     if (menu) if (this.undoHistoryMark>0) menu.enable(); else menu.disable();
@@ -329,6 +362,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     if (menu) if (this.undoHistory.length>this.undoHistoryMark+1) menu.enable(); else menu.disable();
   },
   
+  /**
+   * Mark a configuration for undo
+   */
   markUndo : function() {
     while (this.undoHistory.length>this.undoHistoryMark) this.undoHistory.pop();
     this.undoHistory.push(this.encode(this.getConfig(),0,true));
@@ -337,6 +373,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     this.menuUpdate();
   },
   
+  /**
+   * Undo a configuration
+   */
   undo : function(){
     if (this.undoHistoryMark>0) {
       if (this.undoHistoryMark==this.undoHistory.length) {
@@ -350,6 +389,9 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     }
   },
   
+  /**
+   * Redo an undo configuration
+   */
   redo : function(){
     if (this.undoHistory.length>this.undoHistoryMark+1) {
       this.undoHistoryMark++;
@@ -757,6 +799,25 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   },
   
   /**
+   * Overwrite the jsonparser to check if a xtype exists, when not save it for editing
+   * and convert it into a panel.
+   * @param {Object} object The object array used to assing
+   * @param {String} key The key of the element within then object
+   * @param {Object} value The value of the element within the object
+   * @retrun {Object} The value assigned
+   */
+  setObjectValue : function (object,key,value) {
+    if (key=='xtype' && this.jsonId) {
+      if (!Ext.ComponentMgr.isTypeAvailable(value)) {
+        object[this.jsonId + key] = value;
+        value = 'panel'
+        this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + value + ' does not exists'));      
+      } else delete object[this.jsonId + key];
+    }
+    return Ext.ux.plugin.Designer.superclass.setObjectValue.call(this,object,key,value);
+  },
+  
+  /**
    * @private Function called to initalize the property editor which can be used to edit properties
    * @param {PropertyGrid} propertyGrid The property grid which is used to edit
    */
@@ -769,6 +830,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
         //When somebody changed the json, then make sure we init the changes
         if (id=='json') this.jsonInit(this.decode(value));
+        //Also make sure fallback for xtype is pressent
+        if (id=='xtype') this.setObjectValue(source,id,value);
         this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);
   },
@@ -793,14 +856,18 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
         //Build the url array used to load the property list
         var urls = [this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json']
-        for (var i=0;this.propertyDefintionFiles && i<this.propertyDefintionFiles.length;i++)
-           urls.push(this.propertyDefintionFiles[i]);  
+        for (var i=0;this.propertyDefinitionFiles && i<this.propertyDefinitionFiles.length;i++) {
+           urls.push(this.propertyDefinitionFiles[i]);  
+        }
+        var proxy = new Ext.ux.data.HttpMergeProxy(urls);
         this.properties = new Ext.data.JsonStore({
-            proxy : new Ext.ux.data.HttpMergeProxy(urls),
+            proxy : proxy, //Needed for Ext2.2
             sortInfo : {field:'name',order:'ASC'},
             root: 'properties',
             fields: ['name', 'type','defaults','desc','instance','editable','values']
         });
+        if (Ext.isVersion('2.0','2.1.9')) //Fix for ExtJS versions <= 2.1
+           this.properties.proxy = proxy; 
         this.properties.load();
         //Add Filter function based on instance
         var filterByFn = function(rec,id) {

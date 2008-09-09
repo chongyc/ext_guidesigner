@@ -14,13 +14,16 @@ TODO
  - Make it possible to load more then one component tree and make this version depended
  - Simplify the code used for Ext.ux.grid.PropertyGrid.
  - Add more design elements which are available to Ext.ux.Designer.Components
- - Add multipleAjax(callback,array of url,baseparam) function to Util. 
+ - Do test on designer problem
+ - Select of element does not work in firefox on test screen.
+ - Delete property throws error
  
  Change History:
  Version 2.1.0:
   + Added a new json parser therefor begin and end tags are no longer needed in code
   + Visual resize added activated by context menu
   + Visual move of element in absolute layout activated by context menu
+  + Added XType fallback to panel for unknown xtypes
   + All xtypes which are loaded before guidesigner is load are now selectable
   + Found a good solotion for property grid error
   + Split single javascript files containing multiple classes into files
@@ -28,6 +31,7 @@ TODO
   + Toolbox is forced to do a layout before showing.
   + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
   * Fixed redrawElement problem causing a blank screen to be shown
+  * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed
  
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon

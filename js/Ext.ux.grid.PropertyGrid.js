@@ -60,7 +60,7 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
                 } else if (typeof(o[k]) == 'object') {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: o[this.jsonId + k] || String(Ext.ux.JSON.encode(o[k])), type : 'object'}, k));
                 } 
-                  data.push(new Ext.grid.PropertyRecord({name: k, value: o[this.jsonId + k] || o[k], type : o[this.jsonId + k] ? 'function' : '' }, k));
+                  data.push(new Ext.grid.PropertyRecord({name: k, value: o[this.jsonId + k] || o[k], type : null }, k));
             }
         }
         this.store.loadRecords({records: data}, {}, true);
@@ -84,8 +84,9 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     updateSource : function (prop,value,type) {
       var propType = this.getPropertyType(prop);
       if (!type && propType) type=propType.type;
-      if (typeof(this.source[this.jsonId + prop])!='undefined' ||
-       ['object','function','mixed'].indexOf(type)!=-1 || !propType) {
+      if ((typeof(this.source[this.jsonId + prop])!='undefined' ||
+          ['object','function','mixed'].indexOf(type)!=-1 || !propType)
+          && !(propType && propType.values)) {
          this.source[this.jsonId + prop] = value;
          try {
           //Set the jsonScope to be used during eval
@@ -121,7 +122,7 @@ Ext.ux.grid.PropertyColumnModel = function(grid, store){
         'html' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'html'})),
         'css' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'css'})),
         'editlist' :new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:true})),
-        'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:true}))      
+        'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false}))      
     });
     this.valueRendererDelegate = this.valueRenderer.createDelegate(this);
     this.propertyRendererDelegate = this.propertyRenderer.createDelegate(this);

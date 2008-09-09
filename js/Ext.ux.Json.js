@@ -495,7 +495,21 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
          return a.join("");
        }
      },
-          
+     
+     /**
+      * Function used to by decode to assign a value to a key within a object created during decode
+      * Overwriting this functions allows to write you to rewrite output of value depending on situtation
+      * @param {Object} object The object array used to assing
+      * @param {String} key The key of the element within then object
+      * @param {Object} value The value of the element within the object
+      * @retrun {Object} The value assigned
+      */
+     setObjectValue : function (object,key,value) {
+      //Phase three load javascript, stylesheet and evalute scope objects
+       if (key=='json') this.set(this.getScope(),value,true);
+       return object[key]=value;
+     },
+ 
      /**
       * Decode function for parsing json text into objects
       * The parsing contains four stages. 
@@ -682,15 +696,13 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     next();
                     white();
                     start = at-1;
-                    o[k] = value(k!='items' );
+                    self.setObjectValue(o,k,value(k!='items'));
                     if (o[k]===null) {
                       //Phase two remove empty object results
                       delete o[k];
                     } else if (isCode && k!='items') { 
                        //Phase four save readable code for editing
-                       if (self.jsonId) o[self.jsonId + k] = lastCode;
-                       //Phase three load javascript, stylesheet and evalute scope objects
-                       if (k=='json') self.set(self.getScope(),o[k],true);
+                       if (self.jsonId && !o[self.jsonId + k]) o[self.jsonId + k] = lastCode;
                     }
 
                     white();
@@ -827,6 +839,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               }
           }          
         try {
+          if (!text) return null;
           var v = value(false);
           white();
           if (ch) error("Invalid Json");
