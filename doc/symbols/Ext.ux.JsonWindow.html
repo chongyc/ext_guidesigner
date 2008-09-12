@@ -15,14 +15,14 @@
     <h1>Class Ext.ux.JsonWindow</h1>     
     <table cellspacing="0">
         <tr><td class="label">Package:</td><td class="hd-info">Ext.ux</td></tr>
-        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.JsonWindow" ext:member="" href="src/GuiBuilder_js_Ext.ux.JsonPanel.js.html">Ext.ux.JsonPanel.js</a></td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.JsonWindow" ext:member="" href="src/GuiBuilder_js_Ext.ux.JsonWindow.js.html">Ext.ux.JsonWindow.js</a></td></tr>
         <tr><td class="label">Class:</td><td class="hd-info">JsonWindow</td></tr>
 <!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
         <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.JsonWindow" ext:member="" href="Ext.Window">Ext.Window</a></td></tr>        
     </table>
     
     <div class="description">
-         
+        JsonWindow implements a way to load a json directly into a windowThe window config elements of this window for example x,y can be set by specifing the values in the json tag 
     </div>
     
     <div class="hr"></div>
@@ -79,18 +79,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setX</b>(&nbsp;<code> x</code>&nbsp;) : void                                
+                <b>setX</b>(&nbsp;<code>number x</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Set the x position of window</div>
                     <div class="long">
-                            
+                        Set the x position of window    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>x</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>x</code> : number
+                                    <div class="sub-desc">&nbsp;the postion in pixels</div>                                   
                                 </li>
                             
                             </ul>
@@ -113,18 +113,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setY</b>(&nbsp;<code> y</code>&nbsp;) : void                                
+                <b>setY</b>(&nbsp;<code>number y</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Set the y position of window</div>
                     <div class="long">
-                            
+                        Set the y position of window    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>y</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>y</code> : number
+                                    <div class="sub-desc">&nbsp;the postion in pixels</div>                                   
                                 </li>
                             
                             </ul>
@@ -181,7 +181,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setAnchorTo</b>(&nbsp;<code> ar</code>&nbsp;) : void                                
+                <b>setAnchorTo</b>(&nbsp;<code> arg</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
                     <div class="long">
@@ -191,7 +191,7 @@
                             <ul>
                             
                                 <li>
-                                    <code>ar</code> : 
+                                    <code>arg</code> : 
                                     <div class="sub-desc">&nbsp;</div>                                   
                                 </li>
                             

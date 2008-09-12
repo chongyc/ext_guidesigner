@@ -1,5 +1,6 @@
  /*
   * Author: Sierk Hoeksma. WebBlocks.eu
+  * Contributions by : SamuraiJack
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
   * This plugin used to edit a panel
@@ -19,19 +20,9 @@
 
 Ext.namespace('Ext.ux.plugin');
 
-/*
-Ext.ux.plugin.DesignerWizard = function(json){
-  var cache = {};
-  return function(callback) {
-     if (!cache[json]) {  
-      cache[json] = new Ext.ux.JsonPanel({autoLoad:json,updateOwner:true});
-     }
-     cache[json].callback = callback;
-     (new Ext.Window(cache[json])).show();
-  }
-}
-
-/** Create a desginer */
+/** 
+ * Create a desginer 
+ */
 Ext.ux.plugin.Designer = function(config){
   Ext.ux.plugin.Designer.superclass.constructor.call(this,config);
   this.initialConfig = config;
@@ -559,10 +550,14 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * Refresh the content of the designer
    */
   refresh : function() {
-    this.setConfig(this.getConfig());
+    this.redrawElement(this.container);
   },
 
-  //Find parent which is of type container  
+  /**
+   * Find parent which is of type container
+   * @param {Element} el The element for which to find the contrainer
+   * @return {Container} The container found
+   */
   getContainer : function(el) {
     var p = el;
     while (p && p!=this.container && !this.isContainer(p)) p = p.ownerCt;
@@ -806,15 +801,15 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * @param {Object} value The value of the element within the object
    * @retrun {Object} The value assigned
    */
-  setObjectValue : function (object,key,value) {
+  setObjectValue : function (object,key,value,rawValue,scope) {
     if (key=='xtype' && this.jsonId) {
       if (!Ext.ComponentMgr.isTypeAvailable(value)) {
-        object[this.jsonId + key] = value;
+        rawValue = value;
         value = 'panel'
         this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + value + ' does not exists'));      
-      } else delete object[this.jsonId + key];
+      } else rawValue=null;
     }
-    return Ext.ux.plugin.Designer.superclass.setObjectValue.call(this,object,key,value);
+    return Ext.ux.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
   },
   
   /**
@@ -829,9 +824,10 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
         //When somebody changed the json, then make sure we init the changes
-        if (id=='json') this.jsonInit(this.decode(value));
-        //Also make sure fallback for xtype is pressent
-        if (id=='xtype') this.setObjectValue(source,id,value);
+        switch (id) {
+          case 'json' : this.jsonInit(this.decode(value));break
+          case 'xtype': this.setObjectValue(source,id,value);break;
+        }  
         this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);
   },

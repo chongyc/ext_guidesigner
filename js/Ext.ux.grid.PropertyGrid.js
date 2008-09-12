@@ -44,7 +44,8 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     jsonId : "__JSON__",
 
     getPropertyType : function (name) {
-      if (this.grid && this.grid.getPropertyType) return this.grid.getPropertyType(name);
+      if (this.grid && this.grid.getPropertyType) 
+         return this.grid.getPropertyType(name);
       return null;
     },
     

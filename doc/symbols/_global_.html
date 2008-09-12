@@ -56,6 +56,25 @@
             </td>
             <td class="sig">
                 <a id="Ext.Component-disabled"></a>
+                <b>Ext.ComponentMgr</b> :             
+                <div class="mdesc">   
+                    Override the Ext.ComponentMgr so that whe can validate if a type is available                        
+                </div>
+            </td>
+            <td class="msource">                
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ComponentMgr" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+        
+        
+                    
+        <tr class="property-row">
+            <td class="micon">
+                <a class="exi" href="#expand">&nbsp;</a>
+            </td>
+            <td class="sig">
+                <a id="Ext.Component-disabled"></a>
                 <b>Ext.ux.JSON</b> :             
                 <div class="mdesc">   
                     Create global object                        
@@ -64,6 +83,25 @@
             <td class="msource">                
                 _global_
                 <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.JSON" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+        
+        
+                    
+        <tr class="property-row">
+            <td class="micon">
+                <a class="exi" href="#expand">&nbsp;</a>
+            </td>
+            <td class="sig">
+                <a id="Ext.Component-disabled"></a>
+                <b>Ext.ux.grid.PropertyRecord</b> :             
+                <div class="mdesc">   
+                    The propertyrecord used by the property grid. Name is the key of a property, Value is the value of the property andtype is type of element. This type flag will control which editor is loaded                        
+                </div>
+            </td>
+            <td class="msource">                
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.grid.PropertyRecord" href="symbols/_global_.html">_global_</a>
             </td>
         </tr>
         
@@ -98,6 +136,94 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>Ext.isVersion</b>(&nbsp;<code>String fromVersion, String toVersion</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Check if ExtJS version is between from and to version</div>
+                    <div class="long">
+                        Check if ExtJS version is between from and to version    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>fromVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is at least required</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>toVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is used as end (default ExtJS version)</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">True when ExtJS version is between from and to version</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.isVersion" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>Ext.overrideIf</b>(&nbsp;<code>Class cl, Object obj,  fromVersion,  toVersion</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Override a class when the version matches according to isVersion</div>
+                    <div class="long">
+                        Override a class when the version matches according to isVersion    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>cl</code> : Class
+                                    <div class="sub-desc">&nbsp;The class to override</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>obj</code> : Object
+                                    <div class="sub-desc">&nbsp;The object containing the function to be overwritten</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>fromVersion</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>toVersion</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.overrideIf" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>fn</b>(&nbsp;<code> c</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short"></div>
@@ -125,89 +251,6 @@
             <td class="msource">
                 _global_
                 <a class="x-hidden" ext:cls="_global_" ext:member="_global_#fn" href="symbols/_global_.html">_global_</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>Ext.ux.SyncLoader</b>(&nbsp;<code>String url, Boolean cachingOff, Boolean responseXML</code>&nbsp;) : Boolean/String/XMLObject                                
-                <div class="mdesc">
-                    <div class="short">A Synchronized Content loader for data from url</div>
-                    <div class="long">
-                        A Synchronized Content loader for data from url    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>url</code> : String
-                                    <div class="sub-desc">&nbsp;The url to load synchronized</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>cachingOff</code> : Boolean
-                                    <div class="sub-desc">&nbsp;Should caching of file be disabled</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>responseXML</code> : Boolean
-                                    <div class="sub-desc">&nbsp;Should responseXML be returned instead of responseText</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>Boolean/String/XMLObject<div class="sub-desc">When there was a error False otherwise response base on responseXML flag</div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                _global_
-                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.SyncLoader" href="symbols/_global_.html">_global_</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>Ext.ux.ScriptLoader</b>(&nbsp;<code>String url, Boolean cachingOff</code>&nbsp;) : Boolean                                
-                <div class="mdesc">
-                    <div class="short">Function used to load a JavaScript into a document.head elementthe id of the script item is the name of the file.</div>
-                    <div class="long">
-                        Function used to load a JavaScript into a document.head elementthe id of the script item is the name of the file.    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>url</code> : String
-                                    <div class="sub-desc">&nbsp;The url to load javascript from</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>cachingOff</code> : Boolean
-                                    <div class="sub-desc">&nbsp;Should caching of javascript files be disabled</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>Boolean<div class="sub-desc">Indicator if load went corretly true/false</div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                _global_
-                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.ScriptLoader" href="symbols/_global_.html">_global_</a>
             </td>
         </tr>
                 

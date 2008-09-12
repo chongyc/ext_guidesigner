@@ -15,14 +15,14 @@
     <h1>Class Ext.ux.form.SimpleCombo</h1>     
     <table cellspacing="0">
         <tr><td class="label">Package:</td><td class="hd-info">Ext.ux.form</td></tr>
-        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.form.SimpleCombo" ext:member="" href="src/GuiBuilder_js_Ext.ux.grid.PropertyGrid.js.html">Ext.ux.grid.PropertyGrid.js</a></td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.form.SimpleCombo" ext:member="" href="src/GuiBuilder_js_Ext.ux.ComponentCollection.js.html">Ext.ux.ComponentCollection.js</a></td></tr>
         <tr><td class="label">Class:</td><td class="hd-info">SimpleCombo</td></tr>
 <!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
         <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.form.SimpleCombo" ext:member="" href="Ext.form.ComboBox">Ext.form.ComboBox</a></td></tr>        
     </table>
     
     <div class="description">
-        Used by designer when selecting a value from a ComponentDoc defined value property in the grid 
+        A combo that can be filed by a single array. When customProperties is trueit will also return the rawValue when there is no value in the list 
     </div>
     
     <div class="hr"></div>
@@ -97,18 +97,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setList</b>(&nbsp;<code> list</code>&nbsp;) : void                                
+                <b>setList</b>(&nbsp;<code>Array list</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">A fast loading function for element in combobox.</div>
                     <div class="long">
-                            
+                        A fast loading function for element in combobox.    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>list</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>list</code> : Array
+                                    <div class="sub-desc">&nbsp;a list of elements which are convert into name,value pairs for combobox.</div>                                   
                                 </li>
                             
                             </ul>
@@ -124,6 +124,35 @@
             <td class="msource">
                 SimpleCombo
                 <a class="x-hidden" ext:cls="Ext.ux.form.SimpleCombo" ext:member="Ext.ux.form.SimpleCombo#setList" href="symbols/Ext.ux.form.SimpleCombo.html">SimpleCombo</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getValue</b>(&nbsp;<code></code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Override the getValue so that when customProperties is setthe rawValues is returned</div>
+                    <div class="long">
+                        Override the getValue so that when customProperties is setthe rawValues is returned    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">Based the entered key the combobox value or when not found and customProperties is true the raw entered value</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                SimpleCombo
+                <a class="x-hidden" ext:cls="Ext.ux.form.SimpleCombo" ext:member="Ext.ux.form.SimpleCombo#getValue" href="symbols/Ext.ux.form.SimpleCombo.html">SimpleCombo</a>
             </td>
         </tr>
                                                           

@@ -125,6 +125,8 @@
             hidden  : !scope.enableShow,
             handler : function(){
               var cfg = scope.getConfig();
+              //Clear scope so tabindexed and id's are cleared
+              scope.setConfig({});
               var w = new Ext.Window(Ext.apply({
                     title  : 'Show Config', 
                     border  : false,
@@ -135,7 +137,11 @@
                     modal       : true,
                     maximizable : true,
                     closeAction : 'close',
-                    items       : cfg
+                    items       : cfg,
+                    listeners   : { 'beforeclose' : function(){
+                         //Restore the tabindex and other stuff
+                         scope.undo();
+                    }} 
                     },cfg.json));
                 w.show();
             }

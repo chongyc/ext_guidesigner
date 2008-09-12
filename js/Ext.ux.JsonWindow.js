@@ -23,6 +23,7 @@
  * JsonWindow implements a way to load a json directly into a window
  * The window config elements of this window for example x,y can be set 
  * by specifing the values in the json tag
+ * @type component
  */
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
   

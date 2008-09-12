@@ -80,14 +80,15 @@
 
 
 				try {
+				    //Create a global config to be checked or otherwise exception, therefor evalException=false
 					a = Ext.ux.JSON.decode('{\
 						scope : config.DATA.field,\
 						handler : function (a,b){\
 							return a + b;\
 						},\
 						xtype : \'gmappanel\'\
-				 	}');
-			 	
+				 	}',{evalException:false});
+
 			 		is(a.__JSON__scope, 'config.DATA.field', "scope: undefined decoded as string into __JSON__scope #2");
 			 	} catch (e) {
 			 		fail("scope: undefined decoded as string into __JSON__scope #2");
@@ -101,10 +102,10 @@
 					},\
 					xtype : \'gmappanel\'\
 			 	}');
-			 	
+
 			 	var obj_string = Ext.ux.JSON.encode(obj);
 			 	var obj_copy = Ext.ux.JSON.decode(obj_string);
-			 	
+
 			 	is(obj.scope, obj_copy.scope, "Encoded equally: scope");
 			 	is(obj.handler(1,10), obj_copy.handler(5,6), "Encoded equally: handler");
 			 	is(obj.xtype, obj_copy.xtype, "Encoded equally: xtype");

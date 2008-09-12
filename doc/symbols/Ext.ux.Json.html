@@ -9,16 +9,16 @@
     </div>
     
     <div class="inheritance res-block"><pre class="res-block-inner">
-<a ext:cls="Ext.util.Observable" ext_member="" href="Ext.util.Observable">Ext.util.Observable</a>
+<a ext:cls="Ext.ux.Util" ext_member="" href="Ext.ux.Util">Ext.ux.Util</a>
 <img src="resources/elbow-end.gif"/>Ext.ux.Json
 </pre></div>
     <h1>Class Ext.ux.Json</h1>     
     <table cellspacing="0">
         <tr><td class="label">Package:</td><td class="hd-info">Ext.ux</td></tr>
-        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="src/GuiBuilder_js_Ext.ux.JsonPanel.js.html">Ext.ux.JsonPanel.js</a></td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="src/GuiBuilder_js_Ext.ux.Json.js.html">Ext.ux.Json.js</a></td></tr>
         <tr><td class="label">Class:</td><td class="hd-info">Json</td></tr>
 <!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
-        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="Ext.util.Observable">Ext.util.Observable</a></td></tr>        
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="Ext.ux.Util">Ext.ux.Util</a></td></tr>        
     </table>
     
     <div class="description">
@@ -35,60 +35,6 @@
             <th class="msource-header">Defined By</th>
         </tr>
         
-             
-        <tr class="config-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-listeners"></a>
-                <b>loadMask</b> : 
-                <div class="mdesc">
-                    <div class="short">Boolean indicator when true loadMsg will be shown</div>
-                    <div class="long">
-                        Boolean indicator when true loadMsg will be shown
-                    </div>
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#loadMask" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-             
-        <tr class="config-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-listeners"></a>
-                <b>loadMsg</b> : 
-                <div class="mdesc">
-                    <div class="short">The loading message</div>
-                    <div class="long">
-                        The loading message
-                    </div>
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#loadMsg" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-             
-        <tr class="config-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-listeners"></a>
-                <b>msgCls</b> : 
-                <div class="mdesc">
-                    <div class="short">Mask used for loading message</div>
-                    <div class="long">
-                        Mask used for loading message
-                    </div>
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#msgCls" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
              
         <tr class="config-row expandable">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -112,35 +58,17 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-listeners"></a>
-                <b>blockedJsonInit</b> : Array
+                <b>readable</b> : Boolean
                 <div class="mdesc">
-                    <div class="short">Array with items which should be blocked during init</div>
+                    <div class="short">Should the result of a encode be readable</div>
                     <div class="long">
-                        Array with items which should be blocked during init
+                        Should the result of a encode be readable
                     </div>
                 </div>
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#blockedJsonInit" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-             
-        <tr class="config-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-listeners"></a>
-                <b>disableCaching</b> : Boolean
-                <div class="mdesc">
-                    <div class="short">Should caching be disabled when JSON are loaded (defaults false).</div>
-                    <div class="long">
-                        Should caching be disabled when JSON are loaded (defaults false).
-                    </div>
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#disableCaching" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#readable" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
              
@@ -150,15 +78,87 @@
                 <a id="Ext.data.DataProxy-listeners"></a>
                 <b>licenseText</b> : String
                 <div class="mdesc">
-                    <div class="short">The lisenceText that should be added to each JSON File Created</div>
+                    <div class="short">The custom licenseText that should be added to each JSON File Created</div>
                     <div class="long">
-                        The lisenceText that should be added to each JSON File Created
+                        The custom licenseText that should be added to each JSON File Created
                     </div>
                 </div>
             </td>
             <td class="msource">
                 Json
                 <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#licenseText" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>jsonId</b> : String
+                <div class="mdesc">
+                    <div class="short">The internal tag added to an objectkey used to store original code of a objectvalue,when null the original code is not stored and encode will not be able to recreatejavascript code.</div>
+                    <div class="long">
+                        The internal tag added to an objectkey used to store original code of a objectvalue,when null the original code is not stored and encode will not be able to recreatejavascript code.
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#jsonId" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>scope</b> : Object
+                <div class="mdesc">
+                    <div class="short">Scope is used as binding varaible for <b>this</b> within the json</div>
+                    <div class="long">
+                        Scope is used as binding varaible for <b>this</b> within the json
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#scope" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>evalException</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Should an eval Exception been thrown causing parsing to stopor should it be converted into string</div>
+                    <div class="long">
+                        Should an eval Exception been thrown causing parsing to stopor should it be converted into string
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#evalException" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>fullEncode</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Flag indicating that whe should do a full encode, not only items keys recusivly</div>
+                    <div class="long">
+                        Flag indicating that whe should do a full encode, not only items keys recusivly
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#fullEncode" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
         
@@ -205,19 +205,14 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>addJsonHistory</b>(&nbsp;<code>String json</code>&nbsp;) : void                                
+                <b>initialize</b>(&nbsp;<code></code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short">Add a json to the json history</div>
+                    <div class="short">Called from within the constructor allowing to initialize the parser</div>
                     <div class="long">
-                        Add a json to the json history    
+                        Called from within the constructor allowing to initialize the parser    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
-                            
-                                <li>
-                                    <code>json</code> : String
-                                    <div class="sub-desc">&nbsp;the json to add</div>                                   
-                                </li>
                             
                             </ul>
                                                         
@@ -231,7 +226,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#addJsonHistory" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#initialize" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -239,25 +234,20 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getJsonHistory</b>(&nbsp;<code>Boolean keep</code>&nbsp;) : String                                
+                <b>getScope</b>(&nbsp;<code></code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Get the last item from the json history</div>
+                    <div class="short">Function returning the scope to beused for the json</div>
                     <div class="long">
-                        Get the last item from the json history    
+                        Function returning the scope to beused for the json    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
-                            
-                                <li>
-                                    <code>keep</code> : Boolean
-                                    <div class="sub-desc">&nbsp;Should history be untouched</div>                                   
-                                </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>String<div class="sub-desc">The json</div></li>
+                                <li>Object<div class="sub-desc">the object which should be used as scope when parsing</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -265,7 +255,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#getJsonHistory" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#getScope" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -273,25 +263,25 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setRequired_js</b>(&nbsp;<code>String list</code>&nbsp;) : void                                
+                <b>isEmpty</b>(&nbsp;<code>Object\Array obj</code>&nbsp;) : Boolean                                
                 <div class="mdesc">
-                    <div class="short">Load one or more javascripts. Is trigger by root element window.required_js in json file. The javascripts are synchonrized load before the JSON is evaluated. Base on the config itemdisableCaching (defaults true) the url of the javascript to load is made unique with parameter _dc.</div>
+                    <div class="short">Check if a object is empty, ignoring jsonId keys</div>
                     <div class="long">
-                        Load one or more javascripts. Is trigger by root element window.required_js in json file. The javascripts are synchonrized load before the JSON is evaluated. Base on the config itemdisableCaching (defaults true) the url of the javascript to load is made unique with parameter _dc.    
+                        Check if a object is empty, ignoring jsonId keys    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>list</code> : String
-                                    <div class="sub-desc">&nbsp;A comma seperated list of javascripts to load</div>                                   
+                                    <code>obj</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The json object to be checked</div>                                   
                                 </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>void<div class="sub-desc"></div></li>
+                                <li>Boolean<div class="sub-desc">true when object does not contain any data</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -299,7 +289,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#setRequired_js" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#isEmpty" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -307,25 +297,30 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setRequired_css</b>(&nbsp;<code>String list</code>&nbsp;) : void                                
+                <b>load</b>(&nbsp;<code>String/Object url, function/Container target</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Load one or more stylesheets. Is triggered by root element window.required_css in json file</div>
+                    <div class="short">Load a json object directly from url. Target can be a callback function orvisual component. When target is not set load will be come a synchrone call</div>
                     <div class="long">
-                        Load one or more stylesheets. Is triggered by root element window.required_css in json file    
+                        Load a json object directly from url. Target can be a callback function orvisual component. When target is not set load will be come a synchrone call    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>list</code> : String
-                                    <div class="sub-desc">&nbsp;A comma seperated list of stylesheets to load</div>                                   
+                                    <code>url</code> : String/Object
+                                    <div class="sub-desc">&nbsp;The url information to be used for loading</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>target</code> : function/Container
+                                    <div class="sub-desc">&nbsp;A callback function or container to render json\</div>                                   
                                 </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>void<div class="sub-desc"></div></li>
+                                <li>Object<div class="sub-desc">null when target is set otherwise the loaded json.</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -333,7 +328,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#setRequired_css" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#load" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -341,62 +336,23 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setBlockedJsonInit</b>(&nbsp;<code>Object args</code>&nbsp;) : void                                
+                <b>set</b>(&nbsp;<code>Object items, Element element,  scopeOnly</code>&nbsp;) : Boolean                                
                 <div class="mdesc">
-                    <div class="short">Added items to blockedJsonInit during jsonInit</div>
+                    <div class="short">Function called to set the values of items to element using element functionsSpecial keys within the object are required_css and required_jsthese keys can contain a comma seperated list of javascript or stylesheetsto load. Style sheets are loaded asynchone but javascript are loaded synchrone.</div>
                     <div class="long">
-                        Added items to blockedJsonInit during jsonInit    
+                        Function called to set the values of items to element using element functionsSpecial keys within the object are required_css and required_jsthese keys can contain a comma seperated list of javascript or stylesheetsto load. Style sheets are loaded asynchone but javascript are loaded synchrone.    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>args</code> : Object
-                                    <div class="sub-desc">&nbsp;A object indexed by xtype containing array of blocked keys</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#setBlockedJsonInit" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>jsonInit</b>(&nbsp;<code>Object config,  element,  all,  scopeOnly</code>&nbsp;) : Boolean                                
-                <div class="mdesc">
-                    <div class="short">Function called with config object of json file</div>
-                    <div class="long">
-                        Function called with config object of json file    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>config</code> : Object
-                                    <div class="sub-desc">&nbsp;The config object that can be applied</div>                                   
+                                    <code>items</code> : Object
+                                    <div class="sub-desc">&nbsp;The config object with items that should be set</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>element</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>all</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>element</code> : Element
+                                    <div class="sub-desc">&nbsp;The element to which to set the values</div>                                   
                                 </li>
                             
                                 <li>
@@ -416,7 +372,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#jsonInit" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#set" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -424,25 +380,25 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>isEmptyObject</b>(&nbsp;<code> obj</code>&nbsp;) : void                                
+                <b>clean</b>(&nbsp;<code>Object items</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Check if a object is empty</div>
+                    <div class="short">Clean the null elements from items object</div>
                     <div class="long">
-                        Check if a object is empty    
+                        Clean the null elements from items object    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>obj</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>items</code> : Object
+                                    <div class="sub-desc">&nbsp;The items object to be cleaned</div>                                   
                                 </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>void<div class="sub-desc"></div></li>
+                                <li>Object<div class="sub-desc">The cleaned items object</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -450,7 +406,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#isEmptyObject" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#clean" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -458,11 +414,84 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>applyJson</b>(&nbsp;<code>Object/String json, Element element</code>&nbsp;) : Object                                
+                <b>editable</b>(&nbsp;<code>Object/String json</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Apply the Json to given element</div>
+                    <div class="short">Convert a Json to a editable Json by adding an jsonId when set to each object</div>
                     <div class="long">
-                        Apply the Json to given element    
+                        Convert a Json to a editable Json by adding an jsonId when set to each object    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>json</code> : Object/String
+                                    <div class="sub-desc">&nbsp;The json as text or object to add an id to</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">The decoded object with id's added</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#editable" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>merge</b>(&nbsp;<code>Object\Array json1, Object\Array json2</code>&nbsp;) : Object\Array                                
+                <div class="mdesc">
+                    <div class="short">Merge two json files into one, incase same items exists then second json is leading</div>
+                    <div class="long">
+                        Merge two json files into one, incase same items exists then second json is leading    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>json1</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The first json file</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>json2</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The second json file</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object\Array<div class="sub-desc">The merged json</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#merge" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>apply</b>(&nbsp;<code>Object/String json, Element el, Boolean clean</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Apply the Json to given visual element</div>
+                    <div class="long">
+                        Apply the Json to given visual element    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
@@ -473,8 +502,13 @@
                                 </li>
                             
                                 <li>
-                                    <code>element</code> : Element
+                                    <code>el</code> : Element
                                     <div class="sub-desc">&nbsp;The element to apply the json to</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>clean</code> : Boolean
+                                    <div class="sub-desc">&nbsp;When false object will not be cleaned, defaults true</div>                                   
                                 </li>
                             
                             </ul>
@@ -489,46 +523,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#applyJson" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>editableJson</b>(&nbsp;<code>Object/String json, Object id</code>&nbsp;) : Object                                
-                <div class="mdesc">
-                    <div class="short">Convert a Json to a editableJson by adding an edtiableId when set</div>
-                    <div class="long">
-                        Convert a Json to a editableJson by adding an edtiableId when set    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>json</code> : Object/String
-                                    <div class="sub-desc">&nbsp;The json to add an id to</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>id</code> : Object
-                                    <div class="sub-desc">&nbsp;The id object used to give id</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>Object<div class="sub-desc">The decoded object with id</div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#editableJson" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#apply" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -585,25 +580,30 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>decodeAsString</b>(&nbsp;<code>String value</code>&nbsp;) : Object                                
+                <b>getObjectRawValue</b>(&nbsp;<code>Object object, String key</code>&nbsp;) : value                                
                 <div class="mdesc">
-                    <div class="short">Decode json evaluating Json tag (required_js,required_css) returning all elements as string</div>
+                    <div class="short">Function used to read a raw value form a given object</div>
                     <div class="long">
-                        Decode json evaluating Json tag (required_js,required_css) returning all elements as string    
+                        Function used to read a raw value form a given object    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>value</code> : String
-                                    <div class="sub-desc">&nbsp;The string to decode</div>                                   
+                                    <code>object</code> : Object
+                                    <div class="sub-desc">&nbsp;The object used</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>key</code> : String
+                                    <div class="sub-desc">&nbsp;The key to use</div>                                   
                                 </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>Object<div class="sub-desc">The decoded object with string only</div></li>
+                                <li>value<div class="sub-desc">The value of the raw key</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -611,7 +611,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#decodeAsString" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#getObjectRawValue" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -619,47 +619,38 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getJsonScope</b>(&nbsp;<code></code>&nbsp;) : Object                                
+                <b>setObjectValue</b>(&nbsp;<code>Object object, String key, Object value, String rawValue, Object scope</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short">Function returning the scope to beused for the json</div>
+                    <div class="short">Function used to by decode to assign a value to a key within a object created during decodeOverwriting this functions allows to write you to rewrite output of value depending on situtation</div>
                     <div class="long">
-                        Function returning the scope to beused for the json    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>Object<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#getJsonScope" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>deleteJsonNull</b>(&nbsp;<code> json</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short">Clean null elements from json object</div>
-                    <div class="long">
-                        Clean null elements from json object    
+                        Function used to by decode to assign a value to a key within a object created during decodeOverwriting this functions allows to write you to rewrite output of value depending on situtation    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>json</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>object</code> : Object
+                                    <div class="sub-desc">&nbsp;The object array used to assing</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>key</code> : String
+                                    <div class="sub-desc">&nbsp;The key of the element within then object</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>value</code> : Object
+                                    <div class="sub-desc">&nbsp;The value of the element within the object</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>rawValue</code> : String
+                                    <div class="sub-desc">&nbsp;the rawValue to be used for the object (defaults null)</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>scope</code> : Object
+                                    <div class="sub-desc">&nbsp;The scope to be used (defaults getScope())</div>                                   
                                 </li>
                             
                             </ul>
@@ -674,7 +665,7 @@
             </td>
             <td class="msource">
                 Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#deleteJsonNull" href="symbols/Ext.ux.Json.html">Json</a>
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#setObjectValue" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -682,18 +673,23 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>decode</b>(&nbsp;<code>String value</code>&nbsp;) : Object                                
+                <b>decode</b>(&nbsp;<code>String text, Object options</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Decode json evaluating Json tag (required_js,required_css)</div>
+                    <div class="short">Decode function for parsing json text into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]</div>
                     <div class="long">
-                        Decode json evaluating Json tag (required_js,required_css)    
+                        Decode function for parsing json text into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>value</code> : String
+                                    <code>text</code> : String
                                     <div class="sub-desc">&nbsp;The string to decode</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>options</code> : Object
+                                    <div class="sub-desc">&nbsp;A object that can overrule config items,       fullDecode, evalException or scope</div>                                   
                                 </li>
                             
                             </ul>
@@ -716,18 +712,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>clone</b>(&nbsp;<code>Object o</code>&nbsp;) : Object                                
+                <b>clone</b>(&nbsp;<code>Object items</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Function used to clone a object</div>
+                    <div class="short">Function used to clone a objectIMPORTANT: works only when items are build with jsonid set</div>
                     <div class="long">
-                        Function used to clone a object    
+                        Function used to clone a objectIMPORTANT: works only when items are build with jsonid set    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>o</code> : Object
-                                    <div class="sub-desc">&nbsp;the object to be cloned</div>                                   
+                                    <code>items</code> : Object
+                                    <div class="sub-desc">&nbsp;The object to be cloned</div>                                   
                                 </li>
                             
                             </ul>
@@ -750,11 +746,81 @@
     
     <a id="Ext.ux.Json-events"></a>
     <h2>Public Events</h2>
-    <p>This class has no events</p>
-    <table cellspacing="0" class="x-hidden">        
+    
+    <table cellspacing="0" class="member-table">        
         <tr>
             <th class="sig-header" colspan="2">Event</th>   
             <th class="msource-header">Defined By</th>
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>beforeapply</b> : (&nbsp;<code>Object element, Object json</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires before a json is been applied to a visual component</div>
+                    <div class="long">
+                        Fires before a json is been applied to a visual component  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>element</code> : Object
+                                    <div class="sub-desc">The visual component</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>json</code> : Object
+                                    <div class="sub-desc">The json used</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#beforeapply" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>                                 
+        </tr>
+        
+        <tr class="event-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-beforeload"></a>
+                <b>afterapply</b> : (&nbsp;<code>Object element, Object json</code>&nbsp;) 
+            
+                <div class="mdesc">   
+                    <div class="short">Fires after a json has been applied to a visual component</div>
+                    <div class="long">
+                        Fires after a json has been applied to a visual component  
+                        <div class="mdetail-params">
+                            <strong style="font-weight:normal;">Listeners will be called with the following arguments:</strong>
+                            <ul>
+                            
+                                <li>
+                                    <code>element</code> : Object
+                                    <div class="sub-desc">The visual component</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>json</code> : Object
+                                    <div class="sub-desc">The json used</div>                                   
+                                </li>
+                                                                                        
+                            </ul>   
+                        </div>
+                    </div>
+                </div>
+            </td>   
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#afterapply" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>                                 
         </tr>
                     
     </table>            

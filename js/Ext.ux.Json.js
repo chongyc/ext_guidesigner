@@ -52,7 +52,20 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      * Scope is used as binding varaible for <b>this</b> within the json
      * @type {Object}
      @cfg */
-     scope : null,
+    scope : null,
+          
+    /**
+     * Should an eval Exception been thrown causing parsing to stop
+     * or should it be converted into string
+     * @type {Boolean}
+     @cfg */
+    evalException : true,
+
+    /**
+     * Flag indicating that whe should do a full encode, not only items keys recusivly
+     * @type {Boolean}
+     @cfg */     
+    fullEncode : false,
 
     /**
      * Called from within the constructor allowing to initialize the parser
@@ -254,20 +267,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      //Check if the object is allready editable
      if (!items[this.jsonId]) {
        items[this.jsonId]=Ext.id();
-       for (var k in items) {      
-         if (k.indexOf(this.jsonId)==0 && k!=this.jsonId) {
-           var orgK = k.substring(this.jsonId.length);
-           if (orgK && typeof(items[orgK])=='undefined') items[orgK]=null; //Code is there but not key, create it
-         } else if (!items[this.jsonId + k ]) {
-           if (typeof(items[k]) == 'function') {
-             items[this.jsonId + k]=String(items[k]);
-           } else if (typeof(items[k]) == 'object' && k!='items') {
-             items[this.jsonId + k] = this.encode(items[k]);
-           } 
-         } 
-       }
+       if (items.items) items.items=this.editable(items.items);
      }
-     if (items.items) items.items=this.editable(items.items);
      return items;
     },
         
@@ -455,10 +456,15 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            //Check if key (i) is an internal jsonId and original is empty then use this
            if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) {
              var orgK = i.substring(this.jsonId.length);
-             
+             //Check if whe have a internal key without original code
              if (orgK && typeof(o[orgK])=='undefined' && v) {
                 if(b) a.push(',' + nl); 
-                a.push(this.indentStr(indent), orgK, nc, v);
+                if (typeof(v)=='object') {
+                  a.push(this.indentStr(indent), orgK, nc,
+                   this.encode(v.value,indent + 1,keepJsonId));
+                } else {
+                  a.push(this.indentStr(indent), orgK, nc, v);
+                }
                 b = true;
              }
              continue; //internal id skip it during encode
@@ -466,8 +472,14 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            //Create code for item
            if(!this.useHasOwn || o.hasOwnProperty(i)) {
              if (this.jsonId && o[this.jsonId + i]) {
-                 if(b) a.push(',' + nl); 
-                 a.push(this.indentStr(indent), i, nc, o[this.jsonId + i]);
+                 v = o[this.jsonId + i];
+                 if(b) a.push(',' + nl);
+                 if (typeof(v)=='object') {
+                   a.push(this.indentStr(indent), i, nc,
+                    this.encode(v.value,indent + 1,keepJsonId));
+                 } else {
+                   a.push(this.indentStr(indent), i, nc, v);
+                 }
                  b = true;
              } else {               
                switch (typeof v) {
@@ -496,18 +508,50 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        }
      },
      
+     
+     /**
+      * Function used to read a raw value form a given object
+      * @param {Object} object The object used
+      * @param {String} key The key to use
+      * @return {value} The value of the raw key
+      */
+     getObjectRawValue : function(object,key) {
+       if (this.jsonId && object[this.jsonId+key]) {
+         var v = object[this.jsonId+key];
+         return typeof(v)=='object' ? v.value : v;
+       }
+       return object[key];
+     },
+     
      /**
       * Function used to by decode to assign a value to a key within a object created during decode
       * Overwriting this functions allows to write you to rewrite output of value depending on situtation
       * @param {Object} object The object array used to assing
       * @param {String} key The key of the element within then object
       * @param {Object} value The value of the element within the object
+      * @param {String} rawValue the rawValue to be used for the object (defaults null)
+      * @param {Object} scope The scope to be used (defaults getScope())
       * @retrun {Object} The value assigned
       */
-     setObjectValue : function (object,key,value) {
+     setObjectValue : function (object,key,value,rawValue,scope) {
+       scope = scope || this.getScope();
       //Phase three load javascript, stylesheet and evalute scope objects
-       if (key=='json') this.set(this.getScope(),value,true);
-       return object[key]=value;
+       if (key=='json') this.set(scope,value,true);
+       //remove empty object results
+       if (value===null) {
+         delete object[key];
+         delete object[this.jsonId + key];
+         return value;
+       } 
+       object[key]=value;
+       
+       //Check if whe should set or delete a rawValue
+       if (rawValue && this.jsonId) {
+          object[this.jsonId + key] = rawValue;
+       } else if (!rawValue && this.jsonId) {
+         delete object[this.jsonId+key];
+       }
+       return value;
      },
  
      /**
@@ -519,16 +563,29 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
       *   to check if stylesheets or javascipt or scipe objects should be loaded
       * Fourth stage the code objects are checked if there code should be stored __json__[key]
       * @param {String} text The string to decode
-      * @param {Boolean} full Should parsing walk trough all object or just with key 'items', (defaults false)
+      * @param {Object} options A object that can overrule config items,
+      *        fullDecode, evalException or scope
       * @return {Object} The decoded object
       */
-     decode : function(text,full) {
-          var at = 0;
-          var ch = ' ';
-          var self = this;
-          var isCode = false;
-          var lastCode;
+     decode : function(text,options) {
+          options = options || {}
+          var at = 0,ch = ' ',self = this;
+          var scope = options.scope || this.getScope();
+          var fullDecode = typeof(options.fullDecode)=='undefined' ? this.fullDecode : options.fullDecode ;
+          var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;
+
+          /* Do a code evaluation function */
+          var codeEval = function(code) {
+            try {
+              return eval("(" + code+ ")");
+            } catch (e) {
+              e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );         
+              if (this.fireEvent('error','decode',e) && evalException) throw e;
+              return code;
+            }
+          }.createDelegate(scope);
      
+          /* function throwning a error*/
           function error(m) {
               var e = new SyntaxError(m);
               e.at = at - 1;
@@ -536,12 +593,14 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               throw e;
           }
      
+          /* Get the next charachter of the text to parse, moving pointer one forward */
           function next() {
               ch = text.charAt(at);
               at += 1;
               return ch;
           }
           
+          /* Get the previous charachter of the text to parse, moving pointer one back */
           function prev(count) {
               at -= count ? count : 1;
               ch = text.charAt(at);
@@ -549,6 +608,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               return ch;
           }
      
+          /* Check if there is a full wordmatch, offset is used to set postion to read from
+           * default this is -1 resulting that pointer is set to 0=current charachter */
           function wordMatch(word,offset) {
             if (typeof(offset)=='undefined') offset = -1;
             var i=0;
@@ -561,6 +622,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             return false;
           }
      
+          /* Clean out white space, block comments and end of line comments*/           
           function white() {
               while (ch) {
                   if (ch <= ' ') {
@@ -596,13 +658,15 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   }
               }
           }
-     
+
+          /* Skip a single word */
           function singleWord(){
             var s = ch;
             while (next() && ": \t\n\r.-+={(}[])'\"".indexOf(ch)==-1) {s+= ch}
             return s;
           }
      
+          /* Read a qouted string */
           function string(qoute) {
               qoute = qoute || ch;
               var start=at-1,i, s = '', t, u;
@@ -650,7 +714,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               }
               error("Bad string " + text.substring(start,at-1));
           }
-     
+          
+          /* Read an array */
           function array(asCode) {
               var start=at-1,a = [];
      
@@ -662,7 +727,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                       return a;
                   }
                   while (ch) {
-                      a.push(value(asCode));
+                      a.push(value(asCode)[0]);
                       white();
                       if (ch == ']') {
                           next();
@@ -677,8 +742,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               error("Bad array " + text.substring(start,at-1));
           }
      
+          /* Read a object, when asCode is set only items are recusivly parsed */
           function object(asCode) {
-            var start=at-1,k, o = {};
+            var start=at-1,k, o = {},v;
 
             if (ch == '{') {
                 next();
@@ -691,20 +757,12 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     k = ch=='"' || ch=="'" ? string() : singleWord();
                     white();
                     if (ch != ':') {
-                      error("Bad key for object");
+                      error("Bad key("+ch+") seprator for object");
                     }
                     next();
                     white();
-                    start = at-1;
-                    self.setObjectValue(o,k,value(k!='items'));
-                    if (o[k]===null) {
-                      //Phase two remove empty object results
-                      delete o[k];
-                    } else if (isCode && k!='items') { 
-                       //Phase four save readable code for editing
-                       if (self.jsonId && !o[self.jsonId + k]) o[self.jsonId + k] = lastCode;
-                    }
-
+                    v=value(k!='items');
+                    self.setObjectValue(o,k,v[0],v[1],scope);
                     white();
                     if (ch == '}') {
                         next();
@@ -719,6 +777,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             error("Bad object ["+k+"]" + text.substring(start,at-1));
           }
      
+          /* Read a number */
           function number() {
               var n = '', v;
               if (ch == '-') {
@@ -749,12 +808,13 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               }
               v = +n;
               if (!isFinite(v)) {
-                  ////error("Bad number");
+                  error("Bad number " + v);
               } else {
                   return v;
               }
           }
      
+          /* Skip a code block */
           function codeBlock(breaker){
             while (next()) {
               white();
@@ -772,13 +832,16 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   break;
                 case '"' :
                 case "'" :
-                  string();
+                  string(ch);
                   at--;
               }
             }
             error('Unexpected end of code');
           }
-               
+     
+     
+          /* Parse a code block, returning the evaluated code and 
+           * returning [evaluateCode,orignalCode] */
           function code() {
             at--; //restart code block
             var start = at;
@@ -798,49 +861,41 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   break;
                 case '"' :
                 case "'" :
-                  string();
+                  string(ch);
                   break;
                 case ',' :
                 case ']' :
                 case '}' :
-                  lastCode = text.substring(start,wat-1);
-                  try {
-                    var scope = self.getScope();
-                    //Scope and this variable are now the same by creating a delegate function
-                    var thisEval = function(code){return eval("(" + code+ ")");}.createDelegate(scope);
-                    var c=thisEval(lastCode);
-                    isCode=true;
-                    return c;                        
-                  } catch (e) {                    
-                    error("Invalid code:" + lastCode);
-                  }
+                  var block =text.substring(start,wat-1);
+                  return [codeEval(block),block];
               }
             }
             error('Unexpected end of code');
           }
      
+          /* Read a value returning a array [value,orignalcode] */
           function value(asCode) {
-              isCode=false;
+              lastCode=null;
               white();
               switch (ch) {
                   case '{':
-                    return asCode && !full ? code() : object(false);
+                    return asCode && !fullDecode ? code() : [object(false)];
                   case '[' :
-                    return asCode && !full ? code() : array(false);
+                    return asCode && !fullDecode ? code() : [array(false)];
                   case '"':
                   case "'":
-                    return string(ch);
+                    return [string(ch)];
                   default:
-                    if (wordMatch('true')) return true;
-                    else if (wordMatch('false')) return false;
-                    else if (wordMatch('null')) return null;
-                    else if ("-.0123456789".indexOf(ch)>=0) return  number();
+                    if (wordMatch('true')) return [true];
+                    else if (wordMatch('false')) return [false];
+                    else if (wordMatch('null')) return [null];
+                    else if ("-.0123456789".indexOf(ch)>=0) return [number()];
                     return code();
               }
           }          
         try {
           if (!text) return null;
-          var v = value(false);
+          var v = value(false)[0];
           white();
           if (ch) error("Invalid Json");
           //Check if we should make the code editable
