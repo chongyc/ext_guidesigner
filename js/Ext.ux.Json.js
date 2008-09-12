@@ -553,7 +553,31 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        }
        return value;
      },
- 
+
+     /**
+      * Code Evaluation function forcing that scope is set during eval
+      * @param {String} text The string to be evaluated
+      * @param {Object} options A object that can overrule config items,
+      *         evalException or scope
+      * @return {Object\Function} The evaluated object
+      */     
+     codeEval : function(code,options) {
+       options = options || {}
+       var scope = options.scope || this.getScope();
+       var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;
+       var myEval = function(code) {
+         try {
+           return eval("(" + code+ ")");
+         } catch (e) {
+           e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );  
+           alert(e);
+           if (this.fireEvent('error','decode',e) && evalException) throw e;
+           return code;
+         }
+       }.createDelegate(scope);
+       return myEval(code);
+     },
+
      /**
       * Decode function for parsing json text into objects
       * The parsing contains four stages. 
@@ -572,18 +596,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           var at = 0,ch = ' ',self = this;
           var scope = options.scope || this.getScope();
           var fullDecode = typeof(options.fullDecode)=='undefined' ? this.fullDecode : options.fullDecode ;
-          var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;
 
-          /* Do a code evaluation function */
-          var codeEval = function(code) {
-            try {
-              return eval("(" + code+ ")");
-            } catch (e) {
-              e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );         
-              if (this.fireEvent('error','decode',e) && evalException) throw e;
-              return code;
-            }
-          }.createDelegate(scope);
      
           /* function throwning a error*/
           function error(m) {
@@ -867,7 +880,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 case ']' :
                 case '}' :
                   var block =text.substring(start,wat-1);
-                  return [codeEval(block),block];
+                  return [self.codeEval(block),block];
               }
             }
             error('Unexpected end of code');

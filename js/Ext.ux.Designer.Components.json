@@ -43,7 +43,7 @@
         'A radio form element',
         {xtype:'radio',fieldLabel:'Label',boxLabel:'Box label',name:'radio',inputValue:'radiovalue'}],
       ['Forms','Text Label','A textlabel', {xtype:'label' ,text:'Label'}],
-      ['Forms','Button','A button',{xtype:'button',text:'Ok'}],
+      ['Forms','Button','A button',{xtype:'button',text:'Ok',handler:null}],
 
 // PANELS -------------------------------------------------------------------------------
       ['Panels','Panel',

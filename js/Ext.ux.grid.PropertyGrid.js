@@ -29,9 +29,7 @@ Ext.namespace('Ext.ux.grid');
     {name:'name',type:'string'}, 'value' , 'type'
 ]);
 
-/**
- * Constructor used to create a store used to store designer data
- */
+
 Ext.ux.grid.PropertyStore = function(grid, source){
     Ext.ux.grid.PropertyStore.superclass.constructor.call(this,grid,source);
     this.store = new Ext.data.Store({
@@ -40,6 +38,9 @@ Ext.ux.grid.PropertyStore = function(grid, source){
     this.store.on('update', this.onUpdate,  this);    
 };
 
+/**
+ * Constructor used to create a store used to store designer data
+ */
 Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     jsonId : "__JSON__",
 
@@ -56,12 +57,14 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         var data = [];
         for(var k in o){
             if(k.indexOf(this.jsonId)!=0 && ['items'].indexOf(k)==-1){
+                var v = o[this.jsonId + k];
+                if (typeof(v)=='object') v = v.display || v.value;
                 if (typeof(o[k]) == 'function') {
-                  data.push(new Ext.grid.PropertyRecord({name: k, value: o[this.jsonId + k] || String(o[k]) , type : 'function'}, k));
+                  data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(o[k]) , type : 'function'}, k));
                 } else if (typeof(o[k]) == 'object') {
-                  data.push(new Ext.grid.PropertyRecord({name: k, value: o[this.jsonId + k] || String(Ext.ux.JSON.encode(o[k])), type : 'object'}, k));
+                  data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(Ext.ux.JSON.encode(o[k])), type : 'object'}, k));
                 } 
-                  data.push(new Ext.grid.PropertyRecord({name: k, value: o[this.jsonId + k] || o[k], type : null }, k));
+                  data.push(new Ext.grid.PropertyRecord({name: k, value: v || o[k], type : null }, k));
             }
         }
         this.store.loadRecords({records: data}, {}, true);
@@ -82,23 +85,13 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         }
     },
     
-    updateSource : function (prop,value,type) {
-      var propType = this.getPropertyType(prop);
+    updateSource : function (key,value,type) {
+      var propType = this.getPropertyType(key);
       if (!type && propType) type=propType.type;
-      if ((typeof(this.source[this.jsonId + prop])!='undefined' ||
-          ['object','function','mixed'].indexOf(type)!=-1 || !propType)
-          && !(propType && propType.values)) {
-         this.source[this.jsonId + prop] = value;
-         try {
-          //Set the jsonScope to be used during eval
-           var scope = (this.grid) ? this.grid.jsonScope : this.scope;
-           var o = eval("( { data :" + value + "})");
-           this.source[prop] = o.data;
-         } catch (e) {Ext.Msg.alert('Exception','Could not set ' + prop + ' to ' + value + '/n' + e);}
-      } else {
-        this.source[prop] = value;
+      if (this.grid.fireEvent('propertyvalue',this.source,key,value,type,propType)) {
+        this.source[key] = value;
       }
-      return this.source[prop];
+      return this.source[key];
     },
 
     setValue : function(prop, value){
@@ -222,7 +215,16 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         store.store.sort('name', 'ASC');
         this.addEvents(
             'beforepropertychange',
-            'propertychange'
+            'propertychange',
+            /**
+             * Event fired to allow custom change of value  
+             * @param {Source} source The source object
+             * @param {String} key The key changed
+             * @param {String} value The value to be set
+             * @param {String} type The type of value
+             * @return {Boolean} False will assume custom assignment
+             */
+            'propertyvalue'
         );
         this.cm = cm;
         this.ds = store.store;

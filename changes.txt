@@ -18,7 +18,8 @@ TODO
  - Select of element does not work in firefox on test screen.
  - Delete property throws error
  - xtype is not qouted when using fallback
- 
+ - Add debug window for messages of decoder
+ - Empty function are removed from property ?
  
  Change History:
  Version 2.1.0:

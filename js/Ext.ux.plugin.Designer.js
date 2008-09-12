@@ -804,7 +804,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   setObjectValue : function (object,key,value,rawValue,scope) {
     if (key=='xtype' && this.jsonId) {
       if (!Ext.ComponentMgr.isTypeAvailable(value)) {
-        rawValue = value;
+        rawValue = {"value": value,"display" : value};
         value = 'panel'
         this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + value + ' does not exists'));      
       } else rawValue=null;
@@ -822,11 +822,20 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
     propertyGrid.on('beforepropertychange', function(source,id,value,oldvalue) {
         this.markUndo();
     },this);
+    propertyGrid.on('propertyvalue',function(source,key,value,type,property){
+      if (['object','function','mixed'].indexOf(type)!=-1 || 
+          typeof(source[this.jsonId + key])=='string' || !property) {
+        this.setObjectValue(source,key,this.codeEval(value),value);
+      } else  {
+        this.setObjectValue(source,key,value);
+      }      
+      return false; //We have set value
+    },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
         //When somebody changed the json, then make sure we init the changes
         switch (id) {
           case 'json' : this.jsonInit(this.decode(value));break
-          case 'xtype': this.setObjectValue(source,id,value);break;
+     //     case 'xtype': this.setObjectValue(source,id,value);break;
         }  
         this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);
