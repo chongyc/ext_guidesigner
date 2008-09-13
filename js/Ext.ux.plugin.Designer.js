@@ -537,7 +537,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * @return {Boolean} true when succesfull applied
    */
   setConfig : function (json) {
-    var id = this.activeElement ? this.activeElement[this.jsonId] : null;
+    //? var id = this.activeElement ? this.activeElement[this.jsonId] : null;
+    
     var items = (typeof(json)=='object' ? json : this.decode(json)) || null;
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
     this.container.codeConfig.items=[this.editable(items)];
@@ -906,7 +907,8 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
       }
     }
     //Now show or hide the toolbox
-    if (visible || visible === true) {
+//?    if (visible || visible === true) {
+    if (visible) {
       if (this.fireEvent('beforeshow',this._toolbox)) {
         this._toolbox.doLayout();
         this._toolbox.show();        
