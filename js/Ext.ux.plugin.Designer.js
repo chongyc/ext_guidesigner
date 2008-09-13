@@ -324,6 +324,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * @return {Boolean} Indicator telling element was removed
    */
   removeElement : function(source,internal) {
+    source = source || this.activeElement;
     if (!source) return false;
     var own = this.getContainer(source.ownerCt);
     if (!internal) this.markUndo();
@@ -869,7 +870,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
             proxy : proxy, //Needed for Ext2.2
             sortInfo : {field:'name',order:'ASC'},
             root: 'properties',
-            fields: ['name', 'type','defaults','desc','instance','editable','values']
+            fields: ['name', 'type','defaults','desc','instance','editable','values','editor']
         });
         if (Ext.isVersion('2.0','2.1.9')) //Fix for ExtJS versions <= 2.1
            this.properties.proxy = proxy; 

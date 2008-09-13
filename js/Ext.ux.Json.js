@@ -460,8 +460,12 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
              if (orgK && typeof(o[orgK])=='undefined' && v) {
                 if(b) a.push(',' + nl); 
                 if (typeof(v)=='object') {
-                  a.push(this.indentStr(indent), orgK, nc,
-                   this.encode(v.value,indent + 1,keepJsonId));
+                  if (v.encode===false) {
+                    a.push(this.indentStr(indent), orgK, nc,v.value);
+                  } else {
+                    a.push(this.indentStr(indent), orgK, nc,
+                       this.encode(v.value,indent + 1,keepJsonId));
+                  }
                 } else {
                   a.push(this.indentStr(indent), orgK, nc, v);
                 }

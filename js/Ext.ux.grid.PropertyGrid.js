@@ -137,14 +137,22 @@ Ext.extend(Ext.ux.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
             return this.grid.customEditors[n];
         }
         var prop = this.getPropertyType(n);
-        if (!t && prop) {
-          t=prop.type;
-          if (!t && prop.values) {
-           var editor =  prop.editable ? this.editors['editlist'] : this.editors['list'];
-           editor.field.setList(prop.values);
-           return editor;
+        //Check if there is a property and if there is a editor
+        if (prop) {
+          if (prop.editor) {
+            if (typeof(prop.editor)!='string') {
+               return prop.editor;
+            }
+            t = prop.editor;
           }
-        }
+          t = t || prop.type;
+          if (!t && prop.values) {
+            var editor =  prop.editable ? this.editors['editlist'] : this.editors['list'];
+            editor.field.setList(prop.values);
+            return editor;
+          }
+        } 
+        
         if (t && this.editors[t]) {
           return this.editors[t];
         } else if(Ext.isDate(val)){

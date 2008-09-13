@@ -41,7 +41,10 @@ Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
   elementToText : function(c) {
       var txt = [];
       c = c || {};
-      if (c.xtype)      { txt.push(c.xtype); }
+      if (c[this.jsonId + 'xtype']) {
+        var v = c[this.jsonId + 'xtype'];
+        txt.push(typeof(v)=='object' ? v.display || v.value : v); 
+      } else if (c.xtype) { txt.push(c.xtype); }
       if (c.fieldLabel) { txt.push('[' + c.fieldLabel + ']'); }
       if (c.boxLabel)   { txt.push('[' + c.boxLabel + ']'); }
       if (c.layout)     { txt.push('<i>' + c.layout + '</i>'); }

@@ -14,12 +14,11 @@ TODO
  - Make it possible to load more then one component tree and make this version depended
  - Simplify the code used for Ext.ux.grid.PropertyGrid.
  - Add more design elements which are available to Ext.ux.Designer.Components
- - Do test on designer problem
+ - Do test on designer problem, toolbox not showing
  - Select of element does not work in firefox on test screen.
- - Delete property throws error
- - xtype is not qouted when using fallback
  - Add debug window for messages of decoder
- - Empty function are removed from property ?
+ - Add manual editor in property file
+ - Rename plugin to guid and place in directories
  
  Change History:
  Version 2.1.0:
@@ -33,6 +32,8 @@ TODO
   + Added "scope.!<VAR>" in json object, so you can create local objects if they don't exist
   + Toolbox is forced to do a layout before showing.
   + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
+  + You can now add you own property editors, bye setting "editor" in properties.json
+  * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed
   * Fixed refresh is now using redraw instead of reloading config

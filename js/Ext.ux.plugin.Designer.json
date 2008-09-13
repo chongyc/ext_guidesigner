@@ -405,10 +405,15 @@
                scope   : this,
                handler : function(item,e) {
                    var ds = this.store;
-                   delete this.getSource()[item.record.id];
+                   var source =this.getSource();
+                   delete source[item.record.id];
                    ds.remove(item.record);
                    delete item.record;
-                   scope.redrawElement();
+                   if (scope.isEmpty(source)) {
+                     scope.removeElement();
+                   } else {
+                     scope.redrawElement();
+                   }
                  }.createDelegate(this)
              }]});
              //Connect property grid contextMenu
