@@ -32,7 +32,7 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 19 });
+				plan({ tests: 21 });
 
 				//diag('Decoder operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
@@ -110,6 +110,19 @@
 			 	is(obj.handler(1,10), obj_copy.handler(5,6), "Encoded equally: handler");
 			 	is(obj.xtype, obj_copy.xtype, "Encoded equally: xtype");
 
+				obj = Ext.ux.JSON.decode('{\
+					scope : this.undef,\
+					handler : function (a,b){\
+						return a + b;\
+					},\
+					xtype : \'gmappanel\'\
+			 	}',{evalException:false});
+
+			 	obj_string = Ext.ux.JSON.encode(obj);
+				
+				var regex = /scope : this\.undef/g; 
+				ok(regex.exec(obj_string),'undefined encoded as string #3');
+				ok(!regex.exec(obj_string),'encoded without dublicates');
 			});
 		</script>
 	</head>
