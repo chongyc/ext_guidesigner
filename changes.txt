@@ -12,15 +12,13 @@ TODO
  - Update documentation
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
- - Simplify the code used for Ext.ux.grid.PropertyGrid.
  - Add more design elements which are available to Ext.ux.Designer.Components
  - Do test on designer problem, toolbox not showing
  - Select of element does not work in firefox on test screen.
  - Add debug window for messages of decoder
- - Add manual editor in property file
  - Rename plugin to guid and place in directories
  - When deleting last item codetree is not correctly cleared
- - Stript path from filename to make correct id in script loader
+ - Item is not selected in code tree when changing selection
  
  Change History:
  Version 2.1.0:
@@ -35,6 +33,7 @@ TODO
   + Toolbox is forced to do a layout before showing.
   + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
   + You can now add you own property editors, bye setting "editor" in properties.json
+  + Undo and redo are now keeping track of selected element
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed

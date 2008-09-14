@@ -33,7 +33,6 @@
 		<script>
 			Ext.onReady(function(){
 				plan({ tests: 21 });
-
 				//diag('Decoder operations:');
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
 
@@ -119,8 +118,8 @@
 			 	}',{evalException:false});
 
 			 	obj_string = Ext.ux.JSON.encode(obj);
-				
-				var regex = /scope : this\.undef/g; 
+
+				var regex = /scope : this\.undef/g;
 				ok(regex.exec(obj_string),'undefined encoded as string #3');
 				ok(!regex.exec(obj_string),'encoded without dublicates');
 			});

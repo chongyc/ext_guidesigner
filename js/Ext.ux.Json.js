@@ -452,58 +452,43 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
          a.push("{" + nl);
          for (var i in o) {
            v = o[i];   
-           
-           //Check if key (i) is an internal jsonId and original is empty then use this
-           if (i.indexOf(this.jsonId)==0 && (!keepJsonId || i!=this.jsonId)) {
-             var orgK = i.substring(this.jsonId.length);
-             //Check if whe have a internal key without original code
-             if (orgK && typeof(o[orgK])=='undefined' && v) {
-                if(b) a.push(',' + nl); 
-                if (typeof(v)=='object') {
-                  if (v.encode===false) {
-                    a.push(this.indentStr(indent), orgK, nc,v.value);
-                  } else {
-                    a.push(this.indentStr(indent), orgK, nc,
-                       this.encode(v.value,indent + 1,keepJsonId));
-                  }
-                } else {
-                  a.push(this.indentStr(indent), orgK, nc, v);
-                }
-                b = true;
-             }
-             continue; //internal id skip it during encode
+           var orgKey = (i.indexOf(this.jsonId)==0 && i!=this.jsonId) ?
+                 i.substring(this.jsonId.length) : null;
+           if ((!orgKey && this.jsonId && o[this.jsonId + i]) ||
+               (!keepJsonId && i==this.jsonId)) {
+             continue; //skip items which have a rawValue or are jsonId 
            }
-           //Create code for item
-           if(!this.useHasOwn || o.hasOwnProperty(i)) {
-             if (this.jsonId && o[this.jsonId + i]) {
-                 v = o[this.jsonId + i];
-                 if(b) a.push(',' + nl);
-                 if (typeof(v)=='object') {
-                   a.push(this.indentStr(indent), i, nc,
-                    this.encode(v.value,indent + 1,keepJsonId));
-                 } else {
-                   a.push(this.indentStr(indent), i, nc, v);
-                 }
-                 b = true;
-             } else {               
-               switch (typeof v) {
-                 case "undefined":
-                 case "unknown":               
-                     break;            
-                 case "function":
-                   if(b) a.push(',' + nl); 
-                   a.push(this.indentStr(indent), i, nc, ""+v);
-                   b = true;
-                   break;
-                 case "object" :
-                 case "string" :
-                    if (!v) break; //Skip empty string and objects else default
-                 default:
-                     if(b) a.push(',' + nl);
-                     a.push(this.indentStr(indent), i, nc,
-                           v === null ? "null" : this.encode(v,indent + 1,keepJsonId));
-                     b = true;
+           if (orgKey) { //We have a rawValue
+             if(b) a.push(',' + nl); 
+             if (typeof(v)=='object') {
+               if (v.encode===false) {
+                 a.push(this.indentStr(indent), orgKey, nc,v.value);
+               } else {
+                 a.push(this.indentStr(indent), orgKey, nc,
+                   this.encode(v.value,indent + 1,keepJsonId));
                }
+             } else {
+               a.push(this.indentStr(indent), orgKey, nc, v);
+             }
+             b = true;
+           } else if(!this.useHasOwn || o.hasOwnProperty(i)) { //We have normal value                       
+             switch (typeof v) {
+               case "undefined":
+               case "unknown":               
+                   break;            
+               case "function":
+                 if(b) a.push(',' + nl); 
+                 a.push(this.indentStr(indent), i, nc, ""+v);
+                 b = true;
+                 break;
+               case "object" :
+               case "string" :
+                  if (!v) break; //Skip empty string and objects else default
+               default:
+                   if(b) a.push(',' + nl);
+                   a.push(this.indentStr(indent), i, nc,
+                         v === null ? "null" : this.encode(v,indent + 1,keepJsonId));
+                   b = true;
              }
            }
          }

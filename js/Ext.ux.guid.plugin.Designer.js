@@ -364,7 +364,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   markUndo : function() {
     while (this.undoHistory.length>this.undoHistoryMark) this.undoHistory.pop();
-    this.undoHistory.push(this.encode(this.getConfig(),0,true));
+    this.undoHistory.push({config : this.encode(this.getConfig(),0,true),activeId: this.getJsonId()});
     while (this.undoHistory.length > this.undoHistoryMax) this.undoHistory.shift();
     this.undoHistoryMark = this.undoHistory.length;
     this.menuUpdate();
@@ -377,11 +377,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (this.undoHistoryMark>0) {
       if (this.undoHistoryMark==this.undoHistory.length) {
         //Make sure whe have point to recover incase of redo
-        this.undoHistory.push(this.encode(this.getConfig(),0,true));
+        this.undoHistory.push({config:this.encode(this.getConfig(),0,true),activeId : this.getJsonId()});
         this.undoHistoryMark = this.undoHistory.length-1;
       }
       this.undoHistoryMark--;
-      this.setConfig(this.undoHistory[this.undoHistoryMark]);
+      var undoObj =this.undoHistory[this.undoHistoryMark];
+      this.setConfig(undoObj.config,true);
+      this.selectElement(undoObj.activeId);
       this.menuUpdate();
     }
   },
@@ -392,7 +394,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   redo : function(){
     if (this.undoHistory.length>this.undoHistoryMark+1) {
       this.undoHistoryMark++;
-      this.setConfig(this.undoHistory[this.undoHistoryMark]);
+      var redoObj = this.undoHistory[this.undoHistoryMark];
+      this.setConfig(redoObj.config,true);
+      this.selectElement(redoObj.activeId);
       this.menuUpdate();
     }
   },
@@ -489,7 +493,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       method : 'GET',
       callback: function(options, success, response){
         if (success) {
-         this.setConfig(response.responseText);
+         this.setConfig(response.responseText,false);
          this.modified = false;
         } else {
          if (!this.fireEvent('loadfailed',url,response))
@@ -539,9 +543,11 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    * Set the config to the design element
    * @param {String/Object} json The json to be applied
+   * @param {Boolean} noUndo When true no undo will be created
    * @return {Boolean} true when succesfull applied
    */
-  setConfig : function (json) {
+  setConfig : function (json,noUndo) {
+    if (!noUndo) this.markUndo();
     var items = (typeof(json)=='object' ? json : this.decode(json)) || null;
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
     this.container.codeConfig.items=[this.editable(items)];
@@ -571,6 +577,17 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   },
   
   /**
+   * Get the json id of the (active) element
+   * @param {Element} el The element (default to activeElement)
+   * @return {String} The json id of the active element
+   */
+  getJsonId : function(el) {
+    el = el || this.activeElement;
+    if (!el) return null;
+    return el[this.jsonId] ? el[this.jsonId] : null;
+  },
+  
+  /**
    * redraw an element with the changed config
    * @param {Element} element The elmenent to update
    * @param {Object} config The config 
@@ -580,7 +597,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     var el = element || this.activeElement;
     if (el) {
       try {
-        var id = selectId || (this.activeElement ? this.activeElement[this.jsonId] : null);
+        var id = selectId || this.getJsonId();
         var p = this.container; //Redraw whole canvas          
         if (!this.redrawContainer && el!=p) {
            //Check if whe can find parent which can be redraw
