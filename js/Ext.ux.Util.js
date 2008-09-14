@@ -99,18 +99,21 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * @return {Boolean} Indicator if load went corretly true/false
    */
   scriptLoader : function(url,cachingOff) {
-   if(url && !document.getElementById(url)) {
+   if (!url) return false;
+   var id=ur.substring(url.lastIndexOf('/'));
+   if(!document.getElementById(id)) {
      var content = this.syncContent(url,cachingOff);
      if (content===false) return false;
      var head = document.getElementsByTagName("head")[0];
      var script = document.createElement("script");
+     
      try {
        script.text = content;
      } catch (e) {
        script.appendChild(content);
      }
      script.setAttribute("type", "text/javascript");
-     script.setAttribute("id", url);
+     script.setAttribute("id", id);
      head.appendChild(script);
    }
    return true;

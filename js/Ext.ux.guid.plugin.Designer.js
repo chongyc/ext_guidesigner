@@ -18,17 +18,17 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
-Ext.namespace('Ext.ux.plugin');
+Ext.namespace('Ext.ux.guid.plugin');
 
 /** 
  * Create a desginer 
  */
-Ext.ux.plugin.Designer = function(config){
-  Ext.ux.plugin.Designer.superclass.constructor.call(this,config);
+Ext.ux.guid.plugin.Designer = function(config){
+  Ext.ux.guid.plugin.Designer.superclass.constructor.call(this,config);
   this.initialConfig = config;
 };
 
-Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {  
+Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {  
   
   /**
    * When true the toolbox is show on init
@@ -49,11 +49,11 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   toolboxTarget : false, 
   
   /**
-   * Url used to load toolbox json from defaults to <this.file>/Ext.ux.plugin.Designer.json
+   * Url used to load toolbox json from defaults to <this.file>/Ext.ux.guid.plugin.Designer.json
    * @type {String} 
    @cfg */
-  toolboxJson   : false,
-
+  toolboxJson   : 'js/Ext.ux.guid.plugin.Designer.json',
+  
   /**
    * Enable or disable the usage of customProperties (defaults false). 
    * When disabled only properties which are defined within Ext.ux.Designer.ComponentsDoc.json are available.
@@ -85,10 +85,15 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   enableVersion : true,
 
   /**
-   * An array of property defintion to add. This is the list under add item needs ext2.2
+   * An array of property defintion to add to default (propertyDefinitions)
    * @type {Array}
    @cfg */
   propertyDefinitionFiles : null ,
+
+  /**
+   * @private Internal array with all files with property defintions to load
+   */
+  propertyDefinitions : ['js/Ext.ux.guid.plugin.Designer.Properties.json'],
   
   /**
    * An url specifing the json to load
@@ -100,7 +105,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
   jsonId :  '__JSON__',
   
   
-  licenseText  :  "/* This file is created or modified with Ext.ux.plugin.GuiDesigner */",
+  licenseText  :  "/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */",
    
   //@private The version of the designer
   version : '2.1.0',
@@ -128,7 +133,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * Called from within the constructor allowing to initialize the parser
    */
   initialize: function() {
-    Ext.ux.plugin.Designer.superclass.initialize.call(this);
+    Ext.ux.guid.plugin.Designer.superclass.initialize.call(this);
     Ext.QuickTips.init();    
     this.addEvents({
       /**
@@ -537,8 +542,6 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    * @return {Boolean} true when succesfull applied
    */
   setConfig : function (json) {
-    //? var id = this.activeElement ? this.activeElement[this.jsonId] : null;
-    
     var items = (typeof(json)=='object' ? json : this.decode(json)) || null;
     if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
     this.container.codeConfig.items=[this.editable(items)];
@@ -811,7 +814,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
         this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + value + ' does not exists'));      
       } else rawValue=null;
     }
-    return Ext.ux.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
+    return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
   },
   
   /**
@@ -849,44 +852,29 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
    */
   toolbox : function(visible){
     if (!this._toolbox) {
-      if (!this.toolboxJson) {
-        //Locate the designer javascript file
-        var elements = document.getElementsByTagName("script");
-        var path ='';
-        for (var i=0;i<elements.length;i++) {
-          var s = elements[i].src ? elements[i].src : elements[i].id;
-          if (s.match(/Ext\.ux\.plugin\.Designer\.js(\?.*)?$/)) {
-            path = s.replace(/Ext\.ux\.plugin\.Designer\.js(\?.*)?$/,'');
-          }
-        }
-        this.toolboxPath = path;
-        this.toolboxJson = path + 'Ext.ux.plugin.Designer.json';
-        //Build the url array used to load the property list
-        var urls = [this.toolboxPath + 'Ext.ux.plugin.Designer.Properties.json']
-        for (var i=0;this.propertyDefinitionFiles && i<this.propertyDefinitionFiles.length;i++) {
-           urls.push(this.propertyDefinitionFiles[i]);  
-        }
-        var proxy = new Ext.ux.data.HttpMergeProxy(urls);
-        this.properties = new Ext.data.JsonStore({
-            proxy : proxy, //Needed for Ext2.2
-            sortInfo : {field:'name',order:'ASC'},
-            root: 'properties',
-            fields: ['name', 'type','defaults','desc','instance','editable','values','editor']
-        });
-        if (Ext.isVersion('2.0','2.1.9')) //Fix for ExtJS versions <= 2.1
-           this.properties.proxy = proxy; 
-        this.properties.load();
-        //Add Filter function based on instance
-        var filterByFn = function(rec,id) {
-          var i = rec.get('instance');
-          if (i) return eval('this.activeElement instanceof ' +i);
-          return true;
-        }.createDelegate(this);
-        this.propertyFilter = function (){
-          this.properties.filterBy(filterByFn,this);
-        };
+      //Build the url array used to load the property list
+      for (var i=0;this.propertyDefinitionFiles && i<this.propertyDefinitionFiles.length;i++) {
+         this.propertyDefinitions.push(this.propertyDefinitionFiles[i]);  
       }
-      var tools = 
+      var proxy = new Ext.ux.data.HttpMergeProxy(this.propertyDefinitions);
+      this.properties = new Ext.data.JsonStore({
+          proxy : proxy, //Needed for Ext2.2
+          sortInfo : {field:'name',order:'ASC'},
+          root: 'properties',
+          fields: ['name', 'type','defaults','desc','instance','editable','values','editor']
+      });
+      if (Ext.isVersion('2.0','2.1.9')) //Fix for ExtJS versions <= 2.1
+         this.properties.proxy = proxy; 
+      this.properties.load();
+      //Add Filter function based on instance
+      var filterByFn = function(rec,id) {
+        var i = rec.get('instance');
+        if (i) return eval('this.activeElement instanceof ' +i);
+        return true;
+      }.createDelegate(this);
+      this.propertyFilter = function (){
+        this.properties.filterBy(filterByFn,this);
+      };
       this.toolboxTarget = Ext.getCmp(this.toolboxTarget);
       if (this.toolboxTarget){
         this._toolbox = this.toolboxTarget;
@@ -907,8 +895,7 @@ Ext.extend(Ext.ux.plugin.Designer, Ext.ux.Json, {
       }
     }
     //Now show or hide the toolbox
-//?    if (visible || visible === true) {
-    if (visible) {
+    if (visible || visible === true) {
       if (this.fireEvent('beforeshow',this._toolbox)) {
         this._toolbox.doLayout();
         this._toolbox.show();        

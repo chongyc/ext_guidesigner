@@ -22,39 +22,37 @@
 		<script type="text/javascript" src="../extjs/adapter/ext/ext-base.js"></script>
 		<script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
 
+        <!-- Remove this file if you don't need local file support -->
+        <script id="localXHR.js" type="text/javascript" src="../js/localXHR.js" type="text/javascript"></script>
+
+        <!-- The test framework -->
 		<script src="../lib/Test/Builder.js" type="text/javascript"></script>
 		<script src="../lib/Test/More.js" type="text/javascript"></script>
 
-		<!--The custom script to test -->
-		<script src="../js/Ext.ux.Util.js" type="text/javascript"></script>
-		<script src="../js/Ext.ux.Json.js" type="text/javascript"></script>
-
 		<!-- General components  -->
-	    <script id="js/Ext.ux.Util.js" type="text/javascript" src="../js/Ext.ux.Util.js"></script>
-	    <script id="js/Ext.ux.Override.js" type="text/javascript" src="../js/Ext.ux.Override.js"></script>
-	    <script id="js/Ext.ux.ComponentCollection.js" type="text/javascript" src="../js/Ext.ux.ComponentCollection.js"></script>
-
-        <script id="js/localXHR.js" type="text/javascript" src="../js/localXHR.js"></script>
+	    <script id="Ext.ux.Override.js" src="../js/Ext.ux.Override.js" type="text/javascript"></script>
+	    <script id="Ext.ux.ComponentCollection.js" src="../js/Ext.ux.ComponentCollection.js" type="text/javascript"></script>
+		<script id="Ext.ux.Util.js" src="../js/Ext.ux.Util.js" type="text/javascript"></script>
+		<script id="Ext.ux.Json.js" src="../js/Ext.ux.Json.js" type="text/javascript"></script>
 
 		<!-- Add Code press as script editor, remove line below to used textarea as script editor  -->
-		<script id="js/codepress/Ext.ux.CodePress.js" type="text/javascript" src="../js/codepress/Ext.ux.CodePress.js"></script>
+		<script id="Ext.ux.CodePress.js" src="../js/codepress/Ext.ux.CodePress.js" type="text/javascript"></script>
 
+        <!-- Default functions -->
+	    <script id="Ext.ux.form.ScriptEditor.js" src="../js/Ext.ux.form.ScriptEditor.js" type="text/javascript"></script>
+	    <script id="Ext.ux.data.HttpMergeProxy.js" src="../js/Ext.ux.data.HttpMergeProxy.js" type="text/javascript"></script>
+		<script id="Ext.ux.JsonPanel.js" src="../js/Ext.ux.JsonPanel.js" type="text/javascript"></script>
+		<script id="Ext.ux.JsonWindow.js" src="../js/Ext.ux.JsonWindow.js" type="text/javascript"></script>
 
 	    <!-- Designer functions -->
-	    <link id="css/Ext.ux.plugin.Designer.css" rel="stylesheet" type="text/css" href="../css/Ext.ux.plugin.Designer.css" />
-	    <script id="js/Ext.ux.data.HttpMergeProxy.js" type="text/javascript" src="../js/Ext.ux.data.HttpMergeProxy.js"></script>
-		<script id="js/Ext.ux.tree.CodeLoader.js" type="text/javascript" src="../js/Ext.ux.tree.CodeLoader.js"></script>
-	    <script id="js/Ext.ux.form.ScriptEditor.js" type="text/javascript" src="../js/Ext.ux.form.ScriptEditor.js"></script>
-	    <script id="js/Ext.ux.grid.PropertyGrid.js" type="text/javascript" src="../js/Ext.ux.grid.PropertyGrid.js"></script>
-	    <script id="js/Ext.ux.plugin.FileControl.js" type="text/javascript" src="../js/Ext.ux.plugin.FileControl.js"></script>
-	    <script id="js/Ext.ux.plugin.CookieFiles.js" type="text/javascript" src="../js/Ext.ux.plugin.CookieFiles.js"></script>
-	    <script id="js/Ext.ux.plugin.PHPFiles.js" type="text/javascript" src="../js/Ext.ux.plugin.PHPFiles.js"></script>
-	    <script id="js/Ext.ux.plugin.Designer.js" type="text/javascript" src="../js/Ext.ux.plugin.Designer.js"></script>
-
-		<script id="js/Ext.ux.JsonPanel.js" type="text/javascript" src="../js/Ext.ux.JsonPanel.js"></script>
-		<script id="js/Ext.ux.JsonWindow.js" type="text/javascript" src="../js/Ext.ux.JsonWindow.js"></script>
-		<script id="js/Ext.ux.tree.JsonTreeLoader.js" type="text/javascript" src="../js/Ext.ux.tree.JsonTreeLoader.js"></script>
-
+	    <link id="Ext.ux.guid.plugin.Designer.css" rel="stylesheet" href="../css/Ext.ux.guid.plugin.Designer.css" type="text/css" />
+		<script id="Ext.ux.guid.tree.JsonTreeLoader.js" src="../js/Ext.ux.guid.tree.JsonTreeLoader.js" type="text/javascript"></script>
+		<script id="Ext.ux.guid.tree.CodeLoader.js" src="../js/Ext.ux.guid.tree.CodeLoader.js" type="text/javascript"></script>
+	    <script id="Ext.ux.guid.grid.PropertyGrid.js" src="../js/Ext.ux.guid.grid.PropertyGrid.js" type="text/javascript"></script>
+	    <script id="Ext.ux.guid.data.FileControl.js" src="../js/Ext.ux.guid.data.FileControl.js" type="text/javascript"></script>
+	    <script id="Ext.ux.guid.data.CookieFiles.js" src="../js/Ext.ux.guid.data.CookieFiles.js" type="text/javascript"></script>
+	    <script id="Ext.ux.guid.data.PHPFiles.js" src="../js/Ext.ux.guid.data.PHPFiles.js" type="text/javascript"></script>
+	    <script id="Ext.ux.guid.plugin.Designer.js" src="../js/Ext.ux.guid.plugin.Designer.js" type="text/javascript"></script>
 
 		<!--The test function that fires when body is loaded -->
 		<script>
@@ -71,11 +69,11 @@
 	                bodyBorder:false,
 	                bodyStyle:'background:black;border:dashed green 1px;',
 					plugins : [
-						designer = new Ext.ux.plugin.Designer({
+						designer = new Ext.ux.guid.plugin.Designer({
 							toolboxTarget : 'toolbox',
 							disableCaching : true,
 							customProperties : true,
-							fileControl      : phpSupport ? new Ext.ux.plugin.PHPFiles() : new Ext.ux.plugin.CookieFiles()
+							fileControl      : phpSupport ? new Ext.ux.guid.data.PHPFiles() : new Ext.ux.guid.data.CookieFiles()
 						})
 					]
 

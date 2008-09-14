@@ -17,12 +17,12 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 
-Ext.namespace('Ext.ux.plugin');
+Ext.namespace('Ext.ux.guid.data');
 
 /*
  * PHPFiles
  */
-Ext.ux.plugin.PHPFiles = Ext.extend(Ext.ux.plugin.FileControl,{
+Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
   url : "phpFiles.php",  
   baseDir : "json",
     

@@ -18,33 +18,33 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.plugin');  
+Ext.namespace('Ext.ux.guid.data');  
 
 /*
  * CookieFiles
  */
-Ext.ux.plugin.CookieFiles = Ext.extend(Ext.ux.plugin.FileControl,{
+Ext.ux.guid.data.CookieFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
   
   init : function(){
     this.cookies = new Ext.state.CookieProvider();     
-    Ext.ux.plugin.CookieFiles.superclass.init.call(this);
+    Ext.ux.guid.data.CookieFiles.superclass.init.call(this);
   },
   
   refreshFiles : function (callback) {
     this.files = this.cookies.get('Designer.files');
-    Ext.ux.plugin.CookieFiles.superclass.refreshFiles.call(this,callback);
+    Ext.ux.guid.data.CookieFiles.superclass.refreshFiles.call(this,callback);
   },
 
   saveChanges : function(id,action,callback,content) {  
     if (content) this.cookies.set('Designer/' + id,escape(content));
     if (action=='delete') this.cookies.clear('Designer.'+id);
-    Ext.ux.plugin.CookieFiles.superclass.saveChanges.call(this,id,action,callback,content);
+    Ext.ux.guid.data.CookieFiles.superclass.saveChanges.call(this,id,action,callback,content);
     this.cookies.set('Designer.files',this.files);
   },
 
   openFile : function(id,callback) {
     var content = unescape(this.cookies.get('Designer/' + id));
-    Ext.ux.plugin.CookieFiles.superclass.openFile.call(this,id,callback,content)
+    Ext.ux.guid.data.CookieFiles.superclass.openFile.call(this,id,callback,content)
   }
     
 });

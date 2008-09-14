@@ -18,19 +18,19 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.tree');
+Ext.namespace('Ext.ux.guid.tree');
 
 /**
  * Extend Ext.tree.TreeLoader to enable loading of the designer Components
  * The name of the element is created based on components data
  */
-Ext.ux.tree.CodeLoader = function(designer,config) {
+Ext.ux.guid.tree.CodeLoader = function(designer,config) {
    Ext.apply(this, config);
    this.designer = designer;
    Ext.tree.TreeLoader.superclass.constructor.call(this);
 };
 
-Ext.extend(Ext.ux.tree.CodeLoader, Ext.util.Observable, {
+Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
  // @private jsonId is the id used to store the original code
  jsonId : '__JSON__',
   

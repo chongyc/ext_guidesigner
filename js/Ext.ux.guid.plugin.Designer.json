@@ -17,10 +17,6 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */ 
 { json: /*BEGIN*/{
-   blockedJsonInit: {'jsonpanel' : ['width','height','title'],
-                     'jsonwindow': [] 
-                    },
-   required_js : 'js/Ext.ux.plugin.Designer.js',
    title : 'Designer Toolbox',
    width : 235,
    height: 350,
@@ -195,7 +191,7 @@
           ddGroup: 'designerddgroup',
           rootVisible : false,
           root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
-          loader:/*BEGIN*/new Ext.ux.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.plugin.Designer.Components.json'})/*END*/,
+          loader:/*BEGIN*/new Ext.ux.guid.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.guid.plugin.Designer.Components.json'})/*END*/,
           dragConfig:/*BEGIN*/{ 
             getDragData : function(e){
               var data = Ext.dd.Registry.getHandleFromEvent(e);
@@ -220,7 +216,7 @@
           containerScroll:true,
           rootVisible : false,
           root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
-          loader:/*BEGIN*/new Ext.ux.tree.CodeLoader(scope)/*END*/,
+          loader:/*BEGIN*/new Ext.ux.guid.tree.CodeLoader(scope)/*END*/,
           listeners : /*BEGIN*/ {
             'render': function(){
                scope.on('add',function(){this.root.reload();},this);
@@ -387,7 +383,7 @@
         }/*END*/
         }]
       },{
-        xtype : 'uxpropertygrid',
+        xtype : 'guidpropertygrid',
         region: 'center',
         disabled: true,
         border  : false,

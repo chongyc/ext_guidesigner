@@ -18,18 +18,18 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.plugin');
+Ext.namespace('Ext.ux.guid.data');
 
 /**
  * FileControl
  */
-Ext.ux.plugin.FileControl = function(config) {
+Ext.ux.guid.data.FileControl = function(config) {
   Ext.apply(this,config);
-  Ext.ux.plugin.FileControl.superclass.constructor.call(this);
+  Ext.ux.guid.data.FileControl.superclass.constructor.call(this);
   this.init();
 }
 
-Ext.extend(Ext.ux.plugin.FileControl,Ext.util.Observable,{
+Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
   files : {},
   last  : null,
   activeNode : null,

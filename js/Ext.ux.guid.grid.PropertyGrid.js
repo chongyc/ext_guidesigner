@@ -18,22 +18,22 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.grid');
+Ext.namespace('Ext.ux.guid.grid');
 
 /**
  * The propertyrecord used by the property grid. 
  * Name is the key of a property, Value is the value of the property and
  * type is type of element. This type flag will control which editor is loaded
  */
- Ext.ux.grid.PropertyRecord = Ext.data.Record.create([
+ Ext.ux.guid.grid.PropertyRecord = Ext.data.Record.create([
     {name:'name',type:'string'}, 'value' , 'type'
 ]);
 
 
-Ext.ux.grid.PropertyStore = function(grid, source){
-    Ext.ux.grid.PropertyStore.superclass.constructor.call(this,grid,source);
+Ext.ux.guid.grid.PropertyStore = function(grid, source){
+    Ext.ux.guid.grid.PropertyStore.superclass.constructor.call(this,grid,source);
     this.store = new Ext.data.Store({
-        recordType : Ext.ux.grid.PropertyRecord
+        recordType : Ext.ux.guid.grid.PropertyRecord
     });
     this.store.on('update', this.onUpdate,  this);    
 };
@@ -41,7 +41,7 @@ Ext.ux.grid.PropertyStore = function(grid, source){
 /**
  * Constructor used to create a store used to store designer data
  */
-Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
+Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     jsonId : "__JSON__",
 
     getPropertyType : function (name) {
@@ -102,8 +102,8 @@ Ext.ux.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
 });
 
 
-Ext.ux.grid.PropertyColumnModel = function(grid, store){
-    Ext.ux.grid.PropertyColumnModel.superclass.constructor.call(this,grid,store);
+Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
+    Ext.ux.guid.grid.PropertyColumnModel.superclass.constructor.call(this,grid,store);
     this.jsonId=grid.jsonId;
     Ext.apply(this.editors,{
         'regexp' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'new RegExp()'})),
@@ -122,7 +122,7 @@ Ext.ux.grid.PropertyColumnModel = function(grid, store){
     this.propertyRendererDelegate = this.propertyRenderer.createDelegate(this);
 };
 
-Ext.extend(Ext.ux.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
+Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
     // private
     
     getPropertyType : function (name) {
@@ -192,7 +192,7 @@ Ext.extend(Ext.ux.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
 });
 
     
-Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
+Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     // private config overrides
     enableColumnMove:false,
     stripeRows:false,
@@ -216,10 +216,10 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     initComponent : function(){
         this.customEditors = this.customEditors || {};
         this.lastEditRow = null;
-        var store = new Ext.ux.grid.PropertyStore(this);
+        var store = new Ext.ux.guid.grid.PropertyStore(this);
         store.jsonId=this.jsonId,
         this.propStore = store;
-        var cm = new Ext.ux.grid.PropertyColumnModel(this, store);
+        var cm = new Ext.ux.guid.grid.PropertyColumnModel(this, store);
         store.store.sort('name', 'ASC');
         this.addEvents(
             'beforepropertychange',
@@ -236,7 +236,7 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         );
         this.cm = cm;
         this.ds = store.store;
-        Ext.ux.grid.PropertyGrid.superclass.initComponent.call(this);
+        Ext.ux.guid.grid.PropertyGrid.superclass.initComponent.call(this);
 
         this.selModel.on('beforecellselect', function(sm, rowIndex, colIndex){
             if(colIndex === 0){
@@ -247,12 +247,12 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     onRender : function(){
-        Ext.ux.grid.PropertyGrid.superclass.onRender.apply(this, arguments);
+        Ext.ux.guid.grid.PropertyGrid.superclass.onRender.apply(this, arguments);
         this.getGridEl().addClass('x-props-grid');
     },
 
     afterRender: function(){
-        Ext.ux.grid.PropertyGrid.superclass.afterRender.apply(this, arguments);
+        Ext.ux.guid.grid.PropertyGrid.superclass.afterRender.apply(this, arguments);
         if(this.source){
             this.setSource(this.source);
         }
@@ -268,4 +268,4 @@ Ext.ux.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 });    
 
 //Is not registered but required by designer
-Ext.reg('uxpropertygrid', Ext.ux.grid.PropertyGrid);
+Ext.reg('guidpropertygrid', Ext.ux.guid.grid.PropertyGrid);

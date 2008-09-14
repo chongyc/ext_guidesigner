@@ -18,7 +18,7 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.tree');
+Ext.namespace('Ext.ux.guid.tree');
 
 /**
  * Create a tree based on the content of a json file
@@ -28,7 +28,7 @@ Ext.namespace('Ext.ux.tree');
  * to create childeren in tree
  * By default the treeNodes are not draggable
  */
-Ext.ux.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
+Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
  /**
   * Create node but enabling childeren from Json
   */

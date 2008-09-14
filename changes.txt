@@ -19,6 +19,8 @@ TODO
  - Add debug window for messages of decoder
  - Add manual editor in property file
  - Rename plugin to guid and place in directories
+ - When deleting last item codetree is not correctly cleared
+ - Stript path from filename to make correct id in script loader
  
  Change History:
  Version 2.1.0:
