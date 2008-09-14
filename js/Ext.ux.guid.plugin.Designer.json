@@ -217,11 +217,23 @@
           rootVisible : false,
           root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
           loader:/*BEGIN*/new Ext.ux.guid.tree.CodeLoader(scope)/*END*/,
+          selectElement : function(cmp){
+            this.root.cascade(function(node){
+              if (cmp[scope.jsonId] && node.attributes.jsonId==cmp[scope.jsonId]) {                      
+                this.expandPath(node.getPath());
+                node.select();
+                return false;
+              }
+              return true;
+            },this);
+          },
           listeners : /*BEGIN*/ {
             'render': function(){
                scope.on('add',function(){this.root.reload();},this);
                scope.on('remove',function(){this.root.reload();},this);
                scope.on('newconfig',function(){this.root.reload();},this);
+               scope.on('selectelement',this.selectElement,this);
+               this.selectElement.defer(200,this,[scope.activeElement]);
             },
             'click' : function(node,e){
                e.preventDefault(); 

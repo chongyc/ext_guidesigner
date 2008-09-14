@@ -172,7 +172,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        * Fires after a item is selected in designer
        * @event add
        */            
-      'select'   : true,
+      'selectelement'   : true,
       /**
        * Fires after loadConfig fails
        * @event loadfailed
@@ -648,7 +648,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.propertyGrid.setSource({});
       }
     }
-    this.fireEvent('select',cmp);
+    this.fireEvent('selectelement',cmp);
     return cmp;
   },
 

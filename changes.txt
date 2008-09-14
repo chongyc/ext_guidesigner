@@ -34,6 +34,7 @@ TODO
   + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
   + You can now add you own property editors, bye setting "editor" in properties.json
   + Undo and redo are now keeping track of selected element
+  + Item is selected in code tree
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed
