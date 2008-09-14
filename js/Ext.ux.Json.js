@@ -574,7 +574,6 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return eval("(" + code+ ")");
          } catch (e) {
            e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );  
-           alert(e);
            if (this.fireEvent('error','decode',e) && evalException) throw e;
            return code;
          }
@@ -884,7 +883,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 case ']' :
                 case '}' :
                   var block =text.substring(start,wat-1);
-                  return [self.codeEval(block),block];
+                  return [self.codeEval(block,options),block];
               }
             }
             error('Unexpected end of code');
