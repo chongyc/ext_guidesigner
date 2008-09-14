@@ -521,7 +521,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Object} The config object 
    */
   getConfig : function (el) {
-    el = el || this.container.items.first();
+    el = el || (this.container && this.container.items ? this.container.items.first() : null);
     if (!el) return {};
     if (!el.codeConfig && el[this.jsonId]) {
       var findIn = function(o) {
