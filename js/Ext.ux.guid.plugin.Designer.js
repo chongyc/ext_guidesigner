@@ -405,9 +405,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * Append the config to the element
    * @param {Element} el The element to which the config would be added
    * @param {Object} config The config object to be added
+   * @param {Boolean} select Should item be selected
+   * @param {String} dropLocation The operation to perform
+   * @param {Object} source The source used to perform operation
    * @return {Component} The component added
    */
-  appendConfig : function (el,config,select,dropLocation,source){
+  appendConfig : function (el,config,select,dropLocation,source,noEvents){
     if (!el) return false;
     this.markUndo();
     
@@ -441,23 +444,36 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
      var items = this.editable(this.clone(config));
      //Find the container that should be changed
      ccmp = this.getContainer(cmp); 
-     if (dropLocation == 'appendafter') {
-       add(ccmp,items,this.activeElement,false);      
-     } else if (dropLocation == 'appendbefore') { 
-       add(ccmp,items,this.activeElement,true);
-     } else if (dropLocation == 'moveafter') {
-       this.removeElement(source,true);
-       add(ccmp,items,this.activeElement,false);      
-     } else if (dropLocation == 'movebefore') { 
-       this.removeElement(source,true);
-       add(ccmp,items,this.activeElement,true);
-     } else if (dropLocation == 'move') {
-       this.removeElement(source,true);
-       add(ccmp,items);
-     } else // Append default behavior
-       add(ccmp,items);
+     switch (dropLocation) {
+       case  'appendafter' : 
+         add(ccmp,items,cmp,false);
+         break;
+       case 'appendbefore' :
+         add(ccmp,items,cmp,true);
+         break;
+       case 'moveafter' :
+         this.removeElement(source,true);
+         add(ccmp,items,cmp,false);      
+         break;
+       case 'above':  
+       case 'below' :  
+         ccmp = this.isContainer(cmp) ? this.getContainer(cmp.ownerCt) : ccmp;
+         this.removeElement(source,true);
+         add(ccmp,items,cmp,true);
+         break;
+       case 'movebefore' :
+         this.removeElement(source,true);
+         add(ccmp,items,cmp,true);
+         break;
+       case 'move' :
+         this.removeElement(source,true);
+         add(ccmp,items);
+         break;
+       default :  
+        add(ccmp,items);     
+     }
      this.modified = true;
-     this.fireEvent('add');
+     if (!noEvents) this.fireEvent('add');
      this.redrawElement(ccmp,items[this.jsonId]); 
     } 
     return false;
@@ -826,8 +842,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   setObjectValue : function (object,key,value,rawValue,scope) {
     if (key=='xtype' && this.jsonId) {
       if (!Ext.ComponentMgr.isTypeAvailable(value)) {
-        rawValue = {"value": value,"display" : value};
-        value = 'panel'
+        rawValue = {value: value,encode : true};
+        value = 'panel';
         this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + value + ' does not exists'));      
       } else rawValue=null;
     }

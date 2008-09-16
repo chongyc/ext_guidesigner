@@ -18,7 +18,6 @@ TODO
  - Add debug window for messages of decoder
  - Rename plugin to guid and place in directories
  - When deleting last item codetree is not correctly cleared
- - Item is not selected in code tree when changing selection
  
  Change History:
  Version 2.1.0:
@@ -34,7 +33,8 @@ TODO
   + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
   + You can now add you own property editors, bye setting "editor" in properties.json
   + Undo and redo are now keeping track of selected element
-  + Item is selected in code tree
+  + Active item is now selected in code tree
+  + Code tree can now also be used beside drag drop in designer to reorganize code elements. 
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed

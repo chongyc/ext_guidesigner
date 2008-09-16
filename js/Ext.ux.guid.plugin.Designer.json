@@ -16,13 +16,13 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */ 
-{ json: /*BEGIN*/{
+{ json: {
    title : 'Designer Toolbox',
    width : 235,
    height: 350,
    alignTo: [scope.container.id,'br',[-235,-350]],
    "scope.!FileTreeId" : Ext.id()
-  }/*END*/,
+  },
     layout: 'border',
     border: false,
     items : [{
@@ -32,7 +32,7 @@
       border:false,
       height:180,
       split:true,
-      layoutConfig:/*BEGIN*/{
+      layoutConfig:{
         activeOnTop:false,
         animate:false,
         autoWidth:true,
@@ -40,8 +40,8 @@
         fill:true,
         hideCollapseTool:false,
         titleCollapse:true
-      }/*END*/,
-      tbar:/*BEGIN*/[{
+      },
+      tbar:[{
             tooltip : 'Clear designarea',
             iconCls:'icon-reset',
             handler: function(){
@@ -180,7 +180,7 @@
               w.show();
             }
           }
-      ]/*END*/,
+      ],
       items:[{
           title:"Components",
           xtype:"treepanel",
@@ -190,9 +190,9 @@
           enableDrag:true,
           ddGroup: 'designerddgroup',
           rootVisible : false,
-          root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
-          loader:/*BEGIN*/new Ext.ux.guid.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.guid.plugin.Designer.Components.json'})/*END*/,
-          dragConfig:/*BEGIN*/{ 
+          root:new Ext.tree.AsyncTreeNode({text:'root'}),
+          loader:new Ext.ux.guid.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.guid.plugin.Designer.Components.json'}),
+          dragConfig:{ 
             getDragData : function(e){
               var data = Ext.dd.Registry.getHandleFromEvent(e);
               if (data) {
@@ -202,12 +202,12 @@
               return data;
             },
             ddGroup: 'designerddgroup'
-          }/*END*/,
-          listeners : /*BEGIN*/ {
+          },
+          listeners :  {
            'dblclick' : function(node,e){
              scope.appendConfig(scope.activeElement||scope.container,node.attributes.config,true);
            }
-          }/*END*/
+          }
         },{
           title:"Code Tree",
           xtype:"treepanel",
@@ -215,8 +215,12 @@
           autoScroll:true,
           containerScroll:true,
           rootVisible : false,
-          root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
-          loader:/*BEGIN*/new Ext.ux.guid.tree.CodeLoader(scope)/*END*/,
+          collapsible     : true,
+          floatable       : false,
+          enableDD        : true,
+          ddGroup         : 'codecomponent',
+          root:new Ext.tree.AsyncTreeNode({text:'root'}),
+          loader:new Ext.ux.guid.tree.CodeLoader(scope),
           selectElement : function(cmp){
             this.root.cascade(function(node){
               if (cmp[scope.jsonId] && node.attributes.jsonId==cmp[scope.jsonId]) {                      
@@ -227,24 +231,31 @@
               return true;
             },this);
           },
-          listeners : /*BEGIN*/ {
+          listeners :  {
             'render': function(){
                scope.on('add',function(){this.root.reload();},this);
-               scope.on('remove',function(){this.root.reload();},this);
+               scope.on('remove',function(){          alert('remove');
+this.root.reload();},this);
                scope.on('newconfig',function(){this.root.reload();},this);
                scope.on('selectelement',this.selectElement,this);
-               this.selectElement.defer(200,this,[scope.activeElement]);
+               this.selectElement.defer(150,this,[scope.activeElement]);
             },
             'click' : function(node,e){
                e.preventDefault(); 
                scope.selectElement(node.attributes.jsonId);
-             }
-          }/*END*/
+            },
+            'nodedrop' : function(e) {
+                var target = scope.findByJsonId(e.target.attributes.jsonId);
+                var source = scope.findByJsonId(e.dropNode.attributes.jsonId);
+                //Block events
+                scope.appendConfig(target,scope.getConfig(source),false,e.point,source,true);
+            }
+          }
         },{
           title:"Files",
           xtype:"treepanel",
           id   : scope.FileTreeId,          
-          saveAs: /*BEGIN*/function(){
+          saveAs: function(){
              Ext.Msg.prompt('Filename', 'Please enter full file name:', function(btn, text){
                if (btn == 'ok'){
                 var t = text.replace(/\\/g,'/').split('/');
@@ -258,8 +269,8 @@
                } 
              }.createDelegate(this));              
 
-          }/*END*/,
-          reload : /*BEGIN*/function(){
+          },
+          reload : function(){
             this.root.reload(function(){
              var node = scope.fileControl.activeNode;
              if (node) {
@@ -267,8 +278,8 @@
                node.select();
              }
             }.createDelegate(this));
-          }/*END*/,
-          tbar:/*BEGIN*/[{
+          },
+          tbar:[{
             tooltip : 'Save the design, reusing last name',
             iconCls:'icon-save',
             handler: function(){
@@ -308,15 +319,15 @@
             handler: function (){
                Ext.getCmp(scope.FileTreeId).reload();
             }
-          }]/*END*/,
+          }],
           disabled : scope.fileControl == null,
           animate:true,
           autoScroll:true,
           containerScroll:true,
           rootVisible : false,
-          root:/*BEGIN*/new Ext.tree.AsyncTreeNode({text:'root'})/*END*/,
-          loader:/*BEGIN*/scope.fileControl/*END*/,
-          listeners : /*BEGIN*/ {
+          root:new Ext.tree.AsyncTreeNode({text:'root'}),
+          loader:scope.fileControl,
+          listeners :  {
             'dblclick' : function(node,e){
                e.preventDefault();
                if (node.leaf) {
@@ -392,7 +403,7 @@
                      }
                 }, this);
             }
-        }/*END*/
+        }
         }]
       },{
         xtype : 'guidpropertygrid',
