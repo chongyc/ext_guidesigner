@@ -56,7 +56,6 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
   
  // @private load is called when content of tree should be reloaded
  load : function(node, callback){ 
-     while(node.firstChild) node.removeChild(node.firstChild);
      if(this.doLoad(node,this.designer.getConfig())){
        if(typeof callback == "function") callback();
      }
@@ -64,8 +63,9 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
  
   // @private the interal loop used to go through the data and build a tree
   doLoad : function(node,data){
+    node.beginUpdate();
+    while(node.firstChild) node.removeChild(node.firstChild);
     if(data){
-      node.beginUpdate();
       if (!this.designer.isEmpty(data)) {
         var cs = {
              text: this.elementToText(data),
@@ -80,9 +80,8 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
           }
         }
       }
-      node.endUpdate();
-      return true;
     }
-    return false;
+    node.endUpdate();
+    return !!data;
   }
 });

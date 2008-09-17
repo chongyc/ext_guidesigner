@@ -4,20 +4,17 @@ TODO
  - Label is not selected after alter
  - Add warning when adding second item to root
  - JSON Path should always be relative, directory protection
- - Enable reorder from code tree
  - Drop element when not allowed, element is removed
  - Drop element in tabpanel throws error this.el , notifyover
- - See if it is possible to ignore xtype error when type does not exists
  - Add option to use window as designer container, handy for form design
  - Update documentation
+ - Implement support for a code repository
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
  - Add more design elements which are available to Ext.ux.Designer.Components
  - Do test on designer problem, toolbox not showing
- - Select of element does not work in firefox on test screen.
  - Add debug window for messages of decoder
  - Rename plugin to guid and place in directories
- - When deleting last item codetree is not correctly cleared
  
  Change History:
  Version 2.1.0:
@@ -34,12 +31,13 @@ TODO
   + You can now add you own property editors, bye setting "editor" in properties.json
   + Undo and redo are now keeping track of selected element
   + Active item is now selected in code tree
-  + Code tree can now also be used beside drag drop in designer to reorganize code elements. 
+  + Codetree can now also be used beside drag drop in designer to reorganize code elements. 
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed
   * Fixed refresh is now using redraw instead of reloading config
   * Fixed Before showing the preview window the designer is cleared, therefor no conflicts any more with same extjs ids
+  * Fixed the codetree was not cleared when last element removed
  
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon

@@ -338,8 +338,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         own.codeConfig.items.splice(i,1);
         if (own.codeConfig.items.length==0) delete own.codeConfig.items;
         if (!internal) {
-          this.fireEvent('remove');
           this.redrawElement(own);
+          this.fireEvent('remove');          
         } else {
           this.redrawContainer = true;
         }

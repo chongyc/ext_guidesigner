@@ -234,8 +234,7 @@
           listeners :  {
             'render': function(){
                scope.on('add',function(){this.root.reload();},this);
-               scope.on('remove',function(){          alert('remove');
-this.root.reload();},this);
+               scope.on('remove',function(){this.root.reload();},this);
                scope.on('newconfig',function(){this.root.reload();},this);
                scope.on('selectelement',this.selectElement,this);
                this.selectElement.defer(150,this,[scope.activeElement]);
