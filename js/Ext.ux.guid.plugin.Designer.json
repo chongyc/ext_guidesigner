@@ -20,7 +20,7 @@
    title : 'Designer Toolbox',
    width : 235,
    height: 350,
-   alignTo: [scope.container.id,'br',[-235,-350]],
+   alignTo: [document,'br-br'],
    "scope.!FileTreeId" : Ext.id()
   },
     layout: 'border',
