@@ -67,7 +67,9 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
   // @private the interal loop used to go through the data and build a tree
   doLoad : function(node,data){
     if(data){
-      if (!this.designer.isEmpty(data)) {
+      if (data instanceof Array) {
+        for(var i=0;i<data.length;i++) this.doLoad(node,data[i]);
+      } else if (!this.designer.isEmpty(data)) {
         var isContainer = this.designer.isContainer(this.designer.findByJsonId(data[this.jsonId]));
         var cs = {
              text: this.elementToText(data),

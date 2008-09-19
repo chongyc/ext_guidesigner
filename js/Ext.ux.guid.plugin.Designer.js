@@ -189,6 +189,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   init: function(field) {
     this.container = field;
+    this.container.codeConfig={};
+
     this.jsonScope = this.scope || this.container;
         
     //Init the components drag & drop and toolbox when it is rendered
@@ -329,7 +331,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Boolean} Indicator telling element was removed
    */
   removeElement : function(source,internal) {
-    source = source || this.activeElement;
     if (!source) return false;
     var own = this.getContainer(source.ownerCt);
     if (!internal) this.markUndo();
@@ -410,7 +411,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @param {Object} source The source used to perform operation
    * @return {Component} The component added
    */
-  appendConfig : function (el,config,select,dropLocation,source,noEvents){
+  appendConfig : function (el,config,select,dropLocation,source){
     if (!el) return false;
     this.markUndo();
     
@@ -450,9 +451,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          ccmp = this.isContainer(cmp) ? this.getContainer(cmp.ownerCt) : ccmp;       
        case 'appendcode' :  
          this.removeElement(source,true);
-         add(ccmp,items,cmp,true);
+         add(ccmp,items,cmp,dropLocation=='abovecode');
          break;
-
        case  'appendafter' : 
          add(ccmp,items,cmp,false);
          break;
@@ -475,7 +475,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         add(ccmp,items);     
      }
      this.modified = true;
-     if (!noEvents) this.fireEvent('add');
+     this.fireEvent('add');
      this.redrawElement(ccmp,items[this.jsonId]); 
     } 
     return false;
@@ -539,7 +539,18 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Object} The config object 
    */
   getConfig : function (el) {
-    el = el || (this.container && this.container.items ? this.container.items.first() : null);
+    if (!el) {
+      el = this.container.items.items;
+      //Check if root is a array with more then one element, if so return array
+      if (el.length>1) {
+        var arr = [];
+        for (var i=0;i<el.length;i++) {
+          arr.push(this.getConfig(el[i]));
+        }
+        return arr;
+      }
+      el = el[0];
+    }
     if (!el) return {};
     if (!el.codeConfig && el[this.jsonId]) {
       var findIn = function(o) {
@@ -567,8 +578,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   setConfig : function (json,noUndo) {
     if (!noUndo) this.markUndo();
     var items = (typeof(json)=='object' ? json : this.decode(json)) || null;
-    if (!this.container.codeConfig) this.container.codeConfig = this.getConfig(this.container);
-    this.container.codeConfig.items=[this.editable(items)];
+    this.container.codeConfig.items= (items instanceof Array ? this.editable(items) : [this.editable(items)]);
     this.redrawElement(this.container);
     this.modified = true;
     this.fireEvent('newconfig');
@@ -631,7 +641,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.redrawContainer=false;
         this.selectElement(id);
       } catch (e) { 
-         Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); 
+         if (this.fireEvent('error','redrawElement',e))
+              Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); 
          return false;
       }
       this.fireEvent('change',el);
@@ -754,8 +765,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   isContainer : function (cmp) {
     return cmp instanceof Ext.Container;
-    /*var xtype = cmp ? cmp.xtype : null;
-    return  (xtype && ['jsonpanel','panel','viewport','form','window','tabpanel','toolbar','fieldset'].indexOf(xtype) !== -1);*/
   },
   
   /**
@@ -846,7 +855,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       if (!Ext.ComponentMgr.isTypeAvailable(value)) {
         rawValue = {value: value,encode : true};
         value = 'panel';
-        this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + value + ' does not exists'));      
+        this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + rawValue.value + ' does not exists'));      
       } else rawValue=null;
     }
     return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
