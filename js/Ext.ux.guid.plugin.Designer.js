@@ -445,6 +445,14 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
      //Find the container that should be changed
      ccmp = this.getContainer(cmp); 
      switch (dropLocation) {
+       case 'abovecode' :
+       case 'belowcode' :
+         ccmp = this.isContainer(cmp) ? this.getContainer(cmp.ownerCt) : ccmp;       
+       case 'appendcode' :  
+         this.removeElement(source,true);
+         add(ccmp,items,cmp,true);
+         break;
+
        case  'appendafter' : 
          add(ccmp,items,cmp,false);
          break;
@@ -454,12 +462,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        case 'moveafter' :
          this.removeElement(source,true);
          add(ccmp,items,cmp,false);      
-         break;
-       case 'above':  
-       case 'below' :  
-         ccmp = this.isContainer(cmp) ? this.getContainer(cmp.ownerCt) : ccmp;
-         this.removeElement(source,true);
-         add(ccmp,items,cmp,true);
          break;
        case 'movebefore' :
          this.removeElement(source,true);
@@ -873,7 +875,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         //When somebody changed the json, then make sure we init the changes
         switch (id) {
           case 'json' : this.jsonInit(this.decode(value));break
-     //     case 'xtype': this.setObjectValue(source,id,value);break;
         }  
         this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);

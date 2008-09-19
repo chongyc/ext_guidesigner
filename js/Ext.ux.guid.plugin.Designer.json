@@ -18,7 +18,7 @@
   */ 
 { json: {
    title : 'Designer Toolbox',
-   width : 235,
+   width : 245,
    height: 350,
    alignTo: [document,'br-br'],
    "scope.!FileTreeId" : Ext.id()
@@ -247,7 +247,8 @@
                 var target = scope.findByJsonId(e.target.attributes.jsonId);
                 var source = scope.findByJsonId(e.dropNode.attributes.jsonId);
                 //Block events
-                scope.appendConfig(target,scope.getConfig(source),false,e.point,source,true);
+                
+                scope.appendConfig.defer(150,scope,[target,scope.getConfig(source),false,e.point +'code',source]);
             }
           }
         },{

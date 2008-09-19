@@ -56,21 +56,23 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
   
  // @private load is called when content of tree should be reloaded
  load : function(node, callback){ 
+    node.beginUpdate();
+    while(node.firstChild) node.removeChild(node.firstChild);    
      if(this.doLoad(node,this.designer.getConfig())){
        if(typeof callback == "function") callback();
      }
+    node.endUpdate();     
   },
  
   // @private the interal loop used to go through the data and build a tree
   doLoad : function(node,data){
-    node.beginUpdate();
-    while(node.firstChild) node.removeChild(node.firstChild);
     if(data){
       if (!this.designer.isEmpty(data)) {
+        var isContainer = this.designer.isContainer(this.designer.findByJsonId(data[this.jsonId]));
         var cs = {
              text: this.elementToText(data),
-             cls: data.items ? 'folder' : 'file' , 
-             leaf : data.items ? false : true,
+             cls: isContainer ? 'folder' : 'file' , 
+             leaf : isContainer ? false : true,
              jsonId : data[this.jsonId]
         };
         var cn = node.appendChild(new Ext.tree.TreeNode(cs));
@@ -81,7 +83,6 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.util.Observable, {
         }
       }
     }
-    node.endUpdate();
     return !!data;
   }
 });

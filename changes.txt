@@ -9,12 +9,15 @@ TODO
  - Add option to use window as designer container, handy for form design
  - Update documentation
  - Implement support for a code repository
+ - Multiple select to change one or more items in one go
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
  - Add more design elements which are available to Ext.ux.Designer.Components
  - Do test on designer problem, toolbox not showing
  - Add debug window for messages of decoder
  - Rename plugin to guid and place in directories
+ - When root element is not container and multiple items are dropped convert it into container
+ - Still alert message when applying code should be transformed into event
  
  Change History:
  Version 2.1.0:
@@ -38,6 +41,7 @@ TODO
   * Fixed refresh is now using redraw instead of reloading config
   * Fixed Before showing the preview window the designer is cleared, therefor no conflicts any more with same extjs ids
   * Fixed the codetree was not cleared when last element removed
+  
  
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon

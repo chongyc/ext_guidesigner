@@ -67,9 +67,13 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
   of base info is stored in special tag Window. enabling auto create window/frame see show code
  */
  var phpSupport;
- var designer = new Ext.Viewport({
+ var designer;
+ var container = new Ext.Window({
+    height : 500, width : 800,
 	layout : 'border',
-	items: [ /* When adding region west toolbox is renderd to this area
+	items: [
+	   /*
+	        //When adding region west toolbox is renderd to this area
 	        { region : 'west',
 	          layout : 'fit',
 	          border : false,
@@ -77,7 +81,8 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 	          xtype  : 'panel',
 	          title  : 'toolbox',
 	          width  : 215
-	        },*/
+	        },
+	   */
 	        {
               region:'center',
               layout:'fit',
@@ -91,7 +96,8 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
         //        layout:'fit',
                 xtype :'jsonpanel',
 				 plugins : [
-					new Ext.ux.guid.plugin.Designer({
+				    designer = new Ext.ux.guid.plugin.Designer({
+					  evalException : false,
 					  toolboxTarget : 'toolbox',
 					  disableCaching : true,
 					  customProperties : true
@@ -103,6 +109,9 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 	        }
 	       ]
  });
+ container.show();
+ //Force designer to popup.
+ designer.toolbox(true);
 </script>
 </body>
 </html>
