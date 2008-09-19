@@ -52,7 +52,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      * Scope is used as binding varaible for <b>this</b> within the json
      * @type {Object}
      @cfg */
-    scope : null,
+    scope : {},
           
     /**
      * Should an eval Exception been thrown causing parsing to stop
@@ -96,7 +96,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
       * @return {Object} the object which should be used as scope when parsing
       */
      getScope : function(){
-       return  this.scope || this;  
+       return  this.scope;  
      },     
 
     /**
@@ -163,11 +163,14 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     * to load. Style sheets are loaded asynchone but javascript are loaded synchrone.
     * @param {Object} items The config object with items that should be set
     * @param {Element} element The element to which to set the values
+    * @param {Object} options Options that can be set are scope,scopeOnly
     * @return {Boolean} indicator if all changes where set
     */
-    set : function (element,items,scopeOnly) {
+    set : function (element,items,options) {
      var allSet = true, el = element || this;
+     options = options || {}
      if (items) {
+      if (typeof(items)=='string') items = this.decode(items,options);
       for (var i in items) {       
         var j = i;
           if (i=='required_js') { 
@@ -193,14 +196,14 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             var applyTo = el;
             //When scope of var set if
             if (i.indexOf('scope.')==0) {
-               applyTo = this.getScope();
+               applyTo = options.scope ? options.scope : this.getScope();
                j = i.substring(6);
                if (j.charAt(0)=='!') { 
                  //Check if it only should be set when not available
-                 j=j.substring(1);
+                 j=j.substring(1);                 
                  if (applyTo[j]) continue;
                }
-            } else if (scopeOnly) continue;
+            } else if (options.scopeOnly) continue;
             var k = 'set' + j.substring(0,1).toUpperCase() + j.substring(1);
             try {
               if (applyTo[k] && typeof applyTo[k] == 'function') {
@@ -525,7 +528,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      setObjectValue : function (object,key,value,rawValue,scope) {
        scope = scope || this.getScope();
       //Phase three load javascript, stylesheet and evalute scope objects
-       if (key=='json') this.set(scope,value,true);
+       if (key=='json') this.set(scope,value,{scopeOnly :true,scope : scope});
        //remove empty object results
        if (value===null) {
          delete object[key];
@@ -552,6 +555,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
       */     
      codeEval : function(code,options) {
        options = options || {}
+       var self = this;
        var scope = options.scope || this.getScope();
        var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;
        var myEval = function(code) {
@@ -559,7 +563,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return eval("(" + code+ ")");
          } catch (e) {
            e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );  
-           if (this.fireEvent('error','decode',e) && evalException) throw e;
+           if (self.fireEvent('error','codeEval',e) && evalException) throw e;
            return code;
          }
        }.createDelegate(scope);

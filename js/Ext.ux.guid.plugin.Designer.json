@@ -21,16 +21,41 @@
    width : 245,
    height: 350,
    alignTo: [document,'br-br'],
+   //Function used within json which must be there in order to use designer to desgin
+   "scope.!on" : Ext.emptyFn,
+   "scope.!setConfig" : Ext.emptyFn,
+   "scope.!getConfig" : Ext.emptyFn,
+   "scope.!getCode"   : Ext.emptyFn,
+   "scope.!undo" : Ext.emptyFn,
+   "scope.!redo" : Ext.emptyFn,
+   "scope.!refresh" : Ext.emptyFn,
+   "scope.!setPropertyGrid" : Ext.emptyFn,
+   "scope.!removeElement" : Ext.emptyFn,
+   "scope.!selectElement" : Ext.emptyFn,
+   "scope.!appendConfig" : Ext.emptyFn,
+   "scope.!visualResize" : Ext.emptyFn,
+   "scope.!findByJsonId" : Ext.emptyFn,
+   "scope.!fireEvent"   : Ext.emptyFn,
+   "scope.!fileControl" : null,
+   
+   //From here on normal code stuff
    "scope.!FileTreeId" : Ext.id(),
+   "scope.!enableCopy" : true,
+   "scope.!enableCopy" : true,
+   "scope.!enableShow" : true,
+   "scope.!enableEdit" : true,
+   "scope.!enableVersion" : true,
+
+   /*
    "scope.!errorHandler" : function(){
        //Create a error Handler
        var errorHandler = function(type,exception) {
-        // Ext.Msg.alert('Error:' + exception);
+         Ext.Msg.alert(type,exception);
          return false;
        };
        scope.on('error',errorHandler,scope);
        return errorHandler;
-     }()
+     }()*/
   },
     layout: 'border',
     border: false,

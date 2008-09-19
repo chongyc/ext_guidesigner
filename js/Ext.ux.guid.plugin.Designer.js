@@ -127,7 +127,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * A file control config item
    */
   fileControl : null,
-   
+    
    
   /**
    * Called from within the constructor allowing to initialize the parser
@@ -190,8 +190,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   init: function(field) {
     this.container = field;
     this.container.codeConfig={};
-
-    this.jsonScope = this.scope || this.container;
         
     //Init the components drag & drop and toolbox when it is rendered
     this.container.on('render', function() {    
@@ -235,6 +233,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       } 
     }, this);
   },
+ 
     
   /** 
    * Create the context menu for a selected element
@@ -568,6 +567,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     } 
     return el.codeConfig || el.initialConfig;
   },
+  
+  scope : {'test' : 'dummy'},
   
   /**
    * Set the config to the design element
