@@ -15,9 +15,9 @@
   without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
 
   * Donations are welcomed: http://donate.webblocks.eu
-  */ 
+  */
 { json: {
-   title : 'Designer Toolbox',
+   title : 'Toolbox',
    width : 245,
    height: 350,
    alignTo: [document,'br-br'],
@@ -37,34 +37,26 @@
    "scope.!findByJsonId" : Ext.emptyFn,
    "scope.!fireEvent"   : Ext.emptyFn,
    "scope.!fileControl" : null,
-   
+
    //From here on normal code stuff
    "scope.!FileTreeId" : Ext.id(),
+   "scope.!ErrorId"    : Ext.id(),
+   "scope.!TabId"      : Ext.id(),
    "scope.!enableCopy" : true,
    "scope.!enableCopy" : true,
    "scope.!enableShow" : true,
    "scope.!enableEdit" : true,
-   "scope.!enableVersion" : true,
-
-   /*
-   "scope.!errorHandler" : function(){
-       //Create a error Handler
-       var errorHandler = function(type,exception) {
-         Ext.Msg.alert(type,exception);
-         return false;
-       };
-       scope.on('error',errorHandler,scope);
-       return errorHandler;
-     }()*/
+   "scope.!enableVersion" : true
   },
     layout: 'border',
     border: false,
     items : [{
       xtype : 'tabpanel',
+      id    : scope.TabId,
       activeTab : 0,
       region:"north",
       border:false,
-      height:180,
+      height:150,
       split:true,
       layoutConfig:{
         activeOnTop:false,
@@ -86,21 +78,21 @@
             iconCls :'icon-designcopy',
             hidden  : !scope.enableCopy,
             handler : function(){
-              var text = scope.getCode();  
+              var text = scope.getCode();
               if (window.clipboardData) { // Internet Explorer
                  window.clipboardData.setData("Text", ""+ text); // stupid IE... won't work without the ""+ ?!?!?
               } else if (window.netscape) { // Mozilla
                   try {
-                    netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');       
-                    var gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].getService(Components.interfaces.nsIClipboardHelper);            
+                    netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+                    var gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].getService(Components.interfaces.nsIClipboardHelper);
                     gClipboardHelper.copyString(text);
                   } catch(e) {
                     return Ext.Msg.alert('Information',e +'\n\nPlease type: "about:config" in your address bar.\nThen filter by "signed".\nChange the value of "signed.applets.codebase_principal_support" to true.\nYou should then be able to use this feature.');
                   }
-              } else { 
+              } else {
                 return Ext.Msg.alert('Information',"Your browser does not support this feature");
               }
-            }          
+            }
           },{
             tooltip : 'Edit the generated JSON using a text area',
             iconCls:'icon-editEl',
@@ -119,7 +111,7 @@
                       modal       : true,
                       closeAction : 'hide'
                     });
-                  jsonWindow.tf = tf;          
+                  jsonWindow.tf = tf;
                   jsonWindow.addButton({
                       text    : "Close",
                       scope   : jsonWindow,
@@ -136,7 +128,7 @@
                              return;
                           }
                         } catch (e) {
-                           Ext.Msg.alert('Failure','Failed to apply code ' + e); 
+                           Ext.Msg.alert('Failure','Failed to apply code ' + e);
                            jsonWindow.el.unmask();
                            return;
                         }
@@ -144,7 +136,7 @@
                         jsonWindow.hide();
                       }
                     });
-                 scope.jsonWindow = jsonWindow;   
+                 scope.jsonWindow = jsonWindow;
                 }
                 scope.jsonWindow.tf.setValue(scope.getCode());
                 scope.jsonWindow.show();
@@ -158,7 +150,7 @@
               //Clear scope so tabindexed and id's are cleared
               scope.setConfig({});
               var w = new Ext.Window(Ext.apply({
-                    title  : 'Show Config', 
+                    title  : 'Show Config',
                     border  : false,
                     layout  : 'fit',
                     width:600,
@@ -171,7 +163,7 @@
                     listeners   : { 'beforeclose' : function(){
                          //Restore the tabindex and other stuff
                          scope.undo();
-                    }} 
+                    }}
                     },cfg.json));
                 w.show();
             }
@@ -196,7 +188,7 @@
             hidden  : !scope.enableVersion,
             handler : function() {
               var w = new Ext.Window({
-                title  : 'GuiDesigner (' + scope.version + ') by Sierk Hoeksma, API Information', 
+                title  : 'GuiDesigner (' + scope.version + ') by Sierk Hoeksma, API Information',
                 border  : false,
                 width:700,
                 height: 450,
@@ -216,7 +208,8 @@
           }
       ],
       items:[{
-          title:"Components",
+          title:"Design",
+          tooltip : "Design your ui by selecting elements from this tab",
           xtype:"treepanel",
           animate:true,
           autoScroll:true,
@@ -226,7 +219,7 @@
           rootVisible : false,
           root:new Ext.tree.AsyncTreeNode({text:'root'}),
           loader:new Ext.ux.guid.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.guid.plugin.Designer.Components.json'}),
-          dragConfig:{ 
+          dragConfig:{
             getDragData : function(e){
               var data = Ext.dd.Registry.getHandleFromEvent(e);
               if (data) {
@@ -243,7 +236,8 @@
            }
           }
         },{
-          title:"Code Tree",
+          title:"Select",
+          tooltip : "Tab with Codetree",
           xtype:"treepanel",
           animate:true,
           autoScroll:true,
@@ -257,7 +251,7 @@
           loader:new Ext.ux.guid.tree.CodeLoader(scope),
           selectElement : function(cmp){
             this.root.cascade(function(node){
-              if (cmp[scope.jsonId] && node.attributes.jsonId==cmp[scope.jsonId]) {                      
+              if (cmp[scope.jsonId] && node.attributes.jsonId==cmp[scope.jsonId]) {
                 this.expandPath(node.getPath());
                 node.select();
                 return false;
@@ -305,7 +299,7 @@
                   }, this);
             },
             'click' : function(node,e){
-               e.preventDefault(); 
+               e.preventDefault();
                scope.selectElement(node.attributes.jsonId);
             },
             'nodedrop' : function(e) {
@@ -319,9 +313,10 @@
             }
           }
         },{
-          title:"Files",
+          title:"Manage",
+          tooltip : "Manage your design by performing an action of this tab",
           xtype:"treepanel",
-          id   : scope.FileTreeId,          
+          id   : scope.FileTreeId,
           saveAs: function(){
              Ext.Msg.prompt('Filename', 'Please enter full file name:', function(btn, text){
                if (btn == 'ok'){
@@ -333,8 +328,8 @@
                  if (typeof callback == "function") callback(success);
                 });
                 this.reload();
-               } 
-             }.createDelegate(this));              
+               }
+             }.createDelegate(this));
 
           },
           reload : function(){
@@ -353,10 +348,10 @@
               if (scope.fileControl.last) {
                 scope.fileControl.saveFile(scope.fileControl.last,scope.getCode(),function(success){
                  if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.fileControl.last);
-                });              
+                });
               } else {
                 Ext.getCmp(scope.FileTreeId).saveAs();
-              }              
+              }
             }
           },{
             tooltip : 'Save the design with different name',
@@ -412,7 +407,7 @@
                 //Create context menu
                 var contextMenu = new Ext.menu.Menu({items:[{
                   text    : 'Open',
-                  tooltip : 'Open file',        
+                  tooltip : 'Open file',
                   iconCls : 'icon-reload',
                   scope   : this,
                   handler : function(item,e) {
@@ -427,7 +422,7 @@
                     }
                 },{
                   text    : 'Rename',
-                  tooltip : 'Rename the file',        
+                  tooltip : 'Rename the file',
                   iconCls : 'icon-filerename',
                   scope   : this,
                   handler : function(item,e) {
@@ -444,12 +439,12 @@
                         } else {
                           Ext.Msg.alert('Error','File name not valid');
                         }
-                       } 
+                       }
                       });
                     }
                 },{
                   text    : 'Delete',
-                  tooltip : 'Delete file',        
+                  tooltip : 'Delete file',
                   iconCls : 'icon-filedelete',
                   scope   : this,
                   handler : function(item,e) {
@@ -514,9 +509,10 @@
                }, this);
           }
         },
-        bbar : ['Add ',   
+        bbar : ['Add ',
           new Ext.form.ComboBox({
             mode           : 'local',
+            width          :  205,
             valueField     : 'name',
             displayField   : 'name',
             store          : scope.properties,
@@ -530,11 +526,63 @@
                        tf.setValue('');
                        ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
                        scope.propertyGrid.startEditing(ds.getCount()-1, 1);
-                    } 
+                    }
               }
             }
          })
        ]
-      }
-    ]
-}  
+      },{
+      region : 'south',
+      id     : scope.ErrorId,
+      border : false,
+      bodyBorder : false,
+      hidden  : true,
+      errors  : [],
+      maxErrors : 60,
+      tbar : [{
+        iconCls : 'icon-error',
+        tooltip : 'Open error window',
+        enableToggle : true,
+        handler : function(){
+          var cmp = Ext.getCmp(scope.ErrorId);
+          var tab = Ext.getCmp(scope.TabId);
+          if (this.pressed) {
+             cmp.errorTab = tab.add({
+              iconCls : 'icon-error',
+              tooltip : "A list with errors which have occurred",
+              title   : 'Error',
+              autoScroll:true,
+              items   : cmp.errorText
+             });
+            tab.activate(cmp.errorTab);
+            cmp.errorTab.doLayout();
+          } else if (cmp.errorTab) {
+            tab.remove(cmp.errorTab);
+            delete cmp.errorTab;
+          }
+        }
+      },'-',{
+        xtype : 'label',
+        plugins : {
+          //Create an error handler
+          init : function(self) {
+           var cmp = Ext.getCmp(scope.ErrorId);
+           cmp.errorText = new Ext.form.Label();
+
+           var errorHandler = function(type,exception) {
+             cmp.errors.push('<b>' + type + '</b> : ' + exception);
+             while (cmp.errors.length>cmp.maxErrors) {cmp.errors.shift();}
+             cmp.errorText.setText(cmp.errors.join('<br>'),false);
+             if (cmp.errors.length==1) {
+               cmp.setVisible(true);
+               cmp.ownerCt.doLayout();
+             }
+             self.setText('(<font color="red">' + cmp.errors.length + '</font>) ' + cmp.errors[cmp.errors.length-1],false);
+             return false;
+           };
+           scope.on('error',errorHandler,scope);
+         }
+       }
+      }]
+    }]
+}

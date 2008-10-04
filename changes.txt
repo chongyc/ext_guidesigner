@@ -6,18 +6,17 @@ TODO
  - JSON Path should always be relative, directory protection
  - Drop element when not allowed, element is removed
  - Drop element in tabpanel throws error this.el , notifyover
- - Add option to use window as designer container, handy for form design
  - Update documentation
  - Implement support for a code repository
  - Multiple select to change one or more items in one go
 ==> Problems after creating GUID 2.1 
  - Make it possible to load more then one component tree and make this version depended
  - Add more design elements which are available to Ext.ux.Designer.Components
- - Do test on designer problem, toolbox not showing
- - Add debug window for messages of decoder
  - Rename plugin to guid and place in directories
  - When root element is not container and multiple items are dropped convert it into container
  - Still alert message when applying code should be transformed into event
+ - Implement a loader function: use(filelist,options/defaultpath)
+ - Problem with settings values of mixed compenents, only code when is real code
  
  Change History:
  Version 2.1.0:
@@ -25,16 +24,18 @@ TODO
   + Visual resize added activated by context menu
   + Visual move of element in absolute layout activated by context menu
   + Added XType fallback to panel for unknown xtypes
-  + All xtypes which are loaded before guidesigner is load are now selectable
+  + All xtypes which are loaded before guidesigner is loaded are now selectable
   + Found a good solotion for property grid error
   + Split single javascript files containing multiple classes into files
   + Added "scope.!<VAR>" in json object, so you can create local objects if they don't exist
   + Toolbox is forced to do a layout before showing.
   + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
-  + You can now add you own property editors, bye setting "editor" in properties.json
+  + You can now add you own property editors, by setting "editor" in properties.json
   + Undo and redo are now keeping track of selected element
   + Active item is now selected in code tree
-  + Codetree can now also be used beside drag drop in designer to reorganize code elements. 
+  + Codetree can now also be used beside drag drop in designer to reorganize code elements.
+  + Url options can now beused to configure designer window: window=1 (shows window mode) docked=1 (will dock designer)
+  + A error statusbar and tab have been added to show errors. Click on error icon on statusbar to show or hide detailtab
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed

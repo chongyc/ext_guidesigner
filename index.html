@@ -66,24 +66,22 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
   You can now use the designer as panel, JSON can contain javascript and information
   of base info is stored in special tag Window. enabling auto create window/frame see show code
  */
- var phpSupport;
- var designer;
- //var container = new Ext.Window({height : 500, width : 800,
- var container = new Ext.Viewport({
-	layout : 'border',
-	items: [
-	   /*
-	        //When adding region west toolbox is renderd to this area
-	        { region : 'west',
-	          layout : 'fit',
-	          border : false,
-	          id     : 'toolbox',
-	          xtype  : 'panel',
-	          title  : 'toolbox',
-	          width  : 215
-	        },
-	   */
-	        {
+ var windowMode = Ext.ux.UTIL.getUrlAction('window',false); //Change this flag to true if you want designer to be a window
+ var phpSupport; // Flag is set in index.php to indicate whe support PHP
+ var designer; //Variable used to save the designer plugin
+
+ //Items is the array with the designer area
+ var items = Ext.ux.UTIL.getUrlAction('docked')
+      ? [{ region : 'west',
+	       layout : 'fit',
+	       border : false,
+	       id     : 'toolbox',
+	       xtype  : 'panel',
+	       title  : 'toolbox',
+	       width  : 215
+	     }]
+	  : [];
+  items.push({
               region:'center',
               layout:'fit',
               border:false,
@@ -93,7 +91,6 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
                 border:false,
                 bodyBorder:false,
                 bodyStyle:'background:black;border:dashed green 1px;',
-        //        layout:'fit',
                 xtype :'jsonpanel',
 				 plugins : [
 				    designer = new Ext.ux.guid.plugin.Designer({
@@ -107,11 +104,26 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 				  ]
 	         }
 	        }
-	       ]
- });
- container.show();
- //Force designer to popup.
- designer.toolbox(true);
+	       );
+ if (windowMode) {
+   var container = new Ext.Window({
+    height : Ext.ux.UTIL.getUrlAction('height',500),
+    width : Ext.ux.UTIL.getUrlAction('width',800),
+    maximizable : true,
+    closable : false,
+    title : 'Designer Window',
+	layout : 'border',
+	items: items
+    }
+   ).show();
+   //Force designer to popup.
+   designer.toolbox(true);
+ } else {
+   new Ext.Viewport({
+	layout : 'border',
+	items: items
+   });
+ }
 </script>
 </body>
 </html>

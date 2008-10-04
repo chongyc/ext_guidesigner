@@ -82,7 +82,7 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
     getValue : function (){
       var v = Ext.ux.form.SimpleCombo.superclass.getValue.call(this) || '';
       var r = this.getRawValue() || '';
-      if (v.toLowerCase().indexOf(r.toLowerCase())==0) return v;
+      if (!this.customProperties || v.toLowerCase().indexOf(r.toLowerCase())==0) return v;
       return r;
     }
 

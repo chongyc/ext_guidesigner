@@ -42,6 +42,7 @@
 .icon-reload {background-image:url(../icons/drive_go.png) !important; }
 .icon-left {background-image:url(../icons/arrow_left.png) !important; }
 .icon-right {background-image:url(../icons/arrow_right.png) !important; }
+.icon-error {background-image:url(../icons/error.png) !important; }
 
 .icon-el { background-image:url(../icons/folder_explore.png) !important; }
 .icon-deleteEl { background-image:url(../icons/application_delete.png) !important; }

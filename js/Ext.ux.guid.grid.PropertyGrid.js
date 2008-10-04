@@ -58,13 +58,17 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         for(var k in o){
             if(k.indexOf(this.jsonId)!=0 && ['items'].indexOf(k)==-1){
                 var v = o[this.jsonId + k];
-                if (typeof(v)=='object') v = v.display || v.value;
+                var type = null;
+                if (typeof(v)=='object') {                   
+                   type = v.type || type;
+                   v = v.display || v.value;
+                }
                 if (typeof(o[k]) == 'function') {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(o[k]) , type : 'function'}, k));
                 } else if (typeof(o[k]) == 'object') {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(Ext.ux.JSON.encode(o[k])), type : 'object'}, k));
                 } 
-                  data.push(new Ext.grid.PropertyRecord({name: k, value: v || o[k], type : null }, k));
+                  data.push(new Ext.grid.PropertyRecord({name: k, value: v || o[k], type : type }, k));
             }
         }
         this.store.loadRecords({records: data}, {}, true);
@@ -116,7 +120,8 @@ Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
         'html' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'html'})),
         'css' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'css'})),
         'editlist' :new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:true})),
-        'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false}))      
+        'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false}))
+        ,'boolean':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[['true','true'],['false','false']],editable:true,customProperties:true}))      
     });
     this.valueRendererDelegate = this.valueRenderer.createDelegate(this);
     this.propertyRendererDelegate = this.propertyRenderer.createDelegate(this);

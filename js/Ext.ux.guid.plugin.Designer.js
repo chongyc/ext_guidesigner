@@ -20,48 +20,48 @@
 
 Ext.namespace('Ext.ux.guid.plugin');
 
-/** 
- * Create a desginer 
+/**
+ * Create a desginer
  */
 Ext.ux.guid.plugin.Designer = function(config){
   Ext.ux.guid.plugin.Designer.superclass.constructor.call(this,config);
   this.initialConfig = config;
 };
 
-Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {  
-  
+Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
+
   /**
    * When true the toolbox is show on init
    * @type {Boolean}
    @cfg */
   autoShow : true,
-  
-  /** 
-   * Should caching be disabled when JSON are loaded (defaults false).   
-   * @type {Boolean} 
+
+  /**
+   * Should caching be disabled when JSON are loaded (defaults false).
+   * @type {Boolean}
    @cfg */
-  disableCaching: false, 
-  
+  disableCaching: false,
+
   /**
    * When toolboxTarget is set, this will be used to render toolbox to not window
    * @type {String/Element}
    @cfg */
-  toolboxTarget : false, 
-  
+  toolboxTarget : false,
+
   /**
    * Url used to load toolbox json from defaults to <this.file>/Ext.ux.guid.plugin.Designer.json
-   * @type {String} 
+   * @type {String}
    @cfg */
   toolboxJson   : 'js/Ext.ux.guid.plugin.Designer.json',
-  
+
   /**
-   * Enable or disable the usage of customProperties (defaults false). 
+   * Enable or disable the usage of customProperties (defaults false).
    * When disabled only properties which are defined within Ext.ux.Designer.ComponentsDoc.json are available.
    * @type {Boolean}
-   @cfg */    
-  customProperties  : false, 
-  
-  
+   @cfg */
+  customProperties  : false,
+
+
  //Menu buttons
   /**
    * Enable or disable the Copy menu button (defaults true).
@@ -76,12 +76,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    * Enable or disable the Edit Json menu button (defaults true).
    * @type {Boolean}
-   @cfg */    
+   @cfg */
   enableEdit : true,
   /**
    * Enable or disable the Help/Version information menu button (defaults true).
    * @type {Boolean}
-   @cfg */    
+   @cfg */
   enableVersion : true,
 
   /**
@@ -94,47 +94,47 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @private Internal array with all files with property defintions to load
    */
   propertyDefinitions : ['js/Ext.ux.guid.plugin.Designer.Properties.json'],
-  
+
   /**
    * An url specifing the json to load
    * @type {Url}
    @cfg */
   autoLoad :  false,
-  
+
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
-  
-  
+
+
   licenseText  :  "/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */",
-   
+
   //@private The version of the designer
   version : '2.1.0',
-  
+
   //@private The id for button undo
   undoBtnId  : Ext.id(),
 
   //@private The id for button undo
   redoBtnId  : Ext.id(),
-  
+
   //@private The maximum number of undo histories to keep
   undoHistoryMax : 20,
   //@private The history for undo
-  undoHistory : [],  
+  undoHistory : [],
   //@private The marker for active undo
   undoHistoryMark : 0,
-  
+
   /**
    * A file control config item
    */
   fileControl : null,
-    
-   
+
+
   /**
    * Called from within the constructor allowing to initialize the parser
    */
   initialize: function() {
     Ext.ux.guid.plugin.Designer.superclass.initialize.call(this);
-    Ext.QuickTips.init();    
+    Ext.QuickTips.init();
     this.addEvents({
       /**
        * Fires before the toolbox is shown, returning false will disable show
@@ -151,38 +151,38 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       /**
        * Fires after a item is added to designer
        * @event add
-       */      
+       */
       'add' : true,
       /**
        * Fires after a item is removed from designer
        * @event remove
-       */            
+       */
       'remove' : true,
       /**
        * Fires after a item is changed in designer
        * @event change
-       */            
+       */
       'change' : true,
       /**
        * Fires after a new configuration is loaded into the designer
        * @event newconfig
-       */            
+       */
       'newconfig': true,
       /**
        * Fires after a item is selected in designer
        * @event add
-       */            
+       */
       'selectelement'   : true,
       /**
        * Fires after loadConfig fails
        * @event loadfailed
        * @param {Url} url The url tried to load
        * @param {Object} response Response object
-       */      
+       */
       'loadfailed' : false
-    });        
-   },      
-      
+    });
+   },
+
   /**
    * Init the plugin ad assoiate it to a field
    * @param {Component} field The component to connect this plugin to
@@ -190,9 +190,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   init: function(field) {
     this.container = field;
     this.container.codeConfig={};
-        
+
     //Init the components drag & drop and toolbox when it is rendered
-    this.container.on('render', function() {    
+    this.container.on('render', function() {
       //Drag Drop
       this.drag = new Ext.dd.DragZone(this.container.el, {
         ddGroup:'designerddgroup',
@@ -218,7 +218,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          pinned:true});
       this.resizeLayer.resizer.dd.lock();
       this.resizeLayer.resizer.on('resize', this.resizeElement,this);
-      this.resizeLayer.resizer.dd.endDrag = this.moveElement.createDelegate(this);     
+      this.resizeLayer.resizer.dd.endDrag = this.moveElement.createDelegate(this);
       //Toolbox
       this.toolbox(this.autoShow);
       //Empty desinger
@@ -230,12 +230,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
        if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
        this.loadConfig(this.autoLoad.url);
-      } 
+      }
     }, this);
   },
- 
-    
-  /** 
+
+
+  /**
    * Create the context menu for a selected element
    */
   initContextMenu : function () {
@@ -264,7 +264,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
           }
       }, this);
   },
-  
+
   /**
    * Start resize of an element, it will become active element
    * @param {Element} element The element to resize
@@ -275,7 +275,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     var own = this.getContainer(cmp.ownerCt);
     var layout = own.codeConfig ? own.codeConfig.layout : null;
     if (layout=='fit') {
-     Ext.Msg.alert('Error','Cannot resize element within fit layout');
+     this.fireEvent('error','visualResize','Cannot resize element within fit layout');
     } else {
       //Incase of absolute layout enable movement within element
       if (layout=='absolute') {
@@ -288,7 +288,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       this.resizeLayer.show();
     }
   },
-  
+
   /**
    * Move a element within absolute layout based on drag event of the resize layer
    */
@@ -301,7 +301,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     cmp.codeConfig.y = pos[1] - oPos[1];
     this.redrawElement();
   },
-  
+
   /**
    * resize an element based on the resize of resizelayer
    * @param {} r
@@ -321,8 +321,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       delete cmp.codeConfig.autoHeight;
     }
     this.redrawElement();
-  }, 
-  
+  },
+
   /**
    * Remove an element
    * @param {Element} source The element to remove
@@ -339,16 +339,16 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         if (own.codeConfig.items.length==0) delete own.codeConfig.items;
         if (!internal) {
           this.redrawElement(own);
-          this.fireEvent('remove');          
+          this.fireEvent('remove');
         } else {
           this.redrawContainer = true;
         }
         return true;
       }
-    }    
+    }
     return false;
   },
-  
+
   /**
    * Update the menu buttons for undo and redo
    */
@@ -358,7 +358,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     menu = Ext.getCmp(this.redoBtnId);
     if (menu) if (this.undoHistory.length>this.undoHistoryMark+1) menu.enable(); else menu.disable();
   },
-  
+
   /**
    * Mark a configuration for undo
    */
@@ -369,7 +369,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.undoHistoryMark = this.undoHistory.length;
     this.menuUpdate();
   },
-  
+
   /**
    * Undo a configuration
    */
@@ -387,7 +387,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       this.menuUpdate();
     }
   },
-  
+
   /**
    * Redo an undo configuration
    */
@@ -400,7 +400,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       this.menuUpdate();
     }
   },
-  
+
   /**
    * Append the config to the element
    * @param {Element} el The element to which the config would be added
@@ -413,7 +413,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   appendConfig : function (el,config,select,dropLocation,source){
     if (!el) return false;
     this.markUndo();
-    
+
     //Custom function for adding stuff to a container
     var add =  function(src,comp,at,before){
       if(!src.items) src.initItems();
@@ -424,15 +424,15 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
           i=src.items.length;
         }
       }
-      if (!src.codeConfig.items || !(src.codeConfig.items instanceof Array)) 
+      if (!src.codeConfig.items || !(src.codeConfig.items instanceof Array))
           src.codeConfig.items =  [];
       delete src.codeConfig.html; //items and html go not together in IE
-      if (pos>src.codeConfig.items.length) 
+      if (pos>src.codeConfig.items.length)
         src.codeConfig.items.push(comp)
-      else 
-        src.codeConfig.items.splice(pos, 0, comp);      
+      else
+        src.codeConfig.items.splice(pos, 0, comp);
     }.createDelegate(this);
-    
+
 
     if (typeof config == 'function') {
       config.call(this,function(config) {
@@ -443,16 +443,16 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
      var ccmp,cmp= this.getDesignElement(el,true);
      var items = this.editable(this.clone(config));
      //Find the container that should be changed
-     ccmp = this.getContainer(cmp); 
+     ccmp = this.getContainer(cmp);
      switch (dropLocation) {
        case 'abovecode' :
        case 'belowcode' :
-         ccmp = this.isContainer(cmp) ? this.getContainer(cmp.ownerCt) : ccmp;       
-       case 'appendcode' :  
+         ccmp = this.isContainer(cmp) ? this.getContainer(cmp.ownerCt) : ccmp;
+       case 'appendcode' :
          this.removeElement(source,true);
          add(ccmp,items,cmp,dropLocation=='abovecode');
          break;
-       case  'appendafter' : 
+       case  'appendafter' :
          add(ccmp,items,cmp,false);
          break;
        case 'appendbefore' :
@@ -460,7 +460,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          break;
        case 'moveafter' :
          this.removeElement(source,true);
-         add(ccmp,items,cmp,false);      
+         add(ccmp,items,cmp,false);
          break;
        case 'movebefore' :
          this.removeElement(source,true);
@@ -470,13 +470,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          this.removeElement(source,true);
          add(ccmp,items);
          break;
-       default :  
-        add(ccmp,items);     
+       default :
+        add(ccmp,items);
      }
      this.modified = true;
      this.fireEvent('add');
-     this.redrawElement(ccmp,items[this.jsonId]); 
-    } 
+     this.redrawElement(ccmp,items[this.jsonId]);
+    }
     return false;
   },
 
@@ -489,7 +489,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        while (this.container.items.first()) {
           items.push(this.container.items.first());
           this.container.items.remove(this.container.items.first());
-       }       
+       }
        //Re create a panel with items from config editable root
        var config = { 'border' : false, 'layout' : this.container.getLayout(),'items' : this.editable(items)};
        config[this.jsonId]=Ext.id();
@@ -497,13 +497,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        el.codeConfig = config;
     }
   },
-  
+
   /**
    * Load a config from URL
    * @param {Element} el The url to load
    */
   loadConfig : function (url) {
-    if (this.loadMask && this.container.ownerCt) 
+    if (this.loadMask && this.container.ownerCt)
       this.container.ownerCt.el.mask(this.loadMsg, this.msgCls);
      Ext.Ajax.request({
       url: url,
@@ -516,26 +516,26 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          if (!this.fireEvent('loadfailed',url,response))
             Ext.Msg.alert('Failure','Failed to load url :' + url);
         }
-        if (this.loadMask && this.container.ownerCt) 
+        if (this.loadMask && this.container.ownerCt)
            this.container.ownerCt.el.unmask();
       },
       scope: this
      });
   },
- 
-  /** 
+
+  /**
     * Get the config as string of the specified element
     * @param {Element} el The element for which to get the config object
-    * @return {String} The config string 
+    * @return {String} The config string
     */
   getCode : function(el) {
    return this.encode(this.getConfig(el));
   },
-  
-  /** 
+
+  /**
    * Get the config of the specified element
    * @param {Element} el The element for which to get the config object
-   * @return {Object} The config object 
+   * @return {Object} The config object
    */
   getConfig : function (el) {
     if (!el) {
@@ -564,12 +564,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         return null;
       }.createDelegate(this);
       el.codeConfig = findIn(this.codeConfig)
-    } 
+    }
     return el.codeConfig || el.initialConfig;
   },
-  
+
   scope : {'test' : 'dummy'},
-  
+
   /**
    * Set the config to the design element
    * @param {String/Object} json The json to be applied
@@ -585,7 +585,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.fireEvent('newconfig');
     return true;
   },
-  
+
   /**
    * Refresh the content of the designer
    */
@@ -604,7 +604,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (p && !p.codeConfig) p.codeConfig = this.getConfig(p);
     return p;
   },
-  
+
   /**
    * Get the json id of the (active) element
    * @param {Element} el The element (default to activeElement)
@@ -615,11 +615,11 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (!el) return null;
     return el[this.jsonId] ? el[this.jsonId] : null;
   },
-  
+
   /**
    * redraw an element with the changed config
    * @param {Element} element The elmenent to update
-   * @param {Object} config The config 
+   * @param {Object} config The config
    * @return {Boolean} Indicator that update was applied
    */
   redrawElement : function (element,selectId) {
@@ -627,7 +627,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (el) {
       try {
         var id = selectId || this.getJsonId();
-        var p = this.container; //Redraw whole canvas          
+        var p = this.container; //Redraw whole canvas
         if (!this.redrawContainer && el!=p) {
            //Check if whe can find parent which can be redraw
            var c = '';
@@ -641,9 +641,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.apply(p,this.getConfig(p).items);
         this.redrawContainer=false;
         this.selectElement(id);
-      } catch (e) { 
+      } catch (e) {
          if (this.fireEvent('error','redrawElement',e))
-              Ext.Msg.alert('Failure', 'Failed to redraw element ' + e); 
+              Ext.Msg.alert('Failure', 'Failed to redraw element ' + e);
          return false;
       }
       this.fireEvent('change',el);
@@ -652,7 +652,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return  false;
   },
-  
+
   /**
    * Select a designElement
    * @param {Element} el The element of the item to select
@@ -705,7 +705,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @param {Element} cmp The component to search
    * @param {Element} container The component to search within
    * @return {Component} The ExtJs component found, false when not valid
-   */  
+   */
   isElementOf : function(cmp,container) {
     container = container || this.container;
     var loops = 50,c = cmp,id = container.getId();
@@ -716,7 +716,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return false;
   },
-    
+
   /**
    * Find a designElement, this is a ExtJs component which is embedded within this.container
    * @param {Element} el The element to search the designelement for
@@ -736,11 +736,11 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return allowField ? this.container : false;
   },
-  
+
   findByJsonId : function(id) {
      return this.container.findBy(function (c,p) {return (c[this.jsonId]==id ? true : false);},this)[0];
   },
-  
+
   /**
    * Create the drag data for a element on designerpanel
    * @param {Event} e The drag event
@@ -749,16 +749,16 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   getDragData : function(e) {
      var cmp = this.selectElement(this.getTarget(e));
      var el = e.getTarget('.designerddgroup');
-     if (el && cmp) { 
+     if (el && cmp) {
        return {
          ddel:el,
          config : cmp.initialConfig,
          internal : true,
          source   : cmp
-       }; 
+       };
      }
   },
-  
+
   /**
    * Check if the given component is a container which can contain other xtypes
    * @param {Component} cmp The component to validate if it is in the list
@@ -767,10 +767,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   isContainer : function (cmp) {
     return cmp instanceof Ext.Container;
   },
-  
+
   /**
-   * @private Fix a problem in firefox with drop getTarget by finding a component 
-   * using xy coordinates. 
+   * @private Fix a problem in firefox with drop getTarget by finding a component
+   * using xy coordinates.
    * @param {Event} event The event for which a node should be searched
    * @return {Node} The node that is located by xy coordinates or null when none.
    */
@@ -796,13 +796,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     findNode(this.container);
     return n;
   },
-  
+
   /**
    * Called when a element is dragged over the component
    * @param {Object} src The source element
-   * @param {Event} e The drag event 
+   * @param {Event} e The drag event
    * @param {Object} data The dataobject of event
-   * @return {Boolean} return true to accept or false to reject 
+   * @return {Boolean} return true to accept or false to reject
    */
   notifyOver : function (src,e,data) {
     if (data.config) {
@@ -812,12 +812,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       if (data.internal && !e.shiftKey) {
         //Only allow move if not within same container
         if (this.isElementOf(cmp,data.source,true)) return false;
-        data.drop = this.isContainer(cmp) ? "move" : 
+        data.drop = this.isContainer(cmp) ? "move" :
          (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "movebefore" : "moveafter");
         return (data.drop=='movebefore' ?  "icon-element-move-before" :
           (data.drop=='moveafter'  ? "icon-element-move-after"  : "icon-element-move"));
       } else { //Clone
-        data.drop = this.isContainer(cmp) ? "append" : 
+        data.drop = this.isContainer(cmp) ? "append" :
          (el.getX()+(el.getWidth()/2)>Ext.lib.Event.getPageX(e) ? "appendbefore" : "appendafter");
         return (data.drop=='appendbefore' ?  "icon-element-add-before" :
           (data.drop=='appendafter'  ? "icon-element-add-after"  : "icon-element-add"));
@@ -826,13 +826,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     data.drop = null;
     return false;
   },
-  
+
   /**
    * Called when a element is dropped on the component
    * @param {Object} src The source element
-   * @param {Event} e The drag event 
+   * @param {Event} e The drag event
    * @param {Object} data The dataobject of event
-   * @return {Boolean} return true to accept or false to reject 
+   * @return {Boolean} return true to accept or false to reject
    */
   notifyDrop : function (src,e,data) {
     var el=this.getTarget(e);
@@ -840,9 +840,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       this.appendConfig(el,data.config,true,data.drop,data.source);
       data.processed = true;
     }
-    return true;  
+    return true;
   },
-  
+
   /**
    * Overwrite the jsonparser to check if a xtype exists, when not save it for editing
    * and convert it into a panel.
@@ -856,12 +856,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       if (!Ext.ComponentMgr.isTypeAvailable(value)) {
         rawValue = {value: value,encode : true};
         value = 'panel';
-        this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + rawValue.value + ' does not exists'));      
+        this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + rawValue.value + ' does not exists'));
       } else rawValue=null;
     }
     return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
   },
-  
+
   /**
    * @private Function called to initalize the property editor which can be used to edit properties
    * @param {PropertyGrid} propertyGrid The property grid which is used to edit
@@ -873,23 +873,23 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.markUndo();
     },this);
     propertyGrid.on('propertyvalue',function(source,key,value,type,property){
-      if (['object','function','mixed'].indexOf(type)!=-1 || 
+      if (['object','function','mixed'].indexOf(type)!=-1 ||
           typeof(source[this.jsonId + key])=='string' || !property) {
         this.setObjectValue(source,key,this.codeEval(value),value);
       } else  {
         this.setObjectValue(source,key,value);
-      }      
+      }
       return false; //We have set value
     },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
         //When somebody changed the json, then make sure we init the changes
         switch (id) {
           case 'json' : this.jsonInit(this.decode(value));break
-        }  
+        }
         this.redrawElement.defer(200,this,[this.activeElement]);
     }, this);
   },
-  
+
   /**
    * Show or hide the toolbox
    * @param {Boolean} visible Should toolbox be hidden or shown (defaults true)
@@ -898,7 +898,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (!this._toolbox) {
       //Build the url array used to load the property list
       for (var i=0;this.propertyDefinitionFiles && i<this.propertyDefinitionFiles.length;i++) {
-         this.propertyDefinitions.push(this.propertyDefinitionFiles[i]);  
+         this.propertyDefinitions.push(this.propertyDefinitionFiles[i]);
       }
       var proxy = new Ext.ux.data.HttpMergeProxy(this.propertyDefinitions);
       this.properties = new Ext.data.JsonStore({
@@ -908,7 +908,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
           fields: ['name', 'type','defaults','desc','instance','editable','values','editor']
       });
       if (Ext.isVersion('2.0','2.1.9')) //Fix for ExtJS versions <= 2.1
-         this.properties.proxy = proxy; 
+         this.properties.proxy = proxy;
       this.properties.load();
       //Add Filter function based on instance
       var filterByFn = function(rec,id) {
@@ -942,7 +942,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (visible || visible === true) {
       if (this.fireEvent('beforeshow',this._toolbox)) {
         this._toolbox.doLayout();
-        this._toolbox.show();        
+        this._toolbox.show();
       }
     } else {
       if (this.fireEvent('beforehide',this._toolbox)) this._toolbox.hide();
@@ -955,7 +955,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
  * Override the label is such a way that it can be selected in designer
  * This override should not go outside the designer
  */
-Ext.override(Ext.form.Label, {   
+Ext.override(Ext.form.Label, {
     onRender : function(ct, position){
         if(!this.el){
             this.el = document.createElement('label');
@@ -968,5 +968,23 @@ Ext.override(Ext.form.Label, {
             this.id = this.id + '-';
         }
         Ext.form.Label.superclass.onRender.call(this, ct, position);
-    }
+    },
+
+    /**
+     * Updates the label's innerHTML with the specified string.
+     * @param {String} text The new label text
+     * @param {Boolean} encode (optional) False to skip HTML-encoding the text when rendering it
+     * to the label (defaults to true which encodes the value). This might be useful if you want to include
+     * tags in the label's innerHTML rather than rendering them as string literals per the default logic.
+     * @return {Label} this
+     */
+    setText: function(t, encode){
+        this.text = encode!==false ? t : '';
+        this.html = encode!==false ? ''  : t;
+        if(this.rendered){
+            this.el.dom.innerHTML = encode !== false ? Ext.util.Format.htmlEncode(t) : t;
+        }
+        return this;
+   }
+
 });

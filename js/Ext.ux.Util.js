@@ -1,5 +1,5 @@
 /*global Ext document */
-/*  
+/*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -32,7 +32,7 @@ Ext.ux.Util = function(config){
 /**
  * A class used by JsonPanel and JsonWindow to load a jsonFile
  */
-Ext.extend(Ext.ux.Util,Ext.util.Observable,{ 
+Ext.extend(Ext.ux.Util,Ext.util.Observable,{
 
   /**
    * Indicator if this version support hasOwnProperty
@@ -68,7 +68,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    var isLocal = (document.location.protocol == 'file:');
    var conn;
 
-   try { 
+   try {
     if(Ext.isIE7 && isLocal){throw("IE7forceActiveX");}
     conn = new XMLHttpRequest();
    } catch(e)  {
@@ -89,7 +89,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
      this.fireEvent('error','synchronized',e);
    }
    return false;
-  }, 
+  },
 
   /**
    * Function used to load a JavaScript into a document.head element
@@ -106,7 +106,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
      if (content===false) return false;
      var head = document.getElementsByTagName("head")[0];
      var script = document.createElement("script");
-     
+
      try {
        script.text = content;
      } catch (e) {
@@ -117,11 +117,29 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
      head.appendChild(script);
    }
    return true;
+  },
+
+  /**
+   * Get the value of a url action
+   * @param {String} name The name of the action
+   * @param {String} defaultValue The default value used when not found
+   * @param {String} url The url to use defaults to window url
+   * @return {String} The value found for action or default
+   */
+  getUrlAction : function (name,defaultValue,url) {
+	  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+	  var regexS = "[\\?&]"+name+"=([^&#]*)";
+	  var regex = new RegExp( regexS );
+	  var results = regex.exec( url || window.location.href );
+	  if( results == null )
+	    return defaultValue;
+	  else
+	    return isNaN(results[1]) ? results[1] : Number(results[1]);
   }
-  
+
 });
 
 /**
- * Create global object 
+ * Create global object
  */
 Ext.ux.UTIL = new Ext.ux.Util();
