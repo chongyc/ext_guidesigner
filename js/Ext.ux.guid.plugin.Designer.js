@@ -538,7 +538,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Object} The config object
    */
   getConfig : function (el) {
-    if (!el) {
+    if (!el && this.container.items) {
       el = this.container.items.items;
       //Check if root is a array with more then one element, if so return array
       if (el.length>1) {

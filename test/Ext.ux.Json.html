@@ -55,7 +55,7 @@
 				}
 
 				a = Ext.ux.JSON.decode('{\
-					scope : this,\
+					scope : Ext.ux.JSON,\
 					handler : function (a,b){\
 						return a + b;\
 					},\
@@ -63,7 +63,7 @@
 			 	}');
 
 			 	is(a.scope, Ext.ux.JSON, "scope: this decoded as object");
-			 	is(a.__JSON__scope, 'this', "scope: this decoded as string into __JSON__scope");
+			 	is(a.__JSON__scope, 'Ext.ux.JSON', "scope: this decoded as string into __JSON__scope");
 
 			 	ok(typeof a.handler == 'function', "function decoded as object");
 			 	is(a.handler(1,5),6, ".. and it works");

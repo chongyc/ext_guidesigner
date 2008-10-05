@@ -100,13 +100,12 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    */
   scriptLoader : function(url,cachingOff) {
    if (!url) return false;
-   var id=ur.substring(url.lastIndexOf('/'));
+   var id=url;
    if(!document.getElementById(id)) {
      var content = this.syncContent(url,cachingOff);
      if (content===false) return false;
      var head = document.getElementsByTagName("head")[0];
      var script = document.createElement("script");
-
      try {
        script.text = content;
      } catch (e) {
@@ -127,19 +126,141 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * @return {String} The value found for action or default
    */
   getUrlAction : function (name,defaultValue,url) {
-	  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-	  var regexS = "[\\?&]"+name+"=([^&#]*)";
-	  var regex = new RegExp( regexS );
-	  var results = regex.exec( url || window.location.href );
-	  if( results == null )
-	    return defaultValue;
-	  else
-	    return isNaN(results[1]) ? results[1] : Number(results[1]);
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url || window.location.href );
+    if( results == null )
+      return defaultValue;
+    else
+      return isNaN(results[1]) ? results[1] : Number(results[1]);
+  },
+
+  /**
+   * Parse a url into object
+   * containing element: "source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","name","ext","query","anchor"
+   * @param {String} str The url to parse
+   * @param {Object} options A object with options to be used during parse
+   */
+  parseUrl : function(str,options) {
+		var	o   = Ext.applyIf(options || {},{
+				strictMode: false,
+				key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+				q:   {
+					name:   "queryKey",
+					parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+				},
+				parser: {
+					strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+					loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+				}
+			}),
+			m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+			uri = {},
+			i   = 14;
+
+		while (i--) uri[o.key[i]] = m[i] || "";
+		uri[o.q.name] = {};
+		uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+			if ($1) uri[o.q.name][$1] = $2;
+		});
+		if (!uri.protocol) {
+		  uri.relative= uri.host + uri.relative;
+		  uri.path = uri.host + uri.path;
+		  uri.directory = uri.host + uri.directory;
+		  uri.host="";
+		}
+		if (!uri.file) {
+		  uri.file = uri.path;
+		  uri.path = uri.directory = '';
+		}
+	  uri['name']="";uri['ext']="";
+			if (/\.\w+$/.test(uri.file) && uri.file.match(/([^\/\\]+)\.(\w+)$/)) {
+				uri['name']=RegExp.$1;
+				uri['ext']=RegExp.$2;
+			}
+		return uri;
+	},
+
+  /**
+   * Load a url, stylesheet or javascript by adding it to the header
+   * @param {String} url The url to be added
+   * @param {String} type The load action to perform (default js)
+   * @param {Boolean} reload Should the file be reload if allready loaded
+   */
+  loadUrl : function(url,type,reload) {
+	  //Now load it by adding it to the header
+		if (typeof(this._loadCount)=='undefined') {
+		  this._loadCount=0;
+			this._loaded=[];
+		}
+    if (this._loaded[url] && !reload) return;
+    var node;
+    var self = this;
+    var head = document.getElementsByTagName("head")[0];
+    if(document.getElementById(url)){head.removeChild(url)}
+    switch (type) {
+     case 'css' :
+       node = document.createElement("link");
+       node.setAttribute("rel", "stylesheet");
+       node.setAttribute("type", "text/css");
+       node.setAttribute("href", url);
+       break;
+     default :
+       node = document.createElement("script");
+       node.setAttribute("type", "text/javascript");
+       node.setAttribute("src", url);
+    }
+    node.setAttribute("id",url);
+    node.onload = node.onreadystatechange = function() {
+     if (!self._loaded[url] && (!node.readyState || [4,"loaded","complete"].indexOf(node.readyState)!=-1)) {
+       self._loadCount--;
+       self._loaded[url]=true;
+     }
+    };
+    this._loadCount++;
+    this._loaded[url]=false;
+    head.appendChild(node);
+  },
+
+  /**
+   * Function require is used to checks if the required files are loaded
+   * when not the files are loaded
+   * @param {Mixed} packages An array or ; seperated string with packages to load
+   * @param {Mixed} options An object with options to used, when string then basedir is assumed
+   * options[basedir] The default directory to use for all files
+   * options[cssdir] The directory to be used for stylesheets
+   * options[async] When set to true required will return directly
+   * options[callback] Callback function after all required files are loaded
+   * options[reload] When reload is set packages are reloaded
+   * options[cachingOff] When set the object caching is turned off
+   */
+  require : function(packages,options){
+    packages= (typeof(packages)=='string') ? packages.split(';') : packages || [];
+    options = (typeof(options)=='string') ? {'basedir' : options} : options || {basedir : ""};
+    options['cssdir'] = options.cssdir || options.basedir;
+    //First load all files
+    for (var i=0;i<packages.length;i++) {
+      //Create a name of path + packages + extentsion
+      var url = this.parseUrl(packages[i]);
+      if (['js','css'].indexOf(url.ext)==-1) url.file+='.js';
+      var dir = url.ext=='css' ? options.cssdir : options.basedir;
+      var uri = dir + (dir.length!=0 && dir.charAt(dir.length-1)!='/' ? "/" : "") +
+         url.directory +  url.file + (url.query ? '?' + url.query : '');
+      if (url.ext=='css') {
+          Ext.util.CSS.swapStyleSheet(uri, uri);
+      } else if (options.async){
+         this.loadUrl(uri,url.ext,options.reload);
+      } else {
+         this.scriptLoader(uri);
+      }
+    }
   }
 
 });
 
 /**
- * Create global object
+ * Create global object for utility and require object
  */
 Ext.ux.UTIL = new Ext.ux.Util();
+require = Ext.ux.UTIL.require.createDelegate(Ext.ux.UTIL);
