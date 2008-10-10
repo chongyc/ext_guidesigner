@@ -48,11 +48,42 @@ Ext.isVersion = function(fromVersion,toVersion) {
  * Override a class when the version matches according to isVersion
  * @param {Class} cl The class to override
  * @param {Object} obj The object containing the function to be overwritten
+ * @param {String} fromVersion The version which is at least required
+ * @param {String} toVersion The version which is used as end (default ExtJS version)
  */
 Ext.overrideIf = function(cl,obj,fromVersion,toVersion) {
   if (Ext.isVersion(fromVersion,toVersion)) {
     return Ext.override(cl,obj);
   }
+  return cl;
+};
+
+/**
+ * Apply object to source when version matches
+ * @param {Object} source The source object
+ * @param {Object} obj The object to apply
+ * @param {String} fromVersion The version which is at least required
+ * @param {String} toVersion The version which is used as end (default ExtJS version)  
+ */
+Ext.applyVersion = function(source,obj,fromVersion,toVersion) {
+  if (Ext.isVersion(fromVersion,toVersion)) {
+    return Ext.apply(source,obj);
+  }
+  return source;
+};
+
+/**
+ * Apply object to source when version matches
+ * @param {Object} source The source object
+ * @param {Object} obj The object to apply
+ * @param {String} fromVersion The version which is at least required
+ * @param {String} toVersion The version which is used as end (default ExtJS version)  
+ */
+Ext.applyIfVersion = function(source,obj,fromVersion,toVersion) {
+  if (Ext.isVersion(fromVersion,toVersion)) {
+    return Ext.applyIf(source,obj);
+  }
+  return source;
 };
 
 /**
@@ -106,6 +137,9 @@ Ext.overrideIf(Ext.FormPanel, {
 },'2.0');
 
 
+/**
+ * Add setTooltip function to button
+ */
 Ext.overrideIf(Ext.Button, {
     setTooltip: function(qtipText) {
         var btnEl = this.getEl().child(this.buttonSelector)
@@ -116,6 +150,13 @@ Ext.overrideIf(Ext.Button, {
     }
 },'2.0');
 
+
+/**
+ * Add firefox3 flags to versions below 2.2
+ */
+Ext.applyIfVersion(Ext,{
+   isGecko3 : !Ext.isSafari && navigator.userAgent.toLowerCase().indexOf("rv:1.9") > -1
+},'2.0','2.2');
 
 
 /**

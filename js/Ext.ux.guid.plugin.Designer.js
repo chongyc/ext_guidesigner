@@ -696,6 +696,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return  false;
   },
+  
 
   /**
    * Select a designElement
@@ -711,24 +712,23 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.resizeLayer.resizer.dd.lock();
     this.activeElement = cmp;
     if (cmp) {
-      /*
-        tabPanelNode : function(node,childNode) {
-          if (node.elConfig && this.tabPanelXtype.indexOf(node.elConfig.xtype) != -1) {
-            var el = node.fEl.getActiveTab(); 
-            if (childNode) el = childNode.fEl;
-            for (var i=0,len=node.fEl.items.items.length;i<len;i++) {
-              if (node.fEl.items.items[i]==el) {
-                node.elConfig.activeTab=i;
-                if (childNode) node.fEl.setActiveTab(el);
-                return node.childNodes[i];
-              }
-            }
-          } else if (node.parentNode && !childNode) {
-            this.tabPanelNode(node.parentNode,node);
+      //Search and select tabpanel
+      var searchTab = function(cmp,last) {
+        if (!cmp) return;
+        var tab = (cmp instanceof Ext.TabPanel) ? cmp : null
+        if (tab) {
+           if (last && last!=tab.getActiveTab()) tab.setActiveTab(last);
+           for (var i=0;i<tab.items.items.length;i++) {
+             if (tab.items.items[i]==tab.getActiveTab() && tab.codeConfig.activeTab!=i) {
+              tab.codeConfig.activeTab=i;
+              tab.doLayout();
+              return;
+            }         
           }
-          return node;
-         },
-      */
+        }
+       searchTab(this.getContainer(cmp.ownerCt),cmp);      
+      }.createDelegate(this);
+      searchTab(cmp,null);  
       if (this.propertyGrid) {
         this.propertyFilter();
         this.propertyGrid.enable();
@@ -838,9 +838,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   getTarget : function (event) {
     if (!event) return;
-    if (!Ext.isGecko) event.getTarget();
+    if (!Ext.isGecko || Ext.isGecko3) event.getTarget();
     var n,findNode = function(c) {
-      if (c && c.getPosition && c.getSize) {
+      if (c && c.el && c.getPosition && c.getSize) {
        var pos = c.getPosition();
        var size = c.getSize();
        if (event.xy[0] >= pos[0] && event.xy[0]<=pos[0] + size.width &&
@@ -1009,9 +1009,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     //Now show or hide the toolbox
     if (visible || visible === true) {
-      if (this.fireEvent('beforeshow',this._toolbox)) {
-        this._toolbox.doLayout();
+      if (this.fireEvent('beforeshow',this._toolbox)) {        
         this._toolbox.show();
+        this._toolbox.doLayout();
       }
     } else {
       if (this.fireEvent('beforehide',this._toolbox)) this._toolbox.hide();

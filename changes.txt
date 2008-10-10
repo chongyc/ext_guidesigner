@@ -1,18 +1,20 @@
 TODO
  - Add Grid Wirzard
  - Make toolbox global if required, so only one exits by screen
- - Label is not selected after alter
- - Add warning when adding second item to root
- - JSON Path should always be relative, directory protection
- - Drop element when not allowed, element is removed
- - Drop element in tabpanel throws error this.el , notifyover
- - Update documentation
  - Implement support for a code repository
  - Multiple select to change one or more items in one go
  - In line editing of labels (fieldlabel,title,label)
 ==> Problems after creating GUID 2.1 
  - When root element is not container and multiple items are dropped convert it into container
  - Problem with settings values of mixed compenents, only code when is real code
+ - Still posible to add two forms in each other
+ - Drop element when not allowed, element is removed
+ - Clean up wizards
+ - Update documentation
+ - JSON Path should always be relative, directory protection
+ - Test php files
+ - Label is not selected after alter
+ - Add warning when adding second item to root
  
  Change History:
  Version 2.1.0:
@@ -26,7 +28,7 @@ TODO
   + Split single javascript files containing multiple classes into files
   + Added "scope.!<VAR>" in json object, so you can create local objects if they don't exist
   + Toolbox is forced to do a layout before showing.
-  + Changed version of base ExtJs to 2.2 instead of 2.0, so it also works correlty on firefox 3.0
+  + Changed path ExtJs version can be changed, still using 2.0.1 as base because of stablility
   + You can now add you own property editors, by setting "editor" in properties.json
   + Undo and redo are now keeping track of selected element
   + Active item is now selected in code tree
@@ -36,6 +38,8 @@ TODO
   + A simple loader for javascript and stylesheets is added (require)
   + Third party design elements can be configured (componentFiles) to be added to Components tree
   + Components can be ExtJs version dependend, just set isVersion in component config.
+  * Fixed tabpanel support
+  * Fixed error this.el not defined in firefox
   * Changed seperator of required_js and required_css to ;
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown

@@ -9,7 +9,7 @@
     </div>
     
     <div class="inheritance res-block"><pre class="res-block-inner">
-<a ext:cls="Ext.ux.Util" ext_member="" href="Ext.ux.Util">Ext.ux.Util</a>
+<a ext:cls="Ext.ux.Util" ext_member="" href="symbols/Ext.ux.Util.html">Ext.ux.Util</a>
 <img src="resources/elbow-end.gif"/>Ext.ux.Json
 </pre></div>
     <h1>Class Ext.ux.Json</h1>     
@@ -18,7 +18,7 @@
         <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="src/GuiBuilder_js_Ext.ux.Json.js.html">Ext.ux.Json.js</a></td></tr>
         <tr><td class="label">Class:</td><td class="hd-info">Json</td></tr>
 <!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
-        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="Ext.ux.Util">Ext.ux.Util</a></td></tr>        
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.Json" ext:member="" href="symbols/Ext.ux.Util.html">Ext.ux.Util</a></td></tr>        
     </table>
     
     <div class="description">
@@ -167,11 +167,30 @@
     <a id="Ext.ux.Json-props"></a>      
     
     <h2>Public Properties</h2> 
-    <p>This class has no public properties.</p>        
-    <table cellspacing="0" class="x-hidden">            
+            
+    <table cellspacing="0" class="member-table">            
         <tr>
             <th class="sig-header" colspan="2">Property</th>
             <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+                    
+        <tr class="property-row inherited">
+            <td class="micon">
+                <a class="exi" href="#expand">&nbsp;</a>
+            </td>
+            <td class="sig">
+                <a id="Ext.Component-disabled"></a>
+                <b>useHasOwn</b> : Boolean            
+                <div class="mdesc">   
+                    Indicator if this version support hasOwnProperty                        
+                </div>
+            </td>
+            <td class="msource">                
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#useHasOwn" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
         </tr>
         
         
@@ -336,7 +355,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>set</b>(&nbsp;<code>Object items, Element element,  scopeOnly</code>&nbsp;) : Boolean                                
+                <b>set</b>(&nbsp;<code>Object items, Element element, Object options</code>&nbsp;) : Boolean                                
                 <div class="mdesc">
                     <div class="short">Function called to set the values of items to element using element functionsSpecial keys within the object are required_css and required_jsthese keys can contain a comma seperated list of javascript or stylesheetsto load. Style sheets are loaded asynchone but javascript are loaded synchrone.</div>
                     <div class="long">
@@ -356,8 +375,8 @@
                                 </li>
                             
                                 <li>
-                                    <code>scopeOnly</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>options</code> : Object
+                                    <div class="sub-desc">&nbsp;Options that can be set are scope,scopeOnly</div>                                   
                                 </li>
                             
                             </ul>
@@ -673,17 +692,56 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>decode</b>(&nbsp;<code>String text, Object options</code>&nbsp;) : Object                                
+                <b>codeEval</b>(&nbsp;<code>String text, Object options</code>&nbsp;) : Object\Function                                
                 <div class="mdesc">
-                    <div class="short">Decode function for parsing json text into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]</div>
+                    <div class="short">Code Evaluation function forcing that scope is set during eval</div>
                     <div class="long">
-                        Decode function for parsing json text into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]    
+                        Code Evaluation function forcing that scope is set during eval    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
                                     <code>text</code> : String
+                                    <div class="sub-desc">&nbsp;The string to be evaluated</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>options</code> : Object
+                                    <div class="sub-desc">&nbsp;A object that can overrule config items,        evalException or scope</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object\Function<div class="sub-desc">The evaluated object</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#codeEval" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>decode</b>(&nbsp;<code>String json, Object options</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Decode function for parsing json json into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]</div>
+                    <div class="long">
+                        Decode function for parsing json json into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>json</code> : String
                                     <div class="sub-desc">&nbsp;The string to decode</div>                                   
                                 </li>
                             
@@ -739,6 +797,294 @@
             <td class="msource">
                 Json
                 <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#clone" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>onError</b>(&nbsp;<code>String type, Object exception</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Basic error handling</div>
+                    <div class="long">
+                        Basic error handling    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>type</code> : String
+                                    <div class="sub-desc">&nbsp;The type of error</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>exception</code> : Object
+                                    <div class="sub-desc">&nbsp;The exception object</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">When false the error event is canceled.</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#onError" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>syncContent</b>(&nbsp;<code>String url, Boolean cachingOff, Boolean responseXML</code>&nbsp;) : Boolean/String/XMLObject                                
+                <div class="mdesc">
+                    <div class="short">A Synchronized Content loader for data from url</div>
+                    <div class="long">
+                        A Synchronized Content loader for data from url    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>url</code> : String
+                                    <div class="sub-desc">&nbsp;The url to load synchronized</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>cachingOff</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Should caching of file be disabled</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>responseXML</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Should responseXML be returned instead of responseText</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean/String/XMLObject<div class="sub-desc">When there was a error False otherwise response base on responseXML flag</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#syncContent" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>scriptLoader</b>(&nbsp;<code>String url, Boolean cachingOff</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Function used to load a JavaScript into a document.head elementthe id of the script item is the name of the file.</div>
+                    <div class="long">
+                        Function used to load a JavaScript into a document.head elementthe id of the script item is the name of the file.    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>url</code> : String
+                                    <div class="sub-desc">&nbsp;The url to load javascript from</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>cachingOff</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Should caching of javascript files be disabled</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">Indicator if load went corretly true/false</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#scriptLoader" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getUrlAction</b>(&nbsp;<code>String name, String defaultValue, String url</code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Get the value of a url action</div>
+                    <div class="long">
+                        Get the value of a url action    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>name</code> : String
+                                    <div class="sub-desc">&nbsp;The name of the action</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>defaultValue</code> : String
+                                    <div class="sub-desc">&nbsp;The default value used when not found</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>url</code> : String
+                                    <div class="sub-desc">&nbsp;The url to use defaults to window url</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">The value found for action or default</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#getUrlAction" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>parseUrl</b>(&nbsp;<code>String str, Object options</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Parse a url into objectcontaining element: "source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","name","ext","query","anchor"</div>
+                    <div class="long">
+                        Parse a url into objectcontaining element: "source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","name","ext","query","anchor"    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>str</code> : String
+                                    <div class="sub-desc">&nbsp;The url to parse</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>options</code> : Object
+                                    <div class="sub-desc">&nbsp;A object with options to be used during parse</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#parseUrl" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>loadUrl</b>(&nbsp;<code>String url, String type, Boolean reload</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Load a url, stylesheet or javascript by adding it to the header</div>
+                    <div class="long">
+                        Load a url, stylesheet or javascript by adding it to the header    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>url</code> : String
+                                    <div class="sub-desc">&nbsp;The url to be added</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>type</code> : String
+                                    <div class="sub-desc">&nbsp;The load action to perform (default js)</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>reload</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Should the file be reload if allready loaded</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#loadUrl" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>require</b>(&nbsp;<code>Mixed packages, Mixed options</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Function require is used to checks if the required files are loadedwhen not the files are loaded</div>
+                    <div class="long">
+                        Function require is used to checks if the required files are loadedwhen not the files are loaded    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>packages</code> : Mixed
+                                    <div class="sub-desc">&nbsp;An array or ; seperated string with packages to load</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>options</code> : Mixed
+                                    <div class="sub-desc">&nbsp;An object with options to used, when string then basedir is assumedoptions[basedir] The default directory to use for all filesoptions[cssdir] The directory to be used for stylesheetsoptions[async] When set to true required will return directlyoptions[callback] Callback function after all required files are loadedoptions[reload] When reload is set packages are reloadedoptions[cachingOff] When set the object caching is turned off</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">a object with keys js and css contain an array with full path of items</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#require" href="symbols/Ext.ux.Util.html">Util</a>
             </td>
         </tr>
                                                           

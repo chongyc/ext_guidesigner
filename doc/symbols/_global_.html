@@ -56,6 +56,25 @@
             </td>
             <td class="sig">
                 <a id="Ext.Component-disabled"></a>
+                <b>Ext.ux.UTIL</b> :             
+                <div class="mdesc">   
+                    Create global object for utility and require object                        
+                </div>
+            </td>
+            <td class="msource">                
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.UTIL" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+        
+        
+                    
+        <tr class="property-row">
+            <td class="micon">
+                <a class="exi" href="#expand">&nbsp;</a>
+            </td>
+            <td class="sig">
+                <a id="Ext.Component-disabled"></a>
                 <b>Ext.ComponentMgr</b> :             
                 <div class="mdesc">   
                     Override the Ext.ComponentMgr so that whe can validate if a type is available                        
@@ -94,14 +113,14 @@
             </td>
             <td class="sig">
                 <a id="Ext.Component-disabled"></a>
-                <b>Ext.ux.grid.PropertyRecord</b> :             
+                <b>Ext.ux.guid.grid.PropertyRecord</b> :             
                 <div class="mdesc">   
                     The propertyrecord used by the property grid. Name is the key of a property, Value is the value of the property andtype is type of element. This type flag will control which editor is loaded                        
                 </div>
             </td>
             <td class="msource">                
                 _global_
-                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.grid.PropertyRecord" href="symbols/_global_.html">_global_</a>
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.guid.grid.PropertyRecord" href="symbols/_global_.html">_global_</a>
             </td>
         </tr>
         
@@ -131,6 +150,35 @@
             <th class="msource-header">Defined By</th>
         </tr>
         
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>node.onreadystatechange</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#node.onreadystatechange" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
                 
         <tr class="method-row expandable">
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
@@ -175,7 +223,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>Ext.overrideIf</b>(&nbsp;<code>Class cl, Object obj,  fromVersion,  toVersion</code>&nbsp;) : void                                
+                <b>Ext.overrideIf</b>(&nbsp;<code>Class cl, Object obj, String fromVersion, String toVersion</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Override a class when the version matches according to isVersion</div>
                     <div class="long">
@@ -195,13 +243,13 @@
                                 </li>
                             
                                 <li>
-                                    <code>fromVersion</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>fromVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is at least required</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>toVersion</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>toVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is used as end (default ExtJS version)</div>                                   
                                 </li>
                             
                             </ul>
@@ -217,6 +265,104 @@
             <td class="msource">
                 _global_
                 <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.overrideIf" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>Ext.applyVersion</b>(&nbsp;<code>Object source, Object obj, String fromVersion, String toVersion</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Apply object to source when version matches</div>
+                    <div class="long">
+                        Apply object to source when version matches    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>source</code> : Object
+                                    <div class="sub-desc">&nbsp;The source object</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>obj</code> : Object
+                                    <div class="sub-desc">&nbsp;The object to apply</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>fromVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is at least required</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>toVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is used as end (default ExtJS version)</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.applyVersion" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>Ext.applyIfVersion</b>(&nbsp;<code>Object source, Object obj, String fromVersion, String toVersion</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Apply object to source when version matches</div>
+                    <div class="long">
+                        Apply object to source when version matches    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>source</code> : Object
+                                    <div class="sub-desc">&nbsp;The source object</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>obj</code> : Object
+                                    <div class="sub-desc">&nbsp;The object to apply</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>fromVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is at least required</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>toVersion</code> : String
+                                    <div class="sub-desc">&nbsp;The version which is used as end (default ExtJS version)</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.applyIfVersion" href="symbols/_global_.html">_global_</a>
             </td>
         </tr>
                 
@@ -251,6 +397,45 @@
             <td class="msource">
                 _global_
                 <a class="x-hidden" ext:cls="_global_" ext:member="_global_#fn" href="symbols/_global_.html">_global_</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>Ext.ux.guid.grid.PropertyStore</b>(&nbsp;<code> grid,  source</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>grid</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>source</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                _global_
+                <a class="x-hidden" ext:cls="_global_" ext:member="_global_#Ext.ux.guid.grid.PropertyStore" href="symbols/_global_.html">_global_</a>
             </td>
         </tr>
                 
