@@ -54,6 +54,17 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
          */
         'error' : true
       });
+      this.on('error',this.onError,this);
+   },
+   
+   /**
+    * Basic error handling
+    * @param {String} type The type of error
+    * @param {Object} exception The exception object
+    * @return {Boolean} When false the error event is canceled.
+    */
+   onError : function(type,exception) {
+     return true;
    },
 
   /**
@@ -143,44 +154,44 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * @param {Object} options A object with options to be used during parse
    */
   parseUrl : function(str,options) {
-		var	o   = Ext.applyIf(options || {},{
-				strictMode: false,
-				key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
-				q:   {
-					name:   "queryKey",
-					parser: /(?:^|&)([^&=]*)=?([^&]*)/g
-				},
-				parser: {
-					strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
-					loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
-				}
-			}),
-			m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
-			uri = {},
-			i   = 14;
+    var o   = Ext.applyIf(options || {},{
+        strictMode: false,
+        key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+        q:   {
+          name:   "queryKey",
+          parser: /(?:^|&)([^&=]*)=?([^&]*)/g
+        },
+        parser: {
+          strict: /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
+          loose:  /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*):?([^:@]*))?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+        }
+      }),
+      m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+      uri = {},
+      i   = 14;
 
-		while (i--) uri[o.key[i]] = m[i] || "";
-		uri[o.q.name] = {};
-		uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
-			if ($1) uri[o.q.name][$1] = $2;
-		});
-		if (!uri.protocol) {
-		  uri.relative= uri.host + uri.relative;
-		  uri.path = uri.host + uri.path;
-		  uri.directory = uri.host + uri.directory;
-		  uri.host="";
-		}
-		if (!uri.file) {
-		  uri.file = uri.path;
-		  uri.path = uri.directory = '';
-		}
-	  uri['name']="";uri['ext']="";
-			if (/\.\w+$/.test(uri.file) && uri.file.match(/([^\/\\]+)\.(\w+)$/)) {
-				uri['name']=RegExp.$1;
-				uri['ext']=RegExp.$2;
-			}
-		return uri;
-	},
+    while (i--) uri[o.key[i]] = m[i] || "";
+    uri[o.q.name] = {};
+    uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
+      if ($1) uri[o.q.name][$1] = $2;
+    });
+    if (!uri.protocol) {
+      uri.relative= uri.host + uri.relative;
+      uri.path = uri.host + uri.path;
+      uri.directory = uri.host + uri.directory;
+      uri.host="";
+    }
+    if (!uri.file) {
+      uri.file = uri.path;
+      uri.path = uri.directory = '';
+    }
+    uri['name']="";uri['ext']="";
+      if (/\.\w+$/.test(uri.file) && uri.file.match(/([^\/\\]+)\.(\w+)$/)) {
+        uri['name']=RegExp.$1;
+        uri['ext']=RegExp.$2;
+      }
+    return uri;
+  },
 
   /**
    * Load a url, stylesheet or javascript by adding it to the header
@@ -189,11 +200,11 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * @param {Boolean} reload Should the file be reload if allready loaded
    */
   loadUrl : function(url,type,reload) {
-	  //Now load it by adding it to the header
-		if (typeof(this._loadCount)=='undefined') {
-		  this._loadCount=0;
-			this._loaded=[];
-		}
+    //Now load it by adding it to the header
+    if (typeof(this._loadCount)=='undefined') {
+      this._loadCount=0;
+      this._loaded=[];
+    }
     if (this._loaded[url] && !reload) return;
     var node;
     var self = this;
@@ -234,8 +245,15 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * options[callback] Callback function after all required files are loaded
    * options[reload] When reload is set packages are reloaded
    * options[cachingOff] When set the object caching is turned off
+   * @return {Object} a object with keys js and css contain an array with full path of items
    */
   require : function(packages,options){
+    var ret = {css: [],js:[]};
+    if (!packages) return ret;
+    if (packages instanceof Array && !options && packages.length==2 && typeof(packages[1])=='object') {
+      options=packages[1];
+      packages=packages[0];
+    }
     packages= (typeof(packages)=='string') ? packages.split(';') : packages || [];
     options = (typeof(options)=='string') ? {'basedir' : options} : options || {basedir : ""};
     options['cssdir'] = options.cssdir || options.basedir;
@@ -246,15 +264,19 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
       if (['js','css'].indexOf(url.ext)==-1) url.file+='.js';
       var dir = url.ext=='css' ? options.cssdir : options.basedir;
       var uri = dir + (dir.length!=0 && dir.charAt(dir.length-1)!='/' ? "/" : "") +
-         url.directory +  url.file + (url.query ? '?' + url.query : '');
+         url.directory +  url.file + (url.query ? '?' + url.query : '');    
       if (url.ext=='css') {
+          ret.css.push(uri);
           Ext.util.CSS.swapStyleSheet(uri, uri);
       } else if (options.async){
          this.loadUrl(uri,url.ext,options.reload);
+         ret.js.push(uri);
       } else {
+         ret.js.push(uri);
          this.scriptLoader(uri);
       }
     }
+    return ret;
   }
 
 });

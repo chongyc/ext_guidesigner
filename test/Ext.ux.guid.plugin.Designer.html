@@ -30,31 +30,27 @@
 		<script src="../lib/Test/More.js" type="text/javascript"></script>
 
 		<!-- General components  -->
-	    <script id="Ext.ux.Override.js" src="../js/Ext.ux.Override.js" type="text/javascript"></script>
-	    <script id="Ext.ux.ComponentCollection.js" src="../js/Ext.ux.ComponentCollection.js" type="text/javascript"></script>
-		<script id="Ext.ux.Util.js" src="../js/Ext.ux.Util.js" type="text/javascript"></script>
-		<script id="Ext.ux.Json.js" src="../js/Ext.ux.Json.js" type="text/javascript"></script>
+		<script id="../js/Ext.ux.Util.js" src="../js/Ext.ux.Util.js" type="text/javascript"></script>
+		<script id="../js/Ext.ux.CodePress.js" src="../js/Ext.ux.CodePress.js" type="text/javascript"></script>
+		<link id="../css/Ext.ux.guid.plugin.Designer.css" href="../css/Ext.ux.guid.plugin.Designer.css" rel="stylesheet" type="text/css" />
 
-		<!-- Add Code press as script editor, remove line below to used textarea as script editor  -->
-		<script id="Ext.ux.CodePress.js" src="../js/codepress/Ext.ux.CodePress.js" type="text/javascript"></script>
+		<!-- Now load based on action a compressed or debugable version of desginer -->
+		<script>
+		 if (Ext.ux.UTIL.getUrlAction('debug')!=1) {
+		   require('Ext.ux.guid.plugin.Designer-all',
+			  {basedir:'../js',cssdir:'../css'});
+		 } else {
+		   require('Ext.ux.Override;Ext.ux.ComponentCollection;Ext.ux.Json;' +
+				'Ext.ux.form.ScriptEditor;Ext.ux.data.HttpMergeProxy;Ext.ux.JsonPanel;' +
+				'Ext.ux.JsonWindow;Ext.ux.guid.tree.JsonTreeLoader;' +
+				'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;Ext.ux.guid.data.FileControl;'+
+				'Ext.ux.guid.data.CookieFiles;Ext.ux.guid.PHPFiles;Ext.ux.guid.plugin.Designer',
+			{basedir:'../js',cssdir:'../css'});
+		 }
+	   </script>
 
-        <!-- Default functions -->
-	    <script id="Ext.ux.form.ScriptEditor.js" src="../js/Ext.ux.form.ScriptEditor.js" type="text/javascript"></script>
-	    <script id="Ext.ux.data.HttpMergeProxy.js" src="../js/Ext.ux.data.HttpMergeProxy.js" type="text/javascript"></script>
-		<script id="Ext.ux.JsonPanel.js" src="../js/Ext.ux.JsonPanel.js" type="text/javascript"></script>
-		<script id="Ext.ux.JsonWindow.js" src="../js/Ext.ux.JsonWindow.js" type="text/javascript"></script>
 
-	    <!-- Designer functions -->
-	    <link id="Ext.ux.guid.plugin.Designer.css" rel="stylesheet" href="../css/Ext.ux.guid.plugin.Designer.css" type="text/css" />
-		<script id="Ext.ux.guid.tree.JsonTreeLoader.js" src="../js/Ext.ux.guid.tree.JsonTreeLoader.js" type="text/javascript"></script>
-		<script id="Ext.ux.guid.tree.CodeLoader.js" src="../js/Ext.ux.guid.tree.CodeLoader.js" type="text/javascript"></script>
-	    <script id="Ext.ux.guid.grid.PropertyGrid.js" src="../js/Ext.ux.guid.grid.PropertyGrid.js" type="text/javascript"></script>
-	    <script id="Ext.ux.guid.data.FileControl.js" src="../js/Ext.ux.guid.data.FileControl.js" type="text/javascript"></script>
-	    <script id="Ext.ux.guid.data.CookieFiles.js" src="../js/Ext.ux.guid.data.CookieFiles.js" type="text/javascript"></script>
-	    <script id="Ext.ux.guid.data.PHPFiles.js" src="../js/Ext.ux.guid.data.PHPFiles.js" type="text/javascript"></script>
-	    <script id="Ext.ux.guid.plugin.Designer.js" src="../js/Ext.ux.guid.plugin.Designer.js" type="text/javascript"></script>
-
-		<!--The test function that fires when body is loaded -->
+   <!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
 				plan({ tests: 2 });

@@ -36,6 +36,7 @@
     <script id="js/Ext.ux.CodePress.js" src="js/Ext.ux.CodePress.js" type="text/javascript"></script>
     <link id="css/Ext.ux.guid.plugin.Designer.css" href="css/Ext.ux.guid.plugin.Designer.css" rel="stylesheet" type="text/css" />
 
+    <!-- Now load based on action a compressed or debugable version of desginer -->
     <script>
      if (Ext.ux.UTIL.getUrlAction('debug')!=1) {
        require('Ext.ux.guid.plugin.Designer-all',
@@ -49,6 +50,7 @@
         {basedir:'js',cssdir:'css'});
      }
    </script>
+
 
 <!-- Look for a change log at changes.txt -->
 </head>
@@ -88,6 +90,7 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
                 xtype :'jsonpanel',
 				 plugins : [
 				    designer = new Ext.ux.guid.plugin.Designer({
+				      componentFiles : ['js/ThirdParty.Components.json'],
 					  evalException : false,
 					  toolboxTarget : 'toolbox',
 					  disableCaching : true,

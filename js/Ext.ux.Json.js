@@ -175,7 +175,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
         var j = i;
           if (i=='required_js') { 
             if (items[i]) {
-              var files = items[i].split(',');
+              var files = items[i].split(';');
               for (var f=0;f<files.length;f++) {    
                 if(document.getElementById(files[f])) {continue;}
                 if (!this.scriptLoader(files[f],false)) {
@@ -186,7 +186,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             }
           } else if (i=='required_css') {
             if (items[i]) {
-              var files = items[i].split(',');
+              var files = items[i].split(';');
               for (var f=0;f<files.length;f++) {    
                 if(document.getElementById(files[f])) {continue;}
                 Ext.util.CSS.swapStyleSheet(files[f], files[f]);
@@ -560,7 +560,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;
        var myEval = function(code) {
          try {
-           return eval("(" + code+ ")");
+           //Fix is needed because ie7 does not eval a function directly
+           return eval("({fix:" + code+ "})").fix;
          } catch (e) {
            e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );  
            if (self.fireEvent('error','codeEval',e) && evalException) throw e;
@@ -571,19 +572,19 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      },
 
      /**
-      * Decode function for parsing json text into objects
+      * Decode function for parsing json json into objects
       * The parsing contains four stages. 
       * First stage the json is parsed and code is transformed into strings and evaluated
       * Second stage All empty objects are removed
       * Third stage the json key (if exists) is evaluated 
       *   to check if stylesheets or javascipt or scipe objects should be loaded
       * Fourth stage the code objects are checked if there code should be stored __json__[key]
-      * @param {String} text The string to decode
+      * @param {String} json The string to decode
       * @param {Object} options A object that can overrule config items,
       *        fullDecode, evalException or scope
       * @return {Object} The decoded object
       */
-     decode : function(text,options) {
+     decode : function(json,options) {
           options = options || {}
           var at = 0,ch = ' ',self = this;
           var scope = options.scope || this.getScope();
@@ -594,21 +595,21 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           function error(m) {
               var e = new SyntaxError(m);
               e.at = at - 1;
-              e.text = text;
+              e.json = json;
               throw e;
           }
      
-          /* Get the next charachter of the text to parse, moving pointer one forward */
+          /* Get the next charachter of the json to parse, moving pointer one forward */
           function next() {
-              ch = text.charAt(at);
+              ch = json.charAt(at);
               at += 1;
               return ch;
           }
           
-          /* Get the previous charachter of the text to parse, moving pointer one back */
+          /* Get the previous charachter of the json to parse, moving pointer one back */
           function prev(count) {
               at -= count ? count : 1;
-              ch = text.charAt(at);
+              ch = json.charAt(at);
               at += 1;
               return ch;
           }
@@ -618,7 +619,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           function wordMatch(word,offset) {
             if (typeof(offset)=='undefined') offset = -1;
             var i=0;
-            for (;i<word.length && text.charAt(at+i+offset)==word.charAt(i);i++) {}
+            for (;i<word.length && json.charAt(at+i+offset)==word.charAt(i);i++) {}
             if (i>=word.length) {
               at += offset+i;
               next();
@@ -717,7 +718,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                       }
                   }
               }
-              error("Bad string " + text.substring(start,at-1));
+              error("Bad string " + json.substring(start,at-1));
           }
           
           /* Read an array */
@@ -744,7 +745,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                       white();
                   }
               }
-              error("Bad array " + text.substring(start,at-1));
+              error("Bad array " + json.substring(start,at-1));
           }
      
           /* Read a object, when asCode is set only items are recusivly parsed */
@@ -762,7 +763,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     k = ch=='"' || ch=="'" ? string() : singleWord();
                     white();
                     if (ch != ':') {
-                      error("Bad key("+ch+") seprator for object");
+                      error("Bad key("+ch+") seprator for object " + json);
                     }
                     next();
                     white();
@@ -779,7 +780,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     white();
                 }
             }
-            error("Bad object ["+k+"]" + text.substring(start,at-1));
+            error("Bad object ["+k+"]" + json.substring(start,at-1));
           }
      
           /* Read a number */
@@ -871,7 +872,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 case ',' :
                 case ']' :
                 case '}' :
-                  var block =text.substring(start,wat-1);
+                  var block =json.substring(start,wat-1);
                   return [self.codeEval(block,options),block];
               }
             }
@@ -899,7 +900,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               }
           }          
         try {
-          if (!text) return null;
+          if (!json) return null;
           var v = value(false)[0];
           white();
           if (ch) error("Invalid Json");
@@ -928,4 +929,5 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
 Ext.ux.JSON = new Ext.ux.Json({
    jsonId:'__JSON__',
    licenseText :'/* This file is created or modified by Ext.ux.Json */'
+//   ,onError : function(type,exception){alert(type +" " + (typeof(exception)=='object' ? exception.message || exception : exception))}
 });

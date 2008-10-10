@@ -102,6 +102,18 @@
         text : "Ok"
       },
       cls : "file"
+    },{
+     text : "Date Picker",
+     gtip : "A date picker",
+     config : {
+       xtype : "datepicker"
+     }
+    },{
+     text : "Color Pallet",
+     gtip : "A color Pallet",
+     config : {
+       xtype : "colorpalette"
+     }
     }]
 },{
   text : "Panels",

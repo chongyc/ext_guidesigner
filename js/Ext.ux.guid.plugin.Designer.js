@@ -61,7 +61,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    @cfg */
   customProperties  : false,
 
-
  //Menu buttons
   /**
    * Enable or disable the Copy menu button (defaults true).
@@ -88,12 +87,22 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * An array of property defintion to add to default (propertyDefinitions)
    * @type {Array}
    @cfg */
-  propertyDefinitionFiles : null ,
+  propertyDefinitionFiles : null,
 
   /**
    * @private Internal array with all files with property defintions to load
    */
   propertyDefinitions : ['js/Ext.ux.guid.plugin.Designer.Properties.json'],
+  
+  /**
+   * An array of files with additional components
+   */
+  componentFiles : null,
+  
+  /**
+   *@private Internal array with all files with components to load
+   */
+  components : ['js/Ext.ux.guid.plugin.Designer.Components.json'],
 
   /**
    * An url specifing the json to load
@@ -103,7 +112,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
 
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
-
 
   licenseText  :  "/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */",
 
@@ -408,9 +416,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @param {Boolean} select Should item be selected
    * @param {String} dropLocation The operation to perform
    * @param {Object} source The source used to perform operation
+   * @param {Object} extraConfig A extra config that should be added to config
    * @return {Component} The component added
    */
-  appendConfig : function (el,config,select,dropLocation,source){
+  appendConfig : function (el,config,select,dropLocation,source,extraConfig){
     if (!el) return false;
     this.markUndo();
 
@@ -436,12 +445,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
 
     if (typeof config == 'function') {
       config.call(this,function(config) {
-        this.appendConfig(el,config,true);
+        this.appendConfig(el,config,true,dropLocation,source,extraConfig);
       }.createDelegate(this),this);
     } else {
      //Get the config of the items
      var ccmp,cmp= this.getDesignElement(el,true);
-     var items = this.editable(this.clone(config));
+     var items = this.editable(Ext.applyIf(this.clone(config),extraConfig || {}));
      //Find the container that should be changed
      ccmp = this.getContainer(cmp);
      switch (dropLocation) {
@@ -531,7 +540,42 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   getCode : function(el) {
    return this.encode(this.getConfig(el));
   },
-
+  
+ /**
+   * Function require is used to checks if the required files are loaded
+   * when not the files are loaded. Loaded files are added to required_js and required_css
+   * @param {Mixed} packages An array or ; seperated string with packages to load
+   * @param {Mixed} options An object with options to used, when string then basedir is assumed
+   * options[basedir] The default directory to use for all files
+   * options[cssdir] The directory to be used for stylesheets
+   * options[async] When set to true required will return directly
+   * options[callback] Callback function after all required files are loaded
+   * options[reload] When reload is set packages are reloaded
+   * options[cachingOff] When set the object caching is turned off
+   * @return {Object} a object with keys js and css contain an array with full path of items
+   */
+  require : function(packages,options){
+    var ret = Ext.ux.guid.plugin.Designer.superclass.require.call(this,packages,options);
+    if (ret.js.length || ret.css.length) {
+      var cfg = (this.container.items && this.container.items.items.length==1) ?
+             this.getConfig(this.container.items.items[0]) : {};
+      //Check if root is a array with more then one element, if so skip
+       if (!cfg.json) cfg.json = {};
+       //Parse original so if can be reused as base
+       var myEncoder = new Ext.ux.Json({jsonId : this.jsonId});
+       var o = myEncoder.decode(cfg[this.jsonId + "json"]) || {};
+       var a = cfg.json && cfg.json.required_js ? cfg.json.required_js.split(';') :[];
+       for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(a[i]);
+       if (ret.js.length!=0) o.required_js=cfg.json.required_js=ret.js.join(';');
+       a = cfg.json && cfg.json.required_css ? cfg.json.required_css.split(';') :[];         
+       for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(a[i]);
+       if (ret.css.length!=0) o.required_css=cfg.json.required_css=ret.css.join(';');
+       cfg[this.jsonId+"json"]=myEncoder.encode(o);
+       if (!(this.container.items && this.container.items.items.length==1)) ret['cfg']=cfg;
+    }
+    return ret;
+  },
+  
   /**
    * Get the config of the specified element
    * @param {Element} el The element for which to get the config object
@@ -667,6 +711,24 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.resizeLayer.resizer.dd.lock();
     this.activeElement = cmp;
     if (cmp) {
+      /*
+        tabPanelNode : function(node,childNode) {
+          if (node.elConfig && this.tabPanelXtype.indexOf(node.elConfig.xtype) != -1) {
+            var el = node.fEl.getActiveTab(); 
+            if (childNode) el = childNode.fEl;
+            for (var i=0,len=node.fEl.items.items.length;i<len;i++) {
+              if (node.fEl.items.items[i]==el) {
+                node.elConfig.activeTab=i;
+                if (childNode) node.fEl.setActiveTab(el);
+                return node.childNodes[i];
+              }
+            }
+          } else if (node.parentNode && !childNode) {
+            this.tabPanelNode(node.parentNode,node);
+          }
+          return node;
+         },
+      */
       if (this.propertyGrid) {
         this.propertyFilter();
         this.propertyGrid.enable();
@@ -826,6 +888,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     data.drop = null;
     return false;
   },
+ 
 
   /**
    * Called when a element is dropped on the component
@@ -837,7 +900,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   notifyDrop : function (src,e,data) {
     var el=this.getTarget(e);
     if (data.config && !data.processed && data.drop) {
-      this.appendConfig(el,data.config,true,data.drop,data.source);
+      this.appendConfig(el,data.config,true,data.drop,data.source,this.require(data.require).cfg);
       data.processed = true;
     }
     return true;
@@ -898,8 +961,14 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (!this._toolbox) {
       //Build the url array used to load the property list
       for (var i=0;this.propertyDefinitionFiles && i<this.propertyDefinitionFiles.length;i++) {
-         this.propertyDefinitions.push(this.propertyDefinitionFiles[i]);
+         if (this.propertyDefinitions.indexOf(this.propertyDefinitionFiles[i])==-1)
+            this.propertyDefinitions.push(this.propertyDefinitionFiles[i]);
       }
+      for (var i=0;this.componentFiles && i<this.componentFiles.length;i++) {
+        if (this.components.indexOf(this.componentFiles[i])==-1)
+          this.components.push(this.componentFiles[i]);
+      }
+      
       var proxy = new Ext.ux.data.HttpMergeProxy(this.propertyDefinitions);
       this.properties = new Ext.data.JsonStore({
           proxy : proxy, //Needed for Ext2.2

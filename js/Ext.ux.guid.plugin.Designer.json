@@ -140,7 +140,7 @@
                 }
                 scope.jsonWindow.tf.setValue(scope.getCode());
                 scope.jsonWindow.show();
-             }
+              }
           },{
             iconCls : 'icon-show',
             tooltip : 'Show design in window',
@@ -149,6 +149,7 @@
               var cfg = scope.getConfig();
               //Clear scope so tabindexed and id's are cleared
               scope.setConfig({});
+              try {
               var w = new Ext.Window(Ext.apply({
                     title  : 'Show Config',
                     border  : false,
@@ -166,6 +167,10 @@
                     }}
                     },cfg.json));
                 w.show();
+               } catch (e) {
+                 Ext.Msg.alert('Error','Design contains error and cannot be display');
+                 scope.undo();
+               }
             }
           },'-',{
             iconCls : 'icon-undo',
@@ -184,6 +189,55 @@
             tooltip : 'Redraw',
             handler : function(){scope.refresh();}
           },'->',{
+            iconCls : 'icon-error',
+            tooltip : 'Show or hide(clear) error tab',
+            id      : scope.ErrorId,
+            errorText : new Ext.form.Label(),
+            hidden  : true,
+            enableToggle : true,
+            errors  : [],
+            errorCount : 0,
+            maxErrors : 60,
+            plugins : {
+              //Create an error handler
+              init : function(cmp) {
+               var errorHandler = function(type,exception) {
+                 if (cmp.errorCount==0) cmp.setVisible(true);
+                 cmp.errorCount++;
+                 var curdate = new Date();
+                 var time    = (curdate.getHours()<10 ? "0" : "") + curdate.getHours() + ':' + 
+                               (curdate.getMinutes()<10 ? "0" : "") + curdate.getMinutes() + ':' +
+                               (curdate.getSeconds()<10 ? "0" : "") + curdate.getSeconds();          
+                 cmp.errors.unshift('<i>' + time + '</i> <b>' + type + '</b> : ' + (exception ? exception.message ||exception : exception));
+                 while (cmp.errors.length>cmp.maxErrors) {cmp.errors.pop();}
+                 cmp.errorText.setText(cmp.errors.join('<br>'),false);
+                 cmp.setTooltip('<font color="red">' + cmp.errors[0] + '</font>');
+                 return false;
+               };
+               scope.on('error',errorHandler,scope);
+              }
+            }, 
+            handler : function(){
+              var cmp = Ext.getCmp(scope.ErrorId);
+              var tab = Ext.getCmp(scope.TabId);
+              if (this.pressed) {
+                 cmp.errorTab = tab.add({
+                  iconCls : 'icon-error',
+                  tooltip : "A list with errors which have occurred",
+                  title   : 'Error',
+                  autoScroll:true,
+                  items   : cmp.errorText
+                 });
+                tab.activate(cmp.errorTab);
+                cmp.errorTab.doLayout();
+              } else if (cmp.errorTab) {
+                tab.remove(cmp.errorTab);
+                delete cmp.errorTab;
+                cmp.setVisible(false);
+                cmp.errorCount=0;
+              }
+            }
+          },{
             iconCls : 'icon-help',
             hidden  : !scope.enableVersion,
             handler : function() {
@@ -218,12 +272,16 @@
           ddGroup: 'designerddgroup',
           rootVisible : false,
           root:new Ext.tree.AsyncTreeNode({text:'root'}),
-          loader:new Ext.ux.guid.tree.JsonTreeLoader({requestMethod:'GET',dataUrl:'js/Ext.ux.guid.plugin.Designer.Components.json'}),
+          loader:new Ext.ux.guid.tree.JsonTreeLoader({
+                requestMethod:'GET',
+                dataUrl:scope.components
+           }),
           dragConfig:{
             getDragData : function(e){
               var data = Ext.dd.Registry.getHandleFromEvent(e);
               if (data) {
                data.config=data.node.attributes.config;
+               data.require=data.node.attributes.require;
                data.processed=false;
               }
               return data;
@@ -232,7 +290,9 @@
           },
           listeners :  {
            'dblclick' : function(node,e){
-             scope.appendConfig(scope.activeElement||scope.container,node.attributes.config,true);
+             scope.appendConfig(scope.activeElement||scope.container,
+                node.attributes.config,true,null,null,
+                scope.require(node.attributes.require).cfg);
            }
           }
         },{
@@ -531,58 +591,5 @@
             }
          })
        ]
-      },{
-      region : 'south',
-      id     : scope.ErrorId,
-      border : false,
-      bodyBorder : false,
-      hidden  : true,
-      errors  : [],
-      maxErrors : 60,
-      tbar : [{
-        iconCls : 'icon-error',
-        tooltip : 'Open error window',
-        enableToggle : true,
-        handler : function(){
-          var cmp = Ext.getCmp(scope.ErrorId);
-          var tab = Ext.getCmp(scope.TabId);
-          if (this.pressed) {
-             cmp.errorTab = tab.add({
-              iconCls : 'icon-error',
-              tooltip : "A list with errors which have occurred",
-              title   : 'Error',
-              autoScroll:true,
-              items   : cmp.errorText
-             });
-            tab.activate(cmp.errorTab);
-            cmp.errorTab.doLayout();
-          } else if (cmp.errorTab) {
-            tab.remove(cmp.errorTab);
-            delete cmp.errorTab;
-          }
-        }
-      },'-',{
-        xtype : 'label',
-        plugins : {
-          //Create an error handler
-          init : function(self) {
-           var cmp = Ext.getCmp(scope.ErrorId);
-           cmp.errorText = new Ext.form.Label();
-
-           var errorHandler = function(type,exception) {
-             cmp.errors.push('<b>' + type + '</b> : ' + exception);
-             while (cmp.errors.length>cmp.maxErrors) {cmp.errors.shift();}
-             cmp.errorText.setText(cmp.errors.join('<br>'),false);
-             if (cmp.errors.length==1) {
-               cmp.setVisible(true);
-               cmp.ownerCt.doLayout();
-             }
-             self.setText('(<font color="red">' + cmp.errors.length + '</font>) ' + cmp.errors[cmp.errors.length-1],false);
-             return false;
-           };
-           scope.on('error',errorHandler,scope);
-         }
-       }
-      }]
-    }]
+   }]
 }

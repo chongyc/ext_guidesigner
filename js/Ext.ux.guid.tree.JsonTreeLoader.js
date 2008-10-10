@@ -51,10 +51,28 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
     } else {
       var node = new Ext.tree.TreeNode(Ext.applyIf(attr,{draggable:false}));
       for(var i = 0, len = childeren.length; i < len; i++){
-       var n = this.createNode(childeren[i]);
-       if(n) node.appendChild(n);
+       if (Ext.isVersion(childeren[i].isVersion)) {
+         var n = this.createNode(childeren[i]);
+         if(n) node.appendChild(n);
+       }
       }
       return node;
+    }
+  },
+  
+  /**
+   * Allow dataUrl to be an  array of URLs to be loaded
+   */
+  requestData : function(node, callback){
+    if (this.dataUrl instanceof Array) {
+       var allUrl = this.dataUrl;
+       for (var i=0;i<allUrl.length;i++) {
+         this.dataUrl = allUrl[i];
+         Ext.ux.guid.tree.JsonTreeLoader.superclass.requestData.call(this,node,callback); 
+       }
+       this.dataUrl = allUrl;
+    } else {
+       Ext.ux.guid.tree.JsonTreeLoader.superclass.requestData.call(this,node,callback);
     }
   }
 });

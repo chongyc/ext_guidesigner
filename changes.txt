@@ -9,17 +9,14 @@ TODO
  - Update documentation
  - Implement support for a code repository
  - Multiple select to change one or more items in one go
+ - In line editing of labels (fieldlabel,title,label)
 ==> Problems after creating GUID 2.1 
- - Make it possible to load more then one component tree and make this version depended
- - Add more design elements which are available to Ext.ux.Designer.Components
- - Rename plugin to guid and place in directories
  - When root element is not container and multiple items are dropped convert it into container
- - Still alert message when applying code should be transformed into event
- - Implement a loader function: use(filelist,options/defaultpath)
  - Problem with settings values of mixed compenents, only code when is real code
  
  Change History:
  Version 2.1.0:
+  + A compressed version of designer is added (Ext.ux.guid.plugin.Desginer-all.js) 
   + Added a new json parser therefor begin and end tags are no longer needed in code
   + Visual resize added activated by context menu
   + Visual move of element in absolute layout activated by context menu
@@ -34,8 +31,12 @@ TODO
   + Undo and redo are now keeping track of selected element
   + Active item is now selected in code tree
   + Codetree can now also be used beside drag drop in designer to reorganize code elements.
-  + Url options can now beused to configure designer window: window=1 (shows window mode) docked=1 (will dock designer)
-  + A error statusbar and tab have been added to show errors. Click on error icon on statusbar to show or hide detailtab
+  + Url options can now beused to configure designer window: window=1 (shows window mode) docked=1 (will dock designer) debug=1 (compression off)
+  + A error statusicon and tab have been added to show errors. Click on error icon on statusbar to show or hide detailtab
+  + A simple loader for javascript and stylesheets is added (require)
+  + Third party design elements can be configured (componentFiles) to be added to Components tree
+  + Components can be ExtJs version dependend, just set isVersion in component config.
+  * Changed seperator of required_js and required_css to ;
   * Fixed when removing all properties of node also the node is removed
   * Fixed redrawElement problem causing a blank screen to be shown
   * Fixed problem in propertygrid that selectionboxes which where allowed to be customized could not be changed

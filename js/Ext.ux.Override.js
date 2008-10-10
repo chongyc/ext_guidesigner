@@ -25,6 +25,10 @@
  * @return {Boolean} True when ExtJS version is between from and to version
  */
 Ext.isVersion = function(fromVersion,toVersion) {
+  if (fromVersion instanceof Array) {
+    toVersion = formVersion[1];
+    fromVersion = formVersion[0];
+  }
   var getVersion = function(ver) {    
     var major = ver.match(/^(\d)\.\d/);
     major = major ? major[1] : 0;
@@ -34,7 +38,7 @@ Ext.isVersion = function(fromVersion,toVersion) {
     revision = revision ? revision[1] : 0;
     return (major*1) + (minor*0.1) + (revision*0.001);
   }
-  var f = getVersion(fromVersion);
+  var f = getVersion(fromVersion || Ext.version);
   var t = getVersion(toVersion || Ext.version);
   var e = getVersion(Ext.version);
   return (e>=f && e<=t);
@@ -100,6 +104,18 @@ Ext.overrideIf(Ext.FormPanel, {
         this.items.each(fn);
     }
 },'2.0');
+
+
+Ext.overrideIf(Ext.Button, {
+    setTooltip: function(qtipText) {
+        var btnEl = this.getEl().child(this.buttonSelector)
+        Ext.QuickTips.register({
+            target: btnEl.id,
+            text: qtipText
+        });             
+    }
+},'2.0');
+
 
 
 /**

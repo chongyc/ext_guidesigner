@@ -1,0 +1,14 @@
+[{
+  text : "Third party",
+  cls : "folder",
+  childeren : [{
+      text : "ColorField",
+      qtip : "A color field",
+      cls : "file",
+      require : ["Ext.ux.ColorField;Ext.ux.ColorField.css",{basedir:"js",cssdir:"css"}],
+      config : {
+        xtype : "colorfield",
+        fieldLabel : "Color"
+      }
+  }]
+}]
