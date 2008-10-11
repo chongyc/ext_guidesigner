@@ -120,7 +120,7 @@ class phpFiles {
 
     if($action=='save') {
       $this->check_and_fix_dir($filename);
-      if(($fp=fopen($this->baseDir.$filename,"w")) === FALSE){
+      if(($fp=fopen($this->baseDir."/".$filename,"w")) === FALSE){
         die('0');
       }
       fwrite($fp,$content);
