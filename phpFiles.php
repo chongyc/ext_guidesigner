@@ -130,7 +130,7 @@ class phpFiles {
   }
 }
 
-$PhpBackend=new phpFiles($_POST['baseDir']);
+$PhpBackend=new phpFiles($_POST['baseDir']."/");
 if($_POST['cmd']=="get_files") json_encode($PhpBackend->get_files());
 if($_POST['cmd']=="get_content") $PhpBackend->get_content($_POST['filename']);
 if($_POST['cmd']=="save_changes") $PhpBackend->save_changes($_POST['filename'],$_POST['action'],$_POST['content']); 
