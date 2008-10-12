@@ -1,0 +1,140 @@
+/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */
+{
+json : {
+   size : {width:298,height:290},
+   alignTo : [document,'c-c'],
+   title:"New Tab Panel Wizard",
+   "scope.!firstFocus" : Ext.id(),
+   "scope.!callback" : Ext.emptyFn,
+   listeners : {
+     afterjsonload :  function(){
+        var e = Ext.getCmp(scope.firstFocus);
+        e.focus.defer(150,e,[]);
+     }
+   }
+ },
+xtype : "form",
+frame : true,
+ buttons : [{
+       text:'Ok',
+       handler:function() {
+         var values = scope.items.first().form.getValues();
+         scope.close();
+         var config = {xtype:'tabpanel',items:[]};
+         var activeTab = 0;
+         Ext.each([1,2,3,4,5,6], function(i) {
+           if (values['title_'+i]) {
+             config.items.push({xtype:'panel',title:values['title_'+i]});
+             if (values.active == i) { activeTab = i; }
+           }
+         });
+         config.activeTab = activeTab;
+         scope.callback.call(this,config);
+       }
+     },{
+       text:'Cancel',
+       handler:function() {scope.close();}
+ }],
+items : [{
+    layout : "table",
+    layoutConfig : {
+     columns:2
+   },
+    defaults : {
+     style:"margin:1px;",
+     border:true
+   },
+    xtype : "fieldset",
+    title : "Tabs",
+    autoHeight : true,
+    items : [{
+        title : "Active",
+        style : "margin:1px;",
+        border : true
+      },{
+        title : "Title",
+        style : "margin:1px;",
+        border : true
+      },{
+        xtype : "radio",
+        fieldLabel : "Label",
+        name : "active",
+        inputValue : 0,
+        style : "margin-left:25px;",
+        border : true,
+        checked : true
+      },{
+        xtype : "textfield",
+        id   : scope.firstFocus,
+        name : "title_1",
+        width : 200,
+        style : "margin:1px;",
+        border : true
+      },{
+        xtype : "radio",
+        fieldLabel : "Label",
+        name : "active",
+        inputValue : 1,
+        style : "margin-left:25px;",
+        border : true
+      },{
+        xtype : "textfield",
+        name : "title_2",
+        width : 200,
+        style : "margin:1px;",
+        border : true
+      },{
+        xtype : "radio",
+        fieldLabel : "Label",
+        name : "active",
+        inputValue : 2,
+        style : "margin-left:25px;",
+        border : true
+      },{
+        xtype : "textfield",
+        name : "title_3",
+        width : 200,
+        style : "margin:1px;",
+        border : true
+      },{
+        xtype : "radio",
+        fieldLabel : "Label",
+        name : "active",
+        inputValue : 3,
+        style : "margin-left:25px;",
+        border : true
+      },{
+        xtype : "textfield",
+        name : "title_4",
+        width : 200,
+        style : "margin:1px;",
+        border : true
+      },{
+        xtype : "radio",
+        fieldLabel : "Label",
+        name : "active",
+        inputValue : 4,
+        style : "margin-left:25px;",
+        border : true
+      },{
+        xtype : "textfield",
+        name : "title_5",
+        width : 200,
+        style : "margin:1px;",
+        border : true
+      },{
+        xtype : "radio",
+        fieldLabel : "Label",
+        name : "active",
+        inputValue : 5,
+        style : "margin-left:25px;",
+        border : true
+      },{
+        xtype : "textfield",
+        name : "title_6",
+        width : 200,
+        style : "margin:1px;",
+        border : true
+      }]
+  }]
+}

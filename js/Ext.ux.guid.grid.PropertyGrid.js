@@ -21,7 +21,7 @@
 Ext.namespace('Ext.ux.guid.grid');
 
 /**
- * The propertyrecord used by the property grid. 
+ * The propertyrecord used by the property grid.
  * Name is the key of a property, Value is the value of the property and
  * type is type of element. This type flag will control which editor is loaded
  */
@@ -35,7 +35,7 @@ Ext.ux.guid.grid.PropertyStore = function(grid, source){
     this.store = new Ext.data.Store({
         recordType : Ext.ux.guid.grid.PropertyRecord
     });
-    this.store.on('update', this.onUpdate,  this);    
+    this.store.on('update', this.onUpdate,  this);
 };
 
 /**
@@ -45,11 +45,11 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
     jsonId : "__JSON__",
 
     getPropertyType : function (name) {
-      if (this.grid && this.grid.getPropertyType) 
+      if (this.grid && this.grid.getPropertyType)
          return this.grid.getPropertyType(name);
       return null;
     },
-    
+
     // protected - should only be called by the grid.  Use grid.setSource instead.
     setSource : function(o){
         this.source = o;
@@ -59,7 +59,7 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
             if(k.indexOf(this.jsonId)!=0 && ['items'].indexOf(k)==-1){
                 var v = o[this.jsonId + k];
                 var type = null;
-                if (typeof(v)=='object') {                   
+                if (typeof(v)=='object') {
                    type = v.type || type;
                    v = v.display || v.value;
                 }
@@ -67,13 +67,13 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(o[k]) , type : 'function'}, k));
                 } else if (typeof(o[k]) == 'object') {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(Ext.ux.JSON.encode(o[k])), type : 'object'}, k));
-                } 
+                }
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || o[k], type : type }, k));
             }
         }
         this.store.loadRecords({records: data}, {}, true);
     },
-    
+
     // private
     onUpdate : function(ds, record, type){
         if(type == Ext.data.Record.EDIT){
@@ -88,7 +88,7 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
             }
         }
     },
-    
+
     updateSource : function (key,value,type) {
       var propType = this.getPropertyType(key);
       if (!type && propType) type=propType.type;
@@ -102,12 +102,16 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         this.store.getById(prop).set('value', value);
         this.updateSource(prop,value);
     }
-    
+
 });
 
 
 Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
     Ext.ux.guid.grid.PropertyColumnModel.superclass.constructor.call(this,grid,store);
+    this.setConfig( [
+        {header: this.nameText, width:40, resizable:true, sortable: true, dataIndex:'name', id: 'name', menuDisabled:true},
+        {header: this.valueText, width:60, resizable:false, dataIndex: 'value', id: 'value', menuDisabled:true}
+    ]);
     this.jsonId=grid.jsonId;
     Ext.apply(this.editors,{
         'regexp' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'new RegExp()'})),
@@ -121,7 +125,7 @@ Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
         'css' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'css'})),
         'editlist' :new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:true})),
         'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false}))
-        ,'boolean':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[['true','true'],['false','false']],editable:true,customProperties:true}))      
+        ,'boolean':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[['true','true'],['false','false']],editable:true,customProperties:true}))
     });
     this.valueRendererDelegate = this.valueRenderer.createDelegate(this);
     this.propertyRendererDelegate = this.propertyRenderer.createDelegate(this);
@@ -129,12 +133,12 @@ Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
 
 Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
     // private
-    
+
     getPropertyType : function (name) {
       if (this.grid && this.grid.getPropertyType) return this.grid.getPropertyType(name);
       return null;
     },
-    
+
     getCellEditor : function(colIndex, rowIndex){
         var p = this.store.getProperty(rowIndex);
         var n = p.data['name'], val = p.data['value'], t = p.data['type'];
@@ -156,8 +160,8 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
             editor.field.setList(prop.values);
             return editor;
           }
-        } 
-        
+        }
+
         if (t && this.editors[t]) {
           return this.editors[t];
         } else if(Ext.isDate(val)){
@@ -169,19 +173,22 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
         }
         return this.defaultEditor || this.editors[prop ? 'string' : 'mixed'];
     },
-    
+
     valueRenderer  : function(value, p, r) {
       if (typeof value == 'boolean') {
         p.css = (value ? "typeBoolTrue" : "typeBoolFalse");
         return (value ? "True" : "False");
-      } 
+      }
       var propType = this.getPropertyType(r.id);
       if (propType && ['object','array','object/array'].indexOf(propType.type)!=-1) {
         p.css = "typeObject";
       }
+      if (typeof(value)=="string" && value.length>24) {
+        return value.substring(1,21) + "...";
+      }
       return value;
     },
-    
+
     propertyRenderer :  function(value, p) {
       var propType = this.getPropertyType(value);
       if (propType) {
@@ -190,13 +197,13 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
       }
       return value;
     },
-    
+
     getRenderer  : function(col){
        return col == 0 ? this.propertyRendererDelegate : this.valueRendererDelegate;
     }
 });
 
-    
+
 Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     // private config overrides
     enableColumnMove:false,
@@ -230,7 +237,7 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             'beforepropertychange',
             'propertychange',
             /**
-             * Event fired to allow custom change of value  
+             * Event fired to allow custom change of value
              * @param {Source} source The source object
              * @param {String} key The key changed
              * @param {String} value The value to be set
@@ -269,8 +276,8 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
 
     getSource : function(){
         return this.propStore.getSource();
-    } 
-});    
+    }
+});
 
 //Is not registered but required by designer
 Ext.reg('guidpropertygrid', Ext.ux.guid.grid.PropertyGrid);

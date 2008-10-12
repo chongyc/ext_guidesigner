@@ -1,0 +1,103 @@
+{
+  json : {
+    title:"New Table Layout",
+    size : {width:270,height:220},
+    alignTo : [document,'c-c'],
+	  "scope.!callback" : Ext.emptyFn,
+	  "scope.!firstFocus" : Ext.id(),
+		listeners : {
+		 afterjsonload :  function(){
+				var e = Ext.getCmp(scope.firstFocus);
+				e.focus.defer(150,e,[]);
+		 }
+   }
+  },
+	xtype:"form",
+	frame:true,
+	labelWidth:120,
+	buttons:[{
+	 text:'Ok',
+	 scope:this,
+	 handler:function() {
+			var values = scope.items.first().form.getValues();
+			var cols = parseInt(values.cols,10);
+			var rows = parseInt(values.rows,10);
+			if (isNaN(cols) || isNaN(rows)) {
+				Ext.Msg.alert("Error", "Columns/Rows are incorrect");
+				return;
+			}
+			scope.close();
+			var config = {layout:'table',layoutConfig:{columns:cols},items:[]};
+			for (var j = 0; j < rows; j++) {
+				for (var i = 0; i < cols; i++) {
+					config.items.push({html:(values.addcontent?'col '+i+', row '+j:null)});
+				}
+			}
+			var defaults = {};
+			var pad = parseInt(values.cellpadding,10);
+			if (!isNaN(pad)) { defaults.bodyStyle = 'padding:'+pad+'px;'; }
+			var margin = parseInt(values.cellmargin,10);
+			if (!isNaN(margin)) { defaults.style = 'margin:'+margin+'px;'; }
+			if (!values.borders) { defaults.border = false; }
+			scope.callback(config);
+    }
+	 },{
+	  text:'Cancel',
+	  handler:function() {scope.close();}
+  }],
+	items:[{
+	  layout:"table",
+	  layoutConfig:{
+	    columns:2
+	  },
+	  items:[{
+	      layout:"form",
+	      items:[{
+		  xtype:"numberfield",
+		  fieldLabel:"Columns x Rows",
+		  width:48,
+		  value : 5,
+		  id    : scope.firstFocus,
+		  allowNegative:false,
+		  allowDecimals:false,
+		  name:"cols"
+		}]
+	    },{
+	      layout:"form",
+	      labelWidth:10,
+	      labelSeparator:" ",
+	      style:"margin-left:5px",
+	      items:[{
+		  xtype:"numberfield",
+		  fieldLabel:"x",
+		  value : 5,
+		  width:48,
+		  allowNegative:false,
+		  allowDecimals:false,
+		  name:"rows"
+		}]
+	    }]
+	},{
+	  xtype:"textfield",
+	  value : 0,
+	  fieldLabel:"Cells padding (px)",
+	  width:48,
+	  name:"cellpadding"
+	},{
+	  xtype:"textfield",
+	  fieldLabel:"Cells margin (px)",
+	  value : 0,
+	  width:48,
+	  name:"cellmargin"
+	},{
+	  xtype:"checkbox",
+	  fieldLabel:"Borders",
+	  name:"borders",
+	  checked:true
+	},{
+	  xtype:"checkbox",
+	  fieldLabel:"Add some content (useful for debug)",
+	  name:"addcontent",
+	  checked:true
+	}]
+}

@@ -1,5 +1,5 @@
 /*global Ext document */
- /*  
+ /*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -45,13 +45,25 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
        attr.uiProvider = this.uiProviders[attr.uiProvider] || eval(attr.uiProvider);
     }
     if (!childeren) {
-      return(attr.leaf===false ? 
-            new Ext.tree.AsyncTreeNode(attr) : 
+      return(attr.leaf===false ?
+            new Ext.tree.AsyncTreeNode(attr) :
             new Ext.tree.TreeNode(attr) );
     } else {
       var node = new Ext.tree.TreeNode(Ext.applyIf(attr,{draggable:false}));
       for(var i = 0, len = childeren.length; i < len; i++){
        if (Ext.isVersion(childeren[i].isVersion)) {
+         if (childeren[i].wizard) { //Check if whe should create a wizard config
+           var wizard = childeren[i].wizard;
+           childeren[i]['config'] = function(callback) {
+             new Ext.ux.JsonWindow({
+                x     : -1000, // Window is hidden by moving X out of screen
+                y     : -1000, //Window is hidden by moving Y out of screen
+                autoLoad : wizard,
+                callback : callback,
+                modal       : true
+             }).show();
+           };
+         }
          var n = this.createNode(childeren[i]);
          if(n) node.appendChild(n);
        }
@@ -59,7 +71,7 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
       return node;
     }
   },
-  
+
   /**
    * Allow dataUrl to be an  array of URLs to be loaded
    */
@@ -68,7 +80,7 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
        var allUrl = this.dataUrl;
        for (var i=0;i<allUrl.length;i++) {
          this.dataUrl = allUrl[i];
-         Ext.ux.guid.tree.JsonTreeLoader.superclass.requestData.call(this,node,callback); 
+         Ext.ux.guid.tree.JsonTreeLoader.superclass.requestData.call(this,node,callback);
        }
        this.dataUrl = allUrl;
     } else {

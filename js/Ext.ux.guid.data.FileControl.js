@@ -1,5 +1,5 @@
 /*global Ext document */
-/*  
+/*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -33,16 +33,16 @@ Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
   files : {},
   last  : null,
   activeNode : null,
-  
+
   init : function(){
     this.refreshFiles();
   },
-  
+
   refreshFiles : function (callback) {
     this.files = this.files || {};
     if(typeof callback == "function") callback(true);
   },
-  
+
   saveChanges : function(id,action,callback,content) {
     this.files[id] = id;
     if (action=='delete') {
@@ -58,18 +58,18 @@ Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
     this.last = id;
     if(typeof callback == "function") callback(true,content);
   },
-  
-  
+
+
   deleteFile : function(id,callback){
     this.saveChanges(id,'delete',callback);
   },
-  
+
   renameFile : function(fileFrom,fileTo,callback){
     var last = this.last;
     this.openFile(fileFrom,function(success,content) {
       if (success) {
-         this.saveChanges(fileTo,'save',function(success){          
-           if (success) {              
+         this.saveChanges(fileTo,'save',function(success){
+           if (success) {
               this.deleteFile(fileFrom,function(success){
                 if (success && last==fileFrom) this.last=fileTo;
                 if(typeof callback == "function") callback(success);
@@ -79,17 +79,17 @@ Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
       } else if(typeof callback == "function") callback(success);
     }.createDelegate(this));
   },
-  
+
   saveFile : function(id,content,callback){
     this.saveChanges(id,'save',callback,content);
   },
-  
+
   newFile  : function(id,content,callback){
     this.saveChanges(id,'new',callback,content);
   },
-  
-  load : function(node, callback,refresh){ 
-   if (refresh) {
+
+  load : function(node, callback,refresh){
+   if (refresh!==false) {
      this.refreshFiles(function(){
         this.loadNodes(node,false,callback);
       }.createDelegate(this));
@@ -97,7 +97,7 @@ Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
      this.loadNodes(node,false,callback);
    }
   },
-  
+
   loadNodes : function(node,append,callback){
     this.activeNode = null;
     if (!append) while(node.firstChild) node.removeChild(node.firstChild);
@@ -115,23 +115,23 @@ Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
              if (c[j].attributes.text==path[i]) n = c[j];
            }
            if (!n) {
-             var leaf = (i==path.length-1);             
+             var leaf = (i==path.length-1);
              n = new Ext.tree.TreeNode({
                      text: (name==this.last ? '<B>' + path[i] + '</B>' : path[i]),
-                     cls:  leaf ? 'file' : 'folder' , 
+                     cls:  leaf ? 'file' : 'folder' ,
                      leaf : leaf,
                      id  : name
-             }); 
+             });
              cnode.appendChild(n);
              if (name==this.last) this.activeNode = n;
            }
            cnode = n;
-           name += '/' 
+           name += '/'
         }
     }
     node.endUpdate();
-    if(typeof callback == "function")  callback(this.activeNode);   
-    return this.activeNode;      
+    if(typeof callback == "function")  callback(this.activeNode);
+    return this.activeNode;
   }
 
 });

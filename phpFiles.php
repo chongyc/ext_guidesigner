@@ -96,6 +96,7 @@ class phpFiles {
   }
 
   function get_files() {
+    clearstatcache(); 
     $this->ReadDirs($this->baseDir);
     echo json_encode($this->file_list);
   }

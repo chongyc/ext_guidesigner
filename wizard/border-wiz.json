@@ -1,0 +1,276 @@
+/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */
+{
+json : {
+  	title:"New Border Layout",
+    size : {width:480,height:370},
+    alignTo : [document,'c-c'],
+	  "scope.!callback" : Ext.emptyFn
+  },
+autoScroll : true,
+xtype : "form",
+frame : true,
+buttons : [{
+		text:'Ok',
+		scope:this,
+		handler:function() {
+			var values = scope.items.first().form.getValues();
+			scope.close();
+			var config = {layout:'border',items:[]};
+			config.items.push({region:'center',title:values.title_center||null});
+			Ext.each(['north','south','west','east'], function(r) {
+				if (values['active_'+r]) {
+					config.items.push({
+						region        : r,
+						title         : values['title_'+r]||null,
+						width         : parseInt(values['width_'+r], 10)||null,
+						height        : parseInt(values['height_'+r], 10)||null,
+						split         : (values['split_'+r]?true:null),
+						collapsible   : (values['collapsible_'+r]?true:null),
+						titleCollapse : (values['titleCollapse_'+r]?true:null)
+					});
+				}
+			});
+			//if (parent) { parent.layout = 'fit'; }
+			scope.callback(config);
+		}
+	},{
+		text:'Cancel',
+		handler:function() {scope.close();}
+	}],
+defaults : {
+		style:"margin:2px"
+	},
+items : [{
+    xtype : "fieldset",
+    title : "Center",
+    autoHeight : true,
+    items : [{
+        xtype : "textfield",
+        fieldLabel : "Title",
+        name : "title_center",
+        width : 299
+      }],
+    style : "margin:2px",
+    bodyStyle : "{margin: 0 0 -4;}"
+  },{
+    xtype : "fieldset",
+    title : "Add north region",
+    autoHeight : true,
+    checkboxToggle : true,
+    collapsed : true,
+    checkboxName : "active_north",
+    items : [{
+        xtype : "textfield",
+        fieldLabel : "Title",
+        name : "title_north",
+        width : 299
+      },{
+        layout : "table",
+        items : [{
+            layout : "form",
+            items : [{
+                xtype : "numberfield",
+                fieldLabel : "Height (px)",
+                name : "height_north",
+                allowDecimals : false,
+                allowNegative : false,
+                width : 66
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "split_north",
+                boxLabel : "Split"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "collapsible_north",
+                boxLabel : "Collapsible"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "titleCollapse_north",
+                boxLabel : "TitleCollapse"
+              }]
+          }]
+      }],
+    style : "margin:2px",
+    bodyStyle : "{margin: 0 0 -4;}"
+  },{
+    xtype : "fieldset",
+    title : "Add south region",
+    autoHeight : true,
+    checkboxToggle : true,
+    collapsed : true,
+    checkboxName : "active_south",
+    items : [{
+        xtype : "textfield",
+        fieldLabel : "Title",
+        name : "title_south",
+        width : 299
+      },{
+        layout : "table",
+        items : [{
+            layout : "form",
+            items : [{
+                xtype : "numberfield",
+                fieldLabel : "Height (px)",
+                name : "height_south",
+                allowDecimals : false,
+                allowNegative : false,
+                width : 66
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "split_south",
+                boxLabel : "Split"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "collapsible_south",
+                boxLabel : "Collapsible"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "titleCollapse_south",
+                boxLabel : "TitleCollapse"
+              }]
+          }]
+      }],
+    style : "margin:2px",
+    bodyStyle : "{margin: 0 0 -4;}"
+  },{
+    xtype : "fieldset",
+    title : "Add west region",
+    autoHeight : true,
+    checkboxToggle : true,
+    collapsed : true,
+    checkboxName : "active_west",
+    items : [{
+        xtype : "textfield",
+        fieldLabel : "Title",
+        name : "title_west",
+        width : 299
+      },{
+        layout : "table",
+        items : [{
+            layout : "form",
+            items : [{
+                xtype : "numberfield",
+                fieldLabel : "Width (px)",
+                name : "width_west",
+                allowDecimals : false,
+                allowNegative : false,
+                width : 66
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "split_west",
+                boxLabel : "Split"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "collapsible_west",
+                boxLabel : "Collapsible"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "titleCollapse_west",
+                boxLabel : "TitleCollapse"
+              }]
+          }]
+      }],
+    style : "margin:2px",
+    bodyStyle : "{margin: 0 0 -4;}"
+  },{
+    xtype : "fieldset",
+    title : "Add east region",
+    autoHeight : true,
+    checkboxToggle : true,
+    collapsed : true,
+    checkboxName : "active_east",
+    items : [{
+        xtype : "textfield",
+        fieldLabel : "Title",
+        name : "title_east",
+        width : 299
+      },{
+        layout : "table",
+        items : [{
+            layout : "form",
+            items : [{
+                xtype : "numberfield",
+                fieldLabel : "Width (px)",
+                name : "width_east",
+                allowDecimals : false,
+                allowNegative : false,
+                width : 66
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "split_east",
+                boxLabel : "Split"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "collapsible_east",
+                boxLabel : "Collapsible"
+              }]
+          },{
+            layout : "form",
+            hideLabels : true,
+            style : "margin-left:10px",
+            items : [{
+                xtype : "checkbox",
+                name : "titleCollapse_east",
+                boxLabel : "TitleCollapse"
+              }]
+          }]
+      }],
+    style : "margin:2px",
+    bodyStyle : "{margin: 0 0 -4;}"
+  }]
+}

@@ -1,21 +1,24 @@
 TODO
  - Add Grid Wirzard
- - Make toolbox global if required, so only one exits by screen
+ - Make toolbox supporting tabpanel, so only one exits by multiple tabs designs
  - Implement support for a code repository
  - Multiple select to change one or more items in one go
  - In line editing of labels (fieldlabel,title,label)
 ==> Problems after creating GUID 2.1 
  - When root element is not container and multiple items are dropped convert it into container
  - Problem with settings values of mixed compenents, only code when is real code
- - Still posible to add two forms in each other
+ - Still posible to add two forms in each other, change second form to form layout
  - Drop element when not allowed, element is removed
- - Clean up wizards
  - Update documentation
  - JSON Path should always be relative, directory protection
- - Test php files
- - Label is not selected after alter
  - Add warning when adding second item to root
- 
+ - Update subversion documentation path and files
+ - Grid editors do not work good
+ - Fix json and created test when using " " + " " 
+ - Add delete option under file control
+ - Allow multiple base directroy under file control
+ - Sort file list
+
  Change History:
  Version 2.1.0:
   + A compressed version of designer is added (Ext.ux.guid.plugin.Desginer-all.js) 
@@ -38,7 +41,10 @@ TODO
   + A simple loader for javascript and stylesheets is added (require)
   + Third party design elements can be configured (componentFiles) to be added to Components tree
   + Components can be ExtJs version dependend, just set isVersion in component config.
-  * Fixed tabpanel support
+  + Wizard are now stored in wizard directory in json format.
+  + Added code to allow tabpanel selection
+  * a label is now selectable from code tree
+  * Fixed problem with PHPFileControl not reloading directory
   * Fixed error this.el not defined in firefox
   * Changed seperator of required_js and required_css to ;
   * Fixed when removing all properties of node also the node is removed

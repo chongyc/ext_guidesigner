@@ -11,4 +11,12 @@
         fieldLabel : "Color"
       }
   }]
+},{
+ text : "Wizard",
+ cls  : "folder",
+ childeren : [{
+   text : "Wizard",
+   qtip : "Wizard",
+   wizard : "json/tabpanel-wiz.json"
+ }]
 }]

@@ -1,5 +1,5 @@
 /*global Ext document */
-/*  
+/*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -18,35 +18,35 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-  
+
 /**
  * JsonWindow implements a way to load a json directly into a window
- * The window config elements of this window for example x,y can be set 
+ * The window config elements of this window for example x,y can be set
  * by specifing the values in the json tag
  * @type component
  */
 Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
-  
+
  //@private Layout is by default fit
  layout: 'fit',
- 
+
  //@private Border is by default false
  border: false,
- 
+
  //@private Whe only read a JSON file once
  single:true,  //only needed once
- 
+
  //@private The json parser used is set in initComponent
- json : null, 
+ json : null,
  /**
-  * @private Init the JSON Panel making sure caching is set depending on disableCaching 
+  * @private Init the JSON Panel making sure caching is set depending on disableCaching
   */
  initComponent : function(){
    if (this.autoLoad) {
      if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
      if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
-   }                
-   this.json = new Ext.ux.Json({scope:this.scope || this});   
+   }
+   this.json = new Ext.ux.Json({scope:this.scope || this});
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel
@@ -68,34 +68,38 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
    });
    Ext.ux.JsonWindow.superclass.initComponent.call(this);
  },
- 
+
  /**
   * Set the x position of window
-  * @param x {number} the postion in pixels
+  * @param {number} x the postion in pixels
   */
  setX : function(x) {
    this.setPosition(x,this.y);
  },
- 
+
  /**
   * Set the y position of window
-  * @param y {number} the postion in pixels
+  * @param {number} Y the postion in pixels
   */
  setY : function(y) {
     this.setPosition(this.x,y);
  },
- 
+
  //@private internal function to call allignTo with array
  setAlignTo : function(arg) {
-   this.alignTo(arg[0],arg[1],arg[2]);
+   if (this.rendered) this.alignTo(arg[0],arg[1],arg[2]);
  },
- 
+
  //@private internal function to call anchorTo with array
  setAnchorTo : function(arg) {
    this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
  },
- 
-  
+
+ setListeners : function(listeners) {
+   this.on(listeners);
+ },
+
+
  /**
   * @private We override the render function of the panel, so that the updater.renderer is changed to accept JSON
   * @param {Component} ct The component to render
@@ -114,24 +118,33 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
      if (this.loadMask && this.ownerCt)
        this.ownerCt.el.mask(this.loadMsg, this.msgCls);
   }.createDelegate(this));
-  
+
   um.setRenderer({render:
        function(el, response, updater, callback){
-     //add item configs to the panel layout
-        //Load the code to check if we should javascripts
-        this.fireEvent('beforejsonload', response);
-        try { 
-          //this.applyJson(response.responseText); 
-          this.json.apply(this,response.responseText);
-          this.fireEvent('afterjsonload');
-          if(callback) {callback();}
-        } catch (e) {
-          if (this.fireEvent('failedjsonload',response,e)!==true)
-             Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
-        }
-      }.createDelegate(this)
-    });  
-  }
+         this.apply(response.responseText,callback);
+       }.createDelegate(this)
+    });
+  },
+
+ /**
+  * Apply a json configuration to this window
+  * @param {String} cfg A string containing a json configuration
+  * @param {Function} callback A callback function called after succesfull apply
+  * @returns {Boolean} True when apply was successfull otherwise false
+  */
+ apply : function(cfg,callback) {
+   this.fireEvent('beforejsonload', cfg);
+	 try {
+		 this.json.apply(this,cfg);
+		 this.fireEvent('afterjsonload');
+		 if(callback) {callback();}
+		 return true;
+	 } catch (e) {
+		 if (this.fireEvent('failedjsonload',cfg,e)!==true)
+				Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
+	   return false;
+	 }
+ }
 
 });
 

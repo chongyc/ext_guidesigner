@@ -18,8 +18,7 @@
   */
 { json: {
    title : 'Toolbox',
-   width : 245,
-   height: 350,
+   size : {width : 245, height: 350} ,
    alignTo: [document,'br-br'],
    //Function used within json which must be there in order to use designer to desgin
    "scope.!on" : Ext.emptyFn,
@@ -36,6 +35,7 @@
    "scope.!visualResize" : Ext.emptyFn,
    "scope.!findByJsonId" : Ext.emptyFn,
    "scope.!fireEvent"   : Ext.emptyFn,
+   "scope.!errorHandler": Ext.emptyFn,
    "scope.!fileControl" : null,
 
    //From here on normal code stuff
@@ -146,11 +146,12 @@
             tooltip : 'Show design in window',
             hidden  : !scope.enableShow,
             handler : function(){
-              var cfg = scope.getConfig();
+              var cfg = scope.getCode();
               //Clear scope so tabindexed and id's are cleared
               scope.setConfig({});
+              var self = scope;
               try {
-              var w = new Ext.Window(Ext.apply({
+              var w = new Ext.ux.JsonWindow({
                     title  : 'Show Config',
                     border  : false,
                     layout  : 'fit',
@@ -160,14 +161,14 @@
                     modal       : true,
                     maximizable : true,
                     closeAction : 'close',
-                    items       : cfg,
                     listeners   : { 'beforeclose' : function(){
                          //Restore the tabindex and other stuff
-                         scope.undo();
+                         self.undo();
                     }}
-                    },cfg.json));
-                w.show();
-               } catch (e) {
+                    });
+                w.json.on('error',scope.errorHandler,this);
+                if (w.apply(cfg)) w.show();
+             } catch (e) {
                  Ext.Msg.alert('Error','Design contains error and cannot be display');
                  scope.undo();
                }
@@ -201,22 +202,22 @@
             plugins : {
               //Create an error handler
               init : function(cmp) {
-               var errorHandler = function(type,exception) {
+               scope.errorHandler = function(type,exception) {
                  if (cmp.errorCount==0) cmp.setVisible(true);
                  cmp.errorCount++;
                  var curdate = new Date();
-                 var time    = (curdate.getHours()<10 ? "0" : "") + curdate.getHours() + ':' + 
+                 var time    = (curdate.getHours()<10 ? "0" : "") + curdate.getHours() + ':' +
                                (curdate.getMinutes()<10 ? "0" : "") + curdate.getMinutes() + ':' +
-                               (curdate.getSeconds()<10 ? "0" : "") + curdate.getSeconds();          
+                               (curdate.getSeconds()<10 ? "0" : "") + curdate.getSeconds();
                  cmp.errors.unshift('<i>' + time + '</i> <b>' + type + '</b> : ' + (exception ? exception.message ||exception : exception));
                  while (cmp.errors.length>cmp.maxErrors) {cmp.errors.pop();}
                  cmp.errorText.setText(cmp.errors.join('<br>'),false);
                  cmp.setTooltip('<font color="red">' + cmp.errors[0] + '</font>');
                  return false;
                };
-               scope.on('error',errorHandler,scope);
+               scope.on('error',scope.errorHandler,scope);
               }
-            }, 
+            },
             handler : function(){
               var cmp = Ext.getCmp(scope.ErrorId);
               var tab = Ext.getCmp(scope.TabId);

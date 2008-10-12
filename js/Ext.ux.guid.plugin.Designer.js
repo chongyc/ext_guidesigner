@@ -93,12 +93,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @private Internal array with all files with property defintions to load
    */
   propertyDefinitions : ['js/Ext.ux.guid.plugin.Designer.Properties.json'],
-  
+
   /**
    * An array of files with additional components
    */
   componentFiles : null,
-  
+
   /**
    *@private Internal array with all files with components to load
    */
@@ -540,7 +540,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   getCode : function(el) {
    return this.encode(this.getConfig(el));
   },
-  
+
  /**
    * Function require is used to checks if the required files are loaded
    * when not the files are loaded. Loaded files are added to required_js and required_css
@@ -567,7 +567,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        var a = cfg.json && cfg.json.required_js ? cfg.json.required_js.split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(a[i]);
        if (ret.js.length!=0) o.required_js=cfg.json.required_js=ret.js.join(';');
-       a = cfg.json && cfg.json.required_css ? cfg.json.required_css.split(';') :[];         
+       a = cfg.json && cfg.json.required_css ? cfg.json.required_css.split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(a[i]);
        if (ret.css.length!=0) o.required_css=cfg.json.required_css=ret.css.join(';');
        cfg[this.jsonId+"json"]=myEncoder.encode(o);
@@ -575,7 +575,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return ret;
   },
-  
+
   /**
    * Get the config of the specified element
    * @param {Element} el The element for which to get the config object
@@ -611,8 +611,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return el.codeConfig || el.initialConfig;
   },
-
-  scope : {'test' : 'dummy'},
 
   /**
    * Set the config to the design element
@@ -696,7 +694,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return  false;
   },
-  
+
 
   /**
    * Select a designElement
@@ -723,12 +721,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
               tab.codeConfig.activeTab=i;
               tab.doLayout();
               return;
-            }         
+            }
           }
         }
-       searchTab(this.getContainer(cmp.ownerCt),cmp);      
+       searchTab(this.getContainer(cmp.ownerCt),cmp);
       }.createDelegate(this);
-      searchTab(cmp,null);  
+      searchTab(cmp,null);
       if (this.propertyGrid) {
         this.propertyFilter();
         this.propertyGrid.enable();
@@ -888,7 +886,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     data.drop = null;
     return false;
   },
- 
+
 
   /**
    * Called when a element is dropped on the component
@@ -968,7 +966,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         if (this.components.indexOf(this.componentFiles[i])==-1)
           this.components.push(this.componentFiles[i]);
       }
-      
+
       var proxy = new Ext.ux.data.HttpMergeProxy(this.propertyDefinitions);
       this.properties = new Ext.data.JsonStore({
           proxy : proxy, //Needed for Ext2.2
@@ -1009,7 +1007,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     //Now show or hide the toolbox
     if (visible || visible === true) {
-      if (this.fireEvent('beforeshow',this._toolbox)) {        
+      if (this.fireEvent('beforeshow',this._toolbox)) {
         this._toolbox.show();
         this._toolbox.doLayout();
       }
@@ -1034,7 +1032,7 @@ Ext.override(Ext.form.Label, {
             }
             //Swap the ids, so it becomes selectable in designer
             this.el.id = this.id;
-            this.id = this.id + '-';
+            this.id = this.id;
         }
         Ext.form.Label.superclass.onRender.call(this, ct, position);
     },
