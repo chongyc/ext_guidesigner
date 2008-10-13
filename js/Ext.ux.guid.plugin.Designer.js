@@ -451,6 +451,17 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
      //Get the config of the items
      var ccmp,cmp= this.getDesignElement(el,true);
      var items = this.editable(Ext.applyIf(this.clone(config),extraConfig || {}));
+     //Transform a config to prevent errors
+     var transformAppend = function(cmp,last){
+       if (!cmp) return;
+       //Transform form to layout if allready contained
+       if (items.xtype=='form' && cmp instanceof Ext.form.FormPanel) {
+         delete items.xtype;
+         items.layout='form';
+       }
+       transformAppend(this.getContainer(cmp.ownerCt),cmp);
+     }.createDelegate(this);
+     transformAppend(cmp);
      //Find the container that should be changed
      ccmp = this.getContainer(cmp);
      switch (dropLocation) {
@@ -710,9 +721,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.resizeLayer.resizer.dd.lock();
     this.activeElement = cmp;
     if (cmp) {
-      //Search and select tabpanel
-      var searchTab = function(cmp,last) {
+      //Search parent and select tabpanel
+      var selectParent = function(cmp,last) {
         if (!cmp) return;
+        //TabPanel check
         var tab = (cmp instanceof Ext.TabPanel) ? cmp : null
         if (tab) {
            if (last && last!=tab.getActiveTab()) tab.setActiveTab(last);
@@ -720,13 +732,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
              if (tab.items.items[i]==tab.getActiveTab() && tab.codeConfig.activeTab!=i) {
               tab.codeConfig.activeTab=i;
               tab.doLayout();
-              return;
             }
           }
         }
-       searchTab(this.getContainer(cmp.ownerCt),cmp);
+       selectParent(this.getContainer(cmp.ownerCt),cmp);
       }.createDelegate(this);
-      searchTab(cmp,null);
+      selectParent(cmp,null);
       if (this.propertyGrid) {
         this.propertyFilter();
         this.propertyGrid.enable();
