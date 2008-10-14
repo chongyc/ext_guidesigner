@@ -54,15 +54,17 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
        if (Ext.isVersion(childeren[i].isVersion)) {
          if (childeren[i].wizard) { //Check if whe should create a wizard config
            var wizard = childeren[i].wizard;
-           childeren[i]['config'] = function(callback) {
-             new Ext.ux.JsonWindow({
-                x     : -1000, // Window is hidden by moving X out of screen
-                y     : -1000, //Window is hidden by moving Y out of screen
-                autoLoad : wizard,
-                callback : callback,
-                modal       : true
-             }).show();
-           };
+           var code="";
+           code+="childeren[i]['config'] = function(callback) {\n";
+           code+="  new Ext.ux.JsonWindow({\n";
+           code+="     x     : -1000,\n"; // Window is hidden by moving X out of screen
+           code+="     y     : -1000,\n"; //Window is hidden by moving Y out of screen
+           code+="     autoLoad : '"+wizard+"',\n";
+           code+="     callback : callback,\n";
+           code+="     modal       : true\n";
+           code+="  }).show();\n";
+           code+="};\n";
+           eval(code);
          }
          var n = this.createNode(childeren[i]);
          if(n) node.appendChild(n);
