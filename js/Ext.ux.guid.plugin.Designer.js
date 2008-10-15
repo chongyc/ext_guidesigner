@@ -1000,11 +1000,16 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       this.toolboxTarget = Ext.getCmp(this.toolboxTarget);
       if (this.toolboxTarget){
         this._toolbox = this.toolboxTarget;
+        //Override JsonPanel when setting title we update container title
         this._toolbox.add(new Ext.ux.JsonPanel({
             autoLoad:this.toolboxJson,
             disableCaching :this.disableCaching,
-            scope   : this })
-        );
+            scope   : this,
+            setTitle : function(title,optional){
+              this.scope.toolboxTarget.setTitle(title,optional)
+            }
+         })
+       );
       } else {
         this._toolbox = new Ext.ux.JsonWindow({
             x     : -1000, // Window is hidden by moving X out of screen

@@ -81,6 +81,14 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
     'failedjsonload' : false
    });
  },
+ 
+ /**
+  * Add support for listeners form the json
+  * @param {Array} listeners A array of objects containing the listeners to connect
+  */
+ setListeners : function(listeners) {
+   this.on(listeners);
+ },
 
 
  /**
@@ -90,36 +98,43 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
   */
  onRender : function(ct, position){
   Ext.ux.JsonPanel.superclass.onRender.call(this, ct, position);
-  var um = this.getUpdater();
-  um.showLoadIndicator = false; //disable it.
-  um.on('failure',function(el, response){
-    if (this.ownerCt) this.ownerCt.el.unmask();
-    this.fireEvent('failedjsonload',response)
-  }.createDelegate(this));
-  um.on('beforeupdate',function(el, url, params) {
-   if (this.loadMask && this.ownerCt)
-     this.ownerCt.el.mask(this.loadMsg, this.msgCls);
-  }.createDelegate(this));
+   var um = this.getUpdater();
+   um.showLoadIndicator = false; //disable it.
+   um.on('failure',function(el, response){
+       if (this.ownerCt) this.ownerCt.el.unmask();
+       this.fireEvent('failedjsonload',response)
+     }.createDelegate(this));
+     um.on('beforeupdate',function(el, url, params) {
+      if (this.loadMask && this.ownerCt)
+        this.ownerCt.el.mask(this.loadMsg, this.msgCls);
+   }.createDelegate(this));
  
-  um.setRenderer({render:
-       function(el, response, updater, callback){
-     //add item configs to the panel layout
-        //Load the code to check if we should javascripts
-        this.fireEvent('beforejsonload', response);
-        try { 
-         // this.applyJson(response.responseText);           
-          this.json.apply(this,response.responseText);
-          this.fireEvent('afterjsonload');
-          this.ownerCt.el.unmask();
-
-          if(callback) {callback();}
-        } catch (e) {
-          this.ownerCt.el.unmask();
-          if (!this.fireEvent('afterjsonload',response,e))
-             Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
-        }
-      }.createDelegate(this)
-    });  
+   um.setRenderer({render:
+        function(el, response, updater, callback){
+          this.apply(response.responseText,callback);
+        }.createDelegate(this)
+     });
+   },
+   
+  /**
+   * Apply a json configuration to this window
+   * @param {String} cfg A string containing a json configuration
+   * @param {Function} callback A callback function called after succesfull apply
+   * @returns {Boolean} True when apply was successfull otherwise false
+   */
+  apply : function(cfg,callback) {
+    this.fireEvent('beforejsonload', cfg);
+    try {
+      this.json.apply(this,cfg);
+      this.fireEvent('afterjsonload');
+      if(callback) {callback();}
+      return true;
+    } catch (e) {
+      if (this.json.fireEvent('error','failedjsonload',e) &&
+          this.fireEvent('failedjsonload',cfg,e))
+         Ext.Msg.alert('Failure','Failed to decode load Json:' + e.message)
+      return false;
+    }
   }
 
 });

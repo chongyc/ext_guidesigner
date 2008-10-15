@@ -17,8 +17,8 @@
   * Donations are welcomed: http://donate.webblocks.eu
   */
 { json: {
-   title : 'Toolbox',
-   size : {width : 245, height: 350} ,
+   title : ('GuiDesigner (' + scope.version  + ')'),
+   size : scope.dockedMode ? {width : "100%", height : "100%"} : {width : 245, height: 350} ,
    alignTo: [document,'br-br'],
    //Function used within json which must be there in order to use designer to desgin
    "scope.!on" : Ext.emptyFn,
@@ -54,10 +54,9 @@
       xtype : 'tabpanel',
       id    : scope.TabId,
       activeTab : 0,
-      region:"north",
+      region:"center",
       border:false,
-      height:150,
-      split:true,
+      minHeight : 150,
       layoutConfig:{
         activeOnTop:false,
         animate:false,
@@ -530,9 +529,12 @@
         }]
       },{
         xtype : 'guidpropertygrid',
-        region: 'center',
+        region: 'south',
         disabled: true,
         border  : false,
+        minHeight : 150,
+        split:true,
+        height:170,   
         propertyTypes : scope.properties,
         source : {},
         listeners : {

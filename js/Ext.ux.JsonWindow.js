@@ -94,7 +94,11 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
  setAnchorTo : function(arg) {
    this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
  },
-
+ 
+ /**
+  * Add support for listeners form the json
+  * @param {Array} listeners A array of objects containing the listeners to connect
+  */
  setListeners : function(listeners) {
    this.on(listeners);
  },

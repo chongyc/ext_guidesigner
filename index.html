@@ -65,16 +65,19 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
  var windowMode = Ext.ux.UTIL.getUrlAction('window',false); //Change this flag to true if you want designer to be a window
  var phpSupport; // Flag is set in index.php to indicate whe support PHP
  var designer; //Variable used to save the designer plugin
+ var docked = Ext.ux.UTIL.getUrlAction('docked');
 
  //Items is the array with the designer area
- var items = Ext.ux.UTIL.getUrlAction('docked')
+ var items = docked
       ? [{ region : 'west',
 	       layout : 'fit',
+	       collapsible : true,
+		   split : true,
 	       border : false,
 	       id     : 'toolbox',
 	       xtype  : 'panel',
-	       title  : 'toolbox',
-	       width  : 215
+	       title  : 'GuiDesigner',
+	       width  : 237
 	     }]
 	  : [];
   items.push({
@@ -91,6 +94,7 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 				 plugins : [
 				    designer = new Ext.ux.guid.plugin.Designer({
 				      componentFiles : ['js/ThirdParty.Components.json'],
+				      dockedMode    : docked,
 					  evalException : false,
 					  toolboxTarget : 'toolbox',
 					  disableCaching : true,
