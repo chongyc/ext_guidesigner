@@ -10,10 +10,9 @@
 	var ua = navigator.userAgent;
 	var ts = (new Date).getTime(); // timestamp to avoid cache
 	var lh = location.href;
-	
 	if(ua.match('MSIE')) engine = 'msie';
-	else if(ua.match('KHTML')) engine = 'khtml'; 
-	else if(ua.match('Opera')) engine = 'opera'; 
+	//else if(ua.match('KHTML')) engine = 'khtml';
+	else if(ua.match('Opera')) engine = 'opera';
 	else if(ua.match('Gecko')) engine = 'gecko';
 
 	if(lh.match('language=')) language = lh.replace(/.*language=(.*?)(&.*)?$/,'$1');
