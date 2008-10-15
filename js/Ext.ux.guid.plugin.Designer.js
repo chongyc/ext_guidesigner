@@ -116,7 +116,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   licenseText  :  "/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */",
 
   //@private The version of the designer
-  version : '2.1.0',
+  version : '2.1.0-RC1',
 
   //@private The id for button undo
   undoBtnId  : Ext.id(),

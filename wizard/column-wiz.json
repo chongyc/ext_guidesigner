@@ -14,129 +14,129 @@
  },
  xtype:"form",
  frame:true,
-    buttons:[{
-		text:'Ok',
-		scope:this,
-		handler:function() {
-			var values = scope.items.first().form.getValues();
-			scope.close();
-			var config = {layout:'column',items:[]};
-			Ext.each([1,2,3,4,5,6], function(r) {
-				if (values['active_'+r]) {
-					var item = {title:values['title_'+r]||null};
-					var widthVal = values['size_'+r];
-					var width = parseInt(widthVal,10);
-					if (!isNaN(width)) {
-						if (widthVal[widthVal.length-1] == '%') {
-				      item.columnWidth = width/100;
-						} else {
-				      item.width = width;
-						}
-					}
-					config.items.push(item);
-				}
-	  	});
-			scope.callback.(config);
+ buttons:[{
+   text:'Ok',
+   scope:this,
+   handler:function() {
+    var values = scope.items.first().form.getValues();
+    scope.close();
+    var config = {layout:'column',items:[]};
+    Ext.each([1,2,3,4,5,6], function(r) {
+      if (values['active_'+r]) {
+        var item = {title:values['title_'+r]||null};
+        var widthVal = values['size_'+r];
+        var width = parseInt(widthVal,10);
+        if (!isNaN(width)) {
+          if (widthVal[widthVal.length-1] == '%') {
+            item.columnWidth = width/100;
+          } else {
+            item.width = width;
+          }
+        }
+        config.items.push(item);
+      }
+    });
+    scope.callback(config);
    }
-	},{
-		text:'Cancel',
-		handler:function() {scope.close();}
+  },{
+    text:'Cancel',
+    handler:function() {scope.close();}
  }],
  items:[{
-	  columns:"3",
-	  layout:"table",
-	  layoutConfig:{
-	    columns:3
-	  },
-	  defaults:{
-	    style:"margin:2px"
-	  },
-	  items:[{
-	      title :"Column",
-	      style : "margin:1px;"
-	    },{
-	      title:"Size *",
-	      style : "margin:1px;"
-	    },{
-	      title:"Title **",
-	      style : "margin:1px;"
-	    },{
-	      xtype:"checkbox",
-	      style : "margin-left:25px;",
-	      name:'active_1'
-	    },{
-	      xtype:"textfield",
-	      maskRe:/[0-9%]/,
-	      width:60,
-	      name:'size_1',
-	      id : scope.firstFocus
-	    },{
-	      xtype:"textfield",
-	      name:'title_1'
-	    },{
-	      xtype:"checkbox",
-	      style : "margin-left:25px;",
-	      name:'active_2'
-	    },{
-	      xtype:"textfield",
-	      maskRe:/[0-9.%]/,
-	      width:60,
-	      name:'size_2'
-	    },{
-	      xtype:"textfield",
-	      name:'title_2'
-	    },{
-	      xtype:"checkbox",
-	      style : "margin-left:25px;",
-	      name:'active_3'
-	    },{
-	      xtype:"textfield",
-	      maskRe:/[0-9.%]/,
-	      width:60,
-	      name:'size_3'
-	    },{
-	      xtype:"textfield",
-	      name:'title_3'
-	    },{
-	      xtype:"checkbox",
-	      style : "margin-left:25px;",
-	      name:'active_4'
-	    },{
-	      xtype:"textfield",
-	      maskRe:/[0-9.%]/,
-	      width:60,
-	      name:'size_4'
-	    },{
-	      xtype:"textfield",
-	      name:'title_4'
-	    },{
-	      xtype:"checkbox",
-	      style : "margin-left:25px;",
-	      name:'active_5'
-	    },{
-	      xtype:"textfield",
-	      maskRe:/[0-9.%]/,
-	      width:60,
-	      name:'size_5'
-	    },{
-	      xtype:"textfield",
-	      name:'title_5'
-	    },{
-	      xtype:"checkbox",
-	      style : "margin-left:25px;",
-	      name:'active_6'
-	    },{
-	      xtype:"textfield",
-	      maskRe:/[0-9.%]/,
-	      width:60,
-	      name:'size_6'
-	    },{
-	      xtype:"textfield",
-	      name:'title_6'
-	    }]
-	},{
-	  html:("* Size&nbsp;&nbsp;: can be a percentage of total width (i.e. 33%),<br/>"+
-	        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a fixed with (i.e. 120), or empty (autosize)<br/>"+
-	        "** Title : not set if empty")
-	}]
+    columns:"3",
+    layout:"table",
+    layoutConfig:{
+      columns:3
+    },
+    defaults:{
+      style:"margin:2px"
+    },
+    items:[{
+        title :"Column",
+        style : "margin:1px;"
+      },{
+        title:"Size *",
+        style : "margin:1px;"
+      },{
+        title:"Title **",
+        style : "margin:1px;"
+      },{
+        xtype:"checkbox",
+        style : "margin-left:25px;",
+        name:'active_1'
+      },{
+        xtype:"textfield",
+        maskRe:/[0-9%]/,
+        width:60,
+        name:'size_1',
+        id : scope.firstFocus
+      },{
+        xtype:"textfield",
+        name:'title_1'
+      },{
+        xtype:"checkbox",
+        style : "margin-left:25px;",
+        name:'active_2'
+      },{
+        xtype:"textfield",
+        maskRe:/[0-9.%]/,
+        width:60,
+        name:'size_2'
+      },{
+        xtype:"textfield",
+        name:'title_2'
+      },{
+        xtype:"checkbox",
+        style : "margin-left:25px;",
+        name:'active_3'
+      },{
+        xtype:"textfield",
+        maskRe:/[0-9.%]/,
+        width:60,
+        name:'size_3'
+      },{
+        xtype:"textfield",
+        name:'title_3'
+      },{
+        xtype:"checkbox",
+        style : "margin-left:25px;",
+        name:'active_4'
+      },{
+        xtype:"textfield",
+        maskRe:/[0-9.%]/,
+        width:60,
+        name:'size_4'
+      },{
+        xtype:"textfield",
+        name:'title_4'
+      },{
+        xtype:"checkbox",
+        style : "margin-left:25px;",
+        name:'active_5'
+      },{
+        xtype:"textfield",
+        maskRe:/[0-9.%]/,
+        width:60,
+        name:'size_5'
+      },{
+        xtype:"textfield",
+        name:'title_5'
+      },{
+        xtype:"checkbox",
+        style : "margin-left:25px;",
+        name:'active_6'
+      },{
+        xtype:"textfield",
+        maskRe:/[0-9.%]/,
+        width:60,
+        name:'size_6'
+      },{
+        xtype:"textfield",
+        name:'title_6'
+      }]
+  },{
+    html:("* Size&nbsp;&nbsp;: can be a percentage of total width (i.e. 33%),<br/>"+
+          "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a fixed with (i.e. 120), or empty (autosize)<br/>"+
+          "** Title : not set if empty")
+  }]
 }

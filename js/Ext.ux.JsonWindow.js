@@ -134,16 +134,17 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
   */
  apply : function(cfg,callback) {
    this.fireEvent('beforejsonload', cfg);
-	 try {
-		 this.json.apply(this,cfg);
-		 this.fireEvent('afterjsonload');
-		 if(callback) {callback();}
-		 return true;
-	 } catch (e) {
-		 if (this.fireEvent('failedjsonload',cfg,e)!==true)
-				Ext.Msg.alert('Failure','Failed to decode load Json:' + e)
-	   return false;
-	 }
+   try {
+     this.json.apply(this,cfg);
+     this.fireEvent('afterjsonload');
+     if(callback) {callback();}
+     return true;
+   } catch (e) {
+     if (this.json.fireEvent('error','failedjsonload',e) &&
+         this.fireEvent('failedjsonload',cfg,e))
+        Ext.Msg.alert('Failure','Failed to decode load Json:' + e.message)
+     return false;
+   }
  }
 
 });

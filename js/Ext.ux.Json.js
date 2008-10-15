@@ -321,7 +321,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      try {
        items = this.jsonId ? this.editable(json) : json || {};
        if (typeof(items) !== 'object') items = this.decode(json);
-       if (items) {
+       if (items && (items instanceof Array || typeof(items)=="object")) {
          if (clean!==false) items = this.clean(items);
          this.fireEvent('beforeapply',el,items);
          //Apply global json vars to element
@@ -340,8 +340,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
          } else {
            this.set(el,items);
          }
-       }
-      if (el.rendered && el.layout && el.layout.layout) el.doLayout();
+        if (el.rendered && el.layout && el.layout.layout) el.doLayout();
+      }      
      } catch (e) {
       if (this.fireEvent('error','apply',e)) throw e;
      } finally {
@@ -568,7 +568,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            //Fix is needed because ie7 does not eval a function directly
            return eval("({fix:" + code+ "})").fix;
          } catch (e) {
-           e = new SyntaxError('Invalid code: ' + code + ' (' + e + ')' );
+           e = new SyntaxError('Invalid code: ' + code + ' (' + e.message + ')' );
            if (self.fireEvent('error','codeEval',e) && evalException) throw e;
            return code;
          }
