@@ -13,6 +13,7 @@ TODO
  - Fix json and created test when using " " + " " 
  - Allow multiple base directroy under file control
  - Sort file list
+ - Google Chrome is not supported, no drag drop in editor, not codepress
 
  Change History:
  Version 2.1.0:

@@ -332,7 +332,7 @@
                    iconCls : 'icon-deleteEl',
                    scope   : this,
                    handler : function(item) {
-                       scope.removeElement(contextMenu.node.element);
+                       scope.removeElement(contextMenu.element);
                      }
                  },{
                    text    : 'Duplicate this element',
