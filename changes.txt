@@ -14,6 +14,8 @@ TODO
  - Allow multiple base directroy under file control
  - Sort file list
  - Google Chrome is not supported, no drag drop in editor, not codepress
+ - Delete property from grid does not trigger undo
+ - Refresh file does not work on ie
 
  Change History:
  Version 2.1.0:

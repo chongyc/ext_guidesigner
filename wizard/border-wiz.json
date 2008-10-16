@@ -1,45 +1,45 @@
 /* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */
 {
 json : {
-  	title:"New Border Layout",
+    title:"New Border Layout",
     size : {width:480,height:370},
     alignTo : [document,'c-c'],
-	  "scope.!callback" : Ext.emptyFn
+    "scope.!callback" : Ext.emptyFn
   },
 autoScroll : true,
 xtype : "form",
 frame : true,
 buttons : [{
-		text:'Ok',
-		scope:this,
-		handler:function() {
-			var values = scope.items.first().form.getValues();
-			scope.close();
-			var config = {layout:'border',items:[]};
-			config.items.push({region:'center',title:values.title_center||null});
-			Ext.each(['north','south','west','east'], function(r) {
-				if (values['active_'+r]) {
-					config.items.push({
-						region        : r,
-						title         : values['title_'+r]||null,
-						width         : parseInt(values['width_'+r], 10)||null,
-						height        : parseInt(values['height_'+r], 10)||null,
-						split         : (values['split_'+r]?true:null),
-						collapsible   : (values['collapsible_'+r]?true:null),
-						titleCollapse : (values['titleCollapse_'+r]?true:null)
-					});
-				}
-			});
-			//if (parent) { parent.layout = 'fit'; }
-			scope.callback(config);
-		}
-	},{
-		text:'Cancel',
-		handler:function() {scope.close();}
-	}],
+    text:'Ok',
+    scope:this,
+    handler:function() {
+      var values = scope.items.first().form.getValues();
+      scope.close();
+      var config = {layout:'border',items:[]};
+      config.items.push({region:'center',title:values.title_center||null});
+      Ext.each(['north','south','west','east'], function(r) {
+        if (values['active_'+r]) {
+          config.items.push({
+            region        : r,
+            title         : values['title_'+r]||null,
+            width         : parseInt(values['width_'+r], 10)||null,
+            height        : parseInt(values['height_'+r], 10)||null,
+            split         : (values['split_'+r]?true:null),
+            collapsible   : (values['collapsible_'+r]?true:null),
+            titleCollapse : (values['titleCollapse_'+r]?true:null)
+          });
+        }
+      });
+      //if (parent) { parent.layout = 'fit'; }
+      scope.callback(config);
+    }
+  },{
+    text:'Cancel',
+    handler:function() {scope.close();}
+  }],
 defaults : {
-		style:"margin:2px"
-	},
+    style:"margin:2px"
+  },
 items : [{
     xtype : "fieldset",
     title : "Center",
@@ -72,6 +72,7 @@ items : [{
                 xtype : "numberfield",
                 fieldLabel : "Height (px)",
                 name : "height_north",
+                style : "margin:0px;",
                 allowDecimals : false,
                 allowNegative : false,
                 width : 66
@@ -126,6 +127,7 @@ items : [{
             items : [{
                 xtype : "numberfield",
                 fieldLabel : "Height (px)",
+                style : "margin:0px",
                 name : "height_south",
                 allowDecimals : false,
                 allowNegative : false,
@@ -181,6 +183,7 @@ items : [{
             items : [{
                 xtype : "numberfield",
                 fieldLabel : "Width (px)",
+                style : "margin:0px",
                 name : "width_west",
                 allowDecimals : false,
                 allowNegative : false,
@@ -236,6 +239,7 @@ items : [{
             items : [{
                 xtype : "numberfield",
                 fieldLabel : "Width (px)",
+                style : "margin:0px",
                 name : "width_east",
                 allowDecimals : false,
                 allowNegative : false,

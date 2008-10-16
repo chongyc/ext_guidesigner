@@ -60,6 +60,7 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
                 autoLoad : this.wizard,
                 callback : callback,
                 modal       : true
+               //FOR TESTING ,disableCaching : true
              });
              w.json.on('error',function(type,exception){
                   Ext.Msg.alert('Wizard Load Error',type +" " + (typeof(exception)=='object' ? exception.message || exception : exception));
