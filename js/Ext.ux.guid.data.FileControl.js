@@ -33,9 +33,17 @@ Ext.extend(Ext.ux.guid.data.FileControl,Ext.util.Observable,{
   files : {},
   last  : null,
   activeNode : null,
-
+  //@private relative name used for root
+  rootBase : null,
+  urlSupport : false,
+ 
   init : function(){
     this.refreshFiles();
+  },
+  
+  getUrl : function(id){
+    if (!id) id = this.last;
+    return (id && this.urlSupport) ? (this.rootBase ? this.rootBase + "/" + id : id) : null;
   },
 
   refreshFiles : function (callback) {

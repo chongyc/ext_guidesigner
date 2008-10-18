@@ -1,19 +1,19 @@
 TODO
- - Add Grid Wirzard
  - Make toolbox supporting tabpanel, so only one exits by multiple tabs designs
- - Implement support for a code repository
  - Multiple select to change one or more items in one go
  - In line editing of labels (fieldlabel,title,label)
 ==> Problems after creating GUID 2.1 
- - Problem with settings values of mixed compenents, only code when is real code
  - Update documentation
  - JSON Path should always be relative, directory protection
- - Update subversion documentation path and files
- - Grid editors do not work good,  changing boolean does not work
  - Fix json and created test when using " " + " " 
  - Allow multiple base directroy under file control
  - Sort file list
- - Google Chrome is not supported, no drag drop in editor, not codepress
+ - Implement support for a code repository
+ - Add Grid Wirzard
+ - In appendConfig merge the json objects, and delete from new item
+ - Clear should also clear and hide error tab
+ - Problem with codefield for strings, every thing is threaded as code
+ - After clear object decode is wrong (array)
 
  Change History:
  Version 2.1.0:
@@ -41,6 +41,7 @@ TODO
   + Added code to allow tabpanel selection
   + When adding a second form into a form, the second form is transformed into layout
   + ScriptEditor has been replace by CodeField this also resolves a number of bugs in this area
+  + You can drag you saved code to the designer, which will be loaded through JSONPanel or in case when shift key pressed or FileControl is not supporting url data is appended
   * For json editing now also codepress is used
   * a label is now selectable from code tree
   * Fixed problem with PHPFileControl not reloading directory

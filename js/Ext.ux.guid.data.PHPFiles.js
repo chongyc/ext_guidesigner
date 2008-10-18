@@ -24,14 +24,15 @@ Ext.namespace('Ext.ux.guid.data');
  */
 Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
   url : "phpFiles.php",  
-  baseDir : "json",
+  rootBase : "json",
+  urlSupport : true,
     
   refreshFiles : function (callback) {
     Ext.Ajax.request({
       url: this.url,
       params: {
          cmd: 'get_files',
-         baseDir: this.baseDir
+         baseDir: this.rootBase
       },            
       callback: function(options, success, response) {
         this.files= success ? Ext.util.JSON.decode(response.responseText) : {};
@@ -46,7 +47,7 @@ Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
        url: this.url,
        params: {
          cmd: 'save_changes',
-         baseDir: this.baseDir,
+         baseDir: this.rootBase,
          filename: id,
          action: action,
          content: content
@@ -71,7 +72,7 @@ Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
       url: this.url,
       params: {
         cmd: 'get_content',
-        baseDir: this.baseDir,
+        baseDir: this.rootBase,
         filename: id 
       },
       callback: function(options, success, response) {

@@ -448,6 +448,34 @@
             }
           }],
           disabled : scope.fileControl == null,
+          enableDrag: true,
+          dragConfig:{
+            getDragData : function(e){
+              var data = Ext.dd.Registry.getHandleFromEvent(e);
+              if (data && data.node.leaf) {
+               var url = scope.fileControl.getUrl(data.node.attributes.id);
+               if (e.shiftKey || !url) { //Append mode
+                   data.config=function(callback){
+                    scope.fileControl.openFile(this.id,function(success,result){
+                      if (success) {
+                        callback(result);
+                      } else {
+                        Ext.Msg.alert('Error','Could not load file ' + this.id);
+                     }
+                    }.createDelegate(this)); 
+                 }.createDelegate(data.node.attributes);
+               } else { //Insert jsonPanel
+                 data.config=function(callback){
+                   callback({ xtype : "jsonpanel", autoLoad : url });
+                 }.createDelegate(data.node.attributes);
+               }
+               data.processed=false;
+               return data;
+              }
+              return;
+            },
+            ddGroup: 'designerddgroup'
+          },
           animate:true,
           autoScroll:true,
           containerScroll:true,

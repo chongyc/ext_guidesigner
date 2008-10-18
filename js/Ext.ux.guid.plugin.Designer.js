@@ -724,11 +724,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   selectElement : function (el) {
     if (typeof(el)=='string') el = this.findByJsonId(el);
-    var cmp = this.getDesignElement(el);
-    if (cmp && cmp==this.activeElement) return;
-    this.highlightElement(cmp);
+    var cmp = this.highlightElement(this.getDesignElement(el));
     this.resizeLayer.hide();
     this.resizeLayer.resizer.dd.lock();
+    if (cmp && cmp==this.activeElement) return;
     this.activeElement = cmp;
     if (cmp) {
       //Search parent and select tabpanel
@@ -766,7 +765,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    * Highlight a element within the component, removing old highlight
    * @param {Element} el The element to highlight
-   * @return {Boolean} True when element highlighted
+   * @return {Element} The element highlighted
    */
   highlightElement : function (el) {
     //Remove old highlight and drag support
@@ -776,9 +775,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (el) {
       el.addClass("selectedElement");
       if (el.id != this.container.id) el.addClass("designerddgroup");
-      return true;
+      return el;
     }
-    return false;
+    return el;
   },
 
   /**
@@ -828,8 +827,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Object} the drag data
    */
   getDragData : function(e) {
-     var cmp = this.getDesignElement(this.getTarget(e));
-     this.highlightElement(cmp);
+     var cmp = this.highlightElement(this.getDesignElement(this.getTarget(e)));
      var el = e.getTarget('.designerddgroup');
      if (cmp && el) {
         var d = el.cloneNode(true);
@@ -890,8 +888,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   notifyOver : function (src,e,data) {
     if (data.config) {
-      var cmp = this.getDesignElement(this.getTarget(e),true);
-      this.selectElement(cmp);
+      var cmp = this.highlightElement(this.getDesignElement(this.getTarget(e),true));
       var el=cmp.getEl();
       if (data.internal && !e.shiftKey) {
         //Only allow move if not within same container
