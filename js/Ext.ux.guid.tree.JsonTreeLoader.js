@@ -29,6 +29,10 @@ Ext.namespace('Ext.ux.guid.tree');
  * By default the treeNodes are not draggable
  */
 Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
+
+  //@private Should caching of pages be disabled
+  nocache : false,
+
  /**
   * Create node but enabling childeren from Json
   */
@@ -50,6 +54,7 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
             new Ext.tree.TreeNode(attr) );
     } else {
       var node = new Ext.tree.TreeNode(Ext.applyIf(attr,{draggable:false}));
+      var self = this;
       for(var i = 0, len = childeren.length; i < len; i++){
        if (Ext.isVersion(childeren[i].isVersion)) {
          if (childeren[i].wizard) { //Check if whe should create a wizard config
@@ -59,8 +64,8 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
                 y     : -1000, //Window is hidden by moving Y out of screen
                 autoLoad : this.wizard,
                 callback : callback,
-                modal       : true
-               //FOR TESTING ,disableCaching : true
+                modal    : true,
+                nocache  : self.nocache 
              });
              w.json.on('error',function(type,exception){
                   Ext.Msg.alert('Wizard Load Error',type +" " + (typeof(exception)=='object' ? exception.message || exception : exception));

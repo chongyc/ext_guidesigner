@@ -40,7 +40,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * Should caching be disabled when JSON are loaded (defaults false).
    * @type {Boolean}
    @cfg */
-  disableCaching: false,
+   nocache : false,
 
   /**
    * When toolboxTarget is set, this will be used to render toolbox to not window
@@ -113,10 +113,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
 
-  licenseText  :  "/* This file is created or modified with Ext.ux.guid.plugin.GuiDesigner */",
-
+  
   //@private The version of the designer
   version : '2.1.0-RC1',
+
+  //@private The licenseText used
+  licenseText  :  "/* This file is created or modified with \n * Ext.ux.guid.plugin.GuiDesigner (v{0}) \n */",
 
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -135,13 +137,19 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * A file control config item
    */
   fileControl : null,
-
+  
+  /**
+   * Should it use codePress as code editor (defaults true)
+   * @type {Boolean}
+   @cfg */
+  codePress : !Ext.isSafari, //codePress enabled by default when not Safari/Chrome
 
   /**
    * Called from within the constructor allowing to initialize the parser
    */
   initialize: function() {
     Ext.ux.guid.plugin.Designer.superclass.initialize.call(this);
+    this.licenseText=String.format(this.licenseText,this.version);
     Ext.QuickTips.init();
     this.addEvents({
       /**
@@ -236,7 +244,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       // Check if whe have to load a external file
       if (this.autoLoad) {
        if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
-       if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
+       if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.nocache;
        this.loadConfig(this.autoLoad.url);
       }
     }, this);
@@ -334,7 +342,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    * Remove an element
    * @param {Element} source The element to remove
-   * @param {Boolean} internal When true no remove event and redraw is fired (defaults false)
+   * @param {Boolean\String} internal When true no remove event and redraw is fired,
+   * when "noundo" no undo is created (defaults false)
    * @return {Boolean} Indicator telling element was removed
    */
   removeElement : function(source,internal) {
@@ -345,7 +354,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       if (own.items.items[i]==source) {
         own.codeConfig.items.splice(i,1);
         if (own.codeConfig.items.length==0) delete own.codeConfig.items;
-        if (!internal) {
+        if (!internal || internal=="noundo") {
           this.redrawElement(own);
           this.fireEvent('remove');
         } else {
@@ -716,6 +725,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   selectElement : function (el) {
     if (typeof(el)=='string') el = this.findByJsonId(el);
     var cmp = this.getDesignElement(el);
+    if (cmp && cmp==this.activeElement) return;
     this.highlightElement(cmp);
     this.resizeLayer.hide();
     this.resizeLayer.resizer.dd.lock();
@@ -818,11 +828,14 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Object} the drag data
    */
   getDragData : function(e) {
-     var cmp = this.selectElement(this.getTarget(e));
+     var cmp = this.getDesignElement(this.getTarget(e));
+     this.highlightElement(cmp);
      var el = e.getTarget('.designerddgroup');
-     if (el && cmp) {
+     if (cmp && el) {
+        var d = el.cloneNode(true);
+        d.id = Ext.id();
        return {
-         ddel:el,
+         ddel:d,
          config : cmp.initialConfig,
          internal : true,
          source   : cmp
@@ -1003,7 +1016,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         //Override JsonPanel when setting title we update container title
         this._toolbox.add(new Ext.ux.JsonPanel({
             autoLoad:this.toolboxJson,
-            disableCaching :this.disableCaching,
+            nocache :this.nocache,
             scope   : this,
             setTitle : function(title,optional){
               this.scope.toolboxTarget.setTitle(title,optional)
@@ -1015,7 +1028,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
             x     : -1000, // Window is hidden by moving X out of screen
             y     : -1000, //Window is hidden by moving Y out of screen
             autoLoad:this.toolboxJson,
-            disableCaching :this.disableCaching,
+            nocache :this.nocache,
             scope   : this,
             closable: false
         });

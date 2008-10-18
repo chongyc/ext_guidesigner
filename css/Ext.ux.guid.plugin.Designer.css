@@ -23,6 +23,9 @@
  overflow:hidden;
 }
 
+
+.x-form-field-wrap .x-form-codefield-trigger {background-image: url(../icons/codefield-trigger.png);cursor:pointer;}
+
 .text-scripteditor {float:left;font:normal 12px arial}                    
 .icon-scripteditor {background-image: url(../icons/layout_edit.png) !important;
                     background-repeat: no-repeat;float:left;width:20px;height:20px;}

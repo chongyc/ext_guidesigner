@@ -14,8 +14,6 @@ TODO
  - Allow multiple base directroy under file control
  - Sort file list
  - Google Chrome is not supported, no drag drop in editor, not codepress
- - Delete property from grid does not trigger undo
- - Refresh file does not work on ie
 
  Change History:
  Version 2.1.0:
@@ -42,6 +40,8 @@ TODO
   + Wizard are now stored in wizard directory in json format.
   + Added code to allow tabpanel selection
   + When adding a second form into a form, the second form is transformed into layout
+  + ScriptEditor has been replace by CodeField this also resolves a number of bugs in this area
+  * For json editing now also codepress is used
   * a label is now selectable from code tree
   * Fixed problem with PHPFileControl not reloading directory
   * Fixed error this.el not defined in firefox
@@ -52,7 +52,8 @@ TODO
   * Fixed refresh is now using redraw instead of reloading config
   * Fixed Before showing the preview window the designer is cleared, therefor no conflicts any more with same extjs ids
   * Fixed the codetree was not cleared when last element removed
-  
+  * When removing property undo information is created  
+  * Boolean editor is now selection correct value from list
  
  Version 2.0.6:
   + Added PHPFile control thanks to Epsylon

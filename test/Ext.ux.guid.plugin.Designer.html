@@ -67,7 +67,7 @@
 					plugins : [
 					  designer = new Ext.ux.guid.plugin.Designer({
 							//toolboxTarget : 'toolbox',
-							disableCaching : true,
+							nocache : true,
 							customProperties : true,
 							fileControl      : phpSupport ? new Ext.ux.guid.data.PHPFiles() : new Ext.ux.guid.data.CookieFiles()
 						})

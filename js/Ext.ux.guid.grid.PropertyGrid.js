@@ -114,18 +114,18 @@ Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
     ]);
     this.jsonId=grid.jsonId;
     Ext.apply(this.editors,{
-        'regexp' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'new RegExp()'})),
-        'function':new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'function(){}'})),
-        'object':new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'{}'})),
-        'object/array':new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'[{}]'})),
-        'array': new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'[]'})),
-        'template': new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:''})),
-        'mixed': new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:''})),
-        'html' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'html'})),
-        'css' : new Ext.grid.GridEditor(new Ext.ux.form.ScriptEditor({defaultValue:'',language:'css'})),
+        'regexp' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'new RegExp()',codePress:grid.codePress})),
+        'function':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'function(){}',codePress:grid.codePress})),
+        'object':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'{}',codePress:grid.codePress})),
+        'object/array':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'[{}]',codePress:grid.codePress})),
+        'array': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'[]',codePress:grid.codePress})),
+        'template': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',codePress:grid.codePress})),
+        'mixed': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',codePress:grid.codePress})),
+        'html' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',language:'html',codePress:grid.codePress})),
+        'css' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',language:'css',codePress:grid.codePress})),
         'editlist' :new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:true})),
-        'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false}))
-        ,'boolean':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[['true','true'],['false','false']],editable:true,customProperties:true}))
+        'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false})),
+        'boolean':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[[true,'true'],[false,'false']],editable:true,customProperties:true}))
     });
     this.valueRendererDelegate = this.valueRenderer.createDelegate(this);
     this.propertyRendererDelegate = this.propertyRenderer.createDelegate(this);
@@ -184,7 +184,7 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
         p.css = "typeObject";
       }
       if (typeof(value)=="string" && value.length>24) {
-        return value.substring(1,21) + "...";
+        return value.substring(0,21) + "...";
       }
       return value;
     },
@@ -215,6 +215,12 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         forceFit:true
     },
     jsonId : '__JSON__',
+    
+    /**
+     * Should it use codePress as code editor (defaults true)
+     * @type {Boolean}
+     @cfg */
+    codePress : true, //codePress enabled
 
     getPropertyType : function (name) {
       if (this.propertyTypes) {

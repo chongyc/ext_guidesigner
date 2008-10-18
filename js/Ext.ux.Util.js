@@ -70,11 +70,11 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
   /**
    * A Synchronized Content loader for data from url
    * @param {String} url The url to load synchronized
-   * @param {Boolean} cachingOff Should caching of file be disabled
+   * @param {Boolean} nocache Should caching of file be disabled
    * @param {Boolean} responseXML Should responseXML be returned instead of responseText
    * @return {Boolean/String/XMLObject} When there was a error False otherwise response base on responseXML flag
    */
-  syncContent : function(url,cachingOff,responseXML) {
+  syncContent : function(url,nocache,responseXML) {
    var activeX = Ext.lib.Ajax.activeX;
    var isLocal = (document.location.protocol == 'file:');
    var conn;
@@ -88,7 +88,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
      }
    }
    //Should we disable caching
-   if (!cachingOff)
+   if (typeof nocache == undefined || nocache)
       url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
    try {
     conn.open('GET', url , false);
@@ -106,14 +106,14 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * Function used to load a JavaScript into a document.head element
    * the id of the script item is the name of the file.
    * @param {String} url The url to load javascript from
-   * @param {Boolean} cachingOff Should caching of javascript files be disabled
+   * @param {Boolean} nocache Should caching of javascript files be disabled
    * @return {Boolean} Indicator if load went corretly true/false
    */
-  scriptLoader : function(url,cachingOff) {
+  scriptLoader : function(url,nocache) {
    if (!url) return false;
    var id=url;
    if(!document.getElementById(id)) {
-     var content = this.syncContent(url,cachingOff);
+     var content = this.syncContent(url,nocache);
      if (content===false) return false;
      var head = document.getElementsByTagName("head")[0];
      var script = document.createElement("script");
@@ -273,7 +273,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
          ret.js.push(uri);
       } else {
          ret.js.push(uri);
-         this.scriptLoader(uri);
+         this.scriptLoader(uri,options.nocache);
       }
     }
     return ret;

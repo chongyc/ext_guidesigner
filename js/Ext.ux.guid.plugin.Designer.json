@@ -75,7 +75,7 @@
           },'-',{
             tooltip : 'Copy JSON to clipboard',
             iconCls :'icon-designcopy',
-            hidden  : !scope.enableCopy,
+            hidden  : !scope.enableCopy || (!window.clipboardData && !window.netscape),
             handler : function(){
               var text = scope.getCode();
               if (window.clipboardData) { // Internet Explorer
@@ -93,14 +93,17 @@
               }
             }
           },{
-            tooltip : 'Edit the generated JSON using a text area',
+            tooltip : 'Edit the generated JSON',
             iconCls:'icon-editEl',
             hidden : !scope.enableEdit,
             handler :  function (){
                 if (!scope.jsonWindow) {
-                  var tf = new Ext.form.TextArea();
+                  var tf = (scope.codePress && Ext.ux.CodePress) 
+                   ?  new Ext.ux.CodePress({language: 'javascript' ,autoResize:true,trim : true})
+                   :  new Ext.form.TextArea({resize:Ext.emptyFn});
                   var jsonWindow = new Ext.Window({
                       title       : "Edit JSON",
+                      iconCls     : 'icon-editEl',
                       width       : 500,
                       height      : 300,
                       autoScroll  : true,
@@ -136,9 +139,10 @@
                       }
                     });
                  scope.jsonWindow = jsonWindow;
+                 scope.jsonWindow.on('resize',function () {tf.resize()});
                 }
-                scope.jsonWindow.tf.setValue(scope.getCode());
                 scope.jsonWindow.show();
+                scope.jsonWindow.tf.setValue(scope.getCode());
               }
           },{
             iconCls : 'icon-show',
@@ -274,6 +278,7 @@
           root:new Ext.tree.AsyncTreeNode({text:'root'}),
           loader:new Ext.ux.guid.tree.JsonTreeLoader({
                 requestMethod:'GET',
+                nocache:scope.nocache,
                 dataUrl:scope.components
            }),
           dragConfig:{
@@ -536,6 +541,7 @@
         split:true,
         height:170,   
         propertyTypes : scope.properties,
+        codePress : scope.codePress,
         source : {},
         listeners : {
           'render': function() {
@@ -548,13 +554,14 @@
                iconCls : 'icon-delete',
                scope   : this,
                handler : function(item,e) {
+                   scope.markUndo();
                    var ds = this.store;
                    var source =this.getSource();
                    delete source[item.record.id];
                    ds.remove(item.record);
                    delete item.record;
                    if (scope.isEmpty(source)) {
-                     scope.removeElement(scope.activeElement);
+                     scope.removeElement(scope.activeElement,"noundo");
                    } else {
                      scope.redrawElement();
                    }
@@ -586,7 +593,7 @@
                     if (e.getKey() == e.ENTER && name != '' && !ds.getById(name)) {
                        var i = this.store.find('name',name);
                        if (i!=-1) defaultVal = this.store.getAt(i).get('defaults') || defaultVal;
-                       tf.setValue('');
+                       tf.setValue(''); //Clear add input
                        ds.add(new Ext.grid.PropertyRecord({name:name, value:defaultVal}, name));
                        scope.propertyGrid.startEditing(ds.getCount()-1, 1);
                     }

@@ -80,9 +80,10 @@ Ext.ux.form.SimpleCombo = Ext.extend(Ext.form.ComboBox, {
      * @return {Object} Based the entered key the combobox value or when not found and customProperties is true the raw entered value
      */
     getValue : function (){
-      var v = Ext.ux.form.SimpleCombo.superclass.getValue.call(this) || '';
+      var v = Ext.ux.form.SimpleCombo.superclass.getValue.call(this);
+      if (typeof(v)=='undefined') v = '';
       var r = this.getRawValue() || '';
-      if (!this.customProperties ||
+      if (!this.customProperties || typeof(v)!='string' ||
           (typeof(v)=='string' && v.toLowerCase().indexOf(r.toLowerCase())==0))
         return v;
       return r;

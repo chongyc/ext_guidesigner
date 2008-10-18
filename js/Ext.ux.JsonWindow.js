@@ -38,15 +38,20 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
 
  //@private The json parser used is set in initComponent
  json : null,
+ 
+ //@private Should caching of pages be disabled
+ nocache : false,
+
+ 
  /**
-  * @private Init the JSON Panel making sure caching is set depending on disableCaching
+  * @private Init the JSON Panel making sure caching is set depending on nocache
   */
  initComponent : function(){
    if (this.autoLoad) {
      if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
-     if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.disableCaching;
+     if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.nocache;
    }
-   this.json = new Ext.ux.Json({scope:this.scope || this});
+   this.json = new Ext.ux.Json({scope:this.scope || this,nocache : this.nocache});
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel
@@ -146,7 +151,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
    } catch (e) {
      if (this.json.fireEvent('error','failedjsonload',e) &&
          this.fireEvent('failedjsonload',cfg,e))
-        Ext.Msg.alert('Failure','Failed to decode load Json:' + e.message)
+        Ext.Msg.alert('Failure','Failed to decode load Json:' + e.message )
      return false;
    }
  }

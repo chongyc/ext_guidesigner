@@ -66,6 +66,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      * @type {Boolean}
      @cfg */
     fullEncode : false,
+    
+    //@private Should caching of pages be disabled
+    nocache : false,
 
     /**
      * Called from within the constructor allowing to initialize the parser
@@ -133,6 +136,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
       } else if (typeof(target)=='function') {
         Ext.Ajax.request({
               url: url,
+              nocache : this.nocache,
               callback: function(options, success, response) {
                 try {
                   if (success) {
@@ -150,8 +154,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
         return null;
       } else {
         return this.decode((typeof(url)=='object')
-                   ? this.syncContent(url.url,url.disableChaching)
-                   : this.syncContent(url.url,false));
+                   ? this.syncContent(url.url,typeof(url.nocache)=='undefined' ? this.nocache : url.nocache)
+                   : this.syncContent(url.url,this.nocache));
       }
     },
 
@@ -246,7 +250,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             items[k] = (n.length>0) ? n : null;
            } else items[k]=this.clean(items[k]);
          }
-         if (items[k]===null) {
+         if (typeof items[k]===undefined || items[k]===null || (typeof items[k]=="string" && items[k]=="")) {
            delete items[k];
          } else {
            c++;
@@ -466,16 +470,19 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
              continue; //skip items which have a rawValue or are jsonId
            }
            if (orgKey) { //We have a rawValue
-             if(b) a.push(',' + nl);
-             if (typeof(v)=='object') {
+             if (typeof(v)=='object' && (typeof(v.value)!="string" || !String(v.value).replace(/\s+$/,""))) {
+               if(b) a.push(',' + nl);             
                if (v.encode===false) {
                  a.push(this.indentStr(indent), orgKey, nc,v.value);
                } else {
                  a.push(this.indentStr(indent), orgKey, nc,
                    this.encode(v.value,indent + 1,keepJsonId));
                }
-             } else {
+             } else if (typeof(v)!='object' && String(v).replace(/\s+$/,"")) {
+               if(b) a.push(',' + nl);             
                a.push(this.indentStr(indent), orgKey, nc, v);
+             } else {
+               continue;
              }
              b = true;
            } else if(!this.useHasOwn || o.hasOwnProperty(i)) { //We have normal value
@@ -534,7 +541,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
       //Phase three load javascript, stylesheet and evalute scope objects
        if (key=='json') this.set(scope,value,{scopeOnly :true,scope : scope});
        //remove empty object results
-       if (value===null) {
+       if (value===null || (typeof(value)=='string' && !String(value).replace(/\s+$/,""))) {
          delete object[key];
          delete object[this.jsonId + key];
          return value;
@@ -561,8 +568,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        options = options || {}
        var self = this;
        var scope = options.scope || this.getScope();
-       var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;
-       if (!code) return null;
+       var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;       
+       if (!code || !String(code).replace(/\s+$/,"")) return null;
        var myEval = function(code) {
          try {
            //Fix is needed because ie7 does not eval a function directly
