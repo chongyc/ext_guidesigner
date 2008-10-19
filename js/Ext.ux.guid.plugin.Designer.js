@@ -957,7 +957,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     propertyGrid.on('propertyvalue',function(source,key,value,type,property){
       if (['object','function','mixed'].indexOf(type)!=-1 ||
           typeof(source[this.jsonId + key])=='string' || !property) {
-        this.setObjectValue(source,key,this.codeEval(value),value);
+        this.setObjectValue(source,key,value,value);
       } else  {
         this.setObjectValue(source,key,value);
       }

@@ -470,7 +470,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
              continue; //skip items which have a rawValue or are jsonId
            }
            if (orgKey) { //We have a rawValue
-             if (typeof(v)=='object' && (typeof(v.value)!="string" || !String(v.value).replace(/\s+$/,""))) {
+             if (typeof(v)=='object' && (typeof(v.value)!="string" || String(v.value).replace(/\s+$/,""))) {
                if(b) a.push(',' + nl);             
                if (v.encode===false) {
                  a.push(this.indentStr(indent), orgKey, nc,v.value);
@@ -543,16 +543,28 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        //remove empty object results
        if (value===null || (typeof(value)=='string' && !String(value).replace(/\s+$/,""))) {
          delete object[key];
-         delete object[this.jsonId + key];
+         if (this.jsonId) delete object[this.jsonId + key];
          return value;
        }
        object[key]=value;
 
        //Check if whe should set or delete a rawValue
-       if (rawValue && this.jsonId) {
-          object[this.jsonId + key] = rawValue;
-       } else if (!rawValue && this.jsonId) {
-         delete object[this.jsonId+key];
+       if (this.jsonId) {
+          if (rawValue && typeof(rawValue)=='object') {
+            object[this.jsonId + key] = rawValue;
+          } else if (rawValue) { //Check if this is a valid code object
+            try {
+              object[key]=this.decode(rawValue,{exceptionOnly : true,scope : scope});
+              if (typeof(object[key])=='string') 
+                delete object[this.jsonId+key];
+              else
+               object[this.jsonId+key]=rawValue;
+            } catch (e) { //Code is not valid thread as string  
+              object[this.jsonId + key] = {value : rawValue, encode : true }
+            }
+          } else {
+            delete object[this.jsonId+key];
+          }
        }
        return value;
      },
@@ -576,6 +588,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return eval("({fix:" + code+ "})").fix;
          } catch (e) {
            e = new SyntaxError('Invalid code: ' + code + ' (' + e.message + ')' );
+           if (options.exceptionOnly) throw e;
            if (self.fireEvent('error','codeEval',e) && evalException) throw e;
            return code;
          }
@@ -601,7 +614,6 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           var at = 0,ch = ' ',self = this;
           var scope = options.scope || this.getScope();
           var fullDecode = typeof(options.fullDecode)=='undefined' ? this.fullDecode : options.fullDecode ;
-
 
           /* function throwning a error*/
           function error(m) {
@@ -680,7 +692,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           /* Skip a single word */
           function singleWord(){
             var s = ch;
-            while (next() && ": \t\n\r.-+={(}[])'\"".indexOf(ch)==-1) {s+= ch}
+            while (next() && ": \t\n\r-+={(}[])'\"".indexOf(ch)==-1) {s+= ch}
             return s;
           }
 
@@ -774,9 +786,11 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 while (ch) {
                     k = ch=='"' || ch=="'" ? string() : singleWord();
                     white();
+
                     if (ch != ':') {
                       error("Bad key("+ch+") seprator for object " + json);
                     }
+
                     next();
                     white();
                     v=value(k!='items');
@@ -864,31 +878,36 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             at--; //restart code block
             var start = at;
             var wat;
+            var funcCode = false;
             while (next()){
-              wat = at;
               white();
               switch (ch) {
+                case 'f' :                
+                 funcCode = funcCode || wordMatch('function');
+                 break;
                 case '(' :
                   codeBlock(')');
                   break;
                 case '[' :
                   codeBlock(']');
                   break;
-                case '{' :
-                  codeBlock('}');
-                  break;
                 case '"' :
                 case "'" :
                   string(ch);
                   break;
+                case '{' :
+                  codeBlock('}');
+                  if (!funcCode) break;
+                  next();
                 case ',' :
                 case ']' :
                 case '}' :
-                  var block =json.substring(start,wat-1);
+                  var block =json.substring(start,at-1);
                   return [self.codeEval(block,options),block];
               }
             }
-            error('Unexpected end of code');
+            var block =json.substring(start,at-1);
+            return [self.codeEval(block,options),block];
           }
 
           /* Read a value returning a array [value,orignalcode] */
@@ -917,9 +936,10 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           white();
           if (ch) error("Invalid Json");
           //Check if we should make the code editable
-          if (this.jsonId) v = this.editable(v);
+          if (this.jsonId && typeof(v)=="object") v = this.editable(v);
           return v;
         } catch (e) {
+          if (options.exceptionOnly) throw e;
           if (this.fireEvent('error','decode',e)) throw e;
         }
      },

@@ -32,8 +32,17 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-				plan({ tests: 22 });
+			    var obj;
+				plan({ tests: 25 });
 				//diag('Decoder operations:');
+
+
+                obj = Ext.ux.JSON.decode('"string"');
+                is(obj,'string','Decode string');
+
+				obj = Ext.ux.JSON.decode('this');
+			 	ok(typeof(obj)=='object', "Decode this");
+
 				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
 
 				is(a.str,'string', 'String parsed');
@@ -87,13 +96,13 @@
 						xtype : \'gmappanel\'\
 				 	}',{evalException:false});
 
-			 		is(a.__JSON__scope, 'config.DATA.field', "scope: undefined decoded as string into __JSON__scope #2");
+			 		is(a.__JSON__scope.value, 'config.DATA.field', "scope: undefined decoded as string into __JSON__scope #2");
 			 	} catch (e) {
 			 		fail("scope: undefined decoded as string into __JSON__scope #2");
 			 	}
 
 			 	//diag('Encoder operations:');
-				var obj = Ext.ux.JSON.decode('{\
+			   obj = Ext.ux.JSON.decode('{\
 					scope : this,\
 					handler : function (a,b){\
 						return a + b;\
@@ -103,7 +112,6 @@
 
 			 	var obj_string = Ext.ux.JSON.encode(obj);
 			 	var obj_copy = Ext.ux.JSON.decode(obj_string);
-
 			 	is(obj.scope, obj_copy.scope, "Encoded equally: scope");
 			 	is(obj.handler(1,10), obj_copy.handler(5,6), "Encoded equally: handler");
 			 	is(obj.xtype, obj_copy.xtype, "Encoded equally: xtype");
@@ -125,6 +133,13 @@
 				obj = { k : 1, v : " d ", f : "" , __JSON__f : "" };
 				obj = Ext.ux.JSON.clean(obj);
 				ok(typeof(obj['f'])=='undefined','Cleaned of empty item');
+
+				try {
+				  obj = Ext.ux.JSON.decode("function(){ return 1 + 1;}",{exceptionOnly : true});
+				  ok(typeof(obj)=='function','Decode of code');
+				} catch (e) {
+				  fail("Decode of code failed" + e.message);
+				}
 			});
 		</script>
 	</head>
