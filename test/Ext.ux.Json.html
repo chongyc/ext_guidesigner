@@ -32,8 +32,8 @@
 		<!--The test function that fires when body is loaded -->
 		<script>
 			Ext.onReady(function(){
-			    var obj;
-				plan({ tests: 25 });
+			    var obj,a;
+				plan({ tests: 27 });
 				//diag('Decoder operations:');
 
 
@@ -43,7 +43,11 @@
 				obj = Ext.ux.JSON.decode('this');
 			 	ok(typeof(obj)=='object', "Decode this");
 
-				var a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
+			 	obj = Ext.ux.JSON.decode('{ s : "S" + "I"}');
+			 	is(obj.s,"SI",'String concat');
+                is(obj.__JSON__s,'"S" + "I"','String concat JSON');
+
+				a = Ext.ux.JSON.decode('{ str : "string", arr : ["A1","A2"], num : .8, obj : { key1 : "value1", key2 : [1,2]} }');
 
 				is(a.str,'string', 'String parsed');
 				ok(a.arr[0] == 'A1' && a.arr[1] == 'A2', 'Array parsed');

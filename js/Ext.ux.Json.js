@@ -555,7 +555,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           } else if (rawValue) { //Check if this is a valid code object
             try {
               object[key]=this.decode(rawValue,{exceptionOnly : true,scope : scope});
-              if (typeof(object[key])=='string') 
+              if (typeof(object[key])=='string' &&
+                ([object[key],"'"+object[key]+"'",'"' +object[key] + '"'].indexOf(rawValue.replace(/\s+$/,""))!=-1))  //Stip qoutes
                 delete object[this.jsonId+key];
               else
                object[this.jsonId+key]=rawValue;
@@ -894,6 +895,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 case '"' :
                 case "'" :
                   string(ch);
+                  prev(2); //Go back to closing qoute
                   break;
                 case '{' :
                   codeBlock('}');
@@ -919,9 +921,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     return asCode && !fullDecode ? code() : [object(false)];
                   case '[' :
                     return asCode && !fullDecode ? code() : [array(false)];
-                  case '"':
+            /*      case '"':
                   case "'":
-                    return [string(ch)];
+                    return [string(ch)];*/
                   default:
                     if (wordMatch('true')) return [true];
                     else if (wordMatch('false')) return [false];
