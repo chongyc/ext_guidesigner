@@ -63,7 +63,7 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
      if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.nocache;
    }                
    Ext.ux.JsonPanel.superclass.initComponent.call(this);
-   this.json = new Ext.ux.Json({scope:this.scope || this, noache: this.nocache});      
+   this.json = new Ext.ux.Json({scope: this.scope || this, nocache: this.nocache});      
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel

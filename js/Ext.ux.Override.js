@@ -199,22 +199,3 @@ Ext.ComponentMgr = function(extMgr){
     },extMgr);
 }(Ext.ComponentMgr);
 Ext.reg = Ext.ComponentMgr.registerType; // this will be called a lot internally, shorthand to keep the bytes down
-
-/**
- * String functions
- */ 
-if (!String.prototype.trim) {
- String.prototype.trim = function() {
-  return this.replace(/^\s+|\s+$/g,"");
- }
-}
-if (!String.prototype.ltrim) {
- String.prototype.ltrim = function() {
-  return this.replace(/^\s+/,"");
- }
-}
-if (!String.prototype.rtrim) {
- String.prototype.rtrim = function() {
-   return this.replace(/\s+$/,"");
- }
-}

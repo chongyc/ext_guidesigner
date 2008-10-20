@@ -7,13 +7,13 @@ TODO
  - JSON Path should always be relative, directory protection
  - Fix json and created test when using " " + " " 
  - Allow multiple base directroy under file control
- - Sort file list
  - Implement support for a code repository
  - Add Grid Wirzard
  - In appendConfig merge the json objects, and delete from new item
- - Clear should also clear and hide error tab
- - Problem with codefield for strings, every thing is threaded as code
+ - Clear should also clear and hide error tab (done, test only)
  - After clear object decode is wrong (array)
+ - Do not allow editing of jsonpanels with autoload, getDesignElement ?
+ - Split big json in multiple files
 
  Change History:
  Version 2.1.0:

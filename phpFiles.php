@@ -53,7 +53,7 @@ class phpFiles {
       '.',
       '..'
       );
-    $this->baseDir=$basedir; 
+    $this->baseDir=$basedir;
   }
 
   private function mkdir_recursive($pathname, $mode){
@@ -67,7 +67,7 @@ class phpFiles {
     for($i=0;$i<sizeof($folder)-1;$i++) {
       $path.="/".$folder[$i];
     }
-    $this->mkdir_recursive($path,0777); 
+    $this->mkdir_recursive($path,0777);
   }
 
   private function is_json_file($name) {
@@ -78,7 +78,7 @@ class phpFiles {
   private function ReadDirs($dir) {
     if ($handle = opendir($dir)) {
       while (false !== ($file = readdir($handle))) {
-        if (!in_array($file,$this->hide)) { 
+        if (!in_array($file,$this->hide)) {
           if(is_dir($dir.$file)) {
             $dir_array[]=$dir.$file."/";
           } else {
@@ -89,14 +89,16 @@ class phpFiles {
       }
       closedir($handle);
       //dir first
+      sort($dir_array);
       for($i=0;$i<sizeof($dir_array);$i++) $this->ReadDirs($dir_array[$i]);
       //files second
+      sort($file_array);
       for($i=0;$i<sizeof($file_array);$i++) $this->file_list[$file_array[$i]]=$file_array[$i];
     }
   }
 
   function get_files() {
-    clearstatcache(); 
+    clearstatcache();
     $this->ReadDirs($this->baseDir);
     echo json_encode($this->file_list);
   }
@@ -108,7 +110,7 @@ class phpFiles {
 
   function save_changes($filename,$action,$content) {
     if(!$this->is_json_file($filename)) {
-      die('0'); 
+      die('0');
     }
 
     if($action=='delete'){
@@ -127,19 +129,19 @@ class phpFiles {
       fwrite($fp,$content);
       fclose($fp);
       die('1');
-    } 
+    }
   }
 }
 
 $PhpBackend=new phpFiles($_POST['baseDir']."/");
 if($_POST['cmd']=="get_files") json_encode($PhpBackend->get_files());
 if($_POST['cmd']=="get_content") $PhpBackend->get_content($_POST['filename']);
-if($_POST['cmd']=="save_changes") $PhpBackend->save_changes($_POST['filename'],$_POST['action'],$_POST['content']); 
+if($_POST['cmd']=="save_changes") $PhpBackend->save_changes($_POST['filename'],$_POST['action'],$_POST['content']);
 /*
 $PhpBackend=new phpFiles($_GET['baseDir']);
 if($_GET['cmd']=="test") echo "tester";
 if($_GET['cmd']=="get_files") json_encode($PhpBackend->get_files());
 if($_GET['cmd']=="get_content") $PhpBackend->get_content($_GET['filename']);
-if($_GET['cmd']=="save_changes") $PhpBackend->save_changes($_GET['filename'],$_GET['action'],$_GET['content']); 
+if($_GET['cmd']=="save_changes") $PhpBackend->save_changes($_GET['filename'],$_GET['action'],$_GET['content']);
 */
 ?>

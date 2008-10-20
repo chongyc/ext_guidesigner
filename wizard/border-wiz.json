@@ -51,7 +51,7 @@ items : [{
         width : 299
       }],
     style : "margin:2px",
-    bodyStyle : "{margin: 0 0 -4;}"
+    bodyStyle : "{margin: 0 0 -2;}"
   },{
     xtype : "fieldset",
     title : "Add north region",
@@ -107,7 +107,7 @@ items : [{
           }]
       }],
     style : "margin:2px",
-    bodyStyle : "{margin: 0 0 -4;}"
+    bodyStyle : "{margin: 0 0 -2;}"
   },{
     xtype : "fieldset",
     title : "Add south region",
@@ -163,7 +163,7 @@ items : [{
           }]
       }],
     style : "margin:2px",
-    bodyStyle : "{margin: 0 0 -4;}"
+    bodyStyle : "{margin: 0 0 -2;}"
   },{
     xtype : "fieldset",
     title : "Add west region",
@@ -219,7 +219,7 @@ items : [{
           }]
       }],
     style : "margin:2px",
-    bodyStyle : "{margin: 0 0 -4;}"
+    bodyStyle : "{margin: 0 0 -2;}"
   },{
     xtype : "fieldset",
     title : "Add east region",
@@ -275,6 +275,6 @@ items : [{
           }]
       }],
     style : "margin:2px",
-    bodyStyle : "{margin: 0 0 -4;}"
+    bodyStyle : "{margin: 0 0 -2;}"
   }]
 }

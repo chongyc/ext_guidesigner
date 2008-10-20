@@ -438,10 +438,11 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        var nl = this.readable ? "\n" : "";
        var nc = this.readable ? " : ": "";
        indent = indent || 0;
+       var lic = (indent==0 && !noLicense && this.licenseText) ? this.licenseText + "\n" : "";
        if(typeof o == "undefined" || o === null){
            return "null";
-       }else if(o instanceof Array){
-           return this.encodeArray(o, indent,keepJsonId);
+       }else if(o instanceof Array){       
+           return lic + this.encodeArray(o, indent,keepJsonId);
        }else if(o instanceof Date){
            return this.encodeDate(o);
        }else if(typeof o == "number"){
@@ -456,11 +457,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return this.encodeString(o);
        }else {
          var a = [], b, i, v;
-         //Check if whe should create a license text
-         if (indent==0 && !noLicense) {
-          if (this.licenseText) a.push(this.licenseText + "\n");
-         }
-         a.push("{" + nl);
+         a.push(lic + "{" + nl);
          for (var i in o) {
            v = o[i];
            var orgKey = (i.indexOf(this.jsonId)==0 && i!=this.jsonId) ?
@@ -541,7 +538,8 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
       //Phase three load javascript, stylesheet and evalute scope objects
        if (key=='json') this.set(scope,value,{scopeOnly :true,scope : scope});
        //remove empty object results
-       if (value===null || (typeof(value)=='string' && !String(value).replace(/\s+$/,""))) {
+       if (typeof(value)=='string') value = value.replace(/\s+$/,"");
+       if (value===null || value==="") {
          delete object[key];
          if (this.jsonId) delete object[this.jsonId + key];
          return value;
@@ -554,9 +552,10 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             object[this.jsonId + key] = rawValue;
           } else if (rawValue) { //Check if this is a valid code object
             try {
+              if (typeof(rawValue)=='string') rawValue = rawValue.replace(/\s+$/,"");
               object[key]=this.decode(rawValue,{exceptionOnly : true,scope : scope});
               if (typeof(object[key])=='string' &&
-                ([object[key],"'"+object[key]+"'",'"' +object[key] + '"'].indexOf(rawValue.replace(/\s+$/,""))!=-1))  //Stip qoutes
+                ([object[key],"'"+object[key]+"'",'"' +object[key] + '"'].indexOf(rawValue)!=-1))  //Stip qoutes
                 delete object[this.jsonId+key];
               else
                object[this.jsonId+key]=rawValue;

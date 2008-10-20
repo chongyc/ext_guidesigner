@@ -641,7 +641,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   setConfig : function (json,noUndo) {
     if (!noUndo) this.markUndo();
     var items = (typeof(json)=='object' ? json : this.decode(json)) || null;
-    this.container.codeConfig.items= (items instanceof Array ? this.editable(items) : [this.editable(items)]);
+    this.container.codeConfig=items ? {items : (items instanceof Array ? this.editable(items) : [this.editable(items)])} : {};
     this.redrawElement(this.container);
     this.modified = true;
     this.fireEvent('newconfig');

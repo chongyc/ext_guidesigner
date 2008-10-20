@@ -151,7 +151,7 @@
             handler : function(){
               var cfg = scope.getCode();
               //Clear scope so tabindexed and id's are cleared
-              scope.setConfig({});
+              scope.setConfig();
               var self = scope;
               try {
               var w = new Ext.ux.JsonWindow({
@@ -205,6 +205,17 @@
             plugins : {
               //Create an error handler
               init : function(cmp) {
+               scope.on('newconfig',function(){
+                 this.setVisible(false);
+                 this.errors = [];
+                 this.errorCount = 0;
+                 this.toggle(false);
+                 if (this.errorTab) {
+                    var tab = Ext.getCmp(scope.TabId);
+                    tab.remove(this.errorTab);
+                    delete this.errorTab;
+                 }
+               },cmp);
                scope.errorHandler = function(type,exception) {
                  if (cmp.errorCount==0) cmp.setVisible(true);
                  cmp.errorCount++;
@@ -466,7 +477,10 @@
                  }.createDelegate(data.node.attributes);
                } else { //Insert jsonPanel
                  data.config=function(callback){
-                   callback({ xtype : "jsonpanel", autoLoad : url });
+                   callback({ xtype : "jsonpanel", 
+                              autoLoad : url, 
+                              __JSON__scope : "scope" 
+                            });
                  }.createDelegate(data.node.attributes);
                }
                data.processed=false;
