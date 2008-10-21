@@ -10,5 +10,29 @@
         xtype : "colorfield",
         fieldLabel : "Color"
       }
-  }]
+  },
+	{
+      text : "RecordGrid",
+      qtip : "A record grid",
+      require : ["Ext.ux.grid.Search;Ext.ux.RecordForm;Ext.ux.grid.RowActions;Ext.ux.grid.RecordForm;Ext.ux.form.DateTime",{basedir:"3rdparty/recordform/js",cssdir:"3rdparty/recordform/css"}],
+      config : {
+        xtype : "recordform",
+        border : false,
+        viewConfig : {
+          forceFit : true
+        },
+        __JSON__ds : "new Ext.data.Store({reader: new Ext.data.ArrayReader({}, [{name: 'comment'}]),data: [['Please set CM and DS properties']]})",
+        __JSON__cm : "new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),{header: 'Comment', width: 120, sortable: true, dataIndex: 'comment'}])"
+      },
+      cls : "file"
+    }]
+},{
+ text : "Wizard",
+ cls  : "folder",
+ childeren : [
+{
+   text : "Wizard-grid",
+   qtip : "Wizard-grid",
+   wizard : "json/grid-wiz.json"
+ } ]
 }]
