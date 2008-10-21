@@ -89,10 +89,10 @@ class phpFiles {
       }
       closedir($handle);
       //dir first
-      sort($dir_array);
+      if(isset($dir_array)) sort($dir_array);
       for($i=0;$i<sizeof($dir_array);$i++) $this->ReadDirs($dir_array[$i]);
       //files second
-      sort($file_array);
+      if(isset($dir_array)) sort($dir_array);
       for($i=0;$i<sizeof($file_array);$i++) $this->file_list[$file_array[$i]]=$file_array[$i];
     }
   }
