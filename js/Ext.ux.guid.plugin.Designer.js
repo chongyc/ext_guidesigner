@@ -807,9 +807,18 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     while (loops && el) {
       cmp = Ext.getCmp(el.id);
       if (cmp) {
+        //Check if element is contained within container and if is autoLoaded
+        var id = this.container.getId(),c = cmp;
+        loops = 50;
+        while (loops && c && c.id != id) {
+          if (c instanceof Ext.Panel && c.autoLoad) cmp=c;
+          c = c.ownerCt;
+          loops--;
+        }
+        var contained = c && c.id == id;
         if (!cmp.codeConfig) cmp.codeConfig = this.getConfig(cmp);
         if (!allowField && cmp == this.container) return false;
-        return this.isElementOf(cmp,this.container) ? cmp : (allowField ? this.container : false);
+        return contained ? cmp : (allowField ? this.container : false);
       }
       el = el.parentNode;
       loops--;
