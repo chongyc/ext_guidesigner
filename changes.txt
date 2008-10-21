@@ -9,8 +9,8 @@ TODO
  - Implement support for a code repository, add info to filecontrol to support this
  - Add Grid Wirzard
  - In appendConfig merge the json objects, and delete from new item
- - Do not allow editing of jsonpanels with autoload, getDesignElement ?
  - Split big json in multiple files
+ - On delete of element select underling container
 
  Change History:
  Version 2.1.0:

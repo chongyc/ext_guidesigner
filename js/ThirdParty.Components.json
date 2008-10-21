@@ -5,18 +5,18 @@
       text : "ColorField",
       qtip : "A color field",
       cls : "file",
-      require : ["Ext.ux.ColorField;Ext.ux.ColorField.css",{basedir:"js",cssdir:"css"}],
+      require : ["Ext.ux.ColorField;Ext.ux.ColorField.css",{basedir:"3rdparty/colorfield/js",cssdir:"3rdparty/colorfield/css"}],
       config : {
         xtype : "colorfield",
         fieldLabel : "Color"
       }
   },
-	{
+  {
       text : "RecordGrid",
       qtip : "A record grid",
-      require : ["Ext.ux.grid.Search;Ext.ux.RecordForm;Ext.ux.grid.RowActions;Ext.ux.grid.RecordForm;Ext.ux.form.DateTime",{basedir:"3rdparty/recordform/js",cssdir:"3rdparty/recordform/css"}],
+      require : ["Ext.ux.grid.Search;Ext.ux.RecordForm;Ext.ux.grid.RowActions;Ext.ux.form.DateTime;Ext.ux.grid.RecordForm",{basedir:"3rdparty/recordform/js",cssdir:"3rdparty/recordform/css"}],
       config : {
-        xtype : "recordform",
+        xtype : "gridrecordform",
         border : false,
         viewConfig : {
           forceFit : true

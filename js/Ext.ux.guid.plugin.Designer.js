@@ -355,7 +355,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         own.codeConfig.items.splice(i,1);
         if (own.codeConfig.items.length==0) delete own.codeConfig.items;
         if (!internal || internal=="noundo") {
-          this.redrawElement(own);
+          this.redrawElement(own,this.activeElement==source ? own : this.activeElement);
           this.fireEvent('remove');
         } else {
           this.redrawContainer = true;
@@ -725,9 +725,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   selectElement : function (el) {
     if (typeof(el)=='string') el = this.findByJsonId(el);
     var cmp = this.highlightElement(this.getDesignElement(el));
+    if (cmp && cmp==this.activeElement) return cmp;
     this.resizeLayer.hide();
     this.resizeLayer.resizer.dd.lock();
-    if (cmp && cmp==this.activeElement) return;
     this.activeElement = cmp;
     if (cmp) {
       //Search parent and select tabpanel
