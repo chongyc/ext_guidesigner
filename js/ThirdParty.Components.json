@@ -16,7 +16,7 @@
       qtip : "A record grid",
       require : ["Ext.ux.grid.Search;Ext.ux.RecordForm;Ext.ux.grid.RowActions;Ext.ux.form.DateTime;Ext.ux.grid.RecordForm",{basedir:"3rdparty/recordform/js",cssdir:"3rdparty/recordform/css"}],
       config : {
-        xtype : "gridrecordform",
+        xtype : "recordform",
         border : false,
         viewConfig : {
           forceFit : true

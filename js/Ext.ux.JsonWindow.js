@@ -121,7 +121,9 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
   um.showLoadIndicator = false; //disable it.
   um.on('failure',function(el, response){
       if (this.ownerCt) this.ownerCt.el.unmask();
-      this.fireEvent('failedjsonload',response)
+      if (this.json.fireEvent('error','failedjsonload','url in autoLoad not valid')) {
+         this.fireEvent('failedjsonload',response);
+      }
     }.createDelegate(this));
     um.on('beforeupdate',function(el, url, params) {
      if (this.loadMask && this.ownerCt)
