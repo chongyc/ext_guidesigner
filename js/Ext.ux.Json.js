@@ -173,7 +173,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     set : function (element,items,options) {
      var allSet = true, el = element || this;
      options = options || {}
-     if (typeof options.nocache == undefined) options.nocache = this.nocache;
+     if (typeof options.nocache == undefined) options.nocache = this.nocache;     
      if (items) {
       if (typeof(items)=='string') items = this.decode(items,options);
       for (var i in items) {
@@ -537,7 +537,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      setObjectValue : function (object,key,value,rawValue,scope) {
        scope = scope || this.getScope();
       //Phase three load javascript, stylesheet and evalute scope objects
-       if (key=='json') this.set(scope,value,{scopeOnly :true,scope : scope});
+       if (key=='json') this.set(scope,value,{scopeOnly :true,scope : scope,nocache:this.nocache});
        //remove empty object results
        if (typeof(value)=='string') value = value.replace(/\s+$/,"");
        if (value===null || value==="") {
