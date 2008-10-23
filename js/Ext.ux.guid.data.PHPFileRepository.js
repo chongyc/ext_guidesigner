@@ -54,7 +54,7 @@ Ext.ux.guid.data.PHPFileRepository = Ext.extend(Ext.ux.guid.data.Repository,{
        },
        callback: function(options, success, response) {
          if(success && response.responseText=='1') { 
-           if(action=='delete') {
+           if(action=='remove') {
              delete this.items[id];
              if (id==this.last) this.last = null;
            } else {

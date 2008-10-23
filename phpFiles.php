@@ -62,17 +62,17 @@ class phpFiles {
   }
 
   private function above_dir($dir, $dir_top) {
-	$dir = realpath($dir);
-	$dir_top = realpath($dir_top);
-	
-	$dir = count(explode('/', $dir));
-	$dir_top = count(explode('/', $dir_top));
-	
-	if($dir <= $dir_top){
-		return true;
-	}else{
-		return false;
-	}
+  $dir = realpath($dir);
+  $dir_top = realpath($dir_top);
+  
+  $dir = count(explode('/', $dir));
+  $dir_top = count(explode('/', $dir_top));
+  
+  if($dir <= $dir_top){
+    return true;
+  }else{
+    return false;
+  }
   }
     
   private function check_and_fix_dir($filename) {
@@ -119,22 +119,22 @@ class phpFiles {
 
   function get_content($filename) {
     if($this->above_dir($this->baseDir."/".$filename,"./")) {
-    	if($this->is_json_file($filename))
-      		echo file_get_contents($this->baseDir."/".$filename);
+      if($this->is_json_file($filename))
+          echo file_get_contents($this->baseDir."/".$filename);
     }
     else die('0');
   }
 
   function save_changes($filename,$action,$content) {
     if(!$this->above_dir($this->baseDir."/".$filename,"./")) {
-  	  die('0');
+      die('0');
     }
     
     if(!$this->is_json_file($filename)) {
       die('0');
     }
 
-    if($action=='delete'){
+    if($action=='remove'){
       $full_name=$this->baseDir."/".$filename;
       if(file_exists($full_name)) {
         unlink($full_name);

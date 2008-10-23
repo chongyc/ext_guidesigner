@@ -173,7 +173,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     set : function (element,items,options) {
      var allSet = true, el = element || this;
      options = options || {}
-     if (typeof options.nocache == undefined) options.nocache = this.nocache;     
+     if (typeof(options.nocache)==undefined) options.nocache = this.nocache;     
      if (items) {
       if (typeof(items)=='string') items = this.decode(items,options);
       for (var i in items) {

@@ -559,7 +559,7 @@
                   iconCls : 'icon-filedelete',
                   scope   : this,
                   handler : function(item,e) {
-                      scope.repository.delete(contextMenu.node.id,function(success){
+                      scope.repository.remove(contextMenu.node.id,function(success){
                         if (success) {
                           Ext.getCmp(scope.RepositoryId).reload();
                         } else {

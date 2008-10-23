@@ -52,7 +52,7 @@ Ext.extend(Ext.ux.guid.data.Repository,Ext.util.Observable,{
 
   saveChanges : function(id,action,callback,content) {
     this.items[id] = id;
-    if (action=='delete') {
+    if (action=='remove') {
       delete this.items[id];
       if (id==this.last) this.last = null;
     } else {
@@ -67,8 +67,8 @@ Ext.extend(Ext.ux.guid.data.Repository,Ext.util.Observable,{
   },
 
 
-  delete : function(id,callback){
-    this.saveChanges(id,'delete',callback);
+  remove : function(id,callback){
+    this.saveChanges(id,'remove',callback);
   },
 
   rename : function(from,to,callback){
@@ -77,7 +77,7 @@ Ext.extend(Ext.ux.guid.data.Repository,Ext.util.Observable,{
       if (success) {
          this.saveChanges(to,'save',function(success){
            if (success) {
-              this.delete(from,function(success){
+              this.remove(from,function(success){
                 if (success && last==from) this.last=to;
                 if(typeof callback == "function") callback(success,content);
               }.createDelegate(this));

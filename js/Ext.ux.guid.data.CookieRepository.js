@@ -37,7 +37,7 @@ Ext.ux.guid.data.CookieRepository = Ext.extend(Ext.ux.guid.data.Repository,{
 
   saveChanges : function(id,action,callback,content) {  
     if (content) this.cookies.set('repository/' + id,escape(content));
-    if (action=='delete') this.cookies.clear('repository/'+id);
+    if (action=='remove') this.cookies.clear('repository/'+id);
     Ext.ux.guid.data.CookieRepository.superclass.saveChanges.call(this,id,action,callback,content);
     this.cookies.set('repository.files',this.items);
   },
