@@ -173,6 +173,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     set : function (element,items,options) {
      var allSet = true, el = element || this;
      options = options || {}
+     if (typeof options.nocache == undefined) options.nocache = this.nocache;
      if (items) {
       if (typeof(items)=='string') items = this.decode(items,options);
       for (var i in items) {
@@ -182,7 +183,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               var files = items[i].split(';');
               for (var f=0;f<files.length;f++) {
                 if(document.getElementById(files[f])) {continue;}
-                if (!this.scriptLoader(files[f],false)) {
+                if (!this.scriptLoader(files[f],options.nocache)) {
                   var e = new Error('Failed to load javascript '+ files[f]);
                   if (this.fireEvent('error','set',e)) throw e;
                 }
