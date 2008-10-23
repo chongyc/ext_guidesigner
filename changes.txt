@@ -11,7 +11,9 @@ TODO
  - In appendConfig merge the json objects, and delete from new item
  - Split big json in multiple files
  - On delete of element select underling container
-
+ - Label select for check box does not work
+ - Problem that there is a cmp exception thrown
+ 
  Change History:
  Version 2.1.0:
   + A compressed version of designer is added (Ext.ux.guid.plugin.Desginer-all.js) 
@@ -38,7 +40,7 @@ TODO
   + Added code to allow tabpanel selection
   + When adding a second form into a form, the second form is transformed into layout
   + ScriptEditor has been replace by CodeField this also resolves a number of bugs in this area
-  + You can drag you saved code to the designer, which will be loaded through JSONPanel or in case when shift key pressed or FileControl is not supporting url data is appended
+  + You can drag you saved code to the designer, which will be loaded through JSONPanel or in case when shift key pressed or Repository is not supporting url data is appended
   * For json editing now also codepress is used
   * a label is now selectable from code tree
   * Fixed problem with PHPFileControl not reloading directory

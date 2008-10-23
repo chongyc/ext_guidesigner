@@ -46,8 +46,10 @@
        require('Ext.ux.Override;Ext.ux.ComponentCollection;Ext.ux.Json;' +
             'Ext.ux.form.CodeField;Ext.ux.data.HttpMergeProxy;Ext.ux.JsonPanel;' +
             'Ext.ux.JsonWindow;Ext.ux.guid.tree.JsonTreeLoader;' +
-            'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;Ext.ux.guid.data.FileControl;'+
-            'Ext.ux.guid.data.CookieFiles;Ext.ux.guid.data.PHPFiles;Ext.ux.guid.plugin.Designer',
+            'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;' +
+            'Ext.ux.guid.data.Repository;Ext.ux.guid.tree.RepositoryLoader;'+
+            'Ext.ux.guid.data.CookieRepository;Ext.ux.guid.data.PHPFileRepository;'+
+            'Ext.ux.guid.plugin.Designer',
         {basedir:'js',cssdir:'css',nocache: nocache});
      }
    </script>
@@ -102,7 +104,9 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 					  toolboxTarget : 'toolbox',
 					  nocache : nocache,
 					  customProperties : true
-					 , fileControl      : phpSupport ? new Ext.ux.guid.data.PHPFiles() : new Ext.ux.guid.data.CookieFiles()
+					 , repository      : phpSupport
+					                     ? new Ext.ux.guid.data.PHPFileRepository()
+					                     : new Ext.ux.guid.data.CookieRepository()
 					})
 				  ]
 	         }

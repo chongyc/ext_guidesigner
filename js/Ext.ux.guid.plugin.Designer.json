@@ -36,10 +36,10 @@
    "scope.!findByJsonId" : Ext.emptyFn,
    "scope.!fireEvent"   : Ext.emptyFn,
    "scope.!errorHandler": Ext.emptyFn,
-   "scope.!fileControl" : null,
+   "scope.!repository" : false,
 
    //From here on normal code stuff
-   "scope.!FileTreeId" : Ext.id(),
+   "scope.!RepositoryId" : Ext.id(),
    "scope.!ErrorId"    : Ext.id(),
    "scope.!TabId"      : Ext.id(),
    "scope.!enableCopy" : true,
@@ -392,15 +392,21 @@
           title:"Manage",
           tooltip : "Manage your design by performing an action of this tab",
           xtype:"treepanel",
-          id   : scope.FileTreeId,
+          id   : scope.RepositoryId,
+          animate:true,
+          autoScroll:true,
+          containerScroll:true,
+          rootVisible : false,
+          root:new Ext.tree.AsyncTreeNode({text:'root'}),
+          loader:new Ext.ux.guid.tree.RepositoryLoader(scope.repository),
           saveAs: function(){
              Ext.Msg.prompt('Filename', 'Please enter full file name:', function(btn, text){
                if (btn == 'ok'){
                 var t = text.replace(/\\/g,'/').split('/');
                 text = '';
                 for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
-                scope.fileControl.saveFile(text,scope.getCode(),function(success){
-                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.fileControl.last);
+                scope.repository.save(text,scope.getCode(),function(success){
+                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + text);
                  if (typeof callback == "function") callback(success);
                 });
                 this.reload();
@@ -410,7 +416,7 @@
           },
           reload : function(){
             this.root.reload(function(){
-             var node = scope.fileControl.activeNode;
+             var node = this.loader.activeNode;
              if (node) {
                this.expandPath(node.getPath());
                node.select();
@@ -421,30 +427,30 @@
             tooltip : 'Save the design, reusing last name',
             iconCls:'icon-save',
             handler: function(){
-              if (scope.fileControl.last) {
-                scope.fileControl.saveFile(scope.fileControl.last,scope.getCode(),function(success){
-                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.fileControl.last);
+              if (scope.repository.last) {
+                scope.repository.save(scope.repository.last,scope.getCode(),function(success){
+                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.repository.last);
                 });
               } else {
-                Ext.getCmp(scope.FileTreeId).saveAs();
+                Ext.getCmp(scope.RepositoryId).saveAs();
               }
             }
           },{
             tooltip : 'Save the design with different name',
             iconCls:'icon-saveas',
             handler : function(){
-               Ext.getCmp(scope.FileTreeId).saveAs();
+               Ext.getCmp(scope.RepositoryId).saveAs();
             }
           },'-',{
             iconCls:'icon-reload',
             tooltip : 'Reload the design from file',
             handler : function(){
-              if (scope.fileControl.last) {
-                scope.fileControl.openFile(scope.fileControl.last,function(success,result){
+              if (scope.repository.last) {
+                scope.repository.open(scope.repository.last,function(success,result){
                   if (success){
                     scope.setConfig(result);
                   } else {
-                    Ext.Msg.alert('Error','Failed to reload file ' + scope.fileControl.last);
+                    Ext.Msg.alert('Error','Failed to reload file ' + scope.repository.last);
                   }
                  });
               } else {
@@ -455,19 +461,19 @@
             tooltip : 'Refresh files',
             iconCls:'icon-filerefresh',
             handler: function (){
-               Ext.getCmp(scope.FileTreeId).reload();
+               Ext.getCmp(scope.RepositoryId).reload();
             }
           }],
-          disabled : scope.fileControl == null,
+          disabled : scope.repository == null,
           enableDrag: true,
           dragConfig:{
             getDragData : function(e){
               var data = Ext.dd.Registry.getHandleFromEvent(e);
               if (data && data.node.leaf) {
-               var url = scope.fileControl.getUrl(data.node.attributes.id);
+               var url = scope.repository.getUrl(data.node.attributes.id);
                if (e.shiftKey || !url) { //Append mode
                    data.config=function(callback){
-                    scope.fileControl.openFile(this.id,function(success,result){
+                    scope.repository.open(this.id,function(success,result){
                       if (success) {
                         callback(result);
                       } else {
@@ -490,17 +496,11 @@
             },
             ddGroup: 'designerddgroup'
           },
-          animate:true,
-          autoScroll:true,
-          containerScroll:true,
-          rootVisible : false,
-          root:new Ext.tree.AsyncTreeNode({text:'root'}),
-          loader:scope.fileControl,
           listeners :  {
             'dblclick' : function(node,e){
                e.preventDefault();
                if (node.leaf) {
-                 scope.fileControl.openFile(node.id,function(success,result){
+                 scope.repository.open(node.id,function(success,result){
                    if (success) {
                      scope.setConfig(result);
                      this.reload();
@@ -518,10 +518,10 @@
                   iconCls : 'icon-reload',
                   scope   : this,
                   handler : function(item,e) {
-                      scope.fileControl.openFile(contextMenu.node.id,function(success,result){
+                      scope.repository.open(contextMenu.node.id,function(success,result){
                         if (success) {
                           scope.setConfig(result);
-                          Ext.getCmp(scope.FileTreeId).reload();
+                          Ext.getCmp(scope.RepositoryId).reload();
                         } else {
                           Ext.Msg.alert('Error','Could not load file ' + contextMenu.node.id);
                         }
@@ -539,9 +539,13 @@
                         text = '';
                         for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
                         if (text && contextMenu.id != text ) {
-                          scope.fileControl.renameFile(contextMenu.node.id,text,function(success){
-                            if (!success) Ext.Msg.alert('Error','Failed to rename file ' + contextMenu.id);
-                            Ext.getCmp(scope.FileTreeId).reload();
+                          scope.repository.rename(contextMenu.node.id,text,function(success,result){
+                            if (success) {
+                              scope.setConfig(result);
+                            } else {
+                              Ext.Msg.alert('Error','Failed to rename file ' + contextMenu.id);
+                            }
+                            Ext.getCmp(scope.RepositoryId).reload();
                           });
                         } else {
                           Ext.Msg.alert('Error','File name not valid');
@@ -555,9 +559,9 @@
                   iconCls : 'icon-filedelete',
                   scope   : this,
                   handler : function(item,e) {
-                      scope.fileControl.deleteFile(contextMenu.node.id,function(success){
+                      scope.repository.delete(contextMenu.node.id,function(success){
                         if (success) {
-                          Ext.getCmp(scope.FileTreeId).reload();
+                          Ext.getCmp(scope.RepositoryId).reload();
                         } else {
                           Ext.Msg.alert('Error','Failed to delete ' + contextMenu.node.id);
                         }

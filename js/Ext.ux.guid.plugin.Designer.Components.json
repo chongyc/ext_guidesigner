@@ -38,6 +38,15 @@
       },
       cls : "file"
     },{
+      text : "Text Area",
+      qtip : "A Text Area",
+      config : {
+        xtype : "textarea",
+        fieldLabel : "Text",
+        name : "textarea"
+      },
+      cls : "file"
+    },{
       text : "Number Field",
       qtip : "A Text Field where you can only enter numbers",
       config : {

@@ -22,12 +22,12 @@ Ext.namespace('Ext.ux.guid.data');
 /*
  * PHPFiles
  */
-Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
+Ext.ux.guid.data.PHPFileRepository = Ext.extend(Ext.ux.guid.data.Repository,{
   url : "phpFiles.php",  
   rootBase : "json",
   urlSupport : true,
     
-  refreshFiles : function (callback) {
+  refresh : function (callback) {
     Ext.Ajax.request({
       url: this.url,
       params: {
@@ -35,7 +35,7 @@ Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
          baseDir: this.rootBase
       },            
       callback: function(options, success, response) {
-        this.files= success ? Ext.util.JSON.decode(response.responseText) : {};
+        this.items= success ? Ext.util.JSON.decode(response.responseText) : {};
         if(typeof callback == "function") callback(success);
       },            
       scope: this        
@@ -55,7 +55,7 @@ Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
        callback: function(options, success, response) {
          if(success && response.responseText=='1') { 
            if(action=='delete') {
-             delete this.files[id];
+             delete this.items[id];
              if (id==this.last) this.last = null;
            } else {
              this.last = id;
@@ -67,7 +67,7 @@ Ext.ux.guid.data.PHPFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
     }); 
   },
 
-  openFile : function(id,callback) {
+  open : function(id,callback) {
     Ext.Ajax.request({
       url: this.url,
       params: {

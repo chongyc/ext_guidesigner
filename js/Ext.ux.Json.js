@@ -555,10 +555,11 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               if (typeof(rawValue)=='string') rawValue = rawValue.replace(/\s+$/,"");
               object[key]=this.decode(rawValue,{exceptionOnly : true,scope : scope});
               if (typeof(object[key])=='string' &&
-                ([object[key],"'"+object[key]+"'",'"' +object[key] + '"'].indexOf(rawValue)!=-1))  //Stip qoutes
+                ([object[key],"'"+object[key]+"'",'"' +object[key] + '"'].indexOf(rawValue)!=-1)) {  //Stip qoutes
                 delete object[this.jsonId+key];
-              else
+             } else {
                object[this.jsonId+key]=rawValue;
+             }
             } catch (e) { //Code is not valid thread as string  
               object[this.jsonId + key] = {value : rawValue, encode : true }
             }

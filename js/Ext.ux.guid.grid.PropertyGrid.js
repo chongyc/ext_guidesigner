@@ -56,6 +56,9 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         this.store.removeAll();
         var data = [];
         for(var k in o){
+            var orgKey = (k.indexOf(this.jsonId)==0 && k!=this.jsonId) ?
+                 k.substring(this.jsonId.length) : null;                 
+            if (orgKey && typeof(o[orgKey])=="undefined") k =orgKey;
             if(k.indexOf(this.jsonId)!=0 && ['items'].indexOf(k)==-1){
                 var v = o[this.jsonId + k];
                 var type = null;

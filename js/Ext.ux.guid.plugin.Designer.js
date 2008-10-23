@@ -134,9 +134,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   undoHistoryMark : 0,
 
   /**
-   * A file control config item
+   * A repository config item
    */
-  fileControl : null,
+  repository : null,
   
   /**
    * Should it use codePress as code editor (defaults true)
@@ -964,12 +964,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.markUndo();
     },this);
     propertyGrid.on('propertyvalue',function(source,key,value,type,property){
-      if (['object','function','mixed'].indexOf(type)!=-1 ||
-          typeof(source[this.jsonId + key])=='string' || !property) {
-        this.setObjectValue(source,key,value,value);
-      } else  {
-        this.setObjectValue(source,key,value);
-      }
+      this.setObjectValue(source,key,value,value);
       return false; //We have set value
     },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
@@ -1067,7 +1062,6 @@ Ext.override(Ext.form.Label, {
             }
             //Swap the ids, so it becomes selectable in designer
             this.el.id = this.id;
-            this.id = this.id;
         }
         Ext.form.Label.superclass.onRender.call(this, ct, position);
     },
@@ -1090,3 +1084,4 @@ Ext.override(Ext.form.Label, {
    }
 
 });
+

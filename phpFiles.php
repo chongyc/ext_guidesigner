@@ -142,7 +142,7 @@ class phpFiles {
       }
     }
 
-    if($action=='save') {
+    if($action=='save' || $action=='new') {
       $this->check_and_fix_dir($filename);
       if(($fp=fopen($this->baseDir."/".$filename,"w")) === FALSE){
         die('0');
@@ -151,6 +151,7 @@ class phpFiles {
       fclose($fp);
       die('1');
     }
+    die('0'); 
   }
 }
 

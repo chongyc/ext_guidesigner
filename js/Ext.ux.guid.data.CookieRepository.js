@@ -23,28 +23,28 @@ Ext.namespace('Ext.ux.guid.data');
 /*
  * CookieFiles
  */
-Ext.ux.guid.data.CookieFiles = Ext.extend(Ext.ux.guid.data.FileControl,{
+Ext.ux.guid.data.CookieRepository = Ext.extend(Ext.ux.guid.data.Repository,{
   
   init : function(){
     this.cookies = new Ext.state.CookieProvider();     
-    Ext.ux.guid.data.CookieFiles.superclass.init.call(this);
+    Ext.ux.guid.data.CookieRepository.superclass.init.call(this);
   },
   
-  refreshFiles : function (callback) {
-    this.files = this.cookies.get('Designer.files');
-    Ext.ux.guid.data.CookieFiles.superclass.refreshFiles.call(this,callback);
+  refresh : function (callback) {
+    this.items = this.cookies.get('repository.files');
+    Ext.ux.guid.data.CookieRepository.superclass.refresh.call(this,callback);
   },
 
   saveChanges : function(id,action,callback,content) {  
-    if (content) this.cookies.set('Designer/' + id,escape(content));
-    if (action=='delete') this.cookies.clear('Designer.'+id);
-    Ext.ux.guid.data.CookieFiles.superclass.saveChanges.call(this,id,action,callback,content);
-    this.cookies.set('Designer.files',this.files);
+    if (content) this.cookies.set('repository/' + id,escape(content));
+    if (action=='delete') this.cookies.clear('repository/'+id);
+    Ext.ux.guid.data.CookieRepository.superclass.saveChanges.call(this,id,action,callback,content);
+    this.cookies.set('repository.files',this.items);
   },
 
-  openFile : function(id,callback) {
-    var content = unescape(this.cookies.get('Designer/' + id));
-    Ext.ux.guid.data.CookieFiles.superclass.openFile.call(this,id,callback,content)
+  open : function(id,callback) {
+    var content = unescape(this.cookies.get('repository/' + id));
+    Ext.ux.guid.data.CookieRepository.superclass.open.call(this,id,callback,content)
   }
     
 });
