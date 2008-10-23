@@ -62,9 +62,6 @@ class phpFiles {
   }
 
   private function above_dir($dir, $dir_top) {
-	if($dir == $dir_top)
-		return false;
-
 	$dir = realpath($dir);
 	$dir_top = realpath($dir_top);
 	
