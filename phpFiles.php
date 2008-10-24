@@ -106,7 +106,7 @@ class phpFiles {
       if(isset($dir_array)) sort($dir_array);
       for($i=0;$i<sizeof($dir_array);$i++) $this->ReadDirs($dir_array[$i]);
       //files second
-      if(isset($dir_array)) sort($dir_array);
+      if(isset($file_array)) sort($file_array);
       for($i=0;$i<sizeof($file_array);$i++) $this->file_list[$file_array[$i]]=$file_array[$i];
     }
   }
