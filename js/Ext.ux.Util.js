@@ -35,6 +35,12 @@ Ext.ux.Util = function(config){
 Ext.extend(Ext.ux.Util,Ext.util.Observable,{
 
   /**
+   * Should caching be disabled when JSON are loaded (defaults false).
+   * @type {Boolean}
+   @cfg */
+  nocache : false,
+   
+  /**
    * Indicator if this version support hasOwnProperty
    * @type {Boolean}
    */
@@ -57,14 +63,27 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
       this.on('error',this.onError,this);
    },
    
-   /**
-    * Basic error handling
-    * @param {String} type The type of error
-    * @param {Object} exception The exception object
-    * @return {Boolean} When false the error event is canceled.
-    */
+  /**
+   * Basic error handling
+   * @param {String} type The type of error
+   * @param {Object} exception The exception object
+   * @return {Boolean} When false the error event is canceled.
+   */
    onError : function(type,exception) {
      return true;
+   },
+   
+   /**
+    * Convert a url into a nocache url by adding a date if needed
+    * @param {String} url The url to use
+    * @param {boolean} nocache The nocache variable (default this.nocache)
+    */
+   nocacheUrl : function(url,nocache){
+     nocache = nocache==undefined ? this.nocache : nocache;
+     if (nocache) {
+       url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
+     }
+     return url;
    },
 
   /**
@@ -88,8 +107,7 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
      }
    }
    //Should we disable caching
-   if (typeof nocache == undefined || nocache)
-      url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());
+   url = this.nocacheUrl(url,nocache);
    try {
     conn.open('GET', url , false);
     conn.send(null);
@@ -197,15 +215,16 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * Load a url, stylesheet or javascript by adding it to the header
    * @param {String} url The url to be added
    * @param {String} type The load action to perform (default js)
-   * @param {Boolean} reload Should the file be reload if allready loaded
+   * @param {Object} options options[reload] Should the file be reload if allready loaded
    */
-  loadUrl : function(url,type,reload) {
+  loadUrl : function(url,type,options) {
+    options = options || {};
     //Now load it by adding it to the header
-    if (typeof(this._loadCount)=='undefined') {
+    if (this._loadCount == undefined) {
       this._loadCount=0;
       this._loaded=[];
     }
-    if (this._loaded[url] && !reload) return;
+    if (this._loaded[url] && !options.reload) return;
     var node;
     var self = this;
     var head = document.getElementsByTagName("head")[0];
@@ -215,12 +234,12 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
        node = document.createElement("link");
        node.setAttribute("rel", "stylesheet");
        node.setAttribute("type", "text/css");
-       node.setAttribute("href", url);
+       node.setAttribute("href", this.nocacheUrl(url,options.nocache));
        break;
      default :
        node = document.createElement("script");
        node.setAttribute("type", "text/javascript");
-       node.setAttribute("src", url);
+       node.setAttribute("src", this.nocacheUrl(url,options.nocache));
     }
     node.setAttribute("id",url);
     node.onload = node.onreadystatechange = function() {
@@ -244,7 +263,8 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
    * options[async] When set to true required will return directly
    * options[callback] Callback function after all required files are loaded
    * options[reload] When reload is set packages are reloaded
-   * options[cachingOff] When set the object caching is turned off
+   * options[nocache] When set the object caching is turned off
+   * options[reload] When true stylesheet/javacode is swapped
    * @return {Object} a object with keys js and css contain an array with full path of items
    */
   require : function(packages,options){
@@ -257,6 +277,8 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
     packages= (typeof(packages)=='string') ? packages.split(';') : packages || [];
     options = (typeof(options)=='string') ? {'basedir' : options} : options || {basedir : ""};
     options['cssdir'] = options.cssdir || options.basedir;
+    options['reload'] = options['reload']== undefined ? true : options['reload'];
+    options['nocache'] = options['nocache']== undefined ? this.nocache : options['nocache'];
     //First load all files
     for (var i=0;i<packages.length;i++) {
       //Create a name of path + packages + extentsion
@@ -267,9 +289,9 @@ Ext.extend(Ext.ux.Util,Ext.util.Observable,{
          url.directory +  url.file + (url.query ? '?' + url.query : '');    
       if (url.ext=='css') {
           ret.css.push(uri);
-          Ext.util.CSS.swapStyleSheet(uri, uri);
+          Ext.util.CSS.swapStyleSheet(this.nocacheUrl(uri,options.nocache), uri);
       } else if (options.async){
-         this.loadUrl(uri,url.ext,options.reload);
+         this.loadUrl(uri,url.ext,options);
          ret.js.push(uri);
       } else {
          ret.js.push(uri);

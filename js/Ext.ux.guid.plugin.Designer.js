@@ -37,12 +37,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   autoShow : true,
 
   /**
-   * Should caching be disabled when JSON are loaded (defaults false).
-   * @type {Boolean}
-   @cfg */
-   nocache : false,
-
-  /**
    * When toolboxTarget is set, this will be used to render toolbox to not window
    * @type {String/Element}
    @cfg */
@@ -244,7 +238,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       // Check if whe have to load a external file
       if (this.autoLoad) {
        if (typeof this.autoLoad !== 'object')  this.autoLoad = {url: this.autoLoad};
-       if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.nocache;
+       if (this.autoLoad['nocache']==undefined) this.autoLoad['nocache'] = this.nocache;
        this.loadConfig(this.autoLoad.url);
       }
     }, this);
@@ -577,7 +571,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   require : function(packages,options){
     var ret = Ext.ux.guid.plugin.Designer.superclass.require.call(this,packages,options);
     if (ret.js.length || ret.css.length) {
-      var nocache = (options && typeof(options.nocache)!=undefined) ? options.nocache : this.nocache; 
+      var nocache = (options && options.nocache!=undefined) ? options.nocache : this.nocache; 
       var cfg = (this.container.items && this.container.items.items.length==1) ?
              this.getConfig(this.container.items.items[0]) : {};
       //Check if root is a array with more then one element, if so skip

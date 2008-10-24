@@ -55,9 +55,9 @@ Ext.extend(Ext.ux.data.HttpMergeProxy, Ext.data.DataProxy, {
         return item1+item2;
       } else if (typeof(item1)==typeof(item2)) {
         return item2;
-      } else if (typeof(item1)=='undefined') {
+      } else if (item1==undefined) {
         return item2;
-      } else if (typeof(item2)=='undefined') {
+      } else if (item2==undefined) {
         return item1;      
       } else { 
         throw new SyntaxError('Object items cannot be joined because items mismatch');

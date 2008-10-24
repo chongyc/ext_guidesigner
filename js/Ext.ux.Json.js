@@ -67,9 +67,6 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      @cfg */
     fullEncode : false,
     
-    //@private Should caching of pages be disabled
-    nocache : false,
-
     /**
      * Called from within the constructor allowing to initialize the parser
      */
@@ -119,7 +116,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             return false;
          }
        }
-     } else if (typeof(obj)!='undefined') return false;
+     } else if (obj!=undefined) return false;
      return true;
     },
 
@@ -154,7 +151,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
         return null;
       } else {
         return this.decode((typeof(url)=='object')
-                   ? this.syncContent(url.url,typeof(url.nocache)=='undefined' ? this.nocache : url.nocache)
+                   ? this.syncContent(url.url,url.nocache==undefined ? this.nocache : url.nocache)
                    : this.syncContent(url.url,this.nocache));
       }
     },
@@ -173,7 +170,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     set : function (element,items,options) {
      var allSet = true, el = element || this;
      options = options || {}
-     if (typeof(options.nocache)==undefined) options.nocache = this.nocache;     
+     if (options.nocache==undefined) options.nocache = this.nocache;     
      if (items) {
       if (typeof(items)=='string') items = this.decode(items,options);
       for (var i in items) {
@@ -251,7 +248,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             items[k] = (n.length>0) ? n : null;
            } else items[k]=this.clean(items[k]);
          }
-         if (typeof items[k]===undefined || items[k]===null || (typeof items[k]=="string" && items[k]=="")) {
+         if (items[k]===undefined || items[k]===null || (typeof items[k]=="string" && items[k]=="")) {
            delete items[k];
          } else {
            c++;
@@ -304,9 +301,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
         return obj;
       } else if (typeof(item1)==typeof(item2)) {
         return item2;
-      } else if (typeof(item1)=='undefined') {
+      } else if (item1==undefined) {
         return item2;
-      } else if (typeof(item2)=='undefined') {
+      } else if (item2==undefined) {
         return item1;
       } else {
         throw new SyntaxError('Object items cannot be joined because items mismatch');
@@ -440,7 +437,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        var nc = this.readable ? " : ": "";
        indent = indent || 0;
        var lic = (indent==0 && !noLicense && this.licenseText) ? this.licenseText + "\n" : "";
-       if(typeof o == "undefined" || o === null){
+       if(o == undefined || o === null){
            return "null";
        }else if(o instanceof Array){       
            return lic + this.encodeArray(o, indent,keepJsonId);
@@ -582,7 +579,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        options = options || {}
        var self = this;
        var scope = options.scope || this.getScope();
-       var evalException = typeof(options.evalException)=='undefined' ? this.evalException : options.evalException;       
+       var evalException = options.evalException==undefined ? this.evalException : options.evalException;       
        if (!code || !String(code).replace(/\s+$/,"")) return null;
        var myEval = function(code) {
          try {
@@ -615,7 +612,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           options = options || {}
           var at = 0,ch = ' ',self = this;
           var scope = options.scope || this.getScope();
-          var fullDecode = typeof(options.fullDecode)=='undefined' ? this.fullDecode : options.fullDecode ;
+          var fullDecode = options.fullDecode==undefined ? this.fullDecode : options.fullDecode ;
 
           /* function throwning a error*/
           function error(m) {
@@ -643,7 +640,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
           /* Check if there is a full wordmatch, offset is used to set postion to read from
            * default this is -1 resulting that pointer is set to 0=current charachter */
           function wordMatch(word,offset) {
-            if (typeof(offset)=='undefined') offset = -1;
+            if (offset==undefined) offset = -1;
             var i=0;
             for (;i<word.length && json.charAt(at+i+offset)==word.charAt(i);i++) {}
             if (i>=word.length) {
