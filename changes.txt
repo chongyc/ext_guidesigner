@@ -6,12 +6,9 @@ TODO
  - Update documentation
  - JSON Path should always be relative, directory protection
  - Allow multiple base directroy under file control
- - Implement support for a code repository, add info to filecontrol to support this
  - Add Grid Wirzard
  - In appendConfig merge the json objects, and delete from new item
  - Split big json in multiple files
- - On delete of element select underling container
- - Label select for check box does not work
  - Problem that there is a cmp exception thrown
  
  Change History:
@@ -41,6 +38,8 @@ TODO
   + When adding a second form into a form, the second form is transformed into layout
   + ScriptEditor has been replace by CodeField this also resolves a number of bugs in this area
   + You can drag you saved code to the designer, which will be loaded through JSONPanel or in case when shift key pressed or Repository is not supporting url data is appended
+  * Fixed problem that drag drop was not allways placing items on correct spot
+  * Fixed problem that check box and radio button where not selectable
   * For json editing now also codepress is used
   * a label is now selectable from code tree
   * Fixed problem with PHPFileControl not reloading directory
