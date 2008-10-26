@@ -38,11 +38,11 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
 
  //@private The json parser used is set in initComponent
  json : null,
- 
+
  //@private Should caching of pages be disabled
  nocache : false,
 
- 
+
  /**
   * @private Init the JSON Panel making sure caching is set depending on nocache
   */
@@ -99,7 +99,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
  setAnchorTo : function(arg) {
    this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
  },
- 
+
  /**
   * Add support for listeners form the json
   * @param {Array} listeners A array of objects containing the listeners to connect

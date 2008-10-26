@@ -66,7 +66,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      * @type {Boolean}
      @cfg */
     fullEncode : false,
-    
+
     /**
      * Called from within the constructor allowing to initialize the parser
      */
@@ -170,8 +170,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
     set : function (element,items,options) {
      var allSet = true, el = element || this;
      options = options || {}
-     if (options.nocache==undefined) options.nocache = this.nocache;     
+     if (options.nocache==undefined) options.nocache = this.nocache;
      if (items) {
+      if (options.scopeOnly) options = Ext.apply({evalException : false},options);
       if (typeof(items)=='string') items = this.decode(items,options);
       for (var i in items) {
         var j = i;
@@ -343,7 +344,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            this.set(el,items);
          }
         if (el.rendered && el.layout && el.layout.layout) el.doLayout();
-      }      
+      }
      } catch (e) {
       if (this.fireEvent('error','apply',e)) throw e;
      } finally {
@@ -439,7 +440,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        var lic = (indent==0 && !noLicense && this.licenseText) ? this.licenseText + "\n" : "";
        if(o == undefined || o === null){
            return "null";
-       }else if(o instanceof Array){       
+       }else if(o instanceof Array){
            return lic + this.encodeArray(o, indent,keepJsonId);
        }else if(o instanceof Date){
            return this.encodeDate(o);
@@ -466,7 +467,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            }
            if (orgKey) { //We have a rawValue
              if (typeof(v)=='object' && (typeof(v.value)!="string" || String(v.value).replace(/\s+$/,""))) {
-               if(b) a.push(',' + nl);             
+               if(b) a.push(',' + nl);
                if (v.encode===false) {
                  a.push(this.indentStr(indent), orgKey, nc,v.value);
                } else {
@@ -474,7 +475,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                    this.encode(v.value,indent + 1,keepJsonId));
                }
              } else if (typeof(v)!='object' && String(v).replace(/\s+$/,"")) {
-               if(b) a.push(',' + nl);             
+               if(b) a.push(',' + nl);
                a.push(this.indentStr(indent), orgKey, nc, v);
              } else {
                continue;
@@ -534,7 +535,9 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
      setObjectValue : function (object,key,value,rawValue,scope) {
        scope = scope || this.getScope();
       //Phase three load javascript, stylesheet and evalute scope objects
-       if (key=='json') this.set(scope,value,{scopeOnly :true,scope : scope,nocache:this.nocache});
+       if (key=='json') {
+         this.set(scope,value,{scopeOnly :true,scope : scope,nocache:this.nocache});
+       }
        //remove empty object results
        if (typeof(value)=='string') value = value.replace(/\s+$/,"");
        if (value===null || value==="") {
@@ -558,7 +561,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
              } else {
                object[this.jsonId+key]=rawValue;
              }
-            } catch (e) { //Code is not valid thread as string  
+            } catch (e) { //Code is not valid thread as string
               object[this.jsonId + key] = {value : rawValue, encode : true }
             }
           } else {
@@ -579,7 +582,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        options = options || {}
        var self = this;
        var scope = options.scope || this.getScope();
-       var evalException = options.evalException==undefined ? this.evalException : options.evalException;       
+       var evalException = options.evalException==undefined ? this.evalException : options.evalException;
        if (!code || !String(code).replace(/\s+$/,"")) return null;
        var myEval = function(code) {
          try {
@@ -588,7 +591,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
          } catch (e) {
            e = new SyntaxError('Invalid code: ' + code + ' (' + e.message + ')' );
            if (options.exceptionOnly) throw e;
-           if (self.fireEvent('error','codeEval',e) && evalException) throw e;
+           if (evalException && self.fireEvent('error','codeEval',e)) throw e;
            return code;
          }
        }.createDelegate(scope);
@@ -881,7 +884,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             while (next()){
               white();
               switch (ch) {
-                case 'f' :                
+                case 'f' :
                  funcCode = funcCode || wordMatch('function');
                  break;
                 case '(' :

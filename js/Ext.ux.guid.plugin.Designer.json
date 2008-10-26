@@ -98,8 +98,8 @@
             hidden : !scope.enableEdit,
             handler :  function (){
                 if (!scope.jsonWindow) {
-                  var tf = (scope.codePress && Ext.ux.CodePress) 
-                   ?  new Ext.ux.CodePress({language: 'javascript' ,autoResize:true,trim : true})
+                  var tf = (scope.codePress && Ext.ux.CodePress)
+                   ?  new Ext.ux.CodePress({path:scope.codePressPath,language: 'javascript' ,autoResize:true,trim : true})
                    :  new Ext.form.TextArea({resize:Ext.emptyFn});
                   var jsonWindow = new Ext.Window({
                       title       : "Edit JSON",
@@ -253,6 +253,29 @@
               }
             }
           },{
+            iconCls : 'icon-options',
+            hidden  : !scope.enableOptions,
+            handler : function() {
+              if (scope.nocache || !scope.optionPanel) {
+                scope.optionPanel = new Ext.ux.JsonWindow({
+                  x     : -1000, // Window is hidden by moving X out of screen
+                  y     : -1000, //Window is hidden by moving Y out of screen
+                  autoLoad : scope.optionsUrl,
+                  scope    : scope,
+                  nocache  : scope.nocache,
+                  modal    : true,
+                  closable : true,
+                  closeAction : "hide"
+                });
+                scope.optionPanel.json.on('error',function(type,exception){
+                  Ext.Msg.alert('Option Load Error',type +" " + (typeof(exception)=='object' ? exception.message || exception : exception));
+                  this.close();
+                  return false;
+               },scope.optionPanel);
+              }
+              scope.optionPanel.show();
+            }
+          },{
             iconCls : 'icon-help',
             hidden  : !scope.enableVersion,
             handler : function() {
@@ -269,7 +292,7 @@
                  xtype : 'iframe',
                  width : '100%',
                  height: '100%',
-                 url   : 'doc/index.html'
+                 url   : scope.helpUrl
                 }]
               });
               w.show();
@@ -479,13 +502,13 @@
                       } else {
                         Ext.Msg.alert('Error','Could not load file ' + this.id);
                      }
-                    }.createDelegate(this)); 
+                    }.createDelegate(this));
                  }.createDelegate(data.node.attributes);
                } else { //Insert jsonPanel
                  data.config=function(callback){
-                   callback({ xtype : "jsonpanel", 
-                              autoLoad : url, 
-                              __JSON__scope : "scope" 
+                   callback({ xtype : "jsonpanel",
+                              autoLoad : url,
+                              __JSON__scope : "scope"
                             });
                  }.createDelegate(data.node.attributes);
                }
@@ -585,9 +608,10 @@
         border  : false,
         minHeight : 150,
         split:true,
-        height:170,   
+        height:170,
         propertyTypes : scope.properties,
         codePress : scope.codePress,
+        codePressPath : scope.codePressPath,
         source : {},
         listeners : {
           'render': function() {

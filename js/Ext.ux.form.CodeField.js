@@ -1,5 +1,5 @@
  /*global Ext document */
- /*  
+ /*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -41,7 +41,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
 
     // private
     defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;",autocomplete: "off"},
-        
+
     /**
      * Default language of scripteditor (defaults javascript)
      * @type {String}
@@ -55,13 +55,27 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
     codePress : true, //codePress enabled
 
     /**
+     * Location of CodePress
+     * @type {String}
+     @cfg */
+    codePressPath : undefined,
+
+    /**
+     * InitEvents and redirect dblclick to triggerclick
+     */
+    initEvents : function(){
+        Ext.ux.form.CodeField.superclass.initEvents.call(this);
+        this.el.on('dblclick', this.onTriggerClick, this);
+    },
+
+    /**
      * Returns the current value of the  field
      * @return {String} value The value
      */
     getValue : function(){
       return Ext.ux.form.CodeField.superclass.getValue.call(this) || this.defaultValue || " ";
     },
-    
+
     /**
      * Sets the value of the field.
      * @param {String} code The code string
@@ -70,14 +84,14 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
       Ext.ux.form.CodeField.superclass.setValue.call(this, this.formatCode(code));
       this.setCode(code);
     },
-    
+
     /**
      * Callback function when code is changed with setValue
      * @param {String} code The code used
      */
     setCode : function(code) {
     },
-    
+
     /**
      * Format the code, by default code is rtrimed
      * @param {String} code The code string
@@ -91,13 +105,13 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
     parseCode : function(value){
       return true;
     },
-    
+
     //Private force reload of value after textarea is renderd when we have default value
     initValue : function(){
-      Ext.ux.form.CodeField.superclass.initValue.call(this);      
+      Ext.ux.form.CodeField.superclass.initValue.call(this);
       this.on('focus',function(){this.setValue(this.getValue())},this);
     },
-    
+
     // private
     validateValue : function(value){
         if(!Ext.ux.form.CodeField.superclass.validateValue.call(this, value)){
@@ -131,8 +145,8 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
             return;
         }
         if (!this.editorWin) {
-          var tf = (this.codePress && Ext.ux.CodePress) 
-                 ?  new Ext.ux.CodePress({language: this.language ,autoResize:true,trim : true})
+          var tf = (this.codePress && Ext.ux.CodePress)
+                 ?  new Ext.ux.CodePress({path: this.codePressPath, language: this.language ,autoResize:true,trim : true})
                  :  new Ext.form.TextArea({resize:Ext.emptyFn});
           this.editorWin = new Ext.Window({
               title  : "CodeField Editor",
@@ -142,7 +156,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
               height:450,
               plain:true,
               modal: true,
-              maximizable : true,          
+              maximizable : true,
               layout      : 'fit',
               items       : tf,
               closeAction : 'hide',
@@ -151,25 +165,25 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
                   scope: this,
                   fn: function() {
                     this.editorWin.hide();
-                    if (this.editor.cancelEdit) this.editor.cancelEdit();  
+                    if (this.editor.cancelEdit) this.editor.cancelEdit();
                   }}],
               buttons: [{
                  text    : "Close",
                  scope   : this,
-                 handler : function() {             
-                   this.editorWin.hide(); 
-                   if (this.editor.cancelEdit) this.editor.cancelEdit();  
+                 handler : function() {
+                   this.editorWin.hide();
+                   if (this.editor.cancelEdit) this.editor.cancelEdit();
                  }
                 },{
                  text    : "Apply",
                  scope   : this,
-                 handler : function() {       
+                 handler : function() {
                    this.setValue(tf.getValue());
                    this.editorWin.hide();
-                   this.editorWin.el.unmask(); 
+                   this.editorWin.el.unmask();
                    if (this.editor.completeEdit) this.editor.completeEdit();
                  }
-               }] 
+               }]
             });
           this.editorWin.tf = tf;
           this.editorWin.doLayout();
@@ -178,7 +192,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
         this.editorWin.show();
         this.editorWin.tf.setValue(this.getValue());
     },
-   
+
    onRender : function(ct, position){
       this.editor = Ext.getCmp(ct.id) || {};
       Ext.ux.form.CodeField.superclass.onRender.call(this, ct, position);

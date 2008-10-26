@@ -29,6 +29,38 @@ Ext.ux.guid.plugin.Designer = function(config){
 };
 
 Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
+  //@private The version of the designer
+  version : '2.1.0-RC1',
+
+  /**
+   * The path where all json used by designer is located
+   * @type {String}
+   @cfg */
+  jsonPath : 'js/', 
+
+  /**
+   * The path where all wizards used by designer is located
+   * @type {String}
+   @cfg */
+  wizardPath : 'wizard/', 
+
+  /**
+   * The path where all thirdparty elements
+   * @type {String}
+   @cfg */
+  thirdpartyPath : '3rdparty/', 
+
+  /**
+   * The path where documentation used by designer is located
+   * @type {String}
+   @cfg */
+  docPath : 'doc/', 
+  
+  /**
+   * The path where stylesheets used by designer is located
+   * @type {String}
+   @cfg */
+  cssPath : 'css/', 
 
   /**
    * When true the toolbox is show on init
@@ -46,7 +78,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * Url used to load toolbox json from defaults to <this.file>/Ext.ux.guid.plugin.Designer.json
    * @type {String}
    @cfg */
-  toolboxJson   : 'js/Ext.ux.guid.plugin.Designer.json',
+  toolboxJson   : '{0}Ext.ux.guid.plugin.Designer.json',
 
   /**
    * Enable or disable the usage of customProperties (defaults false).
@@ -78,6 +110,17 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   enableVersion : true,
 
   /**
+   * Enable or disable the option menu button (defaults true)
+   * @type {Boolean}
+   @cfg */
+   enableOptions : true,
+
+   /**
+    * The url with the options screen
+    */
+   optionsUrl  : '{0}Designer.Options.json',
+
+  /**
    * An array of property defintion to add to default (propertyDefinitions)
    * @type {Array}
    @cfg */
@@ -86,7 +129,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    * @private Internal array with all files with property defintions to load
    */
-  propertyDefinitions : ['js/Ext.ux.guid.plugin.Designer.Properties.json'],
+  propertyDefinitions : ['{0}Ext.ux.guid.plugin.Designer.Properties.json'],
 
   /**
    * An array of files with additional components
@@ -96,8 +139,14 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    *@private Internal array with all files with components to load
    */
-  components : ['js/Ext.ux.guid.plugin.Designer.Components.json'],
+  components : ['{0}Ext.ux.guid.plugin.Designer.Components.json'],
 
+  /**
+   * A url containing the help documentation, when undefined local host is assumed
+   * @type {String}
+   @cfg */
+  helpUrl : '{3}index.html',
+  
   /**
    * An url specifing the json to load
    * @type {Url}
@@ -107,12 +156,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   //@private Whe tag each json object with a id
   jsonId :  '__JSON__',
 
-  
-  //@private The version of the designer
-  version : '2.1.0-RC1',
-
   //@private The licenseText used
-  licenseText  :  "/* This file is created or modified with \n * Ext.ux.guid.plugin.GuiDesigner (v{0}) \n */",
+  licenseText  :  "/* This file is created or modified with \n * Ext.ux.guid.plugin.GuiDesigner (v{5}) \n */",
 
   //@private The id for button undo
   undoBtnId  : Ext.id(),
@@ -131,7 +176,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * A repository config item
    */
   repository : null,
-  
+
   /**
    * Should it use codePress as code editor (defaults true)
    * @type {Boolean}
@@ -139,11 +184,46 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   codePress : !Ext.isSafari, //codePress enabled by default when not Safari/Chrome
 
   /**
+   * Location of CodePress
+   * @type {String}
+   @cfg */
+  codePressPath : '{2}codepress',
+  
+  /**
+   * Change the location parameters of path
+   * @param {String} path The path for which path specifiers should be replaced
+   * {0} is jsonPath
+   * {1} is wizardPath, defaults to jsonPath
+   * {2} is thridpartyPath
+   * {3} is docPath
+   * {4} is cssPath
+   * {5} is version
+   * @returns {String} The changes path
+   */
+  formatPath : function(path) {
+    return String.format(path,
+         this.jsonPath || '',
+         this.wizardPath ||  this.jsonPath || '',
+         this.thirdpartyPath || '',
+         this.docPath  || '',
+         this.cssPath  || '',
+         this.version);
+  },
+    
+  /**
    * Called from within the constructor allowing to initialize the parser
    */
   initialize: function() {
     Ext.ux.guid.plugin.Designer.superclass.initialize.call(this);
-    this.licenseText=String.format(this.licenseText,this.version);
+    this.licenseText=this.formatPath(this.licenseText);
+    this.toolboxJson=this.formatPath(this.toolboxJson);
+    this.optionsUrl=this.formatPath(this.optionsUrl);
+    this.helpUrl=this.formatPath(this.helpUrl);
+    this.codePressPath=this.formatPath(this.codePressPath);
+    for (var i=0;i<this.propertyDefinitions.length;i++) 
+        this.propertyDefinitions[i]=this.formatPath(this.propertyDefinitions[i]);
+    for (var i=0;i<this.components.length;i++) 
+        this.components[i]=this.formatPath(this.components[i]);
     Ext.QuickTips.init();
     this.addEvents({
       /**
@@ -353,7 +433,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
           this.redrawElement(own,this.getJsonId(this.activeElement==source ? own : this.activeElement));
           this.fireEvent('remove');
         } else {
-          
+
           this.redrawContainer = true;
         }
         return true;
@@ -573,19 +653,19 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   require : function(packages,options){
     var ret = Ext.ux.guid.plugin.Designer.superclass.require.call(this,packages,options);
     if (ret.js.length || ret.css.length) {
-      var nocache = (options && options.nocache!=undefined) ? options.nocache : this.nocache; 
+      var nocache = (options && options.nocache!=undefined) ? options.nocache : this.nocache;
       var cfg = (this.container.items && this.container.items.items.length==1) ?
              this.getConfig(this.container.items.items[0]) : {};
       //Check if root is a array with more then one element, if so skip
        if (!cfg.json) cfg.json = {};
        //Parse original so if can be reused as base
-       var myEncoder = new Ext.ux.Json({jsonId : this.jsonId, nocache : nocache});
+       var myEncoder = new Ext.ux.Json({jsonId : this.jsonId, nocache : nocache,evalException : false});
        var o = myEncoder.decode(cfg[this.jsonId + "json"]) || {};
        var a = cfg.json && cfg.json.required_js ? cfg.json.required_js.split(';') :[];
-       for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(a[i]);
+       for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(this.formatPath(a[i]));
        if (ret.js.length!=0) o.required_js=cfg.json.required_js=ret.js.join(';');
        a = cfg.json && cfg.json.required_css ? cfg.json.required_css.split(';') :[];
-       for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(a[i]);
+       for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(this.formatPath(a[i]));
        if (ret.css.length!=0) o.required_css=cfg.json.required_css=ret.css.join(';');
        cfg[this.jsonId+"json"]=myEncoder.encode(o);
        if (!(this.container.items && this.container.items.items.length==1)) ret['cfg']=cfg;
@@ -711,13 +791,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     }
     return  false;
   },
-  
+
   /**
    * Select and focus a element
    */
   focusElement : function(el) {
     var cmp = this.selectElement(el);
-    if (cmp  && cmp.innerWrap) {      
+    if (cmp  && cmp.innerWrap) {
      cmp.innerWrap.focus();
     } else if (cmp) cmp.focus();
   },
@@ -749,8 +829,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
               check.codeConfig.activeTab=i;
               check.doLayout();
             }
-          }          
-        } 
+          }
+        }
         selectParent(this.getContainer(cmp.ownerCt),cmp);
       }.createDelegate(this);
       selectParent(cmp,null);
@@ -788,7 +868,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        if (el.id != this.container.id) el.addClass("designerddgroup");
       }
       return el;
-      
+
     }
     return el;
   },
@@ -823,7 +903,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         //Check if element is contained within container and if is autoLoaded
         var id = this.container.getId(),c = cmp;
         loops = 50;
-        while (loops && c && c.id != id) {           
+        while (loops && c && c.id != id) {
           if (c instanceof Ext.Panel && c.autoLoad) cmp=c;
           c = c.ownerCt;
           loops--;
@@ -832,7 +912,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         if (!cmp.codeConfig) cmp.codeConfig = this.getConfig(cmp);
         if (!allowField && cmp == this.container) return false;
         return contained ? cmp : (allowField ? this.container : false);
-      } 
+      }
       el = el.parentNode;
       loops--;
     }
@@ -900,7 +980,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          if(c.items && c.items.items){
             var cs = c.items.items;
             for(var i = 0, len = cs.length; i < len  && !findNode(cs[i]); i++) {}
-         }         
+         }
          return true;
        }
       }
@@ -990,13 +1070,6 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       this.setObjectValue(source,key,value,value);
       return false; //We have set value
     },this);
-    propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
-        //When somebody changed the json, then make sure we init the changes
-        switch (id) {
-          case 'json' : this.jsonInit(this.decode(value));break
-        }
-        this.redrawElement.defer(200,this,[this.activeElement]);
-    }, this);
   },
 
   /**
@@ -1007,10 +1080,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (!this._toolbox) {
       //Build the url array used to load the property list
       for (var i=0;this.propertyDefinitionFiles && i<this.propertyDefinitionFiles.length;i++) {
-         if (this.propertyDefinitions.indexOf(this.propertyDefinitionFiles[i])==-1)
+        this.propertyDefinitionFiles[i]=this.formatPath(this.propertyDefinitionFiles[i]);
+        if (this.propertyDefinitions.indexOf(this.propertyDefinitionFiles[i])==-1)
             this.propertyDefinitions.push(this.propertyDefinitionFiles[i]);
       }
       for (var i=0;this.componentFiles && i<this.componentFiles.length;i++) {
+        this.componentFiles[i]=this.formatPath(this.componentFiles[i]);
         if (this.components.indexOf(this.componentFiles[i])==-1)
           this.components.push(this.componentFiles[i]);
       }
@@ -1109,14 +1184,17 @@ Ext.override(Ext.form.Label, {
 });
 
 /**
- * Override the checkbox so that the click event is passed to designer
+ * Override the checkbox so that in case of designer the click event is disabled
+ * and event is passed to designer
  */
 Ext.override(Ext.form.Checkbox,{
     // private
     onClick : function(e){
-        if (!this.disabled && !this.readOnly) {
+       if (!this.codeConfig) {
+         if (!this.disabled && !this.readOnly) {
             this.toggleValue();
-        }
-      //  e.stopEvent();
+         }
+         e.stopEvent();
+       }
     }
 });

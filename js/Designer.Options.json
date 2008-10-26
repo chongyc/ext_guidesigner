@@ -1,0 +1,83 @@
+/* This file is created or modified with 
+ * Ext.ux.guid.plugin.GuiDesigner (v2.1.0-RC1) 
+ */
+{
+xtype : "form",
+items : [{
+    xtype : "checkbox",
+    fieldLabel : "Dock toolbox",
+    inputValue : "1",
+    name : "dock"
+  },{
+    xtype : "checkbox",
+    fieldLabel : "Caching off",
+    inputValue : "1",
+    name : "caching"
+  },{
+    xtype : "checkbox",
+    name : "codepress",
+    inputValue : "1",
+    fieldLabel : "Use Codepress"
+  },{
+    xtype : "checkbox",
+    inputValue : "1",
+    name : "float",
+    fieldLabel : "Floating designer"
+  },{
+    xtype : "numberfield",
+    name : "floatheight",
+    width : 75,
+    fieldLabel : "Float height"
+  },{
+    xtype : "numberfield",
+    name : "floatwidth",
+    width : 75,
+    fieldLabel : "Float width"
+  },{
+    xtype : "panel",
+    items : [{
+        xtype : "textarea",
+        name : "cmpfiles",
+        width : 160,
+        border : true
+      }],
+    layout : "fit",
+    title : "List of component files"
+  }],
+buttons : [{
+  text:"Apply",
+  scope : scope.optionPanel,   
+  handler : function(){
+    var f = this.items.first().form;
+    scope.cookies.set('Designer.Options',f.getValues());
+    this.hide();
+  }
+},{
+  text : "Cancel",
+  scope : scope.optionPanel, 
+  handler : function(){this.hide();}
+}],
+frame : true,
+listeners : {
+ render : function(win){
+   if (!scope.cookies) {
+     scope.cookies = new Ext.state.CookieProvider();
+   }
+   var f = scope.optionPanel.items.first().form;
+   f.setValues.defer(100,f,[
+     scope.cookies.get('Designer.Options') ||
+     {dock : 1,
+      codepress : 1,
+      floatheight : 480,
+      floatwidth : 480,
+      cmpfiles : "{0}ThirdParty.Components.json"}
+   ]);
+ }
+},
+json : {
+  "scope.!_toolbox" : { getId : Ext.emptyFn},
+  title : 'Configure GuiDesigner', 
+  size : {width : 220, height: 320},
+  alignTo: [scope._toolbox.getId(),'tl?']
+}
+}

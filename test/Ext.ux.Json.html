@@ -36,6 +36,16 @@
 				plan({ tests: 27 });
 				//diag('Decoder operations:');
 
+			 	 obj = Ext.ux.JSON.decode('{\
+				  "scope.!toolbox" : { getId : Ext.emptyFn},\
+				  title : ("Configure GuiDesigner"),\
+				  size : {width : 220, height: 310},\
+				  alignTo: [scope._toolbox.getId(),"tl?"]\
+				 }');
+
+				is(obj.alignTo[1],'tl?','Decode align');
+
+return;
 
                 obj = Ext.ux.JSON.decode('"string"');
                 is(obj,'string','Decode string');

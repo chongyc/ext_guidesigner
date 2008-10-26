@@ -1,5 +1,5 @@
 /*global Ext document */
- /*  
+ /*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -29,11 +29,11 @@ Ext.isVersion = function(fromVersion,toVersion) {
     toVersion = formVersion[1];
     fromVersion = formVersion[0];
   }
-  var getVersion = function(ver) {    
+  var getVersion = function(ver) {
     var major = ver.match(/^(\d)\.\d/);
     major = major ? major[1] : 0;
     var minor = ver.match(/^\d\.(\d)/);
-    minor = minor ? minor[1] : 0; 
+    minor = minor ? minor[1] : 0;
     var revision = ver.match(/^\d\.\d\.(\d)/);
     revision = revision ? revision[1] : 0;
     return (major*1) + (minor*0.1) + (revision*0.001);
@@ -63,7 +63,7 @@ Ext.overrideIf = function(cl,obj,fromVersion,toVersion) {
  * @param {Object} source The source object
  * @param {Object} obj The object to apply
  * @param {String} fromVersion The version which is at least required
- * @param {String} toVersion The version which is used as end (default ExtJS version)  
+ * @param {String} toVersion The version which is used as end (default ExtJS version)
  */
 Ext.applyVersion = function(source,obj,fromVersion,toVersion) {
   if (Ext.isVersion(fromVersion,toVersion)) {
@@ -77,7 +77,7 @@ Ext.applyVersion = function(source,obj,fromVersion,toVersion) {
  * @param {Object} source The source object
  * @param {Object} obj The object to apply
  * @param {String} fromVersion The version which is at least required
- * @param {String} toVersion The version which is used as end (default ExtJS version)  
+ * @param {String} toVersion The version which is used as end (default ExtJS version)
  */
 Ext.applyIfVersion = function(source,obj,fromVersion,toVersion) {
   if (Ext.isVersion(fromVersion,toVersion)) {
@@ -87,14 +87,14 @@ Ext.applyIfVersion = function(source,obj,fromVersion,toVersion) {
 };
 
 /**
- * Override Ext.Panel so that scope of keymap is always set to object when not set, 
- * instead of window 
+ * Override Ext.Panel so that scope of keymap is always set to object when not set,
+ * instead of window
  */
 Ext.overrideIf(Ext.Panel,{
    // private
     getKeyMap : function(){
       if(!this.keyMap){
-        if(Ext.isArray(this.keys)){          
+        if(Ext.isArray(this.keys)){
           for(var i = 0, len = this.keys.length; i < len; i++){
             this.keys[i].scope = this.keys[i].scope || this;
           }
@@ -114,7 +114,7 @@ Ext.overrideIf(Ext.FormPanel, {
     // private
     initFields : function(){
         //BEGIN FIX It can happend that there is a form created without items (json)
-        this.initItems(); 
+        this.initItems();
         //END FIX
         var f = this.form;
         var formPanel = this;
@@ -146,7 +146,7 @@ Ext.overrideIf(Ext.Button, {
         Ext.QuickTips.register({
             target: btnEl.id,
             text: qtipText
-        });             
+        });
     }
 },'2.0');
 
@@ -161,15 +161,15 @@ Ext.applyIfVersion(Ext,{
 
 /**
  * Override the Ext.ComponentMgr so that whe can validate if a type is available
- */ 
+ */
 Ext.ComponentMgr = function(extMgr){
     var types = {}; //List of all types
-    
+
     function addTypes(condition,typeLine){
       if (!condition || !typeLine) return;
       for (var t=typeLine.split(','),i=0;i<t.length;i++) {types[t[i]]=t[i];}
     }
-    
+
     addTypes(Ext.isVersion('2.0'),'box,button,colorpalette,component,container,cycle,' +
       'dataview,datepicker,editor,editorgrid,grid,paging,panel,progress,propertygrid,' +
       'splitbutton,tabpanel,treepanel,viewport,window,toolbar,tbbutton,tbfill,tbitem,' +
@@ -177,7 +177,7 @@ Ext.ComponentMgr = function(extMgr){
       'hidden,htmleditor,label,numberfield,radio,textarea,textfield,timefield,trigger');
 
     addTypes(Ext.isVersion('2.1'),'slider,statusbar');
-   
+
     return Ext.applyIf({
         registerType : function(xtype, cls){
             extMgr.registerType(xtype,cls);
@@ -187,7 +187,7 @@ Ext.ComponentMgr = function(extMgr){
         isTypeAvailable : function (xtype) {
           return !!types[xtype];
         },
-        
+
         allTypes : function(){
           var arr = [];
           for (var key in types) {
@@ -195,7 +195,9 @@ Ext.ComponentMgr = function(extMgr){
           }
           return arr;
         }
-                
+
     },extMgr);
 }(Ext.ComponentMgr);
-Ext.reg = Ext.ComponentMgr.registerType; // this will be called a lot internally, shorthand to keep the bytes down
+
+// this will be called a lot internally, shorthand to keep the bytes down
+Ext.reg = Ext.ComponentMgr.registerType;

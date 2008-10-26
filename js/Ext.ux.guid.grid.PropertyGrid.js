@@ -57,7 +57,7 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         var data = [];
         for(var k in o){
             var orgKey = (k.indexOf(this.jsonId)==0 && k!=this.jsonId) ?
-                 k.substring(this.jsonId.length) : null;                 
+                 k.substring(this.jsonId.length) : null;
             if (orgKey && o[orgKey]==undefined) k =orgKey;
             if(k.indexOf(this.jsonId)!=0 && ['items'].indexOf(k)==-1){
                 var v = o[this.jsonId + k];
@@ -117,15 +117,15 @@ Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
     ]);
     this.jsonId=grid.jsonId;
     Ext.apply(this.editors,{
-        'regexp' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'new RegExp()',codePress:grid.codePress})),
-        'function':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'function(){}',codePress:grid.codePress})),
-        'object':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'{}',codePress:grid.codePress})),
-        'object/array':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'[{}]',codePress:grid.codePress})),
-        'array': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'[]',codePress:grid.codePress})),
-        'template': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',codePress:grid.codePress})),
-        'mixed': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',codePress:grid.codePress})),
-        'html' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',language:'html',codePress:grid.codePress})),
-        'css' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',language:'css',codePress:grid.codePress})),
+        'regexp' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'new RegExp()',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'function':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'function(){}',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'object':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'{}',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'object/array':new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'[{}]',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'array': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'[]',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'template': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'mixed': new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'html' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',language:'html',codePress:grid.codePress,codePressPath:grid.codePressPath})),
+        'css' : new Ext.grid.GridEditor(new Ext.ux.form.CodeField({defaultValue:'',language:'css',codePress:grid.codePress,codePressPath:grid.codePressPath})),
         'editlist' :new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:true})),
         'list':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[],editable:true,customProperties:false})),
         'boolean':new Ext.grid.GridEditor(new Ext.ux.form.SimpleCombo({forceSelection:false,data:[[true,'true'],[false,'false']],editable:true,customProperties:true}))
@@ -218,12 +218,18 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         forceFit:true
     },
     jsonId : '__JSON__',
-    
+
     /**
      * Should it use codePress as code editor (defaults true)
      * @type {Boolean}
      @cfg */
     codePress : true, //codePress enabled
+
+		/**
+		 * Location of CodePress
+		 * @type {String}
+		 @cfg */
+		codePressPath : undefined,
 
     getPropertyType : function (name) {
       if (this.propertyTypes) {

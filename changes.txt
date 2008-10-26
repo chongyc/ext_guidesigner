@@ -10,6 +10,11 @@ TODO
  - In appendConfig merge the json objects, and delete from new item
  - Split big json in multiple files
  - Problem that there is a cmp exception thrown
+ - Create a compress directory with compressed designer and index
+ - Remove codepress from js and move to 3rdparty
+ - Make compress script to include code copy
+ - Fix paths by setting default designerJsonPath for designer
+ - Compressed version should link to external documentation
  
  Change History:
  Version 2.1.0:
