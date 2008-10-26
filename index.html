@@ -39,7 +39,7 @@
      var nocache = Ext.ux.UTIL.getUrlAction('nocache',0)==1;
      if (Ext.ux.UTIL.getUrlAction('debug',0)==0) {
        require('Ext.ux.guid.plugin.Designer.css;Ext.ux.guid.plugin.Designer-all',
-          {basedir:'js',cssdir:'css',nocache: nocache});
+          {basedir:'compressed',cssdir:'css',nocache: nocache});
      } else {
        require('Ext.ux.guid.plugin.Designer.css;Ext.ux.Override;' +
             'Ext.ux.CodePress.js;Ext.ux.ComponentCollection;Ext.ux.Json;' +
