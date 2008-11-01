@@ -1,5 +1,5 @@
-/* This file is created or modified with 
- * Ext.ux.guid.plugin.GuiDesigner (v2.1.0-RC1) 
+/* This file is created or modified with
+ * Ext.ux.guid.plugin.GuiDesigner (v2.1.0-RC1)
  */
 {
 xtype : "form",
@@ -10,9 +10,14 @@ items : [{
     name : "dock"
   },{
     xtype : "checkbox",
+    fieldLabel : "Compressed",
+    inputValue : "1",
+    name : "compressed"
+  },{
+    xtype : "checkbox",
     fieldLabel : "Caching off",
     inputValue : "1",
-    name : "caching"
+    name : "nocache"
   },{
     xtype : "checkbox",
     name : "codepress",
@@ -46,15 +51,20 @@ items : [{
   }],
 buttons : [{
   text:"Apply",
-  scope : scope.optionPanel,   
+  scope : scope.optionPanel,
   handler : function(){
     var f = this.items.first().form;
     scope.cookies.set('Designer.Options',f.getValues());
-    this.hide();
+    if (scope.isModified()) {
+      Ext.Msg.alert('info','Current design is modified, changes apply after refresh of designer');
+      this.hide();
+    } else {
+     location.reload();
+    }
   }
 },{
   text : "Cancel",
-  scope : scope.optionPanel, 
+  scope : scope.optionPanel,
   handler : function(){this.hide();}
 }],
 frame : true,
@@ -68,6 +78,7 @@ listeners : {
      scope.cookies.get('Designer.Options') ||
      {dock : 1,
       codepress : 1,
+      compressed : 1,
       floatheight : 480,
       floatwidth : 480,
       cmpfiles : "{0}ThirdParty.Components.json"}
@@ -76,8 +87,8 @@ listeners : {
 },
 json : {
   "scope.!_toolbox" : { getId : Ext.emptyFn},
-  title : 'Configure GuiDesigner', 
-  size : {width : 220, height: 320},
+  title : 'Configure GuiDesigner',
+  size : {width : 220, height: 360},
   alignTo: [scope._toolbox.getId(),'tl?']
 }
 }

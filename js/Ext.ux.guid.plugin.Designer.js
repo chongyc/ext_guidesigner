@@ -17,7 +17,7 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-
+Ext.namespace('Ext.ux.guid');
 Ext.namespace('Ext.ux.guid.plugin');
 
 /**
@@ -36,31 +36,31 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * The path where all json used by designer is located
    * @type {String}
    @cfg */
-  jsonPath : 'js/', 
+  jsonPath : 'js/',
 
   /**
    * The path where all wizards used by designer is located
    * @type {String}
    @cfg */
-  wizardPath : 'wizard/', 
+  wizardPath : 'wizard/',
 
   /**
    * The path where all thirdparty elements
    * @type {String}
    @cfg */
-  thirdpartyPath : '3rdparty/', 
+  thirdpartyPath : '3rdparty/',
 
   /**
    * The path where documentation used by designer is located
    * @type {String}
    @cfg */
-  docPath : 'doc/', 
-  
+  docPath : 'doc/',
+
   /**
    * The path where stylesheets used by designer is located
    * @type {String}
    @cfg */
-  cssPath : 'css/', 
+  cssPath : 'css/',
 
   /**
    * When true the toolbox is show on init
@@ -146,7 +146,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @type {String}
    @cfg */
   helpUrl : '{3}index.html',
-  
+
   /**
    * An url specifing the json to load
    * @type {Url}
@@ -188,7 +188,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @type {String}
    @cfg */
   codePressPath : '{2}codepress',
-  
+
   /**
    * Change the location parameters of path
    * @param {String} path The path for which path specifiers should be replaced
@@ -209,7 +209,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          this.cssPath  || '',
          this.version);
   },
-    
+
   /**
    * Called from within the constructor allowing to initialize the parser
    */
@@ -220,9 +220,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.optionsUrl=this.formatPath(this.optionsUrl);
     this.helpUrl=this.formatPath(this.helpUrl);
     this.codePressPath=this.formatPath(this.codePressPath);
-    for (var i=0;i<this.propertyDefinitions.length;i++) 
+    for (var i=0;i<this.propertyDefinitions.length;i++)
         this.propertyDefinitions[i]=this.formatPath(this.propertyDefinitions[i]);
-    for (var i=0;i<this.components.length;i++) 
+    for (var i=0;i<this.components.length;i++)
         this.components[i]=this.formatPath(this.components[i]);
     Ext.QuickTips.init();
     this.addEvents({
@@ -601,6 +601,16 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        var el = this.container.add(config);
        el.codeConfig = config;
     }
+  },
+
+  /**
+   * Boolean indicator telling if code has been modified
+   * @param {boolean} newValue the value to set modify flag (defaults unchanged)
+   * @returns {boolean} The state flag
+   */
+  isModified : function(newValue){
+    if (newValue!=undefined) this.modified=newValue;
+    return this.modified;
   },
 
   /**

@@ -18,6 +18,7 @@
   */
 
 //Register name spaces used
+Ext.namespace('Ext.ux.guid');
 Ext.namespace('Ext.ux.guid.tree');
 
 /**

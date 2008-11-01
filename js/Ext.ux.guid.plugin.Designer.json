@@ -429,7 +429,11 @@
                 text = '';
                 for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
                 scope.repository.save(text,scope.getCode(),function(success){
-                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + text);
+                 if (!success) {
+                   Ext.Msg.alert('Error','Failed to save file ' + text);
+                 } else {
+                   scope.isModified(false);
+                 }
                  if (typeof callback == "function") callback(success);
                 });
                 this.reload();
@@ -452,7 +456,11 @@
             handler: function(){
               if (scope.repository.last) {
                 scope.repository.save(scope.repository.last,scope.getCode(),function(success){
-                 if (!success) Ext.Msg.alert('Error','Failed to save file ' + scope.repository.last);
+                 if (!success) {
+                   Ext.Msg.alert('Error','Failed to save file ' + scope.repository.last);
+                 } else {
+                  scope.isModified(true);
+                 }
                 });
               } else {
                 Ext.getCmp(scope.RepositoryId).saveAs();

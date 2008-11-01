@@ -24,52 +24,67 @@
 <link rel="shortcut icon" href="icons/favicon.ico" >
 <title>ExtJs Gui Designer</title>
 	<!-- The ExtJs base 2.2, version 2.0.2 is still supported  -->
+    <link rel="stylesheet" type="text/css" href="css/Loading.css" />
     <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
- 	<script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="extjs/ext-all.js"></script>
-
-	<!-- Remove localXHR.js when running from webserver -->
-    <script id="localXHR.js" src="js/localXHR.js" type="text/javascript"></script>
-
-	<!-- General components  -->
-	<script id="js/Ext.ux.Util.js" src="js/Ext.ux.Util.js" type="text/javascript"></script>
-
-    <!-- Now load based on action a compressed or debugable version of desginer -->
-    <script>
-     var nocache = Ext.ux.UTIL.getUrlAction('nocache',0)==1;
-     if (Ext.ux.UTIL.getUrlAction('debug',0)==0) {
-       require('Ext.ux.guid.plugin.Designer.css;Ext.ux.guid.plugin.Designer-all',
-          {basedir:'compressed',cssdir:'css',nocache: nocache});
-     } else {
-       require('Ext.ux.guid.plugin.Designer.css;Ext.ux.Override;' +
-            'Ext.ux.CodePress.js;Ext.ux.ComponentCollection;Ext.ux.Json;' +
-            'Ext.ux.form.CodeField;Ext.ux.data.HttpMergeProxy;Ext.ux.JsonPanel;' +
-            'Ext.ux.JsonWindow;Ext.ux.guid.tree.JsonTreeLoader;' +
-            'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;' +
-            'Ext.ux.guid.data.Repository;Ext.ux.guid.tree.RepositoryLoader;'+
-            'Ext.ux.guid.data.CookieRepository;Ext.ux.guid.data.PHPFileRepository;'+
-            'Ext.ux.guid.plugin.Designer',
-        {basedir:'js',cssdir:'css',nocache: nocache});
-     }
-   </script>
 
 
 <!-- Look for a change log at changes.txt -->
 </head>
 <body>
+<div id="loading-mask"></div>
+<div id="loading">
+  <div class="loading-indicator"><img src="icons/loading-balls.gif" style="margin-right:8px;" align="absmiddle"/>Loading GuiDesigner....</div>
+</div>
+
+<script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="extjs/ext-all.js"></script>
+
+<!-- Utility class which contains require  -->
+<script id="js/Ext.ux.Util.js" src="js/Ext.ux.Util.js" type="text/javascript"></script>
+
+<!-- Now load based on action a compressed or debugable version of desginer -->
 <script>
 Ext.SSL_SECURE_URL="extjs/resources/images/default/s.gif";
 Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
+
+//Load localXHR.js when not running in webserver
+if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
+
  /*
   You can now use the designer as panel, JSON can contain javascript and information
   of base info is stored in special tag Window. enabling auto create window/frame see show code
  */
  var phpSupport; // Flag is set in index.php to indicate whe support PHP
  var designer; //Variable used to save the designer plugin
+ var cookies = new Ext.state.CookieProvider();
+ var options = cookies.get('Designer.Options') ||
+	  {dock : 1,
+	   compressed : 1,
+	   codepress : 1,
+	   floatheight : 480,
+	   floatwidth : 480,
+	   cmpfiles : "{0}ThirdParty.Components.json"};
 
  //Url based actions
- var windowMode = Ext.ux.UTIL.getUrlAction('window',0)==1; //Change this flag to true if you want designer to be a window
- var docked = Ext.ux.UTIL.getUrlAction('docked',0)==1;
+ var windowMode = Ext.ux.UTIL.getUrlAction('window',options.float)==1; //Change this flag to true if you want designer to be a window
+ var docked = Ext.ux.UTIL.getUrlAction('docked',options.dock)==1;
+ var nocache = Ext.ux.UTIL.getUrlAction('nocache',options.nocache)==1;
+
+ if (Ext.ux.UTIL.getUrlAction('compressed',options.compressed)==1 &&
+	 Ext.ux.UTIL.getUrlAction('debug',0)==0) {
+   require('Ext.ux.guid.plugin.Designer.css;Ext.ux.guid.plugin.Designer-all',
+	  {basedir:'compressed',cssdir:'css',nocache: nocache});
+ } else {
+   require('Ext.ux.guid.plugin.Designer.css;Ext.ux.Override;' +
+		'Ext.ux.CodePress.js;Ext.ux.ComponentCollection;Ext.ux.Json;' +
+		'Ext.ux.form.CodeField;Ext.ux.data.HttpMergeProxy;Ext.ux.JsonPanel;' +
+		'Ext.ux.JsonWindow;Ext.ux.guid.tree.JsonTreeLoader;' +
+		'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;' +
+		'Ext.ux.guid.data.Repository;Ext.ux.guid.tree.RepositoryLoader;'+
+		'Ext.ux.guid.data.CookieRepository;Ext.ux.guid.data.PHPFileRepository;'+
+		'Ext.ux.guid.plugin.Designer',
+	{basedir:'js',cssdir:'css',nocache: nocache});
+ }
 
  //Items is the array with the designer area
  var items = docked
@@ -84,37 +99,38 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 	       width  : 237
 	     }]
 	  : [];
+  var cmpfiles = (options.cmpfiles || "").replace('\r').split("\n");
   items.push({
-              region:'center',
-              layout:'fit',
-              border:false,
-              bodyBorder:false,
-              style:'padding:3px 3px;background:black',
-              items:{
-                border:false,
-                bodyBorder:false,
-                bodyStyle:'background:black;border:dashed green 1px;',
-                xtype :'jsonpanel',
-				 plugins : [
-				    designer = new Ext.ux.guid.plugin.Designer({
-				      componentFiles : ['js/ThirdParty.Components.json'],
-				      dockedMode    : docked,
-					  evalException : false,
-					  toolboxTarget : 'toolbox',
-					  nocache : nocache,
-					  customProperties : true
-					 , repository      : phpSupport
-					                     ? new Ext.ux.guid.data.PHPFileRepository()
-					                     : new Ext.ux.guid.data.CookieRepository()
-					})
-				  ]
-	         }
-	        }
-	       );
+	  region:'center',
+	  layout:'fit',
+	  border:false,
+	  bodyBorder:false,
+	  style:'padding:3px 3px;background:black',
+	  items:{
+		border:false,
+		bodyBorder:false,
+		bodyStyle:'background:black;border:dashed green 1px;',
+		xtype :'jsonpanel',
+		 plugins : [
+			designer = new Ext.ux.guid.plugin.Designer({
+			  codePress     : !Ext.isSafari && options.codepress==1,
+			  componentFiles : cmpfiles,
+			  dockedMode    : docked,
+			  evalException : false,
+			  toolboxTarget : 'toolbox',
+			  nocache : nocache,
+			  customProperties : true
+			 , repository      : phpSupport
+								 ? new Ext.ux.guid.data.PHPFileRepository()
+								 : new Ext.ux.guid.data.CookieRepository()
+			})
+		  ]
+	 }
+  });
  if (windowMode) {
    var container = new Ext.Window({
-    height : Ext.ux.UTIL.getUrlAction('height',500),
-    width : Ext.ux.UTIL.getUrlAction('width',800),
+    height : Ext.ux.UTIL.getUrlAction('height',options.floatheight || 500),
+    width : Ext.ux.UTIL.getUrlAction('width',options.floatwidth || 800),
     maximizable : true,
     closable : false,
     title : 'Designer Window',
@@ -130,6 +146,13 @@ Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 	items: items
    });
  }
+
+ setTimeout(function(){
+	Ext.get('loading').remove();
+	Ext.get('loading-mask').fadeOut({
+		remove:true
+	});
+ }, 350);
 </script>
 </body>
 </html>

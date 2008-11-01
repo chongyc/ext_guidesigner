@@ -47,11 +47,19 @@ Ext.BLANK_IMAGE_URL="../extjs/resources/images/default/s.gif";
  */
  var phpSupport; // Flag is set in index.php to indicate whe support PHP
  var designer; //Variable used to save the designer plugin
+ var cookies = new Ext.state.CookieProvider();
+ var options = cookies.get('Designer.Options') ||
+      {dock : 1,
+       compressed : 1,
+       codepress : 1,
+       floatheight : 480,
+       floatwidth : 480,
+      cmpfiles : "{0}ThirdParty.Components.json"};
 
  //Url based actions
- var windowMode = Ext.ux.UTIL.getUrlAction('window',0)==1; //Change this flag to true if you want designer to be a window
- var docked = Ext.ux.UTIL.getUrlAction('docked',1)==1;
- var nocache = Ext.ux.UTIL.getUrlAction('nocache',0)==1;
+ var windowMode = Ext.ux.UTIL.getUrlAction('window',options.float)==1; //Change this flag to true if you want designer to be a window
+ var docked = Ext.ux.UTIL.getUrlAction('docked',options.dock)==1;
+ var nocache = Ext.ux.UTIL.getUrlAction('nocache',options.nocache)==1;
 
  //Items is the array with the designer area
  var items = docked
@@ -99,8 +107,8 @@ Ext.BLANK_IMAGE_URL="../extjs/resources/images/default/s.gif";
 	       );
  if (windowMode) {
    var container = new Ext.Window({
-    height : Ext.ux.UTIL.getUrlAction('height',500),
-    width : Ext.ux.UTIL.getUrlAction('width',800),
+    height : Ext.ux.UTIL.getUrlAction('height',options.floatheight || 500),
+    width : Ext.ux.UTIL.getUrlAction('width',options.floatwidth || 800),
     maximizable : true,
     closable : false,
     title : 'Designer Window',

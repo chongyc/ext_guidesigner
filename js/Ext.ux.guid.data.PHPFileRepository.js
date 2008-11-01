@@ -16,7 +16,7 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-
+Ext.namespace('Ext.ux.guid');
 Ext.namespace('Ext.ux.guid.data');
 
 /*

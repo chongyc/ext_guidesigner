@@ -4,17 +4,12 @@ TODO
  - In line editing of labels (fieldlabel,title,label)
 ==> Problems after creating GUID 2.1 
  - Update documentation
- - JSON Path should always be relative, directory protection
  - Allow multiple base directroy under file control
  - Add Grid Wirzard
  - In appendConfig merge the json objects, and delete from new item
  - Split big json in multiple files
  - Problem that there is a cmp exception thrown
- - Create a compress directory with compressed designer and index
- - Remove codepress from js and move to 3rdparty
- - Make compress script to include code copy
- - Fix paths by setting default designerJsonPath for designer
- - Compressed version should link to external documentation
+ - Make build script to create compresscopy and documentation and zipfiles
  
  Change History:
  Version 2.1.0:
@@ -43,6 +38,7 @@ TODO
   + When adding a second form into a form, the second form is transformed into layout
   + ScriptEditor has been replace by CodeField this also resolves a number of bugs in this area
   + You can drag you saved code to the designer, which will be loaded through JSONPanel or in case when shift key pressed or Repository is not supporting url data is appended
+  + Optionpanel added
   * Fixed problem that drag drop was not allways placing items on correct spot
   * Fixed problem that check box and radio button where not selectable
   * For json editing now also codepress is used
