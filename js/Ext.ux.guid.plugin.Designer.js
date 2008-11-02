@@ -113,12 +113,18 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * Enable or disable the option menu button (defaults true)
    * @type {Boolean}
    @cfg */
-   enableOptions : true,
+  enableOptions : true,
 
    /**
     * The url with the options screen
     */
-   optionsUrl  : '{0}Designer.Options.json',
+  optionsUrl  : '{0}Designer.Options.json',
+  
+  /**
+   * Enable or disable the autoresize of elements
+   * @type {Boolean}
+   @cfg */
+  autoResize : true, 
 
   /**
    * An array of property defintion to add to default (propertyDefinitions)
@@ -358,9 +364,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   /**
    * Start resize of an element, it will become active element
    * @param {Element} element The element to resize
+   * @param {Boolean} select Should element be selected (default true) 
    */
-  visualResize : function(element) {
-    var cmp= this.selectElement(element);
+  visualResize : function(element,select) {
+    var cmp= select===false ? element : this.selectElement(element);
     if (!cmp) return;
     var own = this.getContainer(cmp.ownerCt);
     var layout = own.codeConfig ? own.codeConfig.layout : null;
@@ -822,9 +829,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   selectElement : function (el) {
     if (typeof(el)=='string') el = this.findByJsonId(el);
     var cmp = this.highlightElement(this.getDesignElement(el));
+    if (this.autoResize && !this.isContainer(cmp)) {
+      this.visualResize(cmp,false);
+    } else {
+     this.resizeLayer.hide();
+     this.resizeLayer.resizer.dd.lock();
+    }
     if (cmp && cmp==this.activeElement) return cmp;
-    this.resizeLayer.hide();
-    this.resizeLayer.resizer.dd.lock();
     this.activeElement = cmp;
     if (cmp) {
       //Search parent and select tabpanel

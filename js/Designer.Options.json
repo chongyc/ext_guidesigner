@@ -15,6 +15,11 @@ items : [{
     name : "compressed"
   },{
     xtype : "checkbox",
+    fieldLabel : "Auto resize on",
+    inputValue : "1",
+    name : "autoresize"
+  },{
+    xtype : "checkbox",
     fieldLabel : "Caching off",
     inputValue : "1",
     name : "nocache"
@@ -43,7 +48,7 @@ items : [{
     bodyBorder :false,
     items : [{
         xtype : "textarea",
-        autoCreate : {tag: "textarea",style:"width:160px;height:80px;",autocomplete: "off",wrap:"off"},
+        autoCreate : {tag: "textarea",style:"width:160px;height:60px;",autocomplete: "off",wrap:"off"},
         name : "cmpfiles"
       }],
     layout : "fit",
@@ -79,6 +84,7 @@ listeners : {
      {dock : 1,
       codepress : 1,
       compressed : 1,
+      autoresize : 1,
       floatheight : 480,
       floatwidth : 480,
       cmpfiles : "{0}ThirdParty.Components.json"}

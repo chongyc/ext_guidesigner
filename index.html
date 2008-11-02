@@ -48,19 +48,19 @@ Ext.SSL_SECURE_URL="extjs/resources/images/default/s.gif";
 Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 
 //Load localXHR.js when not running in webserver
-if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
+if (document.location.protocol == 'file:') require('localXHR','js');
 
  /*
   You can now use the designer as panel, JSON can contain javascript and information
   of base info is stored in special tag Window. enabling auto create window/frame see show code
  */
  var phpSupport; // Flag is set in index.php to indicate whe support PHP
- var designer; //Variable used to save the designer plugin
  var cookies = new Ext.state.CookieProvider();
  var options = cookies.get('Designer.Options') ||
 	  {dock : 1,
 	   compressed : 1,
 	   codepress : 1,
+	   autoresize : 1,
 	   floatheight : 480,
 	   floatwidth : 580,
 	   cmpfiles : "{0}ThirdParty.Components.json"};
@@ -69,6 +69,9 @@ if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
  var windowMode = Ext.ux.UTIL.getUrlAction('window',options.float)==1; //Change this flag to true if you want designer to be a window
  var docked = Ext.ux.UTIL.getUrlAction('docked',options.dock)==1;
  var nocache = Ext.ux.UTIL.getUrlAction('nocache',options.nocache)==1;
+ var autoResize = Ext.ux.UTIL.getUrlAction('autoresize',options.autoresize)==1;
+ var cmpfiles = (options.cmpfiles || "").replace('\r').split("\n");
+ var designer; //Variable used to save the designer plugin
 
  if (Ext.ux.UTIL.getUrlAction('compressed',options.compressed)==1 &&
 	 Ext.ux.UTIL.getUrlAction('debug',0)==0) {
@@ -99,7 +102,7 @@ if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
 	       width  : 237
 	     }]
 	  : [];
-  var cmpfiles = (options.cmpfiles || "").replace('\r').split("\n");
+
   items.push({
 	  region:'center',
 	  layout:'fit',
@@ -115,6 +118,7 @@ if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
 			designer = new Ext.ux.guid.plugin.Designer({
 			  codePress     : !Ext.isSafari && options.codepress==1,
 			  componentFiles : cmpfiles,
+			  autoResize    : autoResize,
 			  dockedMode    : docked,
 			  evalException : false,
 			  toolboxTarget : 'toolbox',
