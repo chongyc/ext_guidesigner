@@ -1,0 +1,172 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='linenumber'>  1</span> <span class="COMM">/*global Ext document */</span><span class="WHIT">
+<span class='linenumber'>  2</span> </span><span class="COMM">/*
+<span class='linenumber'>  3</span>   * Author: Sierk Hoeksma. WebBlocks.eu
+<span class='linenumber'>  4</span>   * Copyright 2007-2008, WebBlocks.  All rights reserved.
+<span class='linenumber'>  5</span>   *
+<span class='linenumber'>  6</span>   * This extension enables a panel to be directly created from Gui Designer Json
+<span class='linenumber'>  7</span>   * Dependend JavaScripts are loaded using ScriptLoader function
+<span class='linenumber'>  8</span>   ************************************************************************************
+<span class='linenumber'>  9</span>   *   This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY;
+<span class='linenumber'> 10</span>   *   without even the implied warranty of MERCHANTABILITY or
+<span class='linenumber'> 11</span>   *   FITNESS FOR A PARTICULAR PURPOSE.
+<span class='linenumber'> 12</span>   ************************************************************************************
+<span class='linenumber'> 13</span> 
+<span class='linenumber'> 14</span>   License: This source is licensed under the terms of the Open Source LGPL 3.0 license.
+<span class='linenumber'> 15</span>   Commercial use is permitted to the extent that the code/component(s) do NOT become
+<span class='linenumber'> 16</span>   part of another Open Source or Commercially licensed development library or toolkit
+<span class='linenumber'> 17</span>   without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
+<span class='linenumber'> 18</span> 
+<span class='linenumber'> 19</span>   * Donations are welcomed: http://donate.webblocks.eu
+<span class='linenumber'> 20</span>   */</span><span class="WHIT">
+<span class='linenumber'> 21</span> 
+<span class='linenumber'> 22</span> </span><span class="COMM">/**
+<span class='linenumber'> 23</span>  * JsonWindow implements a way to load a json directly into a window
+<span class='linenumber'> 24</span>  * The window config elements of this window for example x,y can be set
+<span class='linenumber'> 25</span>  * by specifing the values in the json tag
+<span class='linenumber'> 26</span>  * @type component
+<span class='linenumber'> 27</span>  */</span><span class="WHIT">
+<span class='linenumber'> 28</span> </span><span class="NAME">Ext.ux.JsonWindow</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Ext.extend</span><span class="PUNC">(</span><span class="NAME">Ext.Window</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 29</span> 
+<span class='linenumber'> 30</span> </span><span class="WHIT"> </span><span class="COMM">//@private Layout is by default fit</span><span class="WHIT">
+<span class='linenumber'> 31</span> </span><span class="WHIT"> </span><span class="NAME">layout</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'fit'</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 32</span> 
+<span class='linenumber'> 33</span> </span><span class="WHIT"> </span><span class="COMM">//@private Border is by default false</span><span class="WHIT">
+<span class='linenumber'> 34</span> </span><span class="WHIT"> </span><span class="NAME">border</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 35</span> 
+<span class='linenumber'> 36</span> </span><span class="WHIT"> </span><span class="COMM">//@private Whe only read a JSON file once</span><span class="WHIT">
+<span class='linenumber'> 37</span> </span><span class="WHIT"> </span><span class="NAME">single</span><span class="PUNC">:</span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">  </span><span class="COMM">//only needed once</span><span class="WHIT">
+<span class='linenumber'> 38</span> 
+<span class='linenumber'> 39</span> </span><span class="WHIT"> </span><span class="COMM">//@private The json parser used is set in initComponent</span><span class="WHIT">
+<span class='linenumber'> 40</span> </span><span class="WHIT"> </span><span class="NAME">json</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 41</span> 
+<span class='linenumber'> 42</span> </span><span class="WHIT"> </span><span class="COMM">//@private Should caching of pages be disabled</span><span class="WHIT">
+<span class='linenumber'> 43</span> </span><span class="WHIT"> </span><span class="NAME">nocache</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 44</span> 
+<span class='linenumber'> 45</span> 
+<span class='linenumber'> 46</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='linenumber'> 47</span>   * @private Init the JSON Panel making sure caching is set depending on nocache
+<span class='linenumber'> 48</span>   */</span><span class="WHIT">
+<span class='linenumber'> 49</span> </span><span class="WHIT"> </span><span class="NAME">initComponent</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 50</span> </span><span class="WHIT">   </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.autoLoad</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 51</span> </span><span class="WHIT">     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">this.autoLoad</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="STRN">'object'</span><span class="PUNC">)</span><span class="WHIT">  </span><span class="NAME">this.autoLoad</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">url</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.autoLoad</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 52</span> </span><span class="WHIT">     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">this.autoLoad</span><span class="PUNC">[</span><span class="STRN">'nocache'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.autoLoad</span><span class="PUNC">[</span><span class="STRN">'nocache'</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.nocache</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="WHIT">   </span><span class="NAME">this.json</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Ext.ux.Json</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">scope</span><span class="PUNC">:</span><span class="NAME">this.scope</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">nocache</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.nocache</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 55</span> </span><span class="WHIT">   </span><span class="NAME">this.addEvents</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">     </span><span class="COMM">/**
+<span class='linenumber'> 57</span>       * Fires after the jsonfile is retrived from server but before it's loaded in panel
+<span class='linenumber'> 58</span>       * @event beforejsonload
+<span class='linenumber'> 59</span>       * @param {Object} response The response object returned
+<span class='linenumber'> 60</span>       * @param {Exception} e The exception when avialable
+<span class='linenumber'> 61</span>       */</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">    </span><span class="STRN">'beforejsonload'</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">     </span><span class="COMM">/**
+<span class='linenumber'> 64</span>       * Fires after panel the panel is loaded with new content
+<span class='linenumber'> 65</span>       * @event afterjsonload
+<span class='linenumber'> 66</span>       */</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">    </span><span class="STRN">'afterjsonload'</span><span class="WHIT">  </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">     </span><span class="COMM">/**
+<span class='linenumber'> 69</span>       * Fires when loading of jsonfile fails
+<span class='linenumber'> 70</span>       * @event afterjsonload
+<span class='linenumber'> 71</span>       */</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">    </span><span class="STRN">'failedjsonload'</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 74</span> </span><span class="WHIT">   </span><span class="NAME">Ext.ux.JsonWindow.superclass.initComponent.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 76</span> 
+<span class='linenumber'> 77</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='linenumber'> 78</span>   * Set the x position of window
+<span class='linenumber'> 79</span>   * @param {number} x the postion in pixels
+<span class='linenumber'> 80</span>   */</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT"> </span><span class="NAME">setX</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">   </span><span class="NAME">this.setPosition</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="NAME">this.y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 84</span> 
+<span class='linenumber'> 85</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='linenumber'> 86</span>   * Set the y position of window
+<span class='linenumber'> 87</span>   * @param {number} Y the postion in pixels
+<span class='linenumber'> 88</span>   */</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT"> </span><span class="NAME">setY</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">y</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">    </span><span class="NAME">this.setPosition</span><span class="PUNC">(</span><span class="NAME">this.x</span><span class="PUNC">,</span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 92</span> 
+<span class='linenumber'> 93</span> </span><span class="WHIT"> </span><span class="COMM">//@private internal function to call allignTo with array</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT"> </span><span class="NAME">setAlignTo</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">arg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">   </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.rendered</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.alignTo</span><span class="PUNC">(</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 97</span> 
+<span class='linenumber'> 98</span> </span><span class="WHIT"> </span><span class="COMM">//@private internal function to call anchorTo with array</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT"> </span><span class="NAME">setAnchorTo</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">arg</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">   </span><span class="NAME">this.anchorTo</span><span class="PUNC">(</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">2</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">arg</span><span class="PUNC">[</span><span class="NUMB">3</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>102</span> 
+<span class='linenumber'>103</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='linenumber'>104</span>   * Add support for listeners form the json
+<span class='linenumber'>105</span>   * @param {Array} listeners A array of objects containing the listeners to connect
+<span class='linenumber'>106</span>   */</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT"> </span><span class="NAME">setListeners</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">listeners</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">   </span><span class="NAME">this.on</span><span class="PUNC">(</span><span class="NAME">listeners</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>110</span> 
+<span class='linenumber'>111</span> 
+<span class='linenumber'>112</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='linenumber'>113</span>   * @private We override the render function of the panel, so that the updater.renderer is changed to accept JSON
+<span class='linenumber'>114</span>   * @param {Component} ct The component to render
+<span class='linenumber'>115</span>   * @param {Object} position A object containing the position of the component
+<span class='linenumber'>116</span>   * @see For more information about usages see jsonpanel
+<span class='linenumber'>117</span>   */</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT"> </span><span class="NAME">onRender</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">ct</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>119</span> </span><span class="WHIT">  </span><span class="NAME">Ext.ux.JsonWindow.superclass.onRender.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ct</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>120</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">um</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getUpdater</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">  </span><span class="NAME">um.showLoadIndicator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">//disable it.</span><span class="WHIT">
+<span class='linenumber'>122</span> </span><span class="WHIT">  </span><span class="NAME">um.on</span><span class="PUNC">(</span><span class="STRN">'failure'</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.ownerCt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">this.ownerCt.el.unmask</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.json.fireEvent</span><span class="PUNC">(</span><span class="STRN">'error'</span><span class="PUNC">,</span><span class="STRN">'failedjsonload'</span><span class="PUNC">,</span><span class="STRN">'url in autoLoad not valid'</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">         </span><span class="NAME">this.fireEvent</span><span class="PUNC">(</span><span class="STRN">'failedjsonload'</span><span class="PUNC">,</span><span class="NAME">response</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">createDelegate</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>128</span> </span><span class="WHIT">    </span><span class="NAME">um.on</span><span class="PUNC">(</span><span class="STRN">'beforeupdate'</span><span class="PUNC">,</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">url</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">params</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.loadMask</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.ownerCt</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">       </span><span class="NAME">this.ownerCt.el.mask</span><span class="PUNC">(</span><span class="NAME">this.loadMsg</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.msgCls</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">createDelegate</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>132</span> 
+<span class='linenumber'>133</span> </span><span class="WHIT">  </span><span class="NAME">um.setRenderer</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="NAME">render</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">       </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">el</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">response</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">updater</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">         </span><span class="NAME">this.apply</span><span class="PUNC">(</span><span class="NAME">response.responseText</span><span class="PUNC">,</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">       </span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">createDelegate</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>139</span> 
+<span class='linenumber'>140</span> </span><span class="WHIT"> </span><span class="COMM">/**
+<span class='linenumber'>141</span>   * Apply a json configuration to this window
+<span class='linenumber'>142</span>   * @param {String} cfg A string containing a json configuration
+<span class='linenumber'>143</span>   * @param {Function} callback A callback function called after succesfull apply
+<span class='linenumber'>144</span>   * @returns {Boolean} True when apply was successfull otherwise false
+<span class='linenumber'>145</span>   */</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT"> </span><span class="NAME">apply</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cfg</span><span class="PUNC">,</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">   </span><span class="NAME">this.fireEvent</span><span class="PUNC">(</span><span class="STRN">'beforejsonload'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cfg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>149</span> </span><span class="WHIT">     </span><span class="NAME">this.json.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="NAME">cfg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">     </span><span class="NAME">this.fireEvent</span><span class="PUNC">(</span><span class="STRN">'afterjsonload'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">     </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">callback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">catch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>154</span> </span><span class="WHIT">     </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.json.fireEvent</span><span class="PUNC">(</span><span class="STRN">'error'</span><span class="PUNC">,</span><span class="STRN">'failedjsonload'</span><span class="PUNC">,</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">         </span><span class="NAME">this.fireEvent</span><span class="PUNC">(</span><span class="STRN">'failedjsonload'</span><span class="PUNC">,</span><span class="NAME">cfg</span><span class="PUNC">,</span><span class="NAME">e</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">        </span><span class="NAME">Ext.Msg.alert</span><span class="PUNC">(</span><span class="STRN">'Failure'</span><span class="PUNC">,</span><span class="STRN">'Failed to decode load Json:'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">e.message</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">     </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>159</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>160</span> 
+<span class='linenumber'>161</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>162</span> 
+<span class='linenumber'>163</span> </span><span class="COMM">//Register the window</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="NAME">Ext.reg</span><span class="PUNC">(</span><span class="STRN">'jsonwindow'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Ext.ux.JsonWindow</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>165</span> </span></pre></body></html>

@@ -22,7 +22,7 @@
     </table>
     
     <div class="description">
-        Component extending a panel giving it the capability to read or create a JSON file.When using Json file created with designer this JsonPanel will also evaluate the special items under Json root called <b>winbow</b>. The JsonPanel currently evaluates two special window items called <i>required_js,required_css</i> that enable loading of javascripts and stylesheets directly from the json.<p>Example how to create a Json from a external file filling the browser:</p><pre><code>new Ext.Viewport({
+        Component extending a panel giving it the capability to read or create a JSON file.When using Json file created with designer this JsonPanel will also evaluate the special items under Json root called <b>json</b>. The JsonPanel currently evaluates two special window items called <i>required_js,required_css</i> that enable loading of javascripts and stylesheets directly from the json.<p>Example how to create a Json from a external file filling the browser:</p><pre><code>new Ext.Viewport({
      items : new Ext.ux.JsonPanel({autoLoad:'json/designer.json'}),
      layout: 'fit'
    }).show();</code></pre><p>Example how to (re)load a JsonPanel that is allready loaded:</p><pre><code>this.load({url:'new url'});</code></pre>   <p><b>IMPORTANT:</b>When you want use the JsonPanel to load a Json file in a local browser make sure that you include alocal xhr package like <a href="http://extjs.com/forum/showthread.php?t=10672">localXHR</a> or any otherto fix the problem of ExtJs not supporting Ajax from local file system</p> 
@@ -70,13 +70,86 @@
                    
     <a id="Ext.ux.JsonPanel-methods"></a>
     <h2>Public Methods</h2>    
-    <p>This class has no public methods</p>
-    <table cellspacing="0" class="x-hidden">
+    
+    <table cellspacing="0" class="member-table">
         <tr>
             <th class="sig-header" colspan="2">Method</th>            
             <th class="msource-header">Defined By</th>
         </tr>
         
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setListeners</b>(&nbsp;<code>Array listeners</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Add support for listeners form the json</div>
+                    <div class="long">
+                        Add support for listeners form the json    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>listeners</code> : Array
+                                    <div class="sub-desc">&nbsp;A array of objects containing the listeners to connect</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                JsonPanel
+                <a class="x-hidden" ext:cls="Ext.ux.JsonPanel" ext:member="Ext.ux.JsonPanel#setListeners" href="symbols/Ext.ux.JsonPanel.html">JsonPanel</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>apply</b>(&nbsp;<code>String cfg, Function callback</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Apply a json configuration to this window</div>
+                    <div class="long">
+                        Apply a json configuration to this window    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>cfg</code> : String
+                                    <div class="sub-desc">&nbsp;A string containing a json configuration</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>callback</code> : Function
+                                    <div class="sub-desc">&nbsp;A callback function called after succesfull apply</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">True when apply was successfull otherwise false</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                JsonPanel
+                <a class="x-hidden" ext:cls="Ext.ux.JsonPanel" ext:member="Ext.ux.JsonPanel#apply" href="symbols/Ext.ux.JsonPanel.html">JsonPanel</a>
+            </td>
+        </tr>
                                                           
     </table>
     

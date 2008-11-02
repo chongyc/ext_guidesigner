@@ -21,25 +21,25 @@
 //Register name spaces used
 Ext.namespace('Ext.ux.form');
 
+/**
+ * Component implementing a codefield. The codefield is a single line textarea using a 
+ * triggerfield to open a full textarea or when install codepress.
+ * @type component
+ */
 Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
     /**
-     * @cfg {String} invalidText
      * The error to display when the code in the field is invalid (defaults to
      * '{value} is not a valid code - it must be in the format {format}').
-     */
+     * @type {String} invalidText
+     @cfg */
     invalidText : "'{0}' is not a valid code",
     /**
-     * @cfg {String} triggerClass
      * An additional CSS class used to style the trigger button.
-     */
+     * @type {String} triggerClass
+     @cfg */
     triggerClass : 'x-form-codefield-trigger',
-    /**
-     * @cfg {String/Object} autoCreate
-     * A DomHelper element spec, or true for a default element spec (defaults to
-     * {tag: "input", type: "text", size: "10", autocomplete: "off"})
-     */
 
-    // private
+    //@private
     defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;overflow:'hidden'",autocomplete: "off", wrap : "off"},
 
     /**
@@ -106,13 +106,13 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
       return true;
     },
 
-    //Private force reload of value after textarea is renderd when we have default value
+    //@private force reload of value after textarea is renderd when we have default value
     initValue : function(){
       Ext.ux.form.CodeField.superclass.initValue.call(this);
       this.on('focus',function(){this.setValue(this.getValue())},this);
     },
 
-    // private
+    //@private
     validateValue : function(value){
         if(!Ext.ux.form.CodeField.superclass.validateValue.call(this, value)){
             return false;
@@ -132,14 +132,12 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
         return true;
     },
 
-    // private
-    // Provides logic to override the default TriggerField.validateBlur which just returns true
+    //@private Provides logic to override the default TriggerField.validateBlur which just returns true
     validateBlur : function(){
         return !this.editorWin || !this.editorWin.isVisible();
     },
 
-    // private
-    // Implements the default empty TriggerField.onTriggerClick function to display the CodeField editor
+    //@private Implements the default empty TriggerField.onTriggerClick function to display the CodeField editor
     onTriggerClick : function(){
         if(this.disabled){
             return;
@@ -193,6 +191,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
         this.editorWin.tf.setValue(this.getValue());
     },
 
+   //@private on render set the editor
    onRender : function(ct, position){
       this.editor = Ext.getCmp(ct.id) || {};
       Ext.ux.form.CodeField.superclass.onRender.call(this, ct, position);

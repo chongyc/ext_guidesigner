@@ -469,9 +469,9 @@
                 <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>merge</b>(&nbsp;<code>Object\Array json1, Object\Array json2</code>&nbsp;) : Object\Array                                
                 <div class="mdesc">
-                    <div class="short">Merge two json files into one, incase same items exists then second json is leading</div>
+                    <div class="short">Merge two json files into one, incase same items existsthen second json is leading</div>
                     <div class="long">
-                        Merge two json files into one, incase same items exists then second json is leading    
+                        Merge two json files into one, incase same items existsthen second json is leading    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
@@ -733,9 +733,9 @@
                 <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>decode</b>(&nbsp;<code>String json, Object options</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short">Decode function for parsing json json into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]</div>
+                    <div class="short">Decode function for parsing json json into objectsThe parsing contains four stages.First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated  to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]</div>
                     <div class="long">
-                        Decode function for parsing json json into objectsThe parsing contains four stages. First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated   to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]    
+                        Decode function for parsing json json into objectsThe parsing contains four stages.First stage the json is parsed and code is transformed into strings and evaluatedSecond stage All empty objects are removedThird stage the json key (if exists) is evaluated  to check if stylesheets or javascipt or scipe objects should be loadedFourth stage the code objects are checked if there code should be stored __json__[key]    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
@@ -843,7 +843,46 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>syncContent</b>(&nbsp;<code>String url, Boolean cachingOff, Boolean responseXML</code>&nbsp;) : Boolean/String/XMLObject                                
+                <b>nocacheUrl</b>(&nbsp;<code>String url, boolean nocache</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Convert a url into a nocache url by adding a date if needed</div>
+                    <div class="long">
+                        Convert a url into a nocache url by adding a date if needed    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>url</code> : String
+                                    <div class="sub-desc">&nbsp;The url to use</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>nocache</code> : boolean
+                                    <div class="sub-desc">&nbsp;The nocache variable (default this.nocache)</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#nocacheUrl" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>syncContent</b>(&nbsp;<code>String url, Boolean nocache, Boolean responseXML</code>&nbsp;) : Boolean/String/XMLObject                                
                 <div class="mdesc">
                     <div class="short">A Synchronized Content loader for data from url</div>
                     <div class="long">
@@ -858,7 +897,7 @@
                                 </li>
                             
                                 <li>
-                                    <code>cachingOff</code> : Boolean
+                                    <code>nocache</code> : Boolean
                                     <div class="sub-desc">&nbsp;Should caching of file be disabled</div>                                   
                                 </li>
                             
@@ -887,7 +926,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>scriptLoader</b>(&nbsp;<code>String url, Boolean cachingOff</code>&nbsp;) : Boolean                                
+                <b>scriptLoader</b>(&nbsp;<code>String url, Boolean nocache</code>&nbsp;) : Boolean                                
                 <div class="mdesc">
                     <div class="short">Function used to load a JavaScript into a document.head elementthe id of the script item is the name of the file.</div>
                     <div class="long">
@@ -902,7 +941,7 @@
                                 </li>
                             
                                 <li>
-                                    <code>cachingOff</code> : Boolean
+                                    <code>nocache</code> : Boolean
                                     <div class="sub-desc">&nbsp;Should caching of javascript files be disabled</div>                                   
                                 </li>
                             
@@ -1009,7 +1048,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>loadUrl</b>(&nbsp;<code>String url, String type, Boolean reload</code>&nbsp;) : void                                
+                <b>loadUrl</b>(&nbsp;<code>String url, String type, Object options</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Load a url, stylesheet or javascript by adding it to the header</div>
                     <div class="long">
@@ -1029,8 +1068,8 @@
                                 </li>
                             
                                 <li>
-                                    <code>reload</code> : Boolean
-                                    <div class="sub-desc">&nbsp;Should the file be reload if allready loaded</div>                                   
+                                    <code>options</code> : Object
+                                    <div class="sub-desc">&nbsp;options[reload] Should the file be reload if allready loaded</div>                                   
                                 </li>
                             
                             </ul>
@@ -1069,7 +1108,7 @@
                             
                                 <li>
                                     <code>options</code> : Mixed
-                                    <div class="sub-desc">&nbsp;An object with options to used, when string then basedir is assumedoptions[basedir] The default directory to use for all filesoptions[cssdir] The directory to be used for stylesheetsoptions[async] When set to true required will return directlyoptions[callback] Callback function after all required files are loadedoptions[reload] When reload is set packages are reloadedoptions[cachingOff] When set the object caching is turned off</div>                                   
+                                    <div class="sub-desc">&nbsp;An object with options to used, when string then basedir is assumedoptions[basedir] The default directory to use for all filesoptions[cssdir] The directory to be used for stylesheetsoptions[async] When set to true required will return directlyoptions[callback] Callback function after all required files are loadedoptions[reload] When reload is set packages are reloadedoptions[nocache] When set the object caching is turned offoptions[reload] When true stylesheet/javacode is swapped</div>                                   
                                 </li>
                             
                             </ul>

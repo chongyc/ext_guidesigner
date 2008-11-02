@@ -22,7 +22,7 @@
     </table>
     
     <div class="description">
-        JsonWindow implements a way to load a json directly into a windowThe window config elements of this window for example x,y can be set by specifing the values in the json tag 
+        JsonWindow implements a way to load a json directly into a windowThe window config elements of this window for example x,y can be setby specifing the values in the json tag 
     </div>
     
     <div class="hr"></div>
@@ -113,7 +113,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setY</b>(&nbsp;<code>number y</code>&nbsp;) : void                                
+                <b>setY</b>(&nbsp;<code>number Y</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Set the y position of window</div>
                     <div class="long">
@@ -123,7 +123,7 @@
                             <ul>
                             
                                 <li>
-                                    <code>y</code> : number
+                                    <code>Y</code> : number
                                     <div class="sub-desc">&nbsp;the postion in pixels</div>                                   
                                 </li>
                             
@@ -208,6 +208,79 @@
             <td class="msource">
                 JsonWindow
                 <a class="x-hidden" ext:cls="Ext.ux.JsonWindow" ext:member="Ext.ux.JsonWindow#setAnchorTo" href="symbols/Ext.ux.JsonWindow.html">JsonWindow</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setListeners</b>(&nbsp;<code>Array listeners</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Add support for listeners form the json</div>
+                    <div class="long">
+                        Add support for listeners form the json    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>listeners</code> : Array
+                                    <div class="sub-desc">&nbsp;A array of objects containing the listeners to connect</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                JsonWindow
+                <a class="x-hidden" ext:cls="Ext.ux.JsonWindow" ext:member="Ext.ux.JsonWindow#setListeners" href="symbols/Ext.ux.JsonWindow.html">JsonWindow</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>apply</b>(&nbsp;<code>String cfg, Function callback</code>&nbsp;) : Boolean                                
+                <div class="mdesc">
+                    <div class="short">Apply a json configuration to this window</div>
+                    <div class="long">
+                        Apply a json configuration to this window    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>cfg</code> : String
+                                    <div class="sub-desc">&nbsp;A string containing a json configuration</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>callback</code> : Function
+                                    <div class="sub-desc">&nbsp;A callback function called after succesfull apply</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Boolean<div class="sub-desc">True when apply was successfull otherwise false</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                JsonWindow
+                <a class="x-hidden" ext:cls="Ext.ux.JsonWindow" ext:member="Ext.ux.JsonWindow#apply" href="symbols/Ext.ux.JsonWindow.html">JsonWindow</a>
             </td>
         </tr>
                                                           

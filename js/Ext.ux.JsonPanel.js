@@ -22,7 +22,7 @@
 /**
  * Component extending a panel giving it the capability to read or create a JSON file.
  * When using Json file created with designer this JsonPanel will also evaluate the special items 
- * under Json root called <b>winbow</b>. The JsonPanel currently evaluates two special window items 
+ * under Json root called <b>json</b>. The JsonPanel currently evaluates two special window items 
  * called <i>required_js,required_css</i> that enable loading of javascripts and stylesheets directly from the json.
  *
  *<p>Example how to create a Json from a external file filling the browser:</p>
