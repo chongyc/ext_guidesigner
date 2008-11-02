@@ -163,7 +163,7 @@ if (!Ext.ux.Util) {
       var regex = new RegExp( regexS );
       var results = regex.exec( url || window.location.href );
       if( results == null )
-        return defaultValue;
+        return isNaN(defaultValue) ? defaultValue : Number(defaultValue);
       else
         return isNaN(results[1]) ? results[1] : Number(results[1]);
     },

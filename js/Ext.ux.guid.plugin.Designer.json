@@ -100,7 +100,7 @@
                 if (!scope.jsonWindow) {
                   var tf = (scope.codePress && Ext.ux.CodePress)
                    ?  new Ext.ux.CodePress({path:scope.codePressPath,language: 'javascript' ,autoResize:true,trim : true})
-                   :  new Ext.form.TextArea({resize:Ext.emptyFn});
+                   :  new Ext.form.TextArea({autoCreate : {tag: "textarea",style:"width:160px;height:80px;",autocomplete: "off",wrap:"off"},resize:Ext.emptyFn});
                   var jsonWindow = new Ext.Window({
                       title       : "Edit JSON",
                       iconCls     : 'icon-editEl',

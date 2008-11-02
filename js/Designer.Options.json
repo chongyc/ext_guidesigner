@@ -40,11 +40,11 @@ items : [{
     fieldLabel : "Float width"
   },{
     xtype : "panel",
+    bodyBorder :false,
     items : [{
         xtype : "textarea",
-        name : "cmpfiles",
-        width : 160,
-        border : true
+        autoCreate : {tag: "textarea",style:"width:160px;height:80px;",autocomplete: "off",wrap:"off"},
+        name : "cmpfiles"
       }],
     layout : "fit",
     title : "List of component files"

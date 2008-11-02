@@ -40,7 +40,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
      */
 
     // private
-    defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;",autocomplete: "off"},
+    defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;overflow:'hidden'",autocomplete: "off", wrap : "off"},
 
     /**
      * Default language of scripteditor (defaults javascript)
@@ -147,7 +147,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
         if (!this.editorWin) {
           var tf = (this.codePress && Ext.ux.CodePress)
                  ?  new Ext.ux.CodePress({path: this.codePressPath, language: this.language ,autoResize:true,trim : true})
-                 :  new Ext.form.TextArea({resize:Ext.emptyFn});
+                 :  new Ext.form.TextArea({autoCreate : {tag: "textarea",style:"width:160px;height:80px;",autocomplete: "off",wrap:"off"},resize:Ext.emptyFn});
           this.editorWin = new Ext.Window({
               title  : "CodeField Editor",
               iconCls: 'icon-editEl',

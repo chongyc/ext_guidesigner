@@ -30,7 +30,7 @@
 
 <!-- Look for a change log at changes.txt -->
 </head>
-<body>
+<body style="overflow:hidden;">
 <div id="loading-mask"></div>
 <div id="loading">
   <div class="loading-indicator"><img src="icons/loading-balls.gif" style="margin-right:8px;" align="absmiddle"/>Loading GuiDesigner....</div>
@@ -62,7 +62,7 @@ if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
 	   compressed : 1,
 	   codepress : 1,
 	   floatheight : 480,
-	   floatwidth : 480,
+	   floatwidth : 580,
 	   cmpfiles : "{0}ThirdParty.Components.json"};
 
  //Url based actions
@@ -129,8 +129,8 @@ if (document.location.protocol == 'file:') require('Ext.ux.Util','js');
   });
  if (windowMode) {
    var container = new Ext.Window({
-    height : Ext.ux.UTIL.getUrlAction('height',options.floatheight || 500),
-    width : Ext.ux.UTIL.getUrlAction('width',options.floatwidth || 800),
+    height : (Ext.ux.UTIL.getUrlAction('height',options.floatheight || 480)),
+    width :  (Ext.ux.UTIL.getUrlAction('width',options.floatwidth || 580)),
     maximizable : true,
     closable : false,
     title : 'Designer Window',
