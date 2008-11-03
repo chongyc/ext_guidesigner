@@ -22,7 +22,14 @@
     </table>
     
     <div class="description">
-         
+        The real designer plugin. Just connect as a plugin to a container<p>Example how to create connect a designer to container:</p><pre><code>plugins : [
+       new Ext.ux.guid.plugin.Designer({
+        codePress     : true,
+        autoResize    : true,
+        nocache       : false,
+        repository    : new Ext.ux.guid.data.CookieRepository()
+       })
+      ]</code></pre> 
     </div>
     
     <div class="hr"></div>

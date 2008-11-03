@@ -81,9 +81,9 @@
                 <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>init</b>(&nbsp;<code></code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Init the cookieProvider</div>
                     <div class="long">
-                            
+                        Init the cookieProvider    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
@@ -108,18 +108,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>refresh</b>(&nbsp;<code> callback</code>&nbsp;) : void                                
+                <b>refresh</b>(&nbsp;<code>function callback</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Reload all items from the cookie</div>
                     <div class="long">
-                            
+                        Reload all items from the cookie    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : function
+                                    <div class="sub-desc">&nbsp;A callback function called with parameter true or falseto indicated a succesfull refresh after refresh function is finished</div>                                   
                                 </li>
                             
                             </ul>
@@ -142,33 +142,33 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>saveChanges</b>(&nbsp;<code> id,  action,  callback,  content</code>&nbsp;) : void                                
+                <b>saveChanges</b>(&nbsp;<code>String id, String action, String callback, String content</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Save the changes made to a repositoryId</div>
                     <div class="long">
-                            
+                        Save the changes made to a repositoryId    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>id</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>id</code> : String
+                                    <div class="sub-desc">&nbsp;The repositoryId to use</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>action</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>action</code> : String
+                                    <div class="sub-desc">&nbsp;The action to perform 'remove', 'new' and 'save'</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : String
+                                    <div class="sub-desc">&nbsp;The callback function with parameter true or falseto indicated a succesfull action.</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>content</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>content</code> : String
+                                    <div class="sub-desc">&nbsp;The json as String to used (optional)</div>                                   
                                 </li>
                             
                             </ul>
@@ -191,23 +191,28 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>open</b>(&nbsp;<code> id,  callback</code>&nbsp;) : void                                
+                <b>open</b>(&nbsp;<code>String id, function callback, String content</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Open a repository item by loading it and pasing the content back to the callback function</div>
                     <div class="long">
-                            
+                        Open a repository item by loading it and pasing the content back to the callback function    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>id</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>id</code> : String
+                                    <div class="sub-desc">&nbsp;The repositoryId to use</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : function
+                                    <div class="sub-desc">&nbsp;The callback function to use (boolean state,String content)</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>content</code> : String
+                                    <div class="sub-desc">&nbsp;The content to use as default (optional)</div>                                   
                                 </li>
                             
                             </ul>
@@ -230,25 +235,25 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getUrl</b>(&nbsp;<code> id</code>&nbsp;) : void                                
+                <b>getUrl</b>(&nbsp;<code>String id</code>&nbsp;) : String                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Convert a repositoryId into an url, urlSupport needs to be true</div>
                     <div class="long">
-                            
+                        Convert a repositoryId into an url, urlSupport needs to be true    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>id</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>id</code> : String
+                                    <div class="sub-desc">&nbsp;The repositoryId to use (default last)</div>                                   
                                 </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>void<div class="sub-desc"></div></li>
+                                <li>String<div class="sub-desc">The created url or null when not supported</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -264,23 +269,23 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>remove</b>(&nbsp;<code> id,  callback</code>&nbsp;) : void                                
+                <b>remove</b>(&nbsp;<code>String id, function callback</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Remove a repository item</div>
                     <div class="long">
-                            
+                        Remove a repository item    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>id</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>id</code> : String
+                                    <div class="sub-desc">&nbsp;The repositoryId to use</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : function
+                                    <div class="sub-desc">&nbsp;The callback function to use</div>                                   
                                 </li>
                             
                             </ul>
@@ -303,28 +308,28 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>rename</b>(&nbsp;<code> from,  to,  callback</code>&nbsp;) : void                                
+                <b>rename</b>(&nbsp;<code>String from, String to, function callback</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Rename a repository item, by loading from and saving it to and then remove it</div>
                     <div class="long">
-                            
+                        Rename a repository item, by loading from and saving it to and then remove it    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>from</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>from</code> : String
+                                    <div class="sub-desc">&nbsp;The source repositoryId</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>to</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>to</code> : String
+                                    <div class="sub-desc">&nbsp;The target repositoryId</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : function
+                                    <div class="sub-desc">&nbsp;the callback function</div>                                   
                                 </li>
                             
                             </ul>
@@ -347,28 +352,28 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>save</b>(&nbsp;<code> id,  content,  callback</code>&nbsp;) : void                                
+                <b>save</b>(&nbsp;<code>String id, String content, function callback</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Save the content to the repository</div>
                     <div class="long">
-                            
+                        Save the content to the repository    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>id</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>id</code> : String
+                                    <div class="sub-desc">&nbsp;The repositoryId to use</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>content</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>content</code> : String
+                                    <div class="sub-desc">&nbsp;The content to store in repository</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : function
+                                    <div class="sub-desc">&nbsp;The callback function to use</div>                                   
                                 </li>
                             
                             </ul>

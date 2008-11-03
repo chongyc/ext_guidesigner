@@ -16,17 +16,39 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-Ext.namespace('Ext.ux.guid');
+
+//The namespace
 Ext.namespace('Ext.ux.guid.data');
 
-/*
- * PHPFiles
+/**
+ * PHPFileRepository is a repository using phpFiles.php as a server side
+ * file repository. Files relative to rootBase can be loaded, changed or deleted 
+ * by this repository.
  */
 Ext.ux.guid.data.PHPFileRepository = Ext.extend(Ext.ux.guid.data.Repository,{
+  /**
+   * The url to the php class implementing the repository callback functions
+   * @type {String}
+   @cfg */
   url : "phpFiles.php",  
+  
+  /**
+   * Relative name used to make url for root item  (default json)
+   * @type {String}
+   @cfg */
   rootBase : "json",
+  
+  /**
+   * Can a item be changed to url, used by getUrl. (default true)
+   * @type {Boolean} 
+   @cfg */
   urlSupport : true,
-    
+
+  /**
+   * Refresh the repository
+   * @param {function} callback A callback function called with parameter true or false
+   * to indicated a succesfull refresh after refresh function is finished
+   */    
   refresh : function (callback) {
     Ext.Ajax.request({
       url: this.url,
@@ -42,6 +64,14 @@ Ext.ux.guid.data.PHPFileRepository = Ext.extend(Ext.ux.guid.data.Repository,{
     });    
   },
 
+  /**
+   * Save the changes made to a repositoryId
+   * @param {String} id The repositoryId to use
+   * @param {String} action The action to perform 'remove', 'new' and 'save'
+   * @param {String} callback The callback function with parameter true or false
+   * to indicated a succesfull action.
+   * @param {String} content The json as String to used (optional)
+   */
   saveChanges : function(id,action,callback,content) {  
     Ext.Ajax.request({
        url: this.url,
@@ -67,7 +97,13 @@ Ext.ux.guid.data.PHPFileRepository = Ext.extend(Ext.ux.guid.data.Repository,{
     }); 
   },
 
-  open : function(id,callback) {
+  /**
+   * Open a repository item by loading it and pasing the content back to the callback function
+   * @param {String} id The repositoryId to use
+   * @param {function} callback The callback function to use (boolean state,String content)
+   * @param {String} content The content to use as default (optional)
+   */
+  open : function(id,callback,content) {
     Ext.Ajax.request({
       url: this.url,
       params: {
@@ -77,7 +113,7 @@ Ext.ux.guid.data.PHPFileRepository = Ext.extend(Ext.ux.guid.data.Repository,{
       },
       callback: function(options, success, response) {
         if (success) this.last = id;
-        if(typeof callback == "function") callback(success,response.responseText);
+        if(typeof callback == "function") callback(success,response.responseText || content);
       },
       scope: this        
     }); 

@@ -17,6 +17,7 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
+  
 Ext.namespace('Ext.ux');
 
 //Do not receate util when it is allready there
@@ -33,12 +34,13 @@ if (!Ext.ux.Util) {
   };
 
   /**
-   * A class used by JsonPanel and JsonWindow to load a jsonFile
+   * A class containig basic functionality for loading javascript and stylesheets
+   * and helper functions for url manipulation
    */
   Ext.extend(Ext.ux.Util,Ext.util.Observable,{
 
     /**
-     * Should caching be disabled when JSON are loaded (defaults false).
+     * Should caching be disabled when files are loaded (defaults false).
      * @type {Boolean}
      @cfg */
     nocache : false,

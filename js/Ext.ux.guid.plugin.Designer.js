@@ -28,6 +28,19 @@ Ext.ux.guid.plugin.Designer = function(config){
   this.initialConfig = config;
 };
 
+/**
+ * The real designer plugin. Just connect as a plugin to a container
+ *<p>Example how to create connect a designer to container:</p>
+ * <pre><code>plugins : [
+       new Ext.ux.guid.plugin.Designer({
+        codePress     : true,
+        autoResize    : true,
+        nocache       : false,
+        repository    : new Ext.ux.guid.data.CookieRepository()
+       })
+      ]</code></pre>
+ * @type plugin
+ */
 Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   //@private The version of the designer
   version : '2.1.0-RC1',

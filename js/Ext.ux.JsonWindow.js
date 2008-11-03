@@ -90,12 +90,16 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
     this.setPosition(this.x,y);
  },
 
- //@private internal function to call allignTo with array
+ /**
+  * @private internal function to call allignTo with array
+  */
  setAlignTo : function(arg) {
    if (this.rendered) this.alignTo(arg[0],arg[1],arg[2]);
  },
 
- //@private internal function to call anchorTo with array
+ /**
+  * @private internal function to call anchorTo with array
+  */
  setAnchorTo : function(arg) {
    this.anchorTo(arg[0],arg[1],arg[2],arg[3]);
  },
