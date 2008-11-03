@@ -29,7 +29,9 @@ Ext.namespace('Ext.ux.guid.grid');
     {name:'name',type:'string'}, 'value' , 'type'
 ]);
 
-
+/**
+ * The constructor of property store
+ */
 Ext.ux.guid.grid.PropertyStore = function(grid, source){
     Ext.ux.guid.grid.PropertyStore.superclass.constructor.call(this,grid,source);
     this.store = new Ext.data.Store({
@@ -42,15 +44,24 @@ Ext.ux.guid.grid.PropertyStore = function(grid, source){
  * Constructor used to create a store used to store designer data
  */
 Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
+    //@private The json id  
     jsonId : "__JSON__",
 
+    /**
+     * Get a property type for given name
+     * @param {string} name The property to look fore
+     */
     getPropertyType : function (name) {
       if (this.grid && this.grid.getPropertyType)
          return this.grid.getPropertyType(name);
       return null;
     },
 
-    // protected - should only be called by the grid.  Use grid.setSource instead.
+    /**
+     * protected  - should only be called by the grid.  Use grid.setSource instead.
+     * Based on source object a property record is created
+     * @param {object} o The source object 
+     */
     setSource : function(o){
         this.source = o;
         this.store.removeAll();
@@ -77,7 +88,12 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         this.store.loadRecords({records: data}, {}, true);
     },
 
-    // private
+    /**
+     * @private Update the data and fire beforepropetychange and propertychange events
+     * @param {object} ds The datastore
+     * @param {object} record The record
+     * @param {String} The edit mode
+     */
     onUpdate : function(ds, record, type){
         if(type == Ext.data.Record.EDIT){
             var v = record.data['value'];
@@ -92,6 +108,12 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
         }
     },
 
+    /**
+     * @private Update a source value property
+     * @param {String} key The property key to change
+     * @param {String} value The value to change
+     * @param {String} type The property type
+     */
     updateSource : function (key,value,type) {
       var propType = this.getPropertyType(key);
       if (!type && propType) type=propType.type;
@@ -101,6 +123,11 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
       return this.source[key];
     },
 
+    /**
+     * Set the value of a property
+     * @param {String} prop The property to set
+     * @param {String} value The value to be set
+     */
     setValue : function(prop, value){
         this.store.getById(prop).set('value', value);
         this.updateSource(prop,value);
@@ -109,6 +136,10 @@ Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
 });
 
 
+/**
+ * Constructior which extends default PropertyColumnModel in so that 
+ * we implement other editors
+ */
 Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
     Ext.ux.guid.grid.PropertyColumnModel.superclass.constructor.call(this,grid,store);
     this.setConfig( [
@@ -134,14 +165,25 @@ Ext.ux.guid.grid.PropertyColumnModel = function(grid, store){
     this.propertyRendererDelegate = this.propertyRenderer.createDelegate(this);
 };
 
+/**
+ * Extend the default PropertyColumnModel in so that we implement other editors
+ */
 Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
-    // private
-
+    /**
+     * Get a property type for given name
+     * @param {string} name The property to look fore
+     */  
     getPropertyType : function (name) {
       if (this.grid && this.grid.getPropertyType) return this.grid.getPropertyType(name);
       return null;
     },
 
+    /**
+     * Get the celleditor by row and colIndex
+     * @param {int} colIndex The column index
+     * @param {int} rowIndex The row index
+     * @returns {Object} The cellEditor
+     */
     getCellEditor : function(colIndex, rowIndex){
         var p = this.store.getProperty(rowIndex);
         var n = p.data['name'], val = p.data['value'], t = p.data['type'];
@@ -177,6 +219,12 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
         return this.defaultEditor || this.editors[prop ? 'string' : 'mixed'];
     },
 
+    /**
+     * Format the value of cell
+     * @param {object} The value to be formated
+     * @param {Element} The element
+     * @param {Record} The record
+     */
     valueRenderer  : function(value, p, r) {
       if (typeof value == 'boolean') {
         p.css = (value ? "typeBoolTrue" : "typeBoolFalse");
@@ -192,6 +240,9 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
       return value;
     },
 
+    /**
+     * @private Implement a tooltip
+     */
     propertyRenderer :  function(value, p) {
       var propType = this.getPropertyType(value);
       if (propType) {
@@ -201,22 +252,32 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
       return value;
     },
 
+    /**
+     * @private Return one of the property renders
+     */
     getRenderer  : function(col){
        return col == 0 ? this.propertyRendererDelegate : this.valueRendererDelegate;
     }
 });
 
 
+/**
+ * Create a property gird by extending a Grid
+ */
 Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
-    // private config overrides
+    // @private columns cannot be moved
     enableColumnMove:false,
+    // @private Rows will not be stripped
     stripeRows:false,
+    // @private Mouse over events are not tracked
     trackMouseOver: false,
+    // @private Single click will start edit
     clicksToEdit:1,
+    // @private noHD menu
     enableHdMenu : false,
-    viewConfig : {
-        forceFit:true
-    },
+    // @private Grid is forced to fit space
+    viewConfig : {forceFit:true},
+    // @private The internal jsonId used
     jsonId : '__JSON__',
 
     /**
@@ -225,12 +286,16 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      @cfg */
     codePress : true, //codePress enabled
 
-		/**
-		 * Location of CodePress
-		 * @type {String}
-		 @cfg */
-		codePressPath : undefined,
+    /**
+     * Location of CodePress
+     * @type {String}
+     @cfg */
+    codePressPath : undefined,
 
+    /**
+     * Get a property type for given name
+     * @param {string} name The property to look fore
+     */   
     getPropertyType : function (name) {
       if (this.propertyTypes) {
         var i = this.propertyTypes.find('name',name);
@@ -239,7 +304,9 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
       return null;
     },
 
-    // private
+    /**
+     * @private The component and events
+     */
     initComponent : function(){
         this.customEditors = this.customEditors || {};
         this.lastEditRow = null;
@@ -249,7 +316,23 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var cm = new Ext.ux.guid.grid.PropertyColumnModel(this, store);
         store.store.sort('name', 'ASC');
         this.addEvents(
+            /**
+              * Event fired before value changes
+              * @param {Source} source The source object
+              * @param {String} key The key changed
+              * @param {String} value The value to be set
+              * @param {String} type The type of value
+              * @return {Boolean} False will assume custom assignment
+              */
             'beforepropertychange',
+            /**
+             * Event fired when propery changed
+             * @param {Source} source The source object
+             * @param {String} key The key changed
+             * @param {String} value The value to be set
+             * @param {String} type The type of value
+             * @return {Boolean} False will assume custom assignment
+             */
             'propertychange',
             /**
              * Event fired to allow custom change of value
@@ -273,11 +356,17 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
     },
 
+    /**
+     * @private Apply the property grid style
+     */
     onRender : function(){
         Ext.ux.guid.grid.PropertyGrid.superclass.onRender.apply(this, arguments);
         this.getGridEl().addClass('x-props-grid');
     },
 
+    /**
+     * @private After render the source is set
+     */
     afterRender: function(){
         Ext.ux.guid.grid.PropertyGrid.superclass.afterRender.apply(this, arguments);
         if(this.source){
@@ -285,10 +374,18 @@ Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
 
+    /**
+     * Set the source of the grid
+     * @param {Object} The source object
+     */
     setSource : function(source){
         this.propStore.setSource(source);
     },
 
+    /**
+     * Get the datasource of the grid
+     * @returns {Object} The datasource object
+     */
     getSource : function(){
         return this.propStore.getSource();
     }

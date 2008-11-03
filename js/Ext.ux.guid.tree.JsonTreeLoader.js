@@ -18,7 +18,6 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.guid');
 Ext.namespace('Ext.ux.guid.tree');
 
 /**
@@ -36,6 +35,8 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
 
  /**
   * Create node but enabling childeren from Json
+  * @param {object} attr The attributes from which to created nodes.
+  * When attr.childeren also for these childeren nodes are created
   */
   createNode : function(attr){
     var childeren = attr.childeren;
@@ -86,6 +87,8 @@ Ext.ux.guid.tree.JsonTreeLoader = Ext.extend(Ext.tree.TreeLoader,{
 
   /**
    * Allow dataUrl to be an  array of URLs to be loaded
+   * @param {treeNode} node The treeNode for which to request the data
+   * @param {function} callback The callback function
    */
   requestData : function(node, callback){
     if (this.dataUrl instanceof Array) {

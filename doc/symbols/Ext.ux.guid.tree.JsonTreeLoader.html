@@ -79,7 +79,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>createNode</b>(&nbsp;<code> attr</code>&nbsp;) : void                                
+                <b>createNode</b>(&nbsp;<code>object attr</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Create node but enabling childeren from Json</div>
                     <div class="long">
@@ -89,8 +89,8 @@
                             <ul>
                             
                                 <li>
-                                    <code>attr</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>attr</code> : object
+                                    <div class="sub-desc">&nbsp;The attributes from which to created nodes.When attr.childeren also for these childeren nodes are created</div>                                   
                                 </li>
                             
                             </ul>
@@ -113,7 +113,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>requestData</b>(&nbsp;<code> node,  callback</code>&nbsp;) : void                                
+                <b>requestData</b>(&nbsp;<code>treeNode node, function callback</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Allow dataUrl to be an  array of URLs to be loaded</div>
                     <div class="long">
@@ -123,13 +123,13 @@
                             <ul>
                             
                                 <li>
-                                    <code>node</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>node</code> : treeNode
+                                    <div class="sub-desc">&nbsp;The treeNode for which to request the data</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>callback</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>callback</code> : function
+                                    <div class="sub-desc">&nbsp;The callback function</div>                                   
                                 </li>
                             
                             </ul>

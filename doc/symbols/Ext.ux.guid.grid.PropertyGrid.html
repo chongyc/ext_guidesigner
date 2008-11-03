@@ -22,7 +22,7 @@
     </table>
     
     <div class="description">
-         
+        Create a property gird by extending a Grid 
     </div>
     
     <div class="hr"></div>
@@ -115,18 +115,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getPropertyType</b>(&nbsp;<code> name</code>&nbsp;) : void                                
+                <b>getPropertyType</b>(&nbsp;<code>string name</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Get a property type for given name</div>
                     <div class="long">
-                            
+                        Get a property type for given name    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>name</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>name</code> : string
+                                    <div class="sub-desc">&nbsp;The property to look fore</div>                                   
                                 </li>
                             
                             </ul>
@@ -149,105 +149,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>initComponent</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <b>setSource</b>(&nbsp;<code>Object The</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Set the source of the grid</div>
                     <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                PropertyGrid
-                <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyGrid" ext:member="Ext.ux.guid.grid.PropertyGrid#initComponent" href="symbols/Ext.ux.guid.grid.PropertyGrid.html">PropertyGrid</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>onRender</b>(&nbsp;<code></code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                PropertyGrid
-                <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyGrid" ext:member="Ext.ux.guid.grid.PropertyGrid#onRender" href="symbols/Ext.ux.guid.grid.PropertyGrid.html">PropertyGrid</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>afterRender</b>(&nbsp;<code></code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                PropertyGrid
-                <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyGrid" ext:member="Ext.ux.guid.grid.PropertyGrid#afterRender" href="symbols/Ext.ux.guid.grid.PropertyGrid.html">PropertyGrid</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setSource</b>(&nbsp;<code> source</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
+                        Set the source of the grid    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>source</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>The</code> : Object
+                                    <div class="sub-desc">&nbsp;source object</div>                                   
                                 </li>
                             
                             </ul>
@@ -270,11 +183,11 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getSource</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <b>getSource</b>(&nbsp;<code></code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Get the datasource of the grid</div>
                     <div class="long">
-                            
+                        Get the datasource of the grid    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
@@ -283,7 +196,7 @@
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>void<div class="sub-desc"></div></li>
+                                <li>Object<div class="sub-desc">The datasource object</div></li>
                             </ul>                    
                         </div>
                     </div>                    

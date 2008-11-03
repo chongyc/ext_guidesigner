@@ -21,9 +21,7 @@
 Ext.namespace('Ext.ux.data');  
 
 /**
- * HttpMergeProxy accepts an array of Ajax url and joins them together into one 
- * before calling the callback
- * @param {Array} a array of Ajax requests, url string or as object
+ * Constructor for HttpMergeProxy which accepts an array of Ajax
  */
 Ext.ux.data.HttpMergeProxy = function(urlArray){
     Ext.ux.data.HttpMergeProxy.superclass.constructor.call(this);
@@ -31,6 +29,11 @@ Ext.ux.data.HttpMergeProxy = function(urlArray){
     this.urlData  = [];
 };
 
+/**
+ * HttpMergeProxy accepts an array of Ajax url and joins them together into one 
+ * before calling the callback
+ * @param {Array} a array of Ajax requests, url string or as object
+ */
 Ext.extend(Ext.ux.data.HttpMergeProxy, Ext.data.DataProxy, {
 
     /**
@@ -64,7 +67,8 @@ Ext.extend(Ext.ux.data.HttpMergeProxy, Ext.data.DataProxy, {
       }
     },
        
-    /* Load data from the configured urlArray, read the data object into
+    /**
+     * Load data from the configured urlArray, read the data object into
      * a block of Ext.data.Records using the passed {@link Ext.data.DataReader} implementation, and
      * process that block using the passed callback.
      * @param {Object} params An object containing properties which are to be used as HTTP parameters
@@ -147,12 +151,16 @@ Ext.extend(Ext.ux.data.HttpMergeProxy, Ext.data.DataProxy, {
        }
      },
     
-    // private
+    /**
+     * @private Update the dataSet
+     */
     update : function(dataSet){
         
     },
     
-    // private
+    /**
+     * @private Update the dataSet
+     */
     updateResponse : function(dataSet){
         
     }

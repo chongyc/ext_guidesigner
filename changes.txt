@@ -10,6 +10,7 @@ TODO
  - Split big json in multiple files
  - Problem that there is a cmp exception thrown
  - Make build script to create compresscopy and documentation and zipfiles
+ - Disable visual resize when showing doc
  
  Change History:
  Version 2.1.0:

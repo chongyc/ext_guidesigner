@@ -22,7 +22,7 @@
     </table>
     
     <div class="description">
-         
+        Extend the default PropertyColumnModel in so that we implement other editors/@package Ext.ux.guid.grid 
     </div>
     
     <div class="hr"></div>
@@ -79,18 +79,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getPropertyType</b>(&nbsp;<code> name</code>&nbsp;) : void                                
+                <b>getPropertyType</b>(&nbsp;<code>string name</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Get a property type for given name</div>
                     <div class="long">
-                            
+                        Get a property type for given name    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>name</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>name</code> : string
+                                    <div class="sub-desc">&nbsp;The property to look fore</div>                                   
                                 </li>
                             
                             </ul>
@@ -113,30 +113,30 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getCellEditor</b>(&nbsp;<code> colIndex,  rowIndex</code>&nbsp;) : void                                
+                <b>getCellEditor</b>(&nbsp;<code>int colIndex, int rowIndex</code>&nbsp;) : Object                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Get the celleditor by row and colIndex</div>
                     <div class="long">
-                            
+                        Get the celleditor by row and colIndex    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>colIndex</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>colIndex</code> : int
+                                    <div class="sub-desc">&nbsp;The column index</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>rowIndex</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>rowIndex</code> : int
+                                    <div class="sub-desc">&nbsp;The row index</div>                                   
                                 </li>
                             
                             </ul>
                                                         
                             <strong>Returns:</strong>
                             <ul>
-                                <li>void<div class="sub-desc"></div></li>
+                                <li>Object<div class="sub-desc">The cellEditor</div></li>
                             </ul>                    
                         </div>
                     </div>                    
@@ -152,28 +152,28 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>valueRenderer</b>(&nbsp;<code> value,  p,  r</code>&nbsp;) : void                                
+                <b>valueRenderer</b>(&nbsp;<code>object The, Element The, Record The</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Format the value of cell</div>
                     <div class="long">
-                            
+                        Format the value of cell    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>value</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>The</code> : object
+                                    <div class="sub-desc">&nbsp;value to be formated</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>p</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>The</code> : Element
+                                    <div class="sub-desc">&nbsp;element</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>r</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>The</code> : Record
+                                    <div class="sub-desc">&nbsp;record</div>                                   
                                 </li>
                             
                             </ul>
@@ -189,45 +189,6 @@
             <td class="msource">
                 PropertyColumnModel
                 <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyColumnModel" ext:member="Ext.ux.guid.grid.PropertyColumnModel#valueRenderer" href="symbols/Ext.ux.guid.grid.PropertyColumnModel.html">PropertyColumnModel</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>propertyRenderer</b>(&nbsp;<code> value,  p</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>value</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>p</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                PropertyColumnModel
-                <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyColumnModel" ext:member="Ext.ux.guid.grid.PropertyColumnModel#propertyRenderer" href="symbols/Ext.ux.guid.grid.PropertyColumnModel.html">PropertyColumnModel</a>
             </td>
         </tr>
                                                           

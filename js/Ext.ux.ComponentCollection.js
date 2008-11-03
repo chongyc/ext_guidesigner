@@ -98,6 +98,15 @@ Ext.reg('simplecombo', Ext.ux.form.SimpleCombo);
  * @type component
  */
 Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+    /**
+     * The url to be shown in iframe
+     * @type {String}
+     @cfg */
+    url : null,
+    
+    /**
+     * @private Just render an iframe
+     */
     onRender : function(ct, position){
         var url = this.url;
         url += (url.indexOf('?') != -1 ? '&' : '?') + '_dc=' + (new Date().getTime());

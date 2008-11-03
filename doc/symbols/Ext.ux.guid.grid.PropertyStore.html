@@ -79,18 +79,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>getPropertyType</b>(&nbsp;<code> name</code>&nbsp;) : void                                
+                <b>getPropertyType</b>(&nbsp;<code>string name</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Get a property type for given name</div>
                     <div class="long">
-                            
+                        Get a property type for given name    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>name</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>name</code> : string
+                                    <div class="sub-desc">&nbsp;The property to look fore</div>                                   
                                 </li>
                             
                             </ul>
@@ -113,18 +113,18 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setSource</b>(&nbsp;<code> o</code>&nbsp;) : void                                
+                <b>setSource</b>(&nbsp;<code>object o</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">protected  - should only be called by the grid.  Use grid.setSource instead.Based on source object a property record is created</div>
                     <div class="long">
-                            
+                        protected  - should only be called by the grid.  Use grid.setSource instead.Based on source object a property record is created    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>o</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>o</code> : object
+                                    <div class="sub-desc">&nbsp;The source object</div>                                   
                                 </li>
                             
                             </ul>
@@ -147,111 +147,23 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>onUpdate</b>(&nbsp;<code> ds,  record,  type</code>&nbsp;) : void                                
+                <b>setValue</b>(&nbsp;<code>String prop, String value</code>&nbsp;) : void                                
                 <div class="mdesc">
-                    <div class="short"></div>
+                    <div class="short">Set the value of a property</div>
                     <div class="long">
-                            
+                        Set the value of a property    
                         <div class="mdetail-params">                            
                             <strong>Parameters:</strong>                            
                             <ul>
                             
                                 <li>
-                                    <code>ds</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>prop</code> : String
+                                    <div class="sub-desc">&nbsp;The property to set</div>                                   
                                 </li>
                             
                                 <li>
-                                    <code>record</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>type</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                PropertyStore
-                <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyStore" ext:member="Ext.ux.guid.grid.PropertyStore#onUpdate" href="symbols/Ext.ux.guid.grid.PropertyStore.html">PropertyStore</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>updateSource</b>(&nbsp;<code> key,  value,  type</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>key</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>value</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>type</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>void<div class="sub-desc"></div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                PropertyStore
-                <a class="x-hidden" ext:cls="Ext.ux.guid.grid.PropertyStore" ext:member="Ext.ux.guid.grid.PropertyStore#updateSource" href="symbols/Ext.ux.guid.grid.PropertyStore.html">PropertyStore</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>setValue</b>(&nbsp;<code> prop,  value</code>&nbsp;) : void                                
-                <div class="mdesc">
-                    <div class="short"></div>
-                    <div class="long">
-                            
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>prop</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>value</code> : 
-                                    <div class="sub-desc">&nbsp;</div>                                   
+                                    <code>value</code> : String
+                                    <div class="sub-desc">&nbsp;The value to be set</div>                                   
                                 </li>
                             
                             </ul>

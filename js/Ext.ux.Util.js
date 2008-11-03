@@ -17,8 +17,6 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-  
-Ext.namespace('Ext.ux');
 
 //Do not receate util when it is allready there
 if (!Ext.ux.Util) {

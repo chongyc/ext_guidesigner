@@ -17,17 +17,28 @@
   */
 
 //Register name spaces used
-Ext.namespace('Ext.ux.guid');
 Ext.namespace('Ext.ux.guid.tree');
 
+/**
+ * Constructor of the RepositoryLoader
+ */
 Ext.ux.guid.tree.RepositoryLoader = function(repository,config) {
   Ext.apply(this,config);
   this.repository = repository;
   Ext.ux.guid.tree.RepositoryLoader.superclass.constructor.call(this);
 }
 
+/**
+ * Repostiory loader is used to load a repository class into a tree
+ */
 Ext.extend(Ext.ux.guid.tree.RepositoryLoader,Ext.tree.TreeLoader,{
 
+ /**
+  * Load a tree by loading nodes
+  * @param {treeNode} node The root node to load data to
+  * @param {function} callback Function to be called after loading of nodes finished
+  * @param {boolean} refresh When true the underling repository is refresh (default true)
+  */
  load : function(node, callback,refresh){
    if (refresh!==false && this.repository) {
      this.repository.refresh(function(){
@@ -38,6 +49,12 @@ Ext.extend(Ext.ux.guid.tree.RepositoryLoader,Ext.tree.TreeLoader,{
    }
   },
 
+  /**
+   * Internal callback function used load function for items from repository
+   * @param {treeNode} node The root node to load data to
+   * @param {boolean} append Should data be appended to node
+   * @param {function} callback Function to be called after loading of nodes finished
+   */
   loadNodes : function(node,append,callback){
     this.activeNode = null;
     if (!append) while(node.firstChild) node.removeChild(node.firstChild);
