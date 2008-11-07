@@ -17,7 +17,7 @@
 
   * Donations are welcomed: http://donate.webblocks.eu
   */
-Ext.namespace('Ext.ux.guid');
+
 Ext.namespace('Ext.ux.guid.plugin');
 
 /**
@@ -373,6 +373,14 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
           }
       }, this);
   },
+  
+  /**
+   * Hide the visualResize layer
+   */
+  hideVisualResize : function(){
+   this.resizeLayer.hide();
+   this.resizeLayer.resizer.dd.lock();
+  },  
 
   /**
    * Start resize of an element, it will become active element
@@ -831,7 +839,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
      cmp.innerWrap.focus();
     } else if (cmp) cmp.focus();
   },
-
+  
 
   /**
    * Select a designElement
@@ -845,8 +853,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     if (this.autoResize && !this.isContainer(cmp)) {
       this.visualResize(cmp,false);
     } else {
-     this.resizeLayer.hide();
-     this.resizeLayer.resizer.dd.lock();
+     this.hideVisualResize();
     }
     if (cmp && cmp==this.activeElement) return cmp;
     this.activeElement = cmp;

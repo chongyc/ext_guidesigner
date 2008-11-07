@@ -35,7 +35,7 @@ if (!Ext.ux.Util) {
    * A class containig basic functionality for loading javascript and stylesheets
    * and helper functions for url manipulation
    */
-  Ext.extend(Ext.ux.Util,Ext.util.Observable,{
+  Ext.extend(Ext.ux.Util, Ext.util.Observable,{
 
     /**
      * Should caching be disabled when files are loaded (defaults false).

@@ -1,0 +1,33 @@
+<chart>
+   <chart_data>
+      <row>
+         <null/>
+         <string>2001</string>
+         <string>2002</string>
+         <string>2003</string>
+         <string>2004</string>
+      </row>
+      <row>
+         <string>Region A JE</string>
+         <number>5</number>
+         <number>10</number>
+         <number>30</number>
+         <number>63</number>
+      </row>
+      <row>
+         <string>Region B</string>
+         <number>100</number>
+         <number>20</number>
+         <number>65</number>
+         <number>55</number>
+      </row>
+      <row>
+         <string>Region C</string>
+         <number>56</number>
+         <number>21</number>
+         <number>5</number>
+         <number>90</number>
+      </row>
+   </chart_data>
+
+</chart>

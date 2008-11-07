@@ -43,7 +43,7 @@ Ext.ux.guid.grid.PropertyStore = function(grid, source){
 /**
  * Constructor used to create a store used to store designer data
  */
-Ext.ux.guid.grid.PropertyStore = Ext.extend(Ext.grid.PropertyStore, {
+Ext.extend(Ext.ux.guid.grid.PropertyStore, Ext.grid.PropertyStore, {
     //@private The json id  
     jsonId : "__JSON__",
 

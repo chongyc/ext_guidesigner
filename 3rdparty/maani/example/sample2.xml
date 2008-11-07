@@ -1,0 +1,62 @@
+<chart>
+
+	<axis_category size='16' color='000000' alpha='75' skip='0' orientation='horizontal' />
+	<axis_ticks value_ticks='false' category_ticks='true' major_thickness='2' minor_thickness='1' minor_count='1' major_color='000000' minor_color='222222' position='inside' />
+	<axis_value min='-40' size='10' color='ffffff' alpha='50' steps='6' prefix='' suffix='' decimals='0' separator='' show_min='false' />
+	
+	<chart_data>
+		<row>
+			<null/>
+			<string>2002</string>
+			<string>2003</string>
+			<string>2004</string>
+			<string>2005</string>
+		</row>
+		<row>
+			<string>region 1</string>
+			<number>48</number>
+			<number>55</number>
+			<number>80</number>
+			<number>100</number>
+		</row>
+		<row>
+			<string>region 2</string>
+			<number>-12</number>
+			<number>10</number>
+			<number>55</number>
+			<number>65</number>
+		</row>
+		<row>
+			<string>region 3</string>
+			<number>27</number>
+			<number>-20</number>
+			<number>15</number>
+			<number>80</number>
+		</row>
+	</chart_data>
+	<chart_grid_h alpha='10' color='000000' thickness='1' />
+	<chart_pref line_thickness='2' point_shape='circle' fill_shape='false' />
+	<chart_rect x='50' y='100' width='320' height='150' positive_color='ffffff' positive_alpha='50' negative_color='000000' negative_alpha='10' />
+	<chart_transition type='slide_left' delay='.5' duration='0.5' order='series' />
+	<chart_type>Line</chart_type>
+	<chart_value position='cursor' size='12' color='000000' background_color='aaff00' alpha='80' />
+	
+	<draw>
+		<text transition='dissolve' delay='0' duration='0.5' color='000000' alpha='8' font='Arial' rotation='0' bold='true' size='48' x='8' y='7' width='400' height='75' h_align='center' v_align='bottom'>annual report</text>
+	</draw>
+	
+	<legend_label layout='horizontal' bullet='line' font='arial' bold='true' size='13' color='ffffff' alpha='65' />
+	<legend_rect x='50' y='75' width='320' height='5' margin='5' fill_color='000000' fill_alpha='7' line_color='000000' line_alpha='0' line_thickness='0' />
+	<legend_transition type='dissolve' delay='0' duration='0.5' />
+	
+	<series_color>
+		<color>ff4444</color>
+		<color>ffff00</color>
+		<color>8844ff</color>
+	</series_color>
+	<series_explode>
+		<number>400</number>
+	</series_explode>
+
+</chart>
+

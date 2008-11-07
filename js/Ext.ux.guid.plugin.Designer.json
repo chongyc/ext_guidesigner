@@ -279,6 +279,7 @@
             iconCls : 'icon-help',
             hidden  : !scope.enableVersion,
             handler : function() {
+              scope.hideVisualResize();
               var w = new Ext.Window({
                 title  : 'GuiDesigner (' + scope.version + ') by Sierk Hoeksma, API Information',
                 border  : false,

@@ -178,7 +178,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
         var j = i;
           if (i=='required_js') {
             if (items[i]) {
-              var files = items[i].split(';');
+              var files = items[i].replace(',',';').split(';');
               for (var f=0;f<files.length;f++) {
                 if(document.getElementById(files[f])) {continue;}
                 if (!this.scriptLoader(files[f],options.nocache)) {
@@ -189,7 +189,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
             }
           } else if (i=='required_css') {
             if (items[i]) {
-              var files = items[i].split(';');
+              var files = items[i].replace(',',';').split(';');
               for (var f=0;f<files.length;f++) {
                 if(document.getElementById(files[f])) {continue;}
                 Ext.util.CSS.swapStyleSheet(files[f], files[f]);
