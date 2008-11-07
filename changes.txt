@@ -2,6 +2,7 @@ TODO
  - Make toolbox supporting tabpanel, so only one exits by multiple tabs designs
  - Multiple select to change one or more items in one go
  - In line editing of labels (fieldlabel,title,label)
+ - Add compress option for json
 ==> Problems after creating GUID 2.1 
  - Update documentation
  - Allow multiple base directroy under file control
