@@ -134,6 +134,7 @@ if (!Ext.ux.Util) {
      if (!url) return false;
      var id=url;
      if(!document.getElementById(id)) {
+       alert(id);
        var content = this.syncContent(url,nocache);
        if (content===false) return false;
        var head = document.getElementsByTagName("head")[0];
@@ -255,6 +256,35 @@ if (!Ext.ux.Util) {
       this._loaded[url]=false;
       head.appendChild(node);
     },
+    
+    /**
+     * Merge two json files into one, incase same items exists
+     * then second json is leading
+     * @param {Object\Array} json1 The first json file
+     * @param {Object\Array} json2 The second json file
+     * @return {Object\Array} The merged json
+     */
+    merge : function (item1,item2) {
+      if (item1 instanceof Array && item2 instanceof Array) {
+        var arr = [];
+        for (var i=0;i<item1.length;i++) arr.push(item1[i]);
+        for (var i=0;i<item2.length;i++) arr.push(item2[i]);
+        return arr;
+      } else if (typeof(item1)==typeof(item2) && typeof(item1)=='object') {
+        var obj = {};
+        for (var i in item1) {obj[i] = this.merge(item1[i],item2[i]);}
+        for (var i in item2) {if (!obj[i]) obj[i]=item2[i];}
+        return obj;
+      } else if (typeof(item1)==typeof(item2)) {
+        return item2;
+      } else if (item1==undefined) {
+        return item2;
+      } else if (item2==undefined) {
+        return item1;
+      } else {
+        throw new SyntaxError('Object items cannot be joined because items mismatch');
+      }
+    },
 
     /**
      * Function require is used to checks if the required files are loaded
@@ -271,37 +301,44 @@ if (!Ext.ux.Util) {
      * @return {Object} a object with keys js and css contain an array with full path of items
      */
     require : function(packages,options){
-      var ret = {css: [],js:[]};
-      if (!packages) return ret;
-      if (packages instanceof Array && !options && packages.length==2 && typeof(packages[1])=='object') {
-        options=packages[1];
-        packages=packages[0];
-      }
-      packages= (typeof(packages)=='string') ? packages.split(';') : packages || [];
-      options = (typeof(options)=='string') ? {'basedir' : options} : options || {basedir : ""};
-      options['cssdir'] = options.cssdir || options.basedir;
-      options['reload'] = options['reload']== undefined ? true : options['reload'];
-      options['nocache'] = options['nocache']== undefined ? this.nocache : options['nocache'];
-      //First load all files
-      for (var i=0;i<packages.length;i++) {
-        //Create a name of path + packages + extentsion
-        var url = this.parseUrl(packages[i]);
-        if (['js','css'].indexOf(url.ext)==-1) url.file+='.js';
-        var dir = url.ext=='css' ? options.cssdir : options.basedir;
-        var uri = dir + (dir.length!=0 && dir.charAt(dir.length-1)!='/' ? "/" : "") +
-           url.directory +  url.file + (url.query ? '?' + url.query : '');
-        if (url.ext=='css') {
-            ret.css.push(uri);
-            Ext.util.CSS.swapStyleSheet(this.nocacheUrl(uri,options.nocache), uri);
-        } else if (options.async){
-           this.loadUrl(uri,url.ext,options);
-           ret.js.push(uri);
-        } else {
-           ret.js.push(uri);
-           this.scriptLoader(uri,options.nocache);
+      var _require = function(packages,options){
+         var ret = {css: [],js:[]};
+         if (!packages) return ret;     
+         packages= (typeof(packages)=='string') ? packages.replace(',',';').split(';') : packages || [];
+         options = (typeof(options)=='string') ? {'basedir' : options} : options || {basedir : ""};
+         options['cssdir'] = options.cssdir || options.basedir;
+         options['reload'] = options['reload']== undefined ? true : options['reload'];
+         options['nocache'] = options['nocache']== undefined ? this.nocache : options['nocache'];
+         //First load all files
+         for (var i=0;i<packages.length;i++) {
+           //Create a name of path + packages + extentsion
+           var url = this.parseUrl(packages[i]);
+           if (['js','css'].indexOf(url.ext)==-1) url.file+='.js';
+           var dir = url.ext=='css' ? options.cssdir : options.basedir;
+           var uri = dir + (dir.length!=0 && dir.charAt(dir.length-1)!='/' ? "/" : "") +
+              url.directory +  url.file + (url.query ? '?' + url.query : '');
+           if (url.ext=='css') {
+               ret.css.push(uri);
+               Ext.util.CSS.swapStyleSheet(this.nocacheUrl(uri,options.nocache), uri);
+           } else if (options.async){
+              this.loadUrl(uri,url.ext,options);
+              ret.js.push(uri);
+           } else {
+              ret.js.push(uri);
+              this.scriptLoader(uri,options.nocache);
+           }
+         }
+        return ret;
+      }.createDelegate(this);
+      //Check if packages is an array if so walk it
+      if (packages instanceof Array && !options) {
+        var ret = {css: [],js:[]};
+        for (var i=0;i<packages.length;i=i+2) {
+          ret = this.merge(ret,_require(packages[i],packages[i+1]));
         }
-      }
-      return ret;
+        return ret;
+      } 
+      return _require(packages,options);
     }
 
   });

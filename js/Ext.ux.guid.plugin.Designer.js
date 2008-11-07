@@ -699,10 +699,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        //Parse original so if can be reused as base
        var myEncoder = new Ext.ux.Json({jsonId : this.jsonId, nocache : nocache,evalException : false});
        var o = myEncoder.decode(cfg[this.jsonId + "json"]) || {};
-       var a = cfg.json && cfg.json.required_js ? cfg.json.required_js.split(';') :[];
+       var a = cfg.json && cfg.json.required_js ? cfg.json.required_js.replace(',',';').split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(this.formatPath(a[i]));
        if (ret.js.length!=0) o.required_js=cfg.json.required_js=ret.js.join(';');
-       a = cfg.json && cfg.json.required_css ? cfg.json.required_css.split(';') :[];
+       a = cfg.json && cfg.json.required_css ? cfg.json.required_css.replace(',',';').split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(this.formatPath(a[i]));
        if (ret.css.length!=0) o.required_css=cfg.json.required_css=ret.css.join(';');
        cfg[this.jsonId+"json"]=myEncoder.encode(o);
@@ -759,7 +759,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     this.container.codeConfig=items ? {items : (items instanceof Array ? this.editable(items) : [this.editable(items)])} : {};
     this.redrawElement(this.container);
     this.modified = true;
-    this.fireEvent('newconfig');
+    this.fireEvent('newconfig',noUndo);
     return true;
   },
 

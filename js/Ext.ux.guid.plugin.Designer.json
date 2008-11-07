@@ -205,15 +205,17 @@
             plugins : {
               //Create an error handler
               init : function(cmp) {
-               scope.on('newconfig',function(){
-                 this.setVisible(false);
-                 this.errors = [];
-                 this.errorCount = 0;
-                 this.toggle(false);
-                 if (this.errorTab) {
-                    var tab = Ext.getCmp(scope.TabId);
-                    tab.remove(this.errorTab);
-                    delete this.errorTab;
+               scope.on('newconfig',function(noUndo){
+                 if (!noUndo) {
+                   this.setVisible(false);
+                   this.errors = [];
+                   this.errorCount = 0;
+                   this.toggle(false);
+                   if (this.errorTab) {
+                      var tab = Ext.getCmp(scope.TabId);
+                      tab.remove(this.errorTab);
+                      delete this.errorTab;
+                   }
                  }
                },cmp);
                scope.errorHandler = function(type,exception) {

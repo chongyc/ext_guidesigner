@@ -1,49 +1,49 @@
-<?
+<?php
 // vim: ts=4:sw=4:nu:fdc=4:nospell
 
 require("classes/csql.php");
 
 if(!isset($_REQUEST["cmd"])) {
-	return;
+  return;
 }
 
 $objects = array(
-	// {{{
-	// company
-	"company"=>array(
-		 "table"=>"company"
-		,"idName"=>"compID"
-		,"fields"=>array(
-			 "compID"
-			,"company"
-			,"price"
-			,"change"
-			,"pctChange"
-			,"lastChange"
-			,"industry"
-			,"action1"
-			,"qtip1"
-			,"action2"
-			,"qtip2"
-			,"action3"
-			,"qtip3"
-			,"note"
-		)
-	)
-	,"person"=>array(
-		"table"=>"person left join phone on person.persID=phone.persID"
-		,"idName"=>"persID"
-		,"groupBy"=>"person.persID"
-		,"fields"=>array(
-			  "person.persID"
-			 ,"persFirstName"
-			 ,"persMidName"
-			 ,"persLastName"
-			 ,"persNote"
-			 ,"group_concat(concat_ws('~',phoneType,phoneNumber),'|') as phones"
-		)
-	)
-	// }}}
+  // {{{
+  // company
+  "company"=>array(
+     "table"=>"company"
+    ,"idName"=>"compID"
+    ,"fields"=>array(
+       "compID"
+      ,"company"
+      ,"price"
+      ,"change"
+      ,"pctChange"
+      ,"lastChange"
+      ,"industry"
+      ,"action1"
+      ,"qtip1"
+      ,"action2"
+      ,"qtip2"
+      ,"action3"
+      ,"qtip3"
+      ,"note"
+    )
+  )
+  ,"person"=>array(
+    "table"=>"person left join phone on person.persID=phone.persID"
+    ,"idName"=>"persID"
+    ,"groupBy"=>"person.persID"
+    ,"fields"=>array(
+        "person.persID"
+       ,"persFirstName"
+       ,"persMidName"
+       ,"persLastName"
+       ,"persNote"
+       ,"group_concat(concat_ws('~',phoneType,phoneNumber),'|') as phones"
+    )
+  )
+  // }}}
 );
 
 // create PDO object and execute command
@@ -61,21 +61,21 @@ $_REQUEST["cmd"]($osql);
   * @param     PDO $osql
   */
 function getData($osql) {
-	global $objects;
-	$params = $objects[$_REQUEST["objName"]];
-	$params["start"] = isset($_REQUEST["start"]) ? $_REQUEST["start"] : null;
-	$params["limit"] = isset($_REQUEST["limit"]) ? $_REQUEST["limit"] : null;
-	$params["search"] = isset($_REQUEST["fields"]) ? json_decode($_REQUEST["fields"]) : null;
-	$params["query"] = isset($_REQUEST["query"]) ? $_REQUEST["query"] : null;
-	$params["sort"] = isset($_REQUEST["sort"]) ? $_REQUEST["sort"] : null;
-	$params["dir"] = isset($_REQUEST["dir"]) ? $_REQUEST["dir"] : null;
+  global $objects;
+  $params = $objects[$_REQUEST["objName"]];
+  $params["start"] = isset($_REQUEST["start"]) ? $_REQUEST["start"] : null;
+  $params["limit"] = isset($_REQUEST["limit"]) ? $_REQUEST["limit"] : null;
+  $params["search"] = isset($_REQUEST["fields"]) ? json_decode($_REQUEST["fields"]) : null;
+  $params["query"] = isset($_REQUEST["query"]) ? $_REQUEST["query"] : null;
+  $params["sort"] = isset($_REQUEST["sort"]) ? $_REQUEST["sort"] : null;
+  $params["dir"] = isset($_REQUEST["dir"]) ? $_REQUEST["dir"] : null;
 
-	$response = array(
-		 "success"=>true
-		,"totalCount"=>$osql->getCount($params)
-		,"rows"=>$osql->getData($params)
-	);
-	$osql->output($response);
+  $response = array(
+     "success"=>true
+    ,"totalCount"=>$osql->getCount($params)
+    ,"rows"=>$osql->getData($params)
+  );
+  $osql->output($response);
 
 } // eo function getData
 // }}}
@@ -89,12 +89,12 @@ function getData($osql) {
   * @param     PDO $osql
   */
 function saveData($osql) {
-	global $objects;
-	$params = $objects[$_REQUEST["objName"]];
-	unset($params["fields"]);
+  global $objects;
+  $params = $objects[$_REQUEST["objName"]];
+  unset($params["fields"]);
 
-	$params["data"] = json_decode($_REQUEST["data"]);
-	$osql->output($osql->saveData($params));
+  $params["data"] = json_decode($_REQUEST["data"]);
+  $osql->output($osql->saveData($params));
 
 } // eo function saveData
 // }}}

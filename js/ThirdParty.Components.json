@@ -15,9 +15,11 @@
       text : "RecordGrid",
       qtip : "A record grid",
       require : ["Ext.ux.grid.Search;Ext.ux.IconMenu;Ext.ux.grid.RowActions;Ext.ux.grid.RecordForm;" +
-                 "Ext.ux.form.DateTime;Ext.ux.RecordFormGrid;icons.css;Ext.ux.grid.RowActions.css;recordform.css",
-                 {basedir:"3rdparty/recordform/js",cssdir:"3rdparty/recordform/css"}],
-      
+                 "Ext.ux.form.DateTime;icons.css;Ext.ux.grid.RowActions.css;recordform.css",
+                 {basedir:"3rdparty/recordform/js",cssdir:"3rdparty/recordform/css"},
+                 "Ext.ux.RecordFormGrid",
+                 {basedir:"3rdparty/webblocks",cssdir:"3rdparty/webblocks"}
+                ],
       config : {
         xtype : "recordformgrid"
         /*
