@@ -1,5 +1,5 @@
 /*global Ext document */
- /*  
+ /*
   * Author: Sierk Hoeksma. WebBlocks.eu
   * Copyright 2007-2008, WebBlocks.  All rights reserved.
   *
@@ -36,7 +36,7 @@ Ext.ux.guid.tree.CodeLoader = function(designer,config) {
 Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.tree.TreeLoader, {
  // @private jsonId is the id used to store the original code
  jsonId : '__JSON__',
-  
+
   /**
    * Convert an element into a self explaining name
    * @param c {component} The component for which to create a name
@@ -46,7 +46,7 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.tree.TreeLoader, {
       c = c || {};
       if (c[this.jsonId + 'xtype']) {
         var v = c[this.jsonId + 'xtype'];
-        txt.push(typeof(v)=='object' ? v.display || v.value : v); 
+        txt.push(typeof(v)=='object' ? v.display || v.value : v);
       } else if (c.xtype) { txt.push(c.xtype); }
       if (c.fieldLabel) { txt.push('[' + c.fieldLabel + ']'); }
       if (c.boxLabel)   { txt.push('[' + c.boxLabel + ']'); }
@@ -56,27 +56,27 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.tree.TreeLoader, {
       if (c.region)     { txt.push('<i>(' + c.region + ')</i>'); }
       return (txt.length == 0 ? "Element" : txt.join(" "));
   },
-  
+
  // @private load is called when content of tree should be reloaded
- load : function(node, callback){ 
+ load : function(node, callback){
     node.beginUpdate();
-    while(node.firstChild) node.removeChild(node.firstChild);    
+    while(node.firstChild) node.removeChild(node.firstChild);
      if(this.doLoad(node,this.designer.getConfig())){
        if(typeof callback == "function") callback();
      }
-    node.endUpdate();     
+    node.endUpdate();
   },
- 
+
   // @private the interal loop used to go through the data and build a tree
   doLoad : function(node,data){
     if(data){
       if (data instanceof Array) {
         for(var i=0;i<data.length;i++) this.doLoad(node,data[i]);
       } else if (!this.designer.isEmpty(data)) {
-        var isContainer = this.designer.isContainer(this.designer.findByJsonId(data[this.jsonId]));
+   			var isContainer = this.designer.isContainer(this.designer.findByJsonId(data[this.jsonId]));
         var cs = {
              text: this.elementToText(data),
-             cls: isContainer ? 'folder' : 'file' , 
+             cls: isContainer ? 'folder' : 'file' ,
              leaf : isContainer ? false : true,
              jsonId : data[this.jsonId]
         };

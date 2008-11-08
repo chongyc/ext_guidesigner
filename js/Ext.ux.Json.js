@@ -396,7 +396,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                pad(o.getMinutes()) + ":" +
                pad(o.getSeconds()) + '"';
      },
-    
+
     /**
      * Set a key with a value within the json container of config
      * without changing the layout of the json
@@ -428,11 +428,15 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        var nl = this.readable ? "\n" : "";
        var nc = this.readable ? " : ": "";
        indent = indent || 0;
-       var lic = (indent==0 && !noLicense && this.licenseText) ? this.licenseText + "\n" : "";
+       if (indent==0) {
+         var a=[], lic =  (!noLicense && this.licenseText) ? this.licenseText + "\n" : "";
+         a.push(lic ,this.encode(o,1,keepJsonId));
+         return a.join("");
+       }
        if(o == undefined || o === null){
            return "null";
        }else if(o instanceof Array){
-           return lic + this.encodeArray(o, indent,keepJsonId);
+           return this.encodeArray(o, indent,keepJsonId);
        }else if(o instanceof Date){
            return this.encodeDate(o);
        }else if(typeof o == "number"){
@@ -447,7 +451,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return this.encodeString(o);
        }else {
          var a = [], b, i, v;
-         a.push(lic + "{" + nl);
+         a.push("{" + nl); //On same line as key
          for (var i in o) {
            v = o[i];
            var orgKey = (i.indexOf(this.jsonId)==0 && i!=this.jsonId) ?
@@ -493,7 +497,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
              }
            }
          }
-         a.push(nl + this.indentStr(indent-1) + "}");
+         a.push(nl + this.indentStr(indent-2) + "}");
          return a.join("");
        }
      },

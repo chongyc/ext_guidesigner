@@ -10,10 +10,7 @@ TODO
  - Add Grid Wirzard
  - In appendConfig merge the json objects, and delete from new item
  - Problem that there is a cmp exception thrown
- - When first element is added it is not visable under select
- - First indent not working correctly by json 
  - Problem that still some code is converted to string (listener (all))
- - Save resize of show in json
  
  Change History:
  Version 2.1.0:
