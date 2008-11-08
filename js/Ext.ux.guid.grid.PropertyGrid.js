@@ -263,6 +263,7 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
 
 /**
  * Create a property gird by extending a Grid
+ * @type component
  */
 Ext.ux.guid.grid.PropertyGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     // @private columns cannot be moved

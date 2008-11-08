@@ -467,45 +467,6 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>merge</b>(&nbsp;<code>Object\Array json1, Object\Array json2</code>&nbsp;) : Object\Array                                
-                <div class="mdesc">
-                    <div class="short">Merge two json files into one, incase same items existsthen second json is leading</div>
-                    <div class="long">
-                        Merge two json files into one, incase same items existsthen second json is leading    
-                        <div class="mdetail-params">                            
-                            <strong>Parameters:</strong>                            
-                            <ul>
-                            
-                                <li>
-                                    <code>json1</code> : Object\Array
-                                    <div class="sub-desc">&nbsp;The first json file</div>                                   
-                                </li>
-                            
-                                <li>
-                                    <code>json2</code> : Object\Array
-                                    <div class="sub-desc">&nbsp;The second json file</div>                                   
-                                </li>
-                            
-                            </ul>
-                                                        
-                            <strong>Returns:</strong>
-                            <ul>
-                                <li>Object\Array<div class="sub-desc">The merged json</div></li>
-                            </ul>                    
-                        </div>
-                    </div>                    
-                </div>
-            </td>
-            <td class="msource">
-                Json
-                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#merge" href="symbols/Ext.ux.Json.html">Json</a>
-            </td>
-        </tr>
-                
-        <tr class="method-row expandable">
-            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
-            <td class="sig">
-                <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>apply</b>(&nbsp;<code>Object/String json, Element el, Boolean clean</code>&nbsp;) : Object                                
                 <div class="mdesc">
                     <div class="short">Apply the Json to given visual element</div>
@@ -543,6 +504,50 @@
             <td class="msource">
                 Json
                 <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#apply" href="symbols/Ext.ux.Json.html">Json</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setJson</b>(&nbsp;<code>Object cfg, String key, Mixed value</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Set a key with a value within the json container of configwithout changing the layout of the json</div>
+                    <div class="long">
+                        Set a key with a value within the json container of configwithout changing the layout of the json    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>cfg</code> : Object
+                                    <div class="sub-desc">&nbsp;The config object</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>key</code> : String
+                                    <div class="sub-desc">&nbsp;The to be set</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>value</code> : Mixed
+                                    <div class="sub-desc">&nbsp;The value to be set</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">The config object</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Json
+                <a class="x-hidden" ext:cls="Ext.ux.Json" ext:member="Ext.ux.Json#setJson" href="symbols/Ext.ux.Json.html">Json</a>
             </td>
         </tr>
                 
@@ -843,6 +848,40 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>dateStr</b>(&nbsp;<code>Date curdate</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Retrun a time string in hh:mm:ss</div>
+                    <div class="long">
+                        Retrun a time string in hh:mm:ss    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>curdate</code> : Date
+                                    <div class="sub-desc">&nbsp;The date to used (default Date())</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc">Date string in hh:mm:ss format</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#dateStr" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
                 <b>nocacheUrl</b>(&nbsp;<code>String url, boolean nocache</code>&nbsp;) : void                                
                 <div class="mdesc">
                     <div class="short">Convert a url into a nocache url by adding a date if needed</div>
@@ -1085,6 +1124,45 @@
             <td class="msource">
                 
                 <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#loadUrl" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable inherited">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>merge</b>(&nbsp;<code>Object\Array json1, Object\Array json2</code>&nbsp;) : Object\Array                                
+                <div class="mdesc">
+                    <div class="short">Merge two json files into one, incase same items existsthen second json is leading</div>
+                    <div class="long">
+                        Merge two json files into one, incase same items existsthen second json is leading    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>json1</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The first json file</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>json2</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The second json file</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object\Array<div class="sub-desc">The merged json</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                
+                <a class="" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#merge" href="symbols/Ext.ux.Util.html">Util</a>
             </td>
         </tr>
                 
