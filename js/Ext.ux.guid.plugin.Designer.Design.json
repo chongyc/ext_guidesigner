@@ -1,0 +1,63 @@
+{ json: {
+   //Function used within json which must be there in order to use designer to desgin
+   "scope.!on" : Ext.emptyFn,
+   "scope.!setConfig" : Ext.emptyFn,
+   "scope.!getConfig" : Ext.emptyFn,
+   "scope.!getCode"   : Ext.emptyFn,
+   "scope.!undo" : Ext.emptyFn,
+   "scope.!redo" : Ext.emptyFn,
+   "scope.!refresh" : Ext.emptyFn,
+   "scope.!setPropertyGrid" : Ext.emptyFn,
+   "scope.!removeElement" : Ext.emptyFn,
+   "scope.!selectElement" : Ext.emptyFn,
+   "scope.!appendConfig" : Ext.emptyFn,
+   "scope.!visualResize" : Ext.emptyFn,
+   "scope.!findByJsonId" : Ext.emptyFn,
+   "scope.!fireEvent"   : Ext.emptyFn,
+   "scope.!errorHandler": Ext.emptyFn,
+   "scope.!repository" : false,
+
+   //From here on normal code stuff
+   "scope.!RepositoryId" : Ext.id(),
+   "scope.!ErrorId"    : Ext.id(),
+   "scope.!TabId"      : Ext.id(),
+   "scope.!enableCopy" : true,
+   "scope.!enableCopy" : true,
+   "scope.!enableShow" : true,
+   "scope.!enableEdit" : true,
+   "scope.!enableVersion" : true
+  },
+  xtype:"treepanel",
+  border : false,
+  animate:true,
+  autoScroll:true,
+  containerScroll:true,
+  enableDrag:true,
+  ddGroup: 'designerddgroup',
+  rootVisible : false,
+  root:new Ext.tree.AsyncTreeNode({text:'root'}),
+  loader:new Ext.ux.guid.tree.JsonTreeLoader({
+  requestMethod:'GET',
+  nocache:scope.nocache,
+  dataUrl:scope.components
+   }),
+  dragConfig:{
+    getDragData : function(e){
+      var data = Ext.dd.Registry.getHandleFromEvent(e);
+      if (data) {
+       data.config=data.node.attributes.config;
+       data.require=data.node.attributes.require;
+       data.processed=false;
+      }
+      return data;
+    },
+    ddGroup: 'designerddgroup'
+  },
+  listeners :  {
+   'dblclick' : function(node,e){
+     scope.appendConfig(scope.activeElement||scope.container,
+  node.attributes.config,true,null,null,
+  scope.require(node.attributes.require).cfg);
+   }
+  }
+}

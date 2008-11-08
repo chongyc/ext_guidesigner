@@ -18,6 +18,6 @@
  * Donations are welcomed: http://donate.webblocks.eu
  */
  //Just tell index.html that we support php and load it.
- echo "<script> var phpSupport = true;</script>";
+ echo "<script> var phpSupport = true;</script>\n";
  include "index.html";
 ?>

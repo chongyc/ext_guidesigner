@@ -2,6 +2,7 @@
 {
 xtype : "panel",
 title : "MyJson",
+border : false,
 items : [{
     xtype : "label",
     text : "This is a demo json file (myjson.json)"

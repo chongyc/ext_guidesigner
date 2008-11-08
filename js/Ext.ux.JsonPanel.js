@@ -45,6 +45,9 @@ Ext.ux.JsonPanel = Ext.extend(Ext.Panel,{
  //@private Border is by default false
  border: false,
  
+ //@private bodyBorder is by default false
+ bodyBorder : false,
+ 
  //@private Whe only read a JSON file once
  single:true,  //only needed once
  

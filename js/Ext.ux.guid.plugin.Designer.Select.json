@@ -1,0 +1,106 @@
+{
+ json: {
+   //Function used within json which must be there in order to use designer to desgin
+   "scope.!on" : Ext.emptyFn,
+   "scope.!setConfig" : Ext.emptyFn,
+   "scope.!getConfig" : Ext.emptyFn,
+   "scope.!getCode"   : Ext.emptyFn,
+   "scope.!undo" : Ext.emptyFn,
+   "scope.!redo" : Ext.emptyFn,
+   "scope.!refresh" : Ext.emptyFn,
+   "scope.!setPropertyGrid" : Ext.emptyFn,
+   "scope.!removeElement" : Ext.emptyFn,
+   "scope.!selectElement" : Ext.emptyFn,
+   "scope.!appendConfig" : Ext.emptyFn,
+   "scope.!visualResize" : Ext.emptyFn,
+   "scope.!findByJsonId" : Ext.emptyFn,
+   "scope.!fireEvent"   : Ext.emptyFn,
+   "scope.!errorHandler": Ext.emptyFn,
+   "scope.!repository" : false,
+
+   //From here on normal code stuff
+   "scope.!RepositoryId" : Ext.id(),
+   "scope.!ErrorId"    : Ext.id(),
+   "scope.!TabId"      : Ext.id(),
+   "scope.!enableCopy" : true,
+   "scope.!enableCopy" : true,
+   "scope.!enableShow" : true,
+   "scope.!enableEdit" : true,
+   "scope.!enableVersion" : true
+  },
+  xtype:"treepanel",
+  border : false,
+  animate:true,
+  autoScroll:true,
+  containerScroll:true,
+  rootVisible : false,
+  collapsible     : true,
+  floatable       : false,
+  enableDD        : true,
+  ddGroup         : 'codecomponent',
+  root:new Ext.tree.AsyncTreeNode({text:'root'}),
+  loader:new Ext.ux.guid.tree.CodeLoader(scope),
+  selectElement : function(cmp){
+    this.root.cascade(function(node){
+      if (cmp && cmp[scope.jsonId] && node.attributes.jsonId==cmp[scope.jsonId]) {
+        this.expandPath(node.getPath());
+        node.select();
+        return false;
+      }
+      return true;
+    },this);
+  },
+  listeners :  {
+    'render': function(){
+       scope.on('add',function(){this.root.reload();},this);
+       scope.on('remove',function(){this.root.reload();},this);
+       scope.on('newconfig',function(){this.root.reload();},this);
+       scope.on('selectelement',this.selectElement,this);
+       this.selectElement.defer(150,this,[scope.activeElement]);
+          // context menu to delete / duplicate...
+       var contextMenu = new Ext.menu.Menu({items:[{
+           text    : 'Delete',
+           iconCls : 'icon-deleteEl',
+           scope   : this,
+           handler : function(item) {
+               scope.removeElement(contextMenu.element);
+             }
+         },{
+           text    : 'Duplicate this element',
+           iconCls : 'icon-dupEl',
+           scope   : this,
+           handler : function(item) {
+               var cfg = scope.clone(scope.getConfig(contextMenu.element));
+               scope.appendConfig(contextMenu.element,cfg,true,'belowcode');
+             }
+         },{
+           text    : 'Visual resize / move',
+           tooltip : 'Visual resize the element.',
+           iconCls : 'icon-resize',
+           scope   : this,
+           handler : function(item) {
+               scope.visualResize(contextMenu.element);
+             }
+         }]});
+         this.on('contextmenu', function(node, e) {
+             e.preventDefault();
+             contextMenu.node = node;
+             contextMenu.element = scope.findByJsonId(node.attributes.jsonId)
+             contextMenu.showAt(e.getXY());
+          }, this);
+    },
+    'click' : function(node,e){
+       e.preventDefault();
+       scope.selectElement(node.attributes.jsonId);
+    },
+    'nodedrop' : function(e) {
+        var target = scope.findByJsonId(e.target.attributes.jsonId);
+        var source = scope.findByJsonId(e.dropNode.attributes.jsonId);
+        scope.suspendEvents();
+        scope.appendConfig(target,scope.getConfig(source),false,e.point +'code',source);
+        scope.resumeEvents();
+        e.tree.root.reload();
+        e.tree.selectElement(scope.activeElement);
+    }
+  }
+}

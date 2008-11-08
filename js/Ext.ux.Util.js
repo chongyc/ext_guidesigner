@@ -134,7 +134,6 @@ if (!Ext.ux.Util) {
      if (!url) return false;
      var id=url;
      if(!document.getElementById(id)) {
-       alert(id);
        var content = this.syncContent(url,nocache);
        if (content===false) return false;
        var head = document.getElementsByTagName("head")[0];

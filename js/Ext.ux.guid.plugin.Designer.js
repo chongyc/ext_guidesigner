@@ -74,7 +74,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @type {String}
    @cfg */
   cssPath : 'css/',
-
+  
+  /**
+   * The path where the default repository should point to
+   * @type {String}
+   @cfg */
+  repositoryPath : 'json/',
+  
   /**
    * When true the toolbox is show on init
    * @type {Boolean}
@@ -217,6 +223,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * {3} is docPath
    * {4} is cssPath
    * {5} is version
+   * {6} is repositoryPath
    * @returns {String} The changes path
    */
   formatPath : function(path) {
@@ -226,7 +233,8 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
          this.thirdpartyPath || '',
          this.docPath  || '',
          this.cssPath  || '',
-         this.version);
+         this.version,
+         this.repositoryPath);
   },
 
   /**
@@ -800,6 +808,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @return {Boolean} Indicator that update was applied
    */
   redrawElement : function (element,selectId) {
+    this.hideVisualResize();
     var el = element || this.activeElement;
     if (el) {
       try {
