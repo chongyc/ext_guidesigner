@@ -585,6 +585,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return eval("({fix:" + code+ "})").fix;
          } catch (e) {
            e = new SyntaxError('Invalid code: ' + code + ' (' + e.message + ')' );
+           
            if (options.exceptionOnly) throw e;
            if (evalException && self.fireEvent('error','codeEval',e)) throw e;
            return code;
@@ -880,7 +881,10 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               white();
               switch (ch) {
                 case 'f' :
-                 funcCode = funcCode || wordMatch('function');
+                 if (wordMatch('function')) {
+                   funcCode = true;
+                   prev(2);//Go back to 1 char
+                 } 
                  break;
                 case '(' :
                   codeBlock(')');

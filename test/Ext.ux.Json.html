@@ -33,18 +33,18 @@
 		<script>
 			Ext.onReady(function(){
 			    var obj,a;
-				plan({ tests: 27 });
+				plan({ tests: 28 });
 				//diag('Decoder operations:');
-
-			 	 obj = Ext.ux.JSON.decode('{\
-				  "scope.!toolbox" : { getId : Ext.emptyFn},\
-				  title : ("Configure GuiDesigner"),\
-				  size : {width : 220, height: 310},\
-				  alignTo: [scope._toolbox.getId(),"tl?"]\
-				 }');
-
-				is(obj.alignTo[1],'tl?','Decode align');
-
+                try {
+                obj = Ext.ux.JSON.decode("function(node,e){\
+					 scope.appendConfig(scope.activeElement||scope.container,\
+					 node.attributes.config,true,null,null,\
+					 scope.require(node.attributes.require).cfg);\
+				}");
+				ok(typeof(obj)=='function','Decode Function');
+				} catch (e) {
+				    fail("Decode Function failed");
+				}
                 obj = Ext.ux.JSON.decode('"string"');
                 is(obj,'string','Decode string');
 

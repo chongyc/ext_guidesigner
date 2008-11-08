@@ -56,8 +56,8 @@
   listeners :  {
    'dblclick' : function(node,e){
      scope.appendConfig(scope.activeElement||scope.container,
-  node.attributes.config,true,null,null,
-  scope.require(node.attributes.require).cfg);
+     node.attributes.config,true,null,null,
+     scope.require(node.attributes.require).cfg);
    }
   }
 }

@@ -10,7 +10,6 @@ TODO
  - Add Grid Wirzard
  - In appendConfig merge the json objects, and delete from new item
  - Problem that there is a cmp exception thrown
- - Problem that still some code is converted to string (listener (all))
  
  Change History:
  Version 2.1.0:
