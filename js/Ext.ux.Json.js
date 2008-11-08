@@ -872,20 +872,14 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
 
           /* Parse a code block, returning the evaluated code and
            * returning [evaluateCode,orignalCode] */
-          function code() {
+          function code(isFunction) {
             at--; //restart code block
-            var start = at;
+            var start = at - (isFunction ?  8: 0); //if function add 8 to start
             var wat;
-            var funcCode = false;
             while (next()){
+              
               white();
               switch (ch) {
-                case 'f' :
-                 if (wordMatch('function')) {
-                   funcCode = true;
-                   prev(2);//Go back to 1 char
-                 } 
-                 break;
                 case '(' :
                   codeBlock(')');
                   break;
@@ -899,7 +893,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                   break;
                 case '{' :
                   codeBlock('}');
-                  if (!funcCode) break;
+                  if (!isFunction) break;
                   next();
                 case ',' :
                 case ']' :
@@ -921,14 +915,12 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                     return asCode && !fullDecode ? code() : [object(false)];
                   case '[' :
                     return asCode && !fullDecode ? code() : [array(false)];
-            /*      case '"':
-                  case "'":
-                    return [string(ch)];*/
                   default:
                     if (wordMatch('true')) return [true];
                     else if (wordMatch('false')) return [false];
                     else if (wordMatch('null')) return [null];
                     else if ("-.0123456789".indexOf(ch)>=0) return [number()];
+                    else if (wordMatch('function')) return code(true);
                     return code();
               }
           }
