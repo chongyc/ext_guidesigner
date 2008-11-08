@@ -40,7 +40,7 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
     triggerClass : 'x-form-codefield-trigger',
 
     //@private
-    defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;overflow:'hidden'",autocomplete: "off", wrap : "off"},
+    defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;overflow:hidden;",autocomplete: "off", wrap : "off"},
 
     /**
      * Default language of scripteditor (defaults javascript)

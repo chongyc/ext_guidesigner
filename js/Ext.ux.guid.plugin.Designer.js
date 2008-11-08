@@ -1101,7 +1101,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + rawValue.value + ' does not exists'));
       } else rawValue=null;
     }
-    return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
+    return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);    
   },
 
   /**
@@ -1117,6 +1117,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     propertyGrid.on('propertyvalue',function(source,key,value,type,property){
       this.setObjectValue(source,key,value,value);
       return false; //We have set value
+    },this);
+    propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
+      this.redrawElement(this.findByJsonId(source[this.jsonId]));
     },this);
   },
 
