@@ -43,7 +43,7 @@ Ext.ux.guid.plugin.Designer = function(config){
  */
 Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   //@private The version of the designer
-  version : '2.1.0-RC1',
+  version : '2.1.0',
 
   /**
    * The path where all json used by designer is located
