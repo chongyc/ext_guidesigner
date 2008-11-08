@@ -36,6 +36,7 @@
    "scope.!findByJsonId" : Ext.emptyFn,
    "scope.!fireEvent"   : Ext.emptyFn,
    "scope.!errorHandler": Ext.emptyFn,
+   "scope.!formatPath"  : Ext.emptyFn,
    "scope.!repository" : false,
 
    //From here on normal code stuff
@@ -97,6 +98,7 @@
             iconCls:'icon-editEl',
             hidden : !scope.enableEdit,
             handler :  function (){
+                scope.hideVisualResize();
                 if (!scope.jsonWindow) {
                   var tf = (scope.codePress && Ext.ux.CodePress)
                    ?  new Ext.ux.CodePress({path:scope.codePressPath,language: 'javascript' ,autoResize:true,trim : true})
@@ -153,24 +155,32 @@
               //Clear scope so tabindexed and id's are cleared
               scope.setConfig();
               var self = scope;
+              var curSize;
               try {
-              var w = new Ext.ux.JsonWindow({
-                    title  : 'Show Config',
-                    border  : false,
-                    layout  : 'fit',
-                    width:600,
-                    height: 400,
-                    iconCls: 'icon-show',
-                    modal       : true,
-                    maximizable : true,
-                    closeAction : 'close',
-                    listeners   : { 'beforeclose' : function(){
-                         //Restore the tabindex and other stuff
-                         self.undo();
-                    }}
-                    });
+                var w = new Ext.ux.JsonWindow({
+                  title  : 'Show Config',
+                  border  : false,
+                  layout  : 'fit',
+                  width:600,
+                  height: 400,
+                  iconCls: 'icon-show',
+                  modal       : true,
+                  maximizable : true,
+                  closeAction : 'close',
+                  listeners   : { 
+                   'beforeclose' : function(){
+                     //Restore code in designer and capture resize
+                     self.undo();
+                     var s = w.getSize();                     
+                     if (s.width!=curSize.width || s.height!=curSize.height) {
+                       self.setJson(self.getConfig(),'size',s);
+                     }
+                   }
+                 }
+                });
                 w.json.on('error',scope.errorHandler,this);
                 if (w.apply(cfg)) w.show();
+                curSize = w.getSize();
              } catch (e) {
                  Ext.Msg.alert('Error','Design contains error and cannot be display');
                  scope.undo();
@@ -221,11 +231,8 @@
                scope.errorHandler = function(type,exception) {
                  if (cmp.errorCount==0) cmp.setVisible(true);
                  cmp.errorCount++;
-                 var curdate = new Date();
-                 var time    = (curdate.getHours()<10 ? "0" : "") + curdate.getHours() + ':' +
-                               (curdate.getMinutes()<10 ? "0" : "") + curdate.getMinutes() + ':' +
-                               (curdate.getSeconds()<10 ? "0" : "") + curdate.getSeconds();
-                 cmp.errors.unshift('<i>' + time + '</i> <b>' + type + '</b> : ' + (exception ? exception.message ||exception : exception));
+                 cmp.errors.unshift('<i>' + this.dateStr() + '</i> <b>' + type
+                   + '</b> : ' + (exception ? exception.message ||exception : exception));
                  while (cmp.errors.length>cmp.maxErrors) {cmp.errors.pop();}
                  cmp.errorText.setText(cmp.errors.join('<br>'),false);
                  cmp.setTooltip('<font color="red">' + cmp.errors[0] + '</font>');
@@ -258,6 +265,7 @@
             iconCls : 'icon-options',
             hidden  : !scope.enableOptions,
             handler : function() {
+              scope.hideVisualResize();
               if (scope.nocache || !scope.optionPanel) {
                 scope.optionPanel = new Ext.ux.JsonWindow({
                   x     : -1000, // Window is hidden by moving X out of screen

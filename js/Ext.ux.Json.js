@@ -396,6 +396,27 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                pad(o.getMinutes()) + ":" +
                pad(o.getSeconds()) + '"';
      },
+    
+    /**
+     * Set a key with a value within the json container of config
+     * without changing the layout of the json
+     * @param {Object} cfg The config object
+     * @param {String} key The to be set
+     * @param {Mixed} value The value to be set
+     * @return {Object} The config object
+     */
+    setJson : function(cfg,key,value){
+      cfg = cfg || {};
+      //Check if root is a array with more then one element, if so skip
+       if (!cfg.json) cfg.json = {};
+       //Parse original so if can be reused as base
+       var myEncoder = new Ext.ux.Json({jsonId : this.jsonId, nocache : nocache,evalException : false});
+       var o = myEncoder.decode(cfg[this.jsonId + "json"]) || {};
+       o[key] = value;
+       cfg.json[key] = value;
+       cfg[this.jsonId+"json"]=myEncoder.encode(o);
+       return cfg;
+    },
 
      /**
       * Customer encode decode and recode, enabling reading and writing of JSON files with javascript code

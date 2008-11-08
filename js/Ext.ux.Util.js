@@ -75,6 +75,18 @@ if (!Ext.ux.Util) {
      onError : function(type,exception) {
        return true;
      },
+     
+     /**
+      * Retrun a time string in hh:mm:ss
+      * @param {Date} curdate The date to used (default Date())
+      * @return Date string in hh:mm:ss format
+      */
+     dateStr : function(curdate) {
+       curdate = curdate || new Date();
+       return (curdate.getHours()<10 ? "0" : "") + curdate.getHours() + ':' +
+              (curdate.getMinutes()<10 ? "0" : "") + curdate.getMinutes() + ':' +
+              (curdate.getSeconds()<10 ? "0" : "") + curdate.getSeconds();
+     },
 
      /**
       * Convert a url into a nocache url by adding a date if needed

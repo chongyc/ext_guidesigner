@@ -13,6 +13,7 @@ TODO
  - When first element is added it is not visable under select
  - First indent not working correctly by json 
  - Problem that still some code is converted to string (listener (all))
+ - Save resize of show in json
  
  Change History:
  Version 2.1.0:
@@ -42,6 +43,7 @@ TODO
   + ScriptEditor has been replace by CodeField this also resolves a number of bugs in this area
   + You can drag you saved code to the designer, which will be loaded through JSONPanel or in case when shift key pressed or Repository is not supporting url data is appended
   + Optionpanel added
+  + Resize of show window is stored in json and will be used when showing again
   * Fixed problem that drag drop was not allways placing items on correct spot
   * Fixed problem that check box and radio button where not selectable
   * For json editing now also codepress is used
