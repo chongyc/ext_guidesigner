@@ -31,32 +31,23 @@
 
 		<!-- General components  -->
 		<script id="../js/Ext.ux.Util.js" src="../js/Ext.ux.Util.js" type="text/javascript"></script>
-		<script id="../js/Ext.ux.CodePress.js" src="../js/Ext.ux.CodePress.js" type="text/javascript"></script>
-		<link id="../css/Ext.ux.guid.plugin.Designer.css" href="../css/Ext.ux.guid.plugin.Designer.css" rel="stylesheet" type="text/css" />
 
 		<!-- Now load based on action a compressed or debugable version of desginer -->
 		<script>
-		 if (Ext.ux.UTIL.getUrlAction('debug')!=1) {
-		   require('Ext.ux.guid.plugin.Designer-all',
-			  {basedir:'../js',cssdir:'../css'});
-		 } else {
-		   require('Ext.ux.Override;Ext.ux.ComponentCollection;Ext.ux.Json;' +
+		   require('Ext.ux.guid.plugin.Designer.css;Ext.ux.Override;' +
+				'Ext.ux.CodePress.js;Ext.ux.ComponentCollection;Ext.ux.Json;' +
 				'Ext.ux.form.CodeField;Ext.ux.data.HttpMergeProxy;Ext.ux.JsonPanel;' +
 				'Ext.ux.JsonWindow;Ext.ux.guid.tree.JsonTreeLoader;' +
-				'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;Ext.ux.guid.data.FileControl;'+
-				'Ext.ux.guid.data.CookieFiles;Ext.ux.guid.PHPFiles;Ext.ux.guid.plugin.Designer',
-			{basedir:'../js',cssdir:'../css'});
-		 }
-	   </script>
+				'Ext.ux.guid.tree.CodeLoader;Ext.ux.guid.grid.PropertyGrid;' +
+				'Ext.ux.guid.data.Repository;Ext.ux.guid.tree.RepositoryLoader;'+
+				'Ext.ux.guid.data.CookieRepository;Ext.ux.guid.data.PHPFileRepository;'+
+				'Ext.ux.guid.plugin.Designer',
+			{basedir:'../js',cssdir:'../css',nocache: true});
 
-
-   <!--The test function that fires when body is loaded -->
-		<script>
 			Ext.onReady(function(){
 				plan({ tests: 2 });
 
 				//diag('Designer operations:');
-				var phpSupport;
 				var designer;
 				var designer_panel = new Ext.Panel({
 					applyTo : 'designer',
@@ -68,8 +59,7 @@
 					  designer = new Ext.ux.guid.plugin.Designer({
 							//toolboxTarget : 'toolbox',
 							nocache : true,
-							customProperties : true,
-							fileControl      : phpSupport ? new Ext.ux.guid.data.PHPFiles() : new Ext.ux.guid.data.CookieFiles()
+							customProperties : true
 						})
 					]
 

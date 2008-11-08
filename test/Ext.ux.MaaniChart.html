@@ -1,0 +1,64 @@
+<!--
+  * Author: Sierk Hoeksma. WebBlocks.eu
+  * Copyright 2007-2008, WebBlocks.  All rights reserved.
+  *
+  * This extension adds Gui Designer  Support to ExtJs
+  ************************************************************************************
+  *   This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY;
+  *   without even the implied warranty of MERCHANTABILITY or
+  *   FITNESS FOR A PARTICULAR PURPOSE.
+  ************************************************************************************
+
+  License: This source is licensed under the terms of the Open Source LGPL 3.0 license.
+  Commercial use is permitted to the extent that the code/component(s) do NOT become
+  part of another Open Source or Commercially licensed development library or toolkit
+  without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
+
+  * Donations are welcomed: http://donate.webblocks.eu
+-->
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../extjs/resources/css/ext-all.css" />
+		<script type="text/javascript" src="../extjs/adapter/ext/ext-base.js"></script>
+		<script type="text/javascript" src="../extjs/ext-all-debug.js"></script>
+
+        <!-- Remove this file if you don't need local file support -->
+        <script id="localXHR.js" type="text/javascript" src="../js/localXHR.js" type="text/javascript"></script>
+
+        <!-- The test framework -->
+		<script src="../lib/Test/Builder.js" type="text/javascript"></script>
+		<script src="../lib/Test/More.js" type="text/javascript"></script>
+
+		<!-- General components  -->
+		<script src="../3rdparty/webblocks/Ext.ux.FlashPanel.js" type="text/javascript"></script>
+		<script src="../3rdparty/webblocks/Ext.ux.MaaniChart.js" type="text/javascript"></script>
+
+   <!--The test function that fires when body is loaded -->
+		<script>
+			Ext.onReady(function(){
+				plan({ tests: 1 });
+
+                try {
+					var panel = new Ext.ux.MaaniChart({
+					  height    : 400,
+					  title     : 'test',
+					  maaniPath : '../3rdparty/maani/charts/',
+					  xmlSource : '../3rdparty/maani/example/sample.xml'
+					});
+
+					new Ext.Viewport({
+					 items: panel
+					});
+
+   			      ok(true,'Maani Chart created');
+   			    } catch (e) {
+   			      fail('Could not create Maani Chart');
+   			    }
+			});
+		</script>
+	</head>
+
+ 	<body>
+		<H1>Ext.ux.MaaniChart test suite</H1>
+	</body>
+ </html>
