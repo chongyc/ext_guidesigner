@@ -62,36 +62,37 @@ class phpFiles {
   }
   
   function get_absolute_path($path) {
-        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
-        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = array();
-        foreach ($parts as $part) {
-            if ('.' == $part) continue;
-            if ('..' == $part) {
-                array_pop($absolutes);
-            } else {
-                $absolutes[] = $part;
-            }
-        }
-        return implode(DIRECTORY_SEPARATOR, $absolutes);
+    $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+    $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+    $absolutes = array();
+    foreach ($parts as $part) {
+      if ('.' == $part) continue;
+      if ('..' == $part) {
+          array_pop($absolutes);
+      } else {
+          $absolutes[] = $part;
+      }
+    }
+    return implode(DIRECTORY_SEPARATOR, $absolutes);
   }
       
-
-  private function above_dir($dir, $dir_top)
-  {
-  	  $dir="virtual_main/".$dir;
-  	  $dir_top="virtual_main/".$dir_top;
-	  $dir = $this->get_absolute_path($dir);
-	  $dir_top = $this->get_absolute_path($dir_top);
-	  
-	  $dir = count(explode(DIRECTORY_SEPARATOR, $dir));
-	  $dir_top = count(explode(DIRECTORY_SEPARATOR, $dir_top));
-	  
-	  if($dir >= $dir_top) {
-	    return true;
-	  }else{
-	    return false;
-	  }
+  private function above_dir($dir, $dir_top) {
+    $dir="virtual_main/".$dir;
+    $dir_top="virtual_main/".$dir_top;
+    $dir = $this->get_absolute_path($dir);
+    $dir_top = $this->get_absolute_path($dir_top);
+    if (substr($dir,0,strlen($dir_top))!==$dir_top) {
+      return false;
+    }
+    
+    $dir = count(explode(DIRECTORY_SEPARATOR, $dir));
+    $dir_top = count(explode(DIRECTORY_SEPARATOR, $dir_top));
+    
+    if($dir >= $dir_top) {
+      return true;
+    }else{
+      return false;
+    }
   }
     
   private function check_and_fix_dir($filename) {
@@ -137,16 +138,17 @@ class phpFiles {
   }
 
   function get_content($filename) {
-    if($this->above_dir($this->baseDir."/".$filename,"./")) 
-    {
-      if($this->is_json_file($filename))
+    if($this->above_dir($this->baseDir."/".$filename,$this->baseDir."/")) {
+      if($this->is_json_file($filename)) {
           echo file_get_contents($this->baseDir."/".$filename);
+          return;
+      }
     }
-    else die('0');
+    die('0');
   }
 
   function save_changes($filename,$action,$content) {
-    if(!$this->above_dir($this->baseDir."/".$filename,"./")) {
+    if(!$this->above_dir($this->baseDir."/".$filename,$this->baseDir."/")) {
       die('0');
     }
     
@@ -174,11 +176,12 @@ class phpFiles {
     die('0'); 
   }
 }
-
+   
 $PhpBackend=new phpFiles($_POST['baseDir']."/");
 if($_POST['cmd']=="get_files") json_encode($PhpBackend->get_files());
 if($_POST['cmd']=="get_content") $PhpBackend->get_content($_POST['filename']);
 if($_POST['cmd']=="save_changes") $PhpBackend->save_changes($_POST['filename'],$_POST['action'],$_POST['content']);
+
 /*
 $PhpBackend=new phpFiles($_GET['baseDir']);
 if($_GET['cmd']=="test") echo "tester";
