@@ -33,7 +33,7 @@
 		<script>
 			Ext.onReady(function(){
 			    var obj,a;
-				plan({ tests: 28 });
+				plan({ tests: 29 });
 				//diag('Decoder operations:');
 				obj = Ext.ux.JSON.encode({
 				  xtype : "form",
@@ -41,8 +41,7 @@
 				  html : "\"<font style=\"color:red;\">Hello, World!</font>\""
 				});
 				obj = Ext.ux.JSON.decode(obj,{evalException:false});
-				alert(obj.html + '\n' + obj.__JSON__html);
-				return ;
+				ok(obj.html=="\"<font style=\"color:red;\">Hello, World!</font>\"","Decode String");
 
                 try {
                 obj = Ext.ux.JSON.decode("function(node,e){\
