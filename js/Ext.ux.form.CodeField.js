@@ -39,9 +39,6 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
      @cfg */
     triggerClass : 'x-form-codefield-trigger',
 
-    //@private
-    defaultAutoCreate : {tag: "textarea",rows : 1,style:"height:1.8em;overflow:hidden;",autocomplete: "off", wrap : "off"},
-
     /**
      * Default language of scripteditor (defaults javascript)
      * @type {String}
@@ -59,6 +56,20 @@ Ext.ux.form.CodeField = Ext.extend(Ext.form.TriggerField,  {
      * @type {String}
      @cfg */
     codePressPath : undefined,
+    
+    /**
+     * @private Change defualt Style
+     */
+    initComponent : function(){
+      this.defaultAutoCreate = {
+        tag: "textarea",
+        rows : 1,
+        style:"width:100px;height:1.8em;overflow:hidden;",
+        autocomplete: "off", 
+        wrap : "off"
+      };
+      Ext.ux.form.CodeField.superclass.initComponent.call(this);    
+    },
 
     /**
      * InitEvents and redirect dblclick to triggerclick

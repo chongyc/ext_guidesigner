@@ -1119,7 +1119,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       return false; //We have set value
     },this);
     propertyGrid.on('propertychange', function(source,id,value,oldvalue) {
-      this.redrawElement(this.findByJsonId(source[this.jsonId]));
+      this.redrawElement.defer(150,this);
     },this);
   },
 

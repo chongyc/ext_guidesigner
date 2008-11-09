@@ -81,8 +81,9 @@ Ext.extend(Ext.ux.guid.grid.PropertyStore, Ext.grid.PropertyStore, {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(o[k]) , type : 'function'}, k));
                 } else if (typeof(o[k]) == 'object') {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || String(Ext.ux.JSON.encode(o[k])), type : 'object'}, k));
-                }
+                } else {
                   data.push(new Ext.grid.PropertyRecord({name: k, value: v || o[k], type : type }, k));
+                }
             }
         }
         this.store.loadRecords({records: data}, {}, true);
@@ -237,7 +238,9 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
       if (typeof(value)=="string" && value.length>24) {
         return value.substring(0,21) + "...";
       }
+      
       return value;
+      
     },
 
     /**
