@@ -236,11 +236,12 @@ Ext.extend(Ext.ux.guid.grid.PropertyColumnModel,Ext.grid.PropertyColumnModel, {
         p.css = "typeObject";
       }
       if (typeof(value)=="string" && value.length>24) {
-        return value.substring(0,21) + "...";
+        value = value.substring(0,21) + "...";
       }
-      
-      return value;
-      
+      //Decode the value for html
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(value));
+      return div.innerHTML;
     },
 
     /**

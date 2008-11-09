@@ -707,11 +707,11 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
        
        var a = cfg.json.required_js ? cfg.json.required_js.replace(',',';').split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(this.formatPath(a[i]));      
-       if (ret.js.length!=0) cfg =this.setJson(cfg,"required_js",ret.js.join(';'));
+       if (ret.js.length!=0) cfg =this.setJsonValue(cfg,"required_js",ret.js.join(';'));
        
        a = cfg.json.required_css ? cfg.json.required_css.replace(',',';').split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(this.formatPath(a[i]));
-       if (ret.css.length!=0) cfg = this.setJson(cfg,"required_css",ret.css.join(';'));
+       if (ret.css.length!=0) cfg = this.setJsonValue(cfg,"required_css",ret.css.join(';'));
        if (!(this.container.items && this.container.items.items.length==1)) ret['cfg']=cfg;
     }
     return ret;

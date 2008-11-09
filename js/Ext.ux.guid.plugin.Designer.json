@@ -173,7 +173,7 @@
                      self.undo();
                      var s = w.getSize();                     
                      if (s.width!=curSize.width || s.height!=curSize.height) {
-                       self.setJson(self.getConfig(),'size',s);
+                       self.setJsonValue(self.getConfig(),'size',s);
                      }
                    }
                  }

@@ -397,27 +397,6 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                pad(o.getSeconds()) + '"';
      },
 
-    /**
-     * Set a key with a value within the json container of config
-     * without changing the layout of the json
-     * @param {Object} cfg The config object
-     * @param {String} key The to be set
-     * @param {Mixed} value The value to be set
-     * @return {Object} The config object
-     */
-    setJson : function(cfg,key,value){
-      cfg = cfg || {};
-      //Check if root is a array with more then one element, if so skip
-       if (!cfg.json) cfg.json = {};
-       //Parse original so if can be reused as base
-       var myEncoder = new Ext.ux.Json({jsonId : this.jsonId, nocache : nocache,evalException : false});
-       var o = myEncoder.decode(cfg[this.jsonId + "json"]) || {};
-       o[key] = value;
-       cfg.json[key] = value;
-       cfg[this.jsonId+"json"]=myEncoder.encode(o);
-       return cfg;
-    },
-
      /**
       * Customer encode decode and recode, enabling reading and writing of JSON files with javascript code
       * @param {Object} o The object to encode
@@ -517,6 +496,27 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
        return object[key];
      },
 
+    /**
+     * Set a key with a value within the json container of config
+     * without changing the layout of the json
+     * @param {Object} cfg The config object
+     * @param {String} key The to be set
+     * @param {Mixed} value The value to be set
+     * @return {Object} The config object
+     */
+    setJsonValue : function(cfg,key,value){
+      cfg = cfg || {};
+      //Check if root is a array with more then one element, if so skip
+       if (!cfg.json) cfg.json = {};
+       //Parse original so if can be reused as base
+       var myEncoder = new Ext.ux.Json({jsonId : this.jsonId, nocache : nocache,evalException : false});
+       var o = myEncoder.decode(cfg[this.jsonId + "json"]) || {};
+       o[key] = value;
+       cfg.json[key] = value;
+       cfg[this.jsonId+"json"]=myEncoder.encode(o);
+       return cfg;
+    },
+
      /**
       * Function used to by decode to assign a value to a key within a object created during decode
       * Overwriting this functions allows to write you to rewrite output of value depending on situtation
@@ -551,7 +551,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
               if (typeof(rawValue)=='string') rawValue = rawValue.replace(/\s+$/,"");
               object[key]=this.decode(rawValue,{exceptionOnly : true,scope : scope});
               if (typeof(object[key])=='string' &&
-                ([object[key],"'"+object[key]+"'",'"' +object[key] + '"'].indexOf(rawValue)!=-1)) {  //Stip qoutes
+                ([value,"'"+value+"'",this.encodeString(value)].indexOf(rawValue)!=-1)) {  //Stip qoutes
                 delete object[this.jsonId+key];
              } else {
                object[this.jsonId+key]=rawValue;
