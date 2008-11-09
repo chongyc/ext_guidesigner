@@ -60,11 +60,29 @@ class phpFiles {
     is_dir(dirname($pathname)) || $this->mkdir_recursive(dirname($pathname), $mode);
     return is_dir($pathname) || @mkdir($pathname, $mode);
   }
+  
+  function get_absolute_path($path) {
+        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
+        foreach ($parts as $part) {
+            if ('.' == $part) continue;
+            if ('..' == $part) {
+                array_pop($absolutes);
+            } else {
+                $absolutes[] = $part;
+            }
+        }
+        return implode(DIRECTORY_SEPARATOR, $absolutes);
+  }
+      
 
   private function above_dir($dir, $dir_top)
   {
-	  $dir = realpath($dir);
-	  $dir_top = realpath($dir_top);
+  	  $dir="virtual_main/".$dir;
+  	  $dir_top="virtual_main/".$dir_top;
+	  $dir = $this->get_absolute_path($dir);
+	  $dir_top = $this->get_absolute_path($dir_top);
 	  
 	  $dir = count(explode(DIRECTORY_SEPARATOR, $dir));
 	  $dir_top = count(explode(DIRECTORY_SEPARATOR, $dir_top));
