@@ -1,0 +1,183 @@
+
+<div class="body-wrap">
+    <div class="top-tools">
+        <a class="inner-link" href="#Ext.ux.data.HttpMergeProxy-props"><img src="resources/s.gif" class="item-icon icon-prop">Properties</a>
+        <a class="inner-link" href="#Ext.ux.data.HttpMergeProxy-methods"><img src="resources/s.gif" class="item-icon icon-method">Methods</a>
+        <a class="inner-link" href="#Ext.ux.data.HttpMergeProxy-events"><img src="resources/s.gif" class="item-icon icon-event">Events</a>
+        <a class="inner-link" href="#Ext.ux.data.HttpMergeProxy-configs"><img src="resources/s.gif" class="item-icon icon-config">Config Options</a>
+        <a class="bookmark" href="NEED_TO_CREATE_DIRECT_LINK_HREF"><img src="resources/s.gif" class="item-icon icon-fav">Direct Link</a>
+    </div>
+    
+    <div class="inheritance res-block"><pre class="res-block-inner">
+<a ext:cls="Ext.data.DataProxy" ext_member="" href="Ext.data.DataProxy">Ext.data.DataProxy</a>
+<img src="resources/elbow-end.gif"/>Ext.ux.data.HttpMergeProxy
+</pre></div>
+    <h1>Class Ext.ux.data.HttpMergeProxy</h1>     
+    <table cellspacing="0">
+        <tr><td class="label">Package:</td><td class="hd-info">Ext.ux.data</td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.data.HttpMergeProxy" ext:member="" href="src/GuiBuilder_js_Ext.ux.data.HttpMergeProxy.js.html">Ext.ux.data.HttpMergeProxy.js</a></td></tr>
+        <tr><td class="label">Class:</td><td class="hd-info">HttpMergeProxy</td></tr>
+<!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.data.HttpMergeProxy" ext:member="" href="Ext.data.DataProxy">Ext.data.DataProxy</a></td></tr>        
+    </table>
+    
+    <div class="description">
+        HttpMergeProxy accepts an array of Ajax url and joins them together into one before calling the callback 
+    </div>
+    
+    <div class="hr"></div>
+    <a id="Ext.ux.data.HttpMergeProxy-configs"></a>
+    <h2>Config Options</h2>
+    <p>This class has no config options.</p>
+    <table cellspacing="0" class="x-hidden">
+        <tr>
+            <th class="sig-header" colspan="2">Config Options</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+        
+    </table>
+    <a id="Ext.ux.data.HttpMergeProxy-props"></a>      
+    
+    <h2>Public Properties</h2> 
+    <p>This class has no public properties.</p>        
+    <table cellspacing="0" class="x-hidden">            
+        <tr>
+            <th class="sig-header" colspan="2">Property</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+        
+        <!-- TODO: implement this alt row.  also notice non-linked "Defined by" when property is a part of this class.     
+        <tr class="property-row alt">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.Component-hidden"></a>
+                <b>hidden</b> : Boolean            
+                <div class="mdesc">                            
+                    True if this component is hidden. Read-only.                       
+                </div>
+            </td>
+            <td class="msource">Component</td>
+        </tr>
+        -->
+    </table>
+                   
+    <a id="Ext.ux.data.HttpMergeProxy-methods"></a>
+    <h2>Public Methods</h2>    
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Method</th>            
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>merge</b>(&nbsp;<code>Object\Array json1, Object\Array json2</code>&nbsp;) : Object\Array                                
+                <div class="mdesc">
+                    <div class="short">Merge two json files into one, incase same items exists then second json is leading</div>
+                    <div class="long">
+                        Merge two json files into one, incase same items exists then second json is leading    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>json1</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The first json file</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>json2</code> : Object\Array
+                                    <div class="sub-desc">&nbsp;The second json file</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object\Array<div class="sub-desc">The merged json</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                HttpMergeProxy
+                <a class="x-hidden" ext:cls="Ext.ux.data.HttpMergeProxy" ext:member="Ext.ux.data.HttpMergeProxy#merge" href="symbols/Ext.ux.data.HttpMergeProxy.html">HttpMergeProxy</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>load</b>(&nbsp;<code>Object params, Ext.data.DataReader reader, Function callback, Object scope, Object arg</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Load data from the configured urlArray, read the data object intoa block of Ext.data.Records using the passed {@link Ext.data.DataReader} implementation, andprocess that block using the passed callback.</div>
+                    <div class="long">
+                        Load data from the configured urlArray, read the data object intoa block of Ext.data.Records using the passed {@link Ext.data.DataReader} implementation, andprocess that block using the passed callback.    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>params</code> : Object
+                                    <div class="sub-desc">&nbsp;An object containing properties which are to be used as HTTP parametersfor the request to the remote server.</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>reader</code> : Ext.data.DataReader
+                                    <div class="sub-desc">&nbsp;The Reader object which converts the dataobject into a block of Ext.data.Records.</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>callback</code> : Function
+                                    <div class="sub-desc">&nbsp;The function into which to pass the block of Ext.data.Records.The function must be passed <ul><li>The Record block object</li><li>The "arg" argument from the load function</li><li>A boolean success indicator</li></ul></div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>scope</code> : Object
+                                    <div class="sub-desc">&nbsp;The scope in which to call the callback</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>arg</code> : Object
+                                    <div class="sub-desc">&nbsp;An optional argument which is passed to the callback as its second parameter.</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                HttpMergeProxy
+                <a class="x-hidden" ext:cls="Ext.ux.data.HttpMergeProxy" ext:member="Ext.ux.data.HttpMergeProxy#load" href="symbols/Ext.ux.data.HttpMergeProxy.html">HttpMergeProxy</a>
+            </td>
+        </tr>
+                                                          
+    </table>
+    
+    <a id="Ext.ux.data.HttpMergeProxy-events"></a>
+    <h2>Public Events</h2>
+    <p>This class has no events</p>
+    <table cellspacing="0" class="x-hidden">        
+        <tr>
+            <th class="sig-header" colspan="2">Event</th>   
+            <th class="msource-header">Defined By</th>
+        </tr>
+                    
+    </table>            
+</div>

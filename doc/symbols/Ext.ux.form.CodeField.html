@@ -1,0 +1,534 @@
+
+<div class="body-wrap">
+    <div class="top-tools">
+        <a class="inner-link" href="#Ext.ux.form.CodeField-props"><img src="resources/s.gif" class="item-icon icon-prop">Properties</a>
+        <a class="inner-link" href="#Ext.ux.form.CodeField-methods"><img src="resources/s.gif" class="item-icon icon-method">Methods</a>
+        <a class="inner-link" href="#Ext.ux.form.CodeField-events"><img src="resources/s.gif" class="item-icon icon-event">Events</a>
+        <a class="inner-link" href="#Ext.ux.form.CodeField-configs"><img src="resources/s.gif" class="item-icon icon-config">Config Options</a>
+        <a class="bookmark" href="NEED_TO_CREATE_DIRECT_LINK_HREF"><img src="resources/s.gif" class="item-icon icon-fav">Direct Link</a>
+    </div>
+    
+    <div class="inheritance res-block"><pre class="res-block-inner">
+<a ext:cls="Ext.form.TriggerField" ext_member="" href="Ext.form.TriggerField">Ext.form.TriggerField</a>
+<img src="resources/elbow-end.gif"/>Ext.ux.form.CodeField
+</pre></div>
+    <h1>Class Ext.ux.form.CodeField</h1>     
+    <table cellspacing="0">
+        <tr><td class="label">Package:</td><td class="hd-info">Ext.ux.form</td></tr>
+        <tr><td class="label">Defined In:</td><td class="hd-info"><a ext:cls="Ext.ux.form.CodeField" ext:member="" href="src/GuiBuilder_js_Ext.ux.form.CodeField.js.html">Ext.ux.form.CodeField.js</a></td></tr>
+        <tr><td class="label">Class:</td><td class="hd-info">CodeField</td></tr>
+<!--        <tr><td class="label">Subclasses:</td><td class="hd-info">this could be figured out</td></tr> -->
+        <tr><td class="label">Extends:</td><td class="hd-info"><a ext:cls="Ext.ux.form.CodeField" ext:member="" href="Ext.form.TriggerField">Ext.form.TriggerField</a></td></tr>        
+    </table>
+    
+    <div class="description">
+        Component implementing a codefield. The codefield is a single line textarea using a triggerfield to open a full textarea or when install codepress. 
+    </div>
+    
+    <div class="hr"></div>
+    <a id="Ext.ux.form.CodeField-configs"></a>
+    <h2>Config Options</h2>
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Config Options</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>invalidText</b> : String
+                <div class="mdesc">
+                    <div class="short">The error to display when the code in the field is invalid (defaults to'{value} is not a valid code - it must be in the format {format}').</div>
+                    <div class="long">
+                        The error to display when the code in the field is invalid (defaults to'{value} is not a valid code - it must be in the format {format}').
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#invalidText" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>triggerClass</b> : String
+                <div class="mdesc">
+                    <div class="short">An additional CSS class used to style the trigger button.</div>
+                    <div class="long">
+                        An additional CSS class used to style the trigger button.
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#triggerClass" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>language</b> : String
+                <div class="mdesc">
+                    <div class="short">Default language of scripteditor (defaults javascript)</div>
+                    <div class="long">
+                        Default language of scripteditor (defaults javascript)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#language" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>codePress</b> : Boolean
+                <div class="mdesc">
+                    <div class="short">Should it use codePress as code editor (defaults true)</div>
+                    <div class="long">
+                        Should it use codePress as code editor (defaults true)
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#codePress" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+             
+        <tr class="config-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-listeners"></a>
+                <b>codePressPath</b> : String
+                <div class="mdesc">
+                    <div class="short">Location of CodePress</div>
+                    <div class="long">
+                        Location of CodePress
+                    </div>
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#codePressPath" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+        
+        
+    </table>
+    <a id="Ext.ux.form.CodeField-props"></a>      
+    
+    <h2>Public Properties</h2> 
+    <p>This class has no public properties.</p>        
+    <table cellspacing="0" class="x-hidden">            
+        <tr>
+            <th class="sig-header" colspan="2">Property</th>
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+        
+        
+        <!-- TODO: implement this alt row.  also notice non-linked "Defined by" when property is a part of this class.     
+        <tr class="property-row alt">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.Component-hidden"></a>
+                <b>hidden</b> : Boolean            
+                <div class="mdesc">                            
+                    True if this component is hidden. Read-only.                       
+                </div>
+            </td>
+            <td class="msource">Component</td>
+        </tr>
+        -->
+    </table>
+                   
+    <a id="Ext.ux.form.CodeField-methods"></a>
+    <h2>Public Methods</h2>    
+    
+    <table cellspacing="0" class="member-table">
+        <tr>
+            <th class="sig-header" colspan="2">Method</th>            
+            <th class="msource-header">Defined By</th>
+        </tr>
+        
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>initEvents</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">InitEvents and redirect dblclick to triggerclick</div>
+                    <div class="long">
+                        InitEvents and redirect dblclick to triggerclick    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#initEvents" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>getValue</b>(&nbsp;<code></code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Returns the current value of the  field</div>
+                    <div class="long">
+                        Returns the current value of the  field    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">value The value</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#getValue" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setValue</b>(&nbsp;<code>String code</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Sets the value of the field.</div>
+                    <div class="long">
+                        Sets the value of the field.    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>code</code> : String
+                                    <div class="sub-desc">&nbsp;The code string</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#setValue" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>setCode</b>(&nbsp;<code>String code</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short">Callback function when code is changed with setValue</div>
+                    <div class="long">
+                        Callback function when code is changed with setValue    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>code</code> : String
+                                    <div class="sub-desc">&nbsp;The code used</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#setCode" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>formatCode</b>(&nbsp;<code>String code</code>&nbsp;) : String                                
+                <div class="mdesc">
+                    <div class="short">Format the code, by default code is rtrimed</div>
+                    <div class="long">
+                        Format the code, by default code is rtrimed    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>code</code> : String
+                                    <div class="sub-desc">&nbsp;The code string</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>String<div class="sub-desc">The formated code</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#formatCode" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>parseCode</b>(&nbsp;<code> value</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>value</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#parseCode" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>initValue</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#initValue" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>validateValue</b>(&nbsp;<code> value</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>value</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#validateValue" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>validateBlur</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#validateBlur" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>onTriggerClick</b>(&nbsp;<code></code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#onTriggerClick" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>onRender</b>(&nbsp;<code> ct,  position</code>&nbsp;) : void                                
+                <div class="mdesc">
+                    <div class="short"></div>
+                    <div class="long">
+                            
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>ct</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>position</code> : 
+                                    <div class="sub-desc">&nbsp;</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>void<div class="sub-desc"></div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                CodeField
+                <a class="x-hidden" ext:cls="Ext.ux.form.CodeField" ext:member="Ext.ux.form.CodeField#onRender" href="symbols/Ext.ux.form.CodeField.html">CodeField</a>
+            </td>
+        </tr>
+                                                          
+    </table>
+    
+    <a id="Ext.ux.form.CodeField-events"></a>
+    <h2>Public Events</h2>
+    <p>This class has no events</p>
+    <table cellspacing="0" class="x-hidden">        
+        <tr>
+            <th class="sig-header" colspan="2">Event</th>   
+            <th class="msource-header">Defined By</th>
+        </tr>
+                    
+    </table>            
+</div>
