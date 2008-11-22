@@ -138,7 +138,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
                 try {
                   if (success) {
                     var items = this.decode(response.responseText);
-                    if(typeof callback == "function") target(items);
+                    if(typeof callback == "function") callback(items);
                   } else {
                     throw new Error('Failure during load');
                   }
@@ -430,7 +430,7 @@ Ext.ux.Json = Ext.extend(Ext.ux.Util,{
            return this.encodeString(o);
        }else {
          var a = [], b, i, v;
-         a.push("{" + nl); //On same line as key
+         a.push(this.indentStr(indent-1),"{" + nl); //On same line as key
          for (var i in o) {
            v = o[i];
            var orgKey = (i.indexOf(this.jsonId)==0 && i!=this.jsonId) ?

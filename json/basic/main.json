@@ -1,0 +1,19 @@
+{
+xtype:"panel",
+title:"Panel",
+items:[{
+    xtype:"button",
+    text:"Logout",
+    handler:function(){
+      WebApp.request('logout',undefined,function(){
+        //return {name : 'callback', callback : function(){alert('test ')}};
+      });
+    }
+  },{
+    xtype:"button",
+    text:"Ok",
+    handler : function(){
+      alert('clicked');
+    }
+  }]
+}

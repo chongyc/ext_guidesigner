@@ -52,6 +52,7 @@ Ext.ux.JsonWindow = Ext.extend(Ext.Window,{
      if (typeof this.autoLoad['nocache'] == 'undefined') this.autoLoad['nocache'] = this.nocache;
    }
    this.json = new Ext.ux.Json({scope:this.scope || this,nocache : this.nocache});
+   
    this.addEvents({
      /**
       * Fires after the jsonfile is retrived from server but before it's loaded in panel

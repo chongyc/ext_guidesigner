@@ -105,10 +105,11 @@ if (!Ext.ux.Util) {
      * A Synchronized Content loader for data from url
      * @param {String} url The url to load synchronized
      * @param {Boolean} nocache Should caching of file be disabled
-     * @param {Boolean} responseXML Should responseXML be returned instead of responseText
+     * @param {Boolean} response Should response be returned instead of responseText
+     * @param {Object} param The params to be send
      * @return {Boolean/String/XMLObject} When there was a error False otherwise response base on responseXML flag
      */
-    syncContent : function(url,nocache,responseXML) {
+    syncContent : function(url,nocache,response,params) {
      var activeX = Ext.lib.Ajax.activeX;
      var isLocal = (document.location.protocol == 'file:');
      var conn;
@@ -123,11 +124,12 @@ if (!Ext.ux.Util) {
      }
      //Should we disable caching
      url = this.nocacheUrl(url,nocache);
+     if(typeof params == "object") url  += (url.indexOf('?') != -1 ? '&' : '?') + Ext.urlEncode(params);
      try {
       conn.open('GET', url , false);
       conn.send(null);
       if ((isLocal && conn.responseText.length!=0) || (conn.status !== undefined && conn.status>=200 && conn.status< 300)) {
-        return responseXML ? conn.responseXML : conn.responseText;
+        return response ? conn.response : conn.responseText;
       }
      } catch (e) {
        this.fireEvent('error','synchronized',e);
@@ -295,6 +297,77 @@ if (!Ext.ux.Util) {
       } else {
         throw new SyntaxError('Object items cannot be joined because items mismatch');
       }
+    },
+    
+    /**
+     * Transfer the form content into a object
+     * @param {Form} form The form to be transformed into a object
+     * @returns {Object} With the data of form
+     */
+    formObject : function(form){
+      if(typeof form == 'string') {
+          form = (document.getElementById(form) || document.forms[form]);
+      } else if (form instanceof Ext.form.FormPanel) {
+         form = form.getForm().getEl().dom;
+      } else if (form instanceof Ext.form.BasicForm) {
+         form = form.getEl().dom;
+      }
+
+      var el, name, val, disabled, data, hasSubmit = false;
+      var setData = function(data,name,value) {
+        if (value!=undefined) { 
+           if (data==undefined) data = {};
+           if (data[name]!=undefined && data[name] instanceof Array) {
+             data[name].push(value);
+           } else if (data[name]!=undefined) {
+             data[name]=new Array(data[name]);
+             data[name].push(value);
+           } else data[name]=value;
+        }
+        return data;
+      };
+      for (var i = 0; form && i < form.elements.length; i++) {
+          el = form.elements[i];
+          disabled = form.elements[i].disabled;
+          name = form.elements[i].name;
+          val = form.elements[i].value;
+          if (!disabled && name){
+            switch (el.type)  {
+                  case 'select-one':
+                  case 'select-multiple':
+                      for (var j = 0; j < el.options.length; j++) {
+                          if (el.options[j].selected) {
+                             data =setData(data,name,Ext.isIE ?
+                                  (el.options[j].attributes['value'].specified ? el.options[j].value : el.options[j].text) :
+                                  (el.options[j].hasAttribute('value') ? el.options[j].value : el.options[j].text)
+                             );
+                          }
+                      }
+                      break;
+                  case 'radio':
+                  case 'checkbox':
+                      if (el.checked) {
+                          data = setData(data,name,val);
+                      }
+                      break;
+                  case 'file':
+                  case undefined:
+                  case 'reset':
+                  case 'button':
+                      break;
+                  case 'submit':
+                      if(hasSubmit == false) {
+                          data = setData(data,name,val);
+                          hasSubmit = true;
+                      }
+                      break;
+                  default:
+                      data =setData(data,name,val);
+                      break;
+              }
+          }
+      }
+      return data;
     },
 
     /**

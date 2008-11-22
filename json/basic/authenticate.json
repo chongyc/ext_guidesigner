@@ -1,0 +1,48 @@
+/* This file is created or modified with 
+ * Ext.ux.guid.plugin.GuiDesigner (v2.1.0) 
+ */
+{
+  xtype : "form",
+  labelWidth : 80,
+  frame : true,
+  title : "Please Login",
+  defaultType : "textfield",
+  monitorValid : true,
+  items : [{
+      fieldLabel : "Username",
+      name : "username",
+      allowBlank : false
+  },{
+      fieldLabel : "Password",
+      name : "password",
+      inputType : "password",
+      allowBlank : false
+  },{
+    inputType : "hidden",
+    name      : "action",
+    value     : "login"
+  }],
+  buttons : [{ 
+                text:'Login',
+                formBind: true, 
+                // Function that fires when user clicks the button 
+                handler:function(button,event){ 
+                  var login = button.findParentByType('form');
+                  WebApp.formRequest(login,'login',undefined,
+                    function(response,requestName,requestParams,callback,scope){
+                       if (response.controlerAuthentication=='success') {
+                          login.callback();
+                       } else {
+                         login.getForm().reset();
+                       }
+                    }
+                  );
+                } 
+            }],
+  json : {
+    size : {
+      width : 247,
+      height : 147
+    }
+  }
+}

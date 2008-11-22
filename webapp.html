@@ -1,0 +1,86 @@
+<!--
+  * Author: Sierk Hoeksma. WebBlocks.eu
+  * Copyright 2007-2008, WebBlocks.  All rights reserved.
+  *
+  * This extension adds Gui Designer  Support to ExtJs
+  ************************************************************************************
+  *   This file is distributed on an AS IS BASIS WITHOUT ANY WARRANTY;
+  *   without even the implied warranty of MERCHANTABILITY or
+  *   FITNESS FOR A PARTICULAR PURPOSE.
+  ************************************************************************************
+
+  License: This source is licensed under the terms of the Open Source LGPL 3.0 license.
+  Commercial use is permitted to the extent that the code/component(s) do NOT become
+  part of another Open Source or Commercially licensed development library or toolkit
+  without explicit permission.Full text: http://www.opensource.org/licenses/lgpl-3.0.html
+
+  * Donations are welcomed: http://donate.webblocks.eu
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="ExtJs Web App" content="A Web Application created with Gui Designer for ExtJs">
+<meta name="keywords" content="ExtJs Gui Designer Controler Base">
+<link rel="shortcut icon" href="icons/favicon.ico" >
+<title>WebApp</title>
+	<!-- The ExtJs base 2.2, version 2.0.2 is still supported  -->
+    <link rel="stylesheet" type="text/css" href="css/Loading.css" />
+    <link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+
+
+<!-- Look for a change log at changes.txt -->
+</head>
+<body style="overflow:hidden;">
+<div id="loading-mask"></div>
+<div id="loading">
+  <div class="loading-indicator"><img src="icons/loading-balls.gif" style="margin-right:8px;" align="absmiddle"/>
+    Loading WebApp....</div>
+</div>
+
+<script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="extjs/ext-all.js"></script>
+
+<!-- Utility class which contains require  -->
+<script id="js/Ext.ux.Util.js" src="js/Ext.ux.Util.js" type="text/javascript"></script>
+
+<script>
+Ext.SSL_SECURE_URL="extjs/resources/images/default/s.gif";
+Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
+Ext.QuickTips.init();
+var nocache = Ext.ux.UTIL.getUrlAction('nocache',1)==1;
+
+//Load localXHR.js when not running in webserver
+if (document.location.protocol == 'file:') require('localXHR','js');
+
+require(['Ext.ux.Json;Ext.ux.JsonPanel;Ext.ux.JsonWindow',
+	    {basedir:'js',cssdir:'css',nocache: nocache},
+	    'Ext.ux.WebApp',
+	    {basedir:'3rdparty/webblocks',cssdir:'css',nocache: nocache}
+]);
+
+WebApp.remote = '3rdparty/webblocks/webapp.php';
+
+//Call the controler to get main content
+WebApp.request('jsoncontent','main',
+  function(response){
+    var view = new Ext.Viewport({items : response});
+    view.subscribe('unauthenticated',function(){
+      Ext.ux.JSON.apply(view,null);
+    });
+    view.subscribe('authenticated',function(){
+      Ext.ux.JSON.apply(view,response);
+    });
+  }
+);
+
+Ext.onReady(function (){
+ setTimeout(function(){
+	Ext.get('loading').remove();
+	Ext.get('loading-mask').fadeOut({
+		remove:true
+	});
+ }, 350);
+});
+</script>
+</body>
+</html>
