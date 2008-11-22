@@ -257,7 +257,7 @@
             <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
             <td class="sig">
                 <a id="Ext.data.DataProxy-addEvents"></a>                
-                <b>syncContent</b>(&nbsp;<code>String url, Boolean nocache, Boolean responseXML</code>&nbsp;) : Boolean/String/XMLObject                                
+                <b>syncContent</b>(&nbsp;<code>String url, Boolean nocache, Boolean response, Object param</code>&nbsp;) : Boolean/String/XMLObject                                
                 <div class="mdesc">
                     <div class="short">A Synchronized Content loader for data from url</div>
                     <div class="long">
@@ -277,8 +277,13 @@
                                 </li>
                             
                                 <li>
-                                    <code>responseXML</code> : Boolean
-                                    <div class="sub-desc">&nbsp;Should responseXML be returned instead of responseText</div>                                   
+                                    <code>response</code> : Boolean
+                                    <div class="sub-desc">&nbsp;Should response be returned instead of responseText</div>                                   
+                                </li>
+                            
+                                <li>
+                                    <code>param</code> : Object
+                                    <div class="sub-desc">&nbsp;The params to be send</div>                                   
                                 </li>
                             
                             </ul>
@@ -499,6 +504,40 @@
             <td class="msource">
                 Util
                 <a class="x-hidden" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#merge" href="symbols/Ext.ux.Util.html">Util</a>
+            </td>
+        </tr>
+                
+        <tr class="method-row expandable">
+            <td class="micon"><a class="exi" href="#expand">&nbsp;</a></td>
+            <td class="sig">
+                <a id="Ext.data.DataProxy-addEvents"></a>                
+                <b>formObject</b>(&nbsp;<code>Form form</code>&nbsp;) : Object                                
+                <div class="mdesc">
+                    <div class="short">Transfer the form content into a object</div>
+                    <div class="long">
+                        Transfer the form content into a object    
+                        <div class="mdetail-params">                            
+                            <strong>Parameters:</strong>                            
+                            <ul>
+                            
+                                <li>
+                                    <code>form</code> : Form
+                                    <div class="sub-desc">&nbsp;The form to be transformed into a object</div>                                   
+                                </li>
+                            
+                            </ul>
+                                                        
+                            <strong>Returns:</strong>
+                            <ul>
+                                <li>Object<div class="sub-desc">With the data of form</div></li>
+                            </ul>                    
+                        </div>
+                    </div>                    
+                </div>
+            </td>
+            <td class="msource">
+                Util
+                <a class="x-hidden" ext:cls="Ext.ux.Util" ext:member="Ext.ux.Util#formObject" href="symbols/Ext.ux.Util.html">Util</a>
             </td>
         </tr>
                 
