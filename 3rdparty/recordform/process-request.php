@@ -1,6 +1,30 @@
 <?php
 // vim: ts=4:sw=4:nu:fdc=4:nospell
 
+
+//$_REQUEST["cmd"]="getData";
+//$_REQUEST["objName"]="company";
+
+if ( !function_exists('json_decode') ){
+    function json_decode($content, $assoc=false){
+      require_once 'classes/JSON.php';
+      if ( $assoc ){
+        $json = new Services_JSON(SERVICES_JSON_LOOSE_TYPE);
+      } else {
+          $json = new Services_JSON;
+      }
+      return $json->decode($content);
+    }
+}
+
+if ( !function_exists('json_encode') ){
+    function json_encode($content){
+      require_once 'classes/JSON.php';
+      $json = new Services_JSON;
+      return $json->encode($content);
+    }
+}
+
 require("classes/csql.php");
 
 if(!isset($_REQUEST["cmd"])) {

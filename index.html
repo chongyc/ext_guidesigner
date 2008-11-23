@@ -44,6 +44,7 @@
 
 <!-- Now load based on action a compressed or debugable version of desginer -->
 <script>
+var forceCompressed = false;
 Ext.SSL_SECURE_URL="extjs/resources/images/default/s.gif";
 Ext.BLANK_IMAGE_URL="extjs/resources/images/default/s.gif";
 
@@ -73,8 +74,8 @@ if (document.location.protocol == 'file:') require('localXHR','js');
  var cmpfiles = (options.cmpfiles || "").replace('\r').split("\n");
  var designer; //Variable used to save the designer plugin
 
- if (Ext.ux.UTIL.getUrlAction('compressed',options.compressed)==1 &&
-	 Ext.ux.UTIL.getUrlAction('debug',0)==0) {
+ if (forceCompressed || (Ext.ux.UTIL.getUrlAction('compressed',options.compressed)==1 &&
+	 Ext.ux.UTIL.getUrlAction('debug',0)==0)) {
    require('Ext.ux.guid.plugin.Designer.css;Ext.ux.guid.plugin.Designer-all',
 	  {basedir:'compressed',cssdir:'css',nocache: nocache});
  } else {
@@ -117,6 +118,7 @@ if (document.location.protocol == 'file:') require('localXHR','js');
 		 plugins : [
 			designer = new Ext.ux.guid.plugin.Designer({
 			  codePress     : !Ext.isSafari && options.codepress==1,
+			  docPath       : forceCompressed ? 'http://www.webblocks.eu/designer/doc/' : 'doc/',
 			  componentFiles : cmpfiles,
 			  autoResize    : autoResize,
 			  dockedMode    : docked,
