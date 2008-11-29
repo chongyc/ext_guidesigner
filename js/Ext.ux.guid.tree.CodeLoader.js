@@ -59,9 +59,6 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.tree.TreeLoader, {
 
  // @private load is called when content of tree should be reloaded
  load : function(node, callback){
-    node.beginUpdate();
-    while(node.firstChild) node.removeChild(node.firstChild);
-    node.endUpdate();
     if(this.doLoad(node,this.designer.getConfig())){
        if(typeof callback == "function") callback();
      }    

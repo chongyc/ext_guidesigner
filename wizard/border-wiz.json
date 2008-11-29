@@ -16,7 +16,7 @@ buttons : [{
       var values = scope.items.first().form.getValues();
       scope.close();
       var config = {layout:'border',items:[]};
-      config.items.push({region:'center',title:values.title_center||null});
+      config.items.push({region:'center',layout:'fit',title:values.title_center||null});
       Ext.each(['north','south','west','east'], function(r) {
         if (values['active_'+r]) {
           config.items.push({
