@@ -43,7 +43,7 @@ Ext.ux.guid.plugin.Designer = function(config){
  */
 Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
   //@private The version of the designer
-  version : '2.1.0',
+  version : '2.1.1',
 
   /**
    * The path where all json used by designer is located
@@ -410,8 +410,10 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
       } else {
         this.resizeLayer.resizer.dd.lock();
       }
-      this.resizeLayer.setBox(cmp.el.getBox());
-      this.resizeLayer.show();
+      if (cmp.el) {
+        this.resizeLayer.setBox(cmp.el.getBox());
+        this.resizeLayer.show();
+      }
     }
   },
 
@@ -436,6 +438,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    */
   resizeElement : function(r,w,h) {
     var cmp = this.activeElement;
+    if (!cmp || !cmp.el) return;
     var s = cmp.el.getSize();
     this.markUndo();
     if (s.width != w) {
@@ -819,6 +822,9 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
            //Search if whe find a layout capable contianer
            while (p!=this.container && !c) {
              c = p.codeConfig.layout;
+             if (c && ['border','table','column'].indexOf(c)==-1) {
+               c='';
+             } 
              p = this.getContainer(p.ownerCt);
            }
         }
@@ -875,7 +881,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
            for (var i=0;i<check.items.items.length;i++) {
              if (check.items.items[i]==check.getActiveTab() && check.codeConfig.activeTab!=i) {
               check.codeConfig.activeTab=i;
-              check.doLayout();
+              check.doLayout();              
             }
           }
         }

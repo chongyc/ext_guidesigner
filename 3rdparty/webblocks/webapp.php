@@ -297,8 +297,10 @@ class WebApp {
     } 
     if ( $check && $result = $this->odb->query("SELECT groups FROM users WHERE username='$login' and password='$passwd'")) {
       $row = $result->fetch();
-      $_SESSION['authdata'] = array("login"=>$login,"groups"=>$row['groups'],"actions"=>array());
-      return true;
+      if ($row) {
+        $_SESSION['authdata'] = array("login"=>$login,"groups"=>$row['groups'],"actions"=>array());
+        return true;
+      }
     } 
     if (is_array($_SESSION['authdata'])) {
       unset($_SESSION['authdata']['login']);

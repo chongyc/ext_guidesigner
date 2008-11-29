@@ -2,25 +2,39 @@
  * Ext.ux.guid.plugin.GuiDesigner (v2.1.0) 
  */
 {
+  json : {
+    size : {
+      width : 247,
+      height : 147
+    },
+   "scope.!firstFocus" : Ext.id(),
+   listeners : {
+       afterjsonload :  function(){
+          var e = Ext.getCmp(scope.firstFocus);
+          e.focus.defer(150,e,[]);
+       }
+     }
+  },
   xtype : "form",
   labelWidth : 80,
   frame : true,
   title : "Please Login",
   defaultType : "textfield",
   monitorValid : true,
-  items : [{
+  items : [    {
       fieldLabel : "Username",
       name : "username",
-      allowBlank : false
-  },{
+      allowBlank : false,
+      id : scope.firstFocus
+  },    {
       fieldLabel : "Password",
       name : "password",
       inputType : "password",
       allowBlank : false
-  },{
-    inputType : "hidden",
-    name      : "action",
-    value     : "login"
+  },    {
+      inputType : "hidden",
+      name : "action",
+      value : "login"
   }],
   buttons : [{ 
                 text:'Login',
@@ -29,20 +43,16 @@
                 handler:function(button,event){ 
                   var login = button.findParentByType('form');
                   WebApp.formRequest(login,'login',undefined,
-                    function(response,requestName,requestParams,callback,scope){
+                    function(response,requestName,requestParams,callback,myscope){
                        if (response.controlerAuthentication=='success') {
                           login.callback();
                        } else {
                          login.getForm().reset();
+                         var e = Ext.getCmp(scope.firstFocus);
+                         e.focus.defer(150,e,[]);
                        }
                     }
                   );
                 } 
-            }],
-  json : {
-    size : {
-      width : 247,
-      height : 147
-    }
-  }
+            }]
 }

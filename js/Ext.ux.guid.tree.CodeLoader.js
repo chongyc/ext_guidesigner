@@ -61,10 +61,10 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.tree.TreeLoader, {
  load : function(node, callback){
     node.beginUpdate();
     while(node.firstChild) node.removeChild(node.firstChild);
-     if(this.doLoad(node,this.designer.getConfig())){
-       if(typeof callback == "function") callback();
-     }
     node.endUpdate();
+    if(this.doLoad(node,this.designer.getConfig())){
+       if(typeof callback == "function") callback();
+     }    
   },
 
   // @private the interal loop used to go through the data and build a tree
@@ -73,7 +73,7 @@ Ext.extend(Ext.ux.guid.tree.CodeLoader, Ext.tree.TreeLoader, {
       if (data instanceof Array) {
         for(var i=0;i<data.length;i++) this.doLoad(node,data[i]);
       } else if (!this.designer.isEmpty(data)) {
-   			var isContainer = this.designer.isContainer(this.designer.findByJsonId(data[this.jsonId]));
+        var isContainer = this.designer.isContainer(this.designer.findByJsonId(data[this.jsonId]));
         var cs = {
              text: this.elementToText(data),
              cls: isContainer ? 'folder' : 'file' ,
