@@ -74,13 +74,13 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
    * @type {String}
    @cfg */
   cssPath : 'css/',
-  
+
   /**
    * The path where the default repository should point to
    * @type {String}
    @cfg */
   repositoryPath : 'json/',
-  
+
   /**
    * When true the toolbox is show on init
    * @type {Boolean}
@@ -138,12 +138,12 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     * The url with the options screen
     */
   optionsUrl  : '{0}Designer.Options.json',
-  
+
   /**
    * Enable or disable the autoresize of elements
    * @type {Boolean}
    @cfg */
-  autoResize : true, 
+  autoResize : true,
 
   /**
    * An array of property defintion to add to default (propertyDefinitions)
@@ -381,28 +381,26 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
           }
       }, this);
   },
-  
+
   /**
    * Hide the visualResize layer
    */
   hideVisualResize : function(){
    this.resizeLayer.hide();
    this.resizeLayer.resizer.dd.lock();
-  },  
+  },
 
   /**
    * Start resize of an element, it will become active element
    * @param {Element} element The element to resize
-   * @param {Boolean} select Should element be selected (default true) 
+   * @param {Boolean} select Should element be selected (default true)
    */
   visualResize : function(element,select) {
     var cmp= select===false ? element : this.selectElement(element);
     if (!cmp) return;
     var own = this.getContainer(cmp.ownerCt);
     var layout = own.codeConfig ? own.codeConfig.layout : null;
-    if (layout=='fit') {
-     this.fireEvent('error','visualResize','Cannot resize element within fit layout');
-    } else {
+    if (layout!='fit') { //We cannot resize when laout is fit
       //Incase of absolute layout enable movement within element
       if (layout=='absolute') {
         this.resizeLayer.resizer.dd.unlock();
@@ -707,11 +705,11 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
              this.getConfig(this.container.items.items[0]) : {};
       //Check if root is a array with more then one element, if so skip
        if (!cfg.json) cfg.json = {};
-       
+
        var a = cfg.json.required_js ? cfg.json.required_js.replace(',',';').split(';') :[];
-       for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(this.formatPath(a[i]));      
+       for (var i=0;i<a.length;i++) if (ret.js.indexOf(a[i])==-1) ret.js.push(this.formatPath(a[i]));
        if (ret.js.length!=0) cfg =this.setJsonValue(cfg,"required_js",ret.js.join(';'));
-       
+
        a = cfg.json.required_css ? cfg.json.required_css.replace(',',';').split(';') :[];
        for (var i=0;i<a.length;i++) if (ret.css.indexOf(a[i])==-1) ret.css.push(this.formatPath(a[i]));
        if (ret.css.length!=0) cfg = this.setJsonValue(cfg,"required_css",ret.css.join(';'));
@@ -772,6 +770,40 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
     return true;
   },
 
+ /**
+	* Set a new config when ismodified is false or
+	* ignore changes question is yes or save through file control is valid
+	* @param {String/Object} json The json to be applied
+	* @param {Boolean} noUndo When true no undo will be created
+	*/
+	newConfig : function(json,noUndo) {
+		if (this.isModified() && this.repository) { //Check if modified and whe have repository
+		  // Show a dialog using config options:
+		  Ext.Msg.show({
+		    title:'Save Changes?',
+		    msg: 'You are creating new design but there are still unsaved changes. Would you like to save your changes?',
+		    buttons: Ext.Msg.YESNOCANCEL,
+		    fn: function(btn, text){
+		 		  if (btn == 'yes'){
+		 		    this.repository.visualSave(this,
+		 		      function(){
+		 		        this.repository.last=null;
+		 		        this.setConfig(json,noUndo);
+		 		      }.createDelegate(this)
+		 		    );
+		 		  } else if (btn == 'no') {
+				  	this.setConfig(json,noUndo);
+				  }
+		    },
+		    icon: Ext.MessageBox.QUESTION,
+		    scope : this
+      });
+		} else {
+			this.setConfig(json,noUndo);
+		}
+	},
+
+
   /**
    * Refresh the content of the designer
    */
@@ -824,7 +856,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
              c = p.codeConfig.layout;
              if (c && ['border','table','column'].indexOf(c)==-1) {
                c='';
-             } 
+             }
              p = this.getContainer(p.ownerCt);
            }
         }
@@ -852,7 +884,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
      cmp.innerWrap.focus();
     } else if (cmp) cmp.focus();
   },
-  
+
 
   /**
    * Select a designElement
@@ -881,7 +913,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
            for (var i=0;i<check.items.items.length;i++) {
              if (check.items.items[i]==check.getActiveTab() && check.codeConfig.activeTab!=i) {
               check.codeConfig.activeTab=i;
-              check.doLayout();              
+              check.doLayout();
             }
           }
         }
@@ -1107,7 +1139,7 @@ Ext.extend(Ext.ux.guid.plugin.Designer, Ext.ux.Json, {
         this.fireEvent('error','setObjectValue',new SyntaxError('xtype ' + rawValue.value + ' does not exists'));
       } else rawValue=null;
     }
-    return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);    
+    return Ext.ux.guid.plugin.Designer.superclass.setObjectValue.call(this,object,key,value,rawValue,scope);
   },
 
   /**

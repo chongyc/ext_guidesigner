@@ -46,17 +46,17 @@ Ext.extend(Ext.ux.guid.data.Repository,Ext.util.Observable,{
   rootBase : null,
   /**
    * Can a item be changed to url, used by getUrl. (default false)
-   * @type {Boolean} 
+   * @type {Boolean}
    @cfg */
   urlSupport : false,
- 
+
   /**
    * Init is called by constructor to init the respository it will call refresh
    */
   init : function(){
     this.refresh();
   },
-  
+
   /**
    * Convert a repositoryId into an url, urlSupport needs to be true
    * @param {String} id The repositoryId to use (default last)
@@ -146,7 +146,42 @@ Ext.extend(Ext.ux.guid.data.Repository,Ext.util.Observable,{
    */
   save : function(id,content,callback){
     this.saveChanges(id,(this.items[id] ? 'save' : 'new' ),callback,content);
-  }
+  },
+
+  //The functions below can be overwritten by gui design
+  visualSaveAs : function(scope,callback){
+     Ext.Msg.prompt('Filename', 'Please enter full file name:', function(btn, text){
+       if (btn == 'ok'){
+        var t = text.replace(/\\/g,'/').split('/');
+        text = '';
+        for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
+         this.save(text,scope.getCode(),function(success){
+          if (!success) {
+            Ext.Msg.alert('Error','Failed to save file ' + text);
+          } else {
+            scope.isModified(false);
+          }
+          if (typeof callback == "function") callback(success);
+        }.createDelegate(this));
+        this.visualReload(scope);
+       }
+     },this,false,this.last);
+  },
+  visualSave : function(scope,callback){
+		if (this.last) {
+			this.save(this.last,scope.getCode(),function(success){
+			 if (!success) {
+				Ext.Msg.alert('Error','Failed to save file ' + this.last);
+			 } else {
+				scope.isModified(true);
+			 }
+			 if (typeof callback == "function") callback(success);
+			}.createDelegate(this));
+		} else {
+			this.visualSaveAs(scope,callback);
+		}
+  },
+  visualReload : function(scope){}
 
 });
 

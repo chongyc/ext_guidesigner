@@ -38,9 +38,6 @@
   floatable       : false,
   enableDD        : true,
   ddGroup         : 'codecomponent',
-  reload          : function(){
-    this.root.reload.defer(100,this);
-  },
   root:new Ext.tree.AsyncTreeNode({text:'root'}),
   loader:new Ext.ux.guid.tree.CodeLoader(scope),
   selectElement : function(cmp){
@@ -52,6 +49,9 @@
       }
       return true;
     },this);
+  },
+  reload          : function(){
+    this.root.reload.defer(100,this.root);
   },
   listeners :  {
     'render': function(){

@@ -71,7 +71,7 @@
             tooltip : 'Clear designarea',
             iconCls:'icon-reset',
             handler: function(){
-              scope.setConfig();
+              scope.newConfig();
             }
           },'-',{
             tooltip : 'Copy JSON to clipboard',
@@ -167,11 +167,11 @@
                   modal       : true,
                   maximizable : true,
                   closeAction : 'close',
-                  listeners   : { 
+                  listeners   : {
                    'beforeclose' : function(){
                      //Restore code in designer and capture resize
                      self.undo();
-                     var s = w.getSize();                     
+                     var s = w.getSize();
                      if (s.width!=curSize.width || s.height!=curSize.height) {
                        self.setJsonValue(self.getConfig(),'size',s);
                      }
@@ -310,19 +310,19 @@
             }
           }
       ],
-      items:[{ 
+      items:[{
          xtype : "jsonpanel",
          autoLoad : scope.formatPath('{0}Ext.ux.guid.plugin.Designer.Design.json'),
          scope   : scope,
          title:"Design",
          tooltip : "Design your ui by selecting elements from this tab"
-       },{ 
+       },{
          xtype : "jsonpanel",
          autoLoad : scope.formatPath('{0}Ext.ux.guid.plugin.Designer.Select.json'),
          scope   : scope,
          title:"Select",
          tooltip : "Tab with Codetree"
-       },{ 
+       },{
          xtype : "jsonpanel",
          autoLoad : scope.formatPath('{0}Ext.ux.guid.plugin.Designer.Manage.json'),
          scope   : scope,

@@ -37,25 +37,6 @@
   rootVisible : false,
   root:new Ext.tree.AsyncTreeNode({text:'root'}),
   loader:new Ext.ux.guid.tree.RepositoryLoader(scope.repository),
-  saveAs: function(){
-     Ext.Msg.prompt('Filename', 'Please enter full file name:', function(btn, text){
-       if (btn == 'ok'){
-        var t = text.replace(/\\/g,'/').split('/');
-        text = '';
-        for (var i=0;i<t.length;i++) { if (t[i]) text += (text ? '/' : '') + t[i]}
-        scope.repository.save(text,scope.getCode(),function(success){
-         if (!success) {
-           Ext.Msg.alert('Error','Failed to save file ' + text);
-         } else {
-           scope.isModified(false);
-         }
-         if (typeof callback == "function") callback(success);
-        });
-        this.reload();
-       }
-     },this,false,scope.repository.last);
-
-  },
   reload : function(){
     this.root.reload(function(){
      var node = this.loader.activeNode;
@@ -69,23 +50,13 @@
     tooltip : 'Save the design, reusing last name',
     iconCls:'icon-save',
     handler: function(){
-      if (scope.repository.last) {
-        scope.repository.save(scope.repository.last,scope.getCode(),function(success){
-         if (!success) {
-           Ext.Msg.alert('Error','Failed to save file ' + scope.repository.last);
-         } else {
-          scope.isModified(true);
-         }
-        });
-      } else {
-        Ext.getCmp(scope.RepositoryId).saveAs();
-      }
-    }
+        scope.repository.visualSave(scope);
+ 	  }
   },{
     tooltip : 'Save the design with different name',
     iconCls:'icon-saveas',
     handler : function(){
-       Ext.getCmp(scope.RepositoryId).saveAs();
+       scope.repository.visualSaveAs(scope);
     }
   },'-',{
     iconCls:'icon-reload',
@@ -107,7 +78,7 @@
     tooltip : 'Refresh files',
     iconCls:'icon-filerefresh',
     handler: function (){
-       Ext.getCmp(scope.RepositoryId).reload();
+       scope.repository.visualReload();
     }
   }],
   disabled : scope.repository == null,
@@ -157,6 +128,7 @@
        }
      },
     'render': function() {
+        scope.repository.visualReload = this.reload;
         //Create context menu
         var contextMenu = new Ext.menu.Menu({items:[{
           text    : 'Open',
@@ -167,7 +139,7 @@
               scope.repository.open(contextMenu.node.id,function(success,result){
                 if (success) {
                   scope.setConfig(result);
-                  Ext.getCmp(scope.RepositoryId).reload();
+                  scope.repository.visualReload();
                 } else {
                   Ext.Msg.alert('Error','Could not load file ' + contextMenu.node.id);
                 }
@@ -191,7 +163,7 @@
                     } else {
                       Ext.Msg.alert('Error','Failed to rename file ' + contextMenu.id);
                     }
-                    Ext.getCmp(scope.RepositoryId).reload();
+                    scope.repository.visualReload();
                   });
                 } else {
                   Ext.Msg.alert('Error','File name not valid');
@@ -207,7 +179,7 @@
           handler : function(item,e) {
               scope.repository.remove(contextMenu.node.id,function(success){
                 if (success) {
-                  Ext.getCmp(scope.RepositoryId).reload();
+                  scope.repository.visualReload();
                 } else {
                   Ext.Msg.alert('Error','Failed to delete ' + contextMenu.node.id);
                 }

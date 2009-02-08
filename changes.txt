@@ -11,8 +11,15 @@ TODO
  - In appendConfig merge the json objects, and delete from new item
  - Problem that there is a cmp exception thrown
  - Check if clear also rests modify
+ - Make it possible to do document write to load required files
+ 
  
  Change History:
+ Version 2.1.1:
+  - Removed warning message on visual resize because of fit layout
+  - Fixed problems with selectpanel not working
+  + Added new Config function which prevents removing config when not saved
+  
  Version 2.1.0:
   + A compressed version of designer is added (Ext.ux.guid.plugin.Desginer-all.js) 
   + Added a new json parser therefor begin and end tags are no longer needed in code
